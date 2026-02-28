@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER Diagram Viewer — 5 Database Schemas | Interview Prep</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --bg2: #1e293b;
+            --text: #f1f5f9;
+            --text2: #94a3b8;
+            --muted: #64748b;
+            --accent: #3b82f6;
+            --border: #334155;
+            --pk: #fbbf24;
+            --fk: #a78bfa;
+            --grad: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Navbar */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: 54px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-size: 1.05rem;
+            font-weight: 800;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-links a {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text2);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: var(--bg2);
+        }
+
+        .nav-links a.on {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.12);
+        }
+
+        /* Toolbar */
+        .bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 150;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 7px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 6px 13px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text2);
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tab:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .tab.on {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .sep {
+            width: 1px;
+            height: 26px;
+            background: var(--border);
+        }
+
+        .btn {
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text2);
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .zoom-lbl {
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            min-width: 54px;
+            text-align: center;
+        }
+
+        .info {
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            color: var(--muted);
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            margin-left: auto;
+        }
+
+        .info b {
+            color: var(--accent);
+        }
+
+        /* Canvas area */
+        .wrap {
+            position: fixed;
+            top: 46px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            cursor: grab;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 70%), linear-gradient(rgba(51, 65, 85, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(51, 65, 85, 0.15) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .wrap.grab {
+            cursor: grabbing;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: 0 0;
+        }
+
+        /* Table entity */
+        .tbl {
+            position: absolute;
+            background: var(--bg2);
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            min-width: 210px;
+            max-width: 270px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+            cursor: move;
+            user-select: none;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .tbl:hover,
+        .tbl.drag {
+            border-color: var(--accent);
+            box-shadow: 0 6px 28px rgba(59, 130, 246, 0.18);
+            z-index: 10;
+        }
+
+        .tbl-h {
+            padding: 9px 13px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.07));
+            border-bottom: 1.5px solid var(--border);
+            border-radius: 8px 8px 0 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        .col {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 11px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.68rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.35);
+        }
+
+        .col:last-child {
+            border-bottom: none;
+        }
+
+        .ci {
+            width: 13px;
+            height: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .ci.pk {
+            background: rgba(251, 191, 36, 0.18);
+            color: var(--pk);
+        }
+
+        .ci.fk {
+            background: rgba(167, 139, 250, 0.18);
+            color: var(--fk);
+        }
+
+        .ci.rg {
+            background: rgba(148, 163, 184, 0.06);
+            color: var(--muted);
+        }
+
+        .cn {
+            flex: 1;
+            color: var(--text);
+        }
+
+        .cn.pkn {
+            color: var(--pk);
+            font-weight: 600;
+        }
+
+        .cn.fkn {
+            color: var(--fk);
+        }
+
+        .ct {
+            color: var(--muted);
+            font-size: 0.62rem;
+        }
+
+        /* SVG lines */
+        #svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .rl {
+            fill: none;
+            stroke: var(--fk);
+            stroke-width: 1.5;
+            opacity: 0.45;
+            transition: opacity 0.15s, stroke-width 0.15s;
+        }
+
+        .rl.hi {
+            opacity: 1;
+            stroke-width: 2.5;
+        }
+
+        .rd {
+            opacity: 0.55;
+            transition: opacity 0.15s;
+        }
+
+        .rd.hi {
+            opacity: 1;
+        }
+
+        /* Legend */
+        .leg {
+            position: fixed;
+            bottom: 14px;
+            left: 14px;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-size: 0.72rem;
+        }
+
+        .leg-t {
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: 5px;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .leg-i {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 2px;
+            color: var(--muted);
+        }
+
+        .leg-c {
+            width: 11px;
+            height: 11px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            font-weight: 800;
+        }
+
+        .leg-l {
+            width: 22px;
+            height: 2px;
+            border-radius: 1px;
+        }
+
+        /* Minimap */
+        .mm {
+            position: fixed;
+            bottom: 14px;
+            right: 14px;
+            z-index: 100;
+            width: 180px;
+            height: 120px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            overflow: hidden;
+        }
+
+        .mm canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mm-vp {
+            position: absolute;
+            border: 1.5px solid var(--accent);
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        @media(max-width:768px) {
+
+            .mm,
+            .leg,
+            .info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bar">
+        <div class="tabs" id="tabs"></div>
+        <div class="sep"></div>
+        <button class="btn" onclick="zm(scale-0.15)">−</button>
+        <div class="zoom-lbl" id="zl">85%</div>
+        <button class="btn" onclick="zm(scale+0.15)">+</button>
+        <button class="btn" onclick="zm(1)">Reset</button>
+        <button class="btn" onclick="layout()">⟳ Layout</button>
+        <div class="info">Tables: <b id="tc">0</b> &nbsp;|&nbsp; Cols: <b id="cc">0</b> &nbsp;|&nbsp; FKs: <b
+                id="rc">0</b></div>
+    </div>
+    <div class="wrap" id="wrap">
+        <div id="canvas">
+            <svg id="svg" width="8000" height="6000"></svg>
+        </div>
+    </div>
+    <div class="mm" id="mm"><canvas id="mc" width="180" height="120"></canvas>
+        <div class="mm-vp" id="mv"></div>
+    </div>
+    <div class="leg">
+        <div class="leg-t">Legend</div>
+        <div class="leg-i">
+            <div class="leg-c pk" style="background:rgba(251,191,36,0.18);color:#fbbf24;">PK</div> Primary Key
+        </div>
+        <div class="leg-i">
+            <div class="leg-c fk" style="background:rgba(167,139,250,0.18);color:#a78bfa;">→</div> Foreign Key
+        </div>
+        <div class="leg-i">
+            <div class="leg-l" style="background:#a78bfa;"></div> FK Relationship
+        </div>
+    </div>
+    <script src="schema-data.js"></script>
+    <script>
+        let curDb = 'ecommerce_db', scale = 0.85, px = 50, py = 50;
+        let T = {}, dragT = null, dx = 0, dy = 0, pan = false, psx = 0, psy = 0, ppx = 0, ppy = 0;
+        const C = document.getElementById('canvas'), W = document.getElementById('wrap'), S = document.getElementById('svg');
+
+        // Build tabs
+        Object.entries(SCHEMAS).forEach(([k, db]) => {
+            const t = document.createElement('div');
+            t.className = 'tab' + (k === curDb ? ' on' : '');
+            t.dataset.db = k; t.textContent = db.icon + ' ' + db.label;
+            t.onclick = () => { curDb = k; build(); };
+            document.getElementById('tabs').appendChild(t);
+        });
+
+        function zm(z) { scale = Math.max(0.2, Math.min(2.5, z)); apply(); document.getElementById('zl').textContent = Math.round(scale * 100) + '%'; mini(); }
+        function apply() { C.style.transform = `translate(${px}px,${py}px) scale(${scale})`; }
+
+        function build() {
+            document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.db === curDb));
+            C.querySelectorAll('.tbl').forEach(e => e.remove());
+            S.innerHTML = ''; T = {};
+            const db = SCHEMAS[curDb]; let tc = 0, rc = 0;
+            db.tables.forEach(t => {
+                const el = document.createElement('div');
+                el.className = 'tbl'; el.dataset.t = t.name;
+                let h = '';
+                const fks = [];
+                t.columns.forEach(c => {
+                    tc++;
+                    let ic = 'rg', it = '○', nc = '';
+                    if (c.pk) { ic = 'pk'; it = 'PK'; nc = 'pkn'; }
+                    else if (c.fk) { ic = 'fk'; it = '→'; nc = 'fkn'; rc++; fks.push(c); }
+                    h += `<div class="col" data-c="${c.n}"><div class="ci ${ic}">${it}</div><span class="cn ${nc}">${c.n}</span><span class="ct">${c.t}</span></div>`;
+                });
+                el.innerHTML = `<div class="tbl-h">${t.name}</div>${h}`;
+                C.appendChild(el);
+                T[t.name] = { el, x: 0, y: 0, w: 0, h: 0, cols: t.columns, fks };
+                el.addEventListener('mouseenter', () => hi(t.name, true));
+                el.addEventListener('mouseleave', () => hi(t.name, false));
+            });
+            document.getElementById('tc').textContent = db.tables.length;
+            document.getElementById('cc').textContent = tc;
+            document.getElementById('rc').textContent = rc;
+            requestAnimationFrame(() => {
+                Object.values(T).forEach(t => { t.w = t.el.offsetWidth; t.h = t.el.offsetHeight; });
+                layout();
+            });
+        }
+
+        function layout() {
+            const db = SCHEMAS[curDb], names = db.tables.map(t => t.name);
+            // Build dependency map
+            const deps = {};
+            names.forEach(n => deps[n] = new Set());
+            db.tables.forEach(t => t.columns.forEach(c => {
+                if (c.fk) { const tgt = c.fk.split('(')[0]; if (names.includes(tgt) && tgt !== t.name) deps[t.name].add(tgt); }
+            }));
+            // Topological layering
+            const layers = [], done = new Set();
+            let roots = names.filter(n => deps[n].size === 0);
+            if (roots.length > 0) { layers.push(roots); roots.forEach(r => done.add(r)); }
+            let safe = 0;
+            while (done.size < names.length && safe++ < 20) {
+                const next = names.filter(n => !done.has(n) && [...deps[n]].every(d => done.has(d)));
+                if (next.length === 0) { layers.push(names.filter(n => !done.has(n))); break; }
+                layers.push(next); next.forEach(n => done.add(n));
+            }
+            // Position
+            const gx = 310, gy = 50;
+            layers.forEach((ly, li) => {
+                let y = 30;
+                ly.forEach(n => {
+                    if (!T[n]) return;
+                    T[n].x = 30 + li * gx; T[n].y = y;
+                    T[n].el.style.left = T[n].x + 'px'; T[n].el.style.top = T[n].y + 'px';
+                    y += T[n].h + gy;
+                });
+            });
+            // Fit zoom
+            const totalW = (layers.length) * gx + 300, vw = W.clientWidth;
+            scale = Math.max(0.3, Math.min(0.9, (vw - 80) / totalW));
+            px = 50; py = 50;
+            zm(scale); apply(); draw(); mini();
+        }
+
+        function colY(tn, cn) {
+            const t = T[tn]; if (!t) return 0;
+            const hh = t.el.querySelector('.tbl-h').offsetHeight;
+            const cols = t.el.querySelectorAll('.col');
+            for (let i = 0; i < cols.length; i++) if (cols[i].dataset.c === cn) return t.y + hh + i * cols[i].offsetHeight + cols[i].offsetHeight / 2;
+            return t.y + t.h / 2;
+        }
+
+        function draw() {
+            S.innerHTML = '<defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#a78bfa" opacity="0.65"/></marker><marker id="ahh" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#a78bfa"/></marker><marker id="dm" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><polygon points="0 4,5 0,10 4,5 8" fill="#fbbf24" opacity="0.65"/></marker></defs>';
+            const db = SCHEMAS[curDb];
+            db.tables.forEach(t => {
+                t.columns.forEach(c => {
+                    if (!c.fk) return;
+                    const tgt = c.fk.split('(')[0], tgtCol = c.fk.match(/\((\w+)\)/)?.[1];
+                    if (!T[tgt] || !T[t.name]) return;
+                    const f = T[t.name], to = T[tgt];
+                    const fy = colY(t.name, c.n), ty = colY(tgt, tgtCol);
+                    let fx, tx, c1x, c2x;
+                    if (f.x + f.w < to.x) { fx = f.x + f.w; tx = to.x; const d = tx - fx; c1x = fx + d * 0.4; c2x = tx - d * 0.4; }
+                    else if (to.x + to.w < f.x) { fx = f.x; tx = to.x + to.w; const d = fx - tx; c1x = fx - d * 0.4; c2x = tx + d * 0.4; }
+                    else { fx = f.x + f.w; tx = to.x + to.w; const o = 55; c1x = Math.max(fx, tx) + o; c2x = c1x; }
+                    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    p.setAttribute('d', `M ${fx} ${fy} C ${c1x} ${fy}, ${c2x} ${ty}, ${tx} ${ty}`);
+                    p.setAttribute('class', 'rl');
+                    p.setAttribute('marker-end', 'url(#ah)');
+                    p.setAttribute('marker-start', 'url(#dm)');
+                    p.dataset.f = t.name; p.dataset.t2 = tgt;
+                    S.appendChild(p);
+                    [{ x: fx, y: fy, c: '#a78bfa' }, { x: tx, y: ty, c: '#fbbf24' }].forEach(pt => {
+                        const ci = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        ci.setAttribute('cx', pt.x); ci.setAttribute('cy', pt.y); ci.setAttribute('r', 3);
+                        ci.setAttribute('fill', pt.c); ci.setAttribute('class', 'rd');
+                        ci.dataset.f = t.name; ci.dataset.t2 = tgt;
+                        S.appendChild(ci);
+                    });
+                });
+            });
+        }
+
+        function hi(n, on) {
+            S.querySelectorAll('.rl,.rd').forEach(e => {
+                if (e.dataset.f === n || e.dataset.t2 === n) {
+                    e.classList.toggle('hi', on);
+                    if (e.tagName === 'path') e.setAttribute('marker-end', on ? 'url(#ahh)' : 'url(#ah)');
+                }
+            });
+            if (on) {
+                S.querySelectorAll('.rl').forEach(e => {
+                    const o = e.dataset.f === n ? e.dataset.t2 : (e.dataset.t2 === n ? e.dataset.f : null);
+                    if (o && T[o]) T[o].el.style.borderColor = 'var(--fk)';
+                });
+            } else { Object.values(T).forEach(t => t.el.style.borderColor = ''); }
+        }
+
+        // Drag tables
+        C.addEventListener('mousedown', e => {
+            const el = e.target.closest('.tbl');
+            if (el) {
+                dragT = el.dataset.t; el.classList.add('drag'); const t = T[dragT];
+                dx = (e.clientX - px) / scale - t.x; dy = (e.clientY - py - 46) / scale - t.y;
+                e.preventDefault(); e.stopPropagation();
+            }
+        });
+        // Pan
+        W.addEventListener('mousedown', e => { if (dragT) return; pan = true; W.classList.add('grab'); psx = e.clientX; psy = e.clientY; ppx = px; ppy = py; });
+        window.addEventListener('mousemove', e => {
+            if (dragT) {
+                const t = T[dragT]; t.x = (e.clientX - px) / scale - dx; t.y = (e.clientY - py - 46) / scale - dy;
+                t.el.style.left = t.x + 'px'; t.el.style.top = t.y + 'px'; draw(); mini();
+            }
+            else if (pan) { px = ppx + (e.clientX - psx); py = ppy + (e.clientY - psy); apply(); mini(); }
+        });
+        window.addEventListener('mouseup', () => { if (dragT) { T[dragT].el.classList.remove('drag'); dragT = null; } pan = false; W.classList.remove('grab'); });
+
+        // Zoom with scroll
+        W.addEventListener('wheel', e => {
+            e.preventDefault();
+            const d = e.deltaY > 0 ? -0.07 : 0.07, ns = Math.max(0.2, Math.min(2.5, scale + d));
+            const r = W.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+            px = mx - (mx - px) * (ns / scale); py = my - (my - py) * (ns / scale); scale = ns;
+            apply(); document.getElementById('zl').textContent = Math.round(scale * 100) + '%'; mini();
+        }, { passive: false });
+
+        // Minimap
+        function mini() {
+            const mc = document.getElementById('mc'), ctx = mc.getContext('2d'), mw = mc.width, mh = mc.height;
+            ctx.clearRect(0, 0, mw, mh);
+            let x1 = 1e9, y1 = 1e9, x2 = -1e9, y2 = -1e9;
+            Object.values(T).forEach(t => { x1 = Math.min(x1, t.x); y1 = Math.min(y1, t.y); x2 = Math.max(x2, t.x + t.w); y2 = Math.max(y2, t.y + t.h); });
+            if (!isFinite(x1)) return;
+            x1 -= 30; y1 -= 30; x2 += 30; y2 += 30;
+            const ms = Math.min(mw / (x2 - x1), mh / (y2 - y1));
+            // Lines
+            ctx.strokeStyle = 'rgba(167,139,250,0.25)'; ctx.lineWidth = 0.5;
+            const db = SCHEMAS[curDb];
+            db.tables.forEach(t => t.columns.forEach(c => {
+                if (!c.fk) return; const tgt = c.fk.split('(')[0], f = T[t.name], to = T[tgt];
+                if (!f || !to) return;
+                ctx.beginPath(); ctx.moveTo((f.x + f.w / 2 - x1) * ms, (f.y + f.h / 2 - y1) * ms);
+                ctx.lineTo((to.x + to.w / 2 - x1) * ms, (to.y + to.h / 2 - y1) * ms); ctx.stroke();
+            }));
+            // Tables
+            Object.values(T).forEach(t => {
+                ctx.fillStyle = 'rgba(59,130,246,0.45)';
+                ctx.fillRect((t.x - x1) * ms, (t.y - y1) * ms, Math.max(t.w * ms, 3), Math.max(t.h * ms, 2));
+            });
+            // Viewport
+            const v = document.getElementById('mv');
+            v.style.left = Math.max(0, (-px / scale - x1) * ms) + 'px';
+            v.style.top = Math.max(0, ((-py + 46) / scale - y1) * ms) + 'px';
+            v.style.width = Math.min(mw, (W.clientWidth / scale) * ms) + 'px';
+            v.style.height = Math.min(mh, (W.clientHeight / scale) * ms) + 'px';
+        }
+
+        build();
+    </script>
+</body>
+
+</html>

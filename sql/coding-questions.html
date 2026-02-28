@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1000+ PostgreSQL SQL Questions — Complete Interview Prep</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-light: rgba(59, 130, 246, 0.15);
+            --border: #334155;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --code-bg: #0f172a;
+            --gradient-1: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --gradient-2: linear-gradient(135deg, #06b6d4, #3b82f6);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+        }
+
+        .navbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .navbar-links a {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .navbar-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+
+        .navbar-links a.active {
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            position: sticky;
+            top: 60px;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .controls-inner {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent);
+        }
+
+        .search-box::placeholder {
+            color: var(--text-muted);
+        }
+
+        .section-select {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            max-width: 400px;
+        }
+
+        .counter {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .counter strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .chips-container {
+            padding: 12px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .chips-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .chips-container::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 6px 14px;
+            margin: 3px 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .chip:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .chip.active {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .section-header {
+            padding: 24px 0 12px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .section-header .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--accent-light);
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 16px;
+            padding-bottom: 20px;
+        }
+
+        .q-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s;
+        }
+
+        .q-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .q-number {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .q-text {
+            font-size: 0.95rem;
+            flex-grow: 1;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .q-text code {
+            background: var(--code-bg);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #93c5fd;
+        }
+
+        .q-db {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            background: rgba(139, 92, 246, 0.12);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--accent-light);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            align-self: flex-start;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        .toggle-btn .arrow {
+            transition: transform 0.2s;
+        }
+
+        .toggle-btn.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .io-details {
+            display: none;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        .io-details.show {
+            display: block;
+        }
+
+        .io-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            margin-top: 12px;
+        }
+
+        .io-label:first-child {
+            margin-top: 0;
+        }
+
+        .io-code {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.82rem;
+            color: #93c5fd;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            z-index: 99;
+            transition: all 0.2s;
+        }
+
+        .scroll-top:hover {
+            background: var(--accent-hover);
+            transform: scale(1.1);
+        }
+
+        .scroll-top.visible {
+            display: block;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-results h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media(max-width:768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .questions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-inner {
+                flex-direction: column;
+            }
+
+            .search-box,
+            .section-select {
+                min-width: auto;
+                max-width: none;
+                width: 100%;
+            }
+
+            .navbar-links a span.lbl {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <div class="container">
+            <div class="controls-inner">
+                <input type="text" class="search-box" id="searchBox"
+                    placeholder="Search questions, topics, SQL keywords...">
+                <select class="section-select" id="sectionSelect">
+                    <option value="all">All Topic Groups</option>
+                </select>
+                <div class="counter">Showing <strong id="showingCount">0</strong> questions</div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="chips-container" id="chipsContainer"></div>
+        <div id="questionsArea"></div>
+    </div>
+    <button class="scroll-top" id="scrollTop" title="Scroll to top">↑</button>
+    <footer>
+        <p>PostgreSQL SQL Interview Questions</p>
+    </footer>
+    <script src="questions-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ALL_SECTIONS = [...new Set(ALL_QUESTIONS.map(q => q.section))];
+            const sectionSelect = document.getElementById('sectionSelect');
+            const searchBox = document.getElementById('searchBox');
+            const chipsContainer = document.getElementById('chipsContainer');
+            const questionsArea = document.getElementById('questionsArea');
+            const scrollTopBtn = document.getElementById('scrollTop');
+            const el_tc = document.getElementById('total-count'); if (el_tc) el_tc.textContent = ALL_QUESTIONS.length;
+            const el_sc = document.getElementById('section-count'); if (el_sc) el_sc.textContent = ALL_SECTIONS.length;
+            ALL_SECTIONS.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; sectionSelect.appendChild(o); });
+            const allChip = document.createElement('span');
+            allChip.className = 'chip active'; allChip.dataset.section = 'all'; allChip.textContent = 'All';
+            chipsContainer.appendChild(allChip);
+            ALL_SECTIONS.forEach(s => {
+                const c = document.createElement('span'); c.className = 'chip'; c.dataset.section = s;
+                const m = s.match(/^(.+?)\s*\(/); c.textContent = m ? m[1].trim() : s; chipsContainer.appendChild(c);
+            });
+            let currentSection = 'all', currentSearch = '';
+            function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+            function hl(t) { return t.replace(/`([^`]+)`/g, '<code>$1</code>'); }
+            function render() {
+                let f = ALL_QUESTIONS;
+                if (currentSection !== 'all') f = f.filter(q => q.section === currentSection);
+                if (currentSearch) { const ts = currentSearch.toLowerCase().split(/\s+/); f = f.filter(q => { const t = (q.question + ' ' + q.section + (q.db || '')).toLowerCase(); return ts.every(x => t.includes(x)); }); }
+                document.getElementById('showingCount').textContent = f.length; const el_vc = document.getElementById('visible-count'); if (el_vc) el_vc.textContent = f.length;
+                if (!f.length) { questionsArea.innerHTML = '<div class="no-results"><h3>No questions found</h3><p>Try adjusting your search or filter.</p></div>'; return; }
+                const g = {}; f.forEach(q => { if (!g[q.section]) g[q.section] = []; g[q.section].push(q); });
+                let h = '';
+                for (const sec of ALL_SECTIONS) {
+                    if (!g[sec]) continue; const qs = g[sec];
+                    h += `<div class="section-header"><h2>${sec}<span class="badge">${qs.length} Qs</span></h2></div><div class="questions-grid">`;
+                    qs.forEach(q => {
+                        const qt = hl(esc(q.question)); const db = q.db ? `<div class="q-db">${esc(q.db)}</div>` : '';
+                        h += `<div class="q-card">${db}<div class="q-number">Question #${q.id}</div><div class="q-text">${qt}</div><button class="toggle-btn" onclick="toggleIO(this)"><span class="arrow">▼</span> Show SQL</button><div class="io-details"><div class="io-label">SQL Solution</div><div class="io-code">${esc(q.sql)}</div>${q.explanation ? `<div class="io-label">Explanation</div><div class="io-code">${esc(q.explanation)}</div>` : ''}</div></div>`;
+                    }); h += '</div>';
+                }
+                questionsArea.innerHTML = h;
+            }
+            searchBox.addEventListener('input', e => { currentSearch = e.target.value; render(); });
+            sectionSelect.addEventListener('change', e => { currentSection = e.target.value; document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.section === currentSection)); render(); });
+            chipsContainer.addEventListener('click', e => { if (e.target.classList.contains('chip')) { currentSection = e.target.dataset.section; sectionSelect.value = currentSection; document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); e.target.classList.add('active'); render(); } });
+            window.addEventListener('scroll', () => scrollTopBtn.classList.toggle('visible', window.scrollY > 500));
+            scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            render();
+        });
+        function toggleIO(btn) { const d = btn.nextElementSibling; const o = d.classList.contains('show'); d.classList.toggle('show'); btn.classList.toggle('open'); btn.innerHTML = o ? '<span class="arrow">▼</span> Show SQL' : '<span class="arrow">▼</span> Hide SQL'; }
+    </script>
+</body>
+
+</html>
