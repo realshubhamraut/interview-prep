@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 11: Core Service — Flask Architecture &amp;amp; Data Models</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-10.html">&larr; Previous</a> <a href="page-12.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-11-core-service-flask-architecture-data-models">Page 11: Core Service — Flask Architecture &amp; Data Models</h1>
+<hr />
+<h2 id="overview-4">11.1 Overview</h2>
+<p>The Core Service is the <strong>primary backend API</strong> for ensureStudy, built with Flask and SQLAlchemy. It manages all CRUD operations, user authentication, file uploads, classroom management, and serves as the persistence layer for the entire platform.</p>
+<h3 id="source-backendcore-service">Source: <code>backend/core-service/</code></h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Framework</td>
+<td>Flask 3.x with Application Factory</td>
+</tr>
+<tr>
+<td>ORM</td>
+<td>SQLAlchemy (Flask-SQLAlchemy)</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>Migrations</td>
+<td>Flask-Migrate (Alembic)</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>JWT (PyJWT)</td>
+</tr>
+<tr>
+<td>CORS</td>
+<td>Flask-CORS (all origins for <code>api/*</code>)</td>
+</tr>
+<tr>
+<td>Max Upload</td>
+<td>500 MB</td>
+</tr>
+<tr>
+<td>Blueprints</td>
+<td>29 registered</td>
+</tr>
+<tr>
+<td>Model Files</td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="application-factory">11.2 Application Factory</h2>
+<h3 id="source-backendcore-serviceapp__init__.py-125-lines">Source: <code>backend/core-service/app/__init__.py</code> (125 lines)</h3>
+<div class="sourceCode" id="cb98"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_app(config_name<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>    app <span class="op">=</span> Flask(<span class="va">__name__</span>)</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PostgreSQL only — no SQLite fallback</span></span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a>    database_url <span class="op">=</span> os.getenv(<span class="st">&#39;DATABASE_URL&#39;</span>, </span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;postgresql://ensure_study_user:secure_password_123@localhost:5432/ensure_study&#39;</span>)</span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>    app.config[<span class="st">&#39;SQLALCHEMY_ENGINE_OPTIONS&#39;</span>] <span class="op">=</span> {</span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;pool_pre_ping&#39;</span>: <span class="va">True</span>,     <span class="co"># Verify connections before use</span></span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;pool_recycle&#39;</span>: <span class="dv">300</span>,       <span class="co"># Recycle connections every 5 minutes</span></span>
+<span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a>    app.config[<span class="st">&#39;MAX_CONTENT_LENGTH&#39;</span>] <span class="op">=</span> <span class="dv">500</span> <span class="op">*</span> <span class="dv">1024</span> <span class="op">*</span> <span class="dv">1024</span>  <span class="co"># 500MB</span></span>
+<span id="cb98-13"><a href="#cb98-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb98-14"><a href="#cb98-14" aria-hidden="true" tabindex="-1"></a>    db.init_app(app)</span>
+<span id="cb98-15"><a href="#cb98-15" aria-hidden="true" tabindex="-1"></a>    migrate.init_app(app, db)</span>
+<span id="cb98-16"><a href="#cb98-16" aria-hidden="true" tabindex="-1"></a>    CORS(app, resources<span class="op">=</span>{<span class="vs">r&quot;/api/</span><span class="op">*</span><span class="vs">&quot;</span>: {<span class="st">&quot;origins&quot;</span>: <span class="st">&quot;*&quot;</span>}})</span>
+<span id="cb98-17"><a href="#cb98-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb98-18"><a href="#cb98-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Register 29 blueprints...</span></span>
+<span id="cb98-19"><a href="#cb98-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Import all models for table creation...</span></span>
+<span id="cb98-20"><a href="#cb98-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb98-21"><a href="#cb98-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> app.app_context():</span>
+<span id="cb98-22"><a href="#cb98-22" aria-hidden="true" tabindex="-1"></a>        db.create_all()</span>
+<span id="cb98-23"><a href="#cb98-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb98-24"><a href="#cb98-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> app</span></code></pre></div>
+<hr />
+<h2 id="complete-data-model-reference">11.3 Complete Data Model Reference</h2>
+<h3 id="model-file-user.py-398-lines-9-models">Model File: <code>user.py</code> (398 lines — 9 models)</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 34%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th>Table</th>
+<th>Key Fields</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User</strong></td>
+<td><code>users</code></td>
+<td>id, username, email, password_hash, role, first_name, last_name, avatar_url</td>
+<td>Multi-role user (student, teacher, parent, admin)</td>
+</tr>
+<tr>
+<td><strong>Progress</strong></td>
+<td><code>progress</code></td>
+<td>user_id, subject, topic, score, total_questions</td>
+<td>Per-topic progress tracking</td>
+</tr>
+<tr>
+<td><strong>Assessment</strong></td>
+<td><code>assessments</code></td>
+<td>topic, subject, num_questions, questions (JSON), difficulty, assessment_type</td>
+<td>Quiz/assessment definitions</td>
+</tr>
+<tr>
+<td><strong>AssessmentResult</strong></td>
+<td><code>assessment_results</code></td>
+<td>user_id, assessment_id, score, total, answers (JSON), feedback (JSON)</td>
+<td>Student submission results</td>
+</tr>
+<tr>
+<td><strong>ChatSession</strong></td>
+<td><code>chat_sessions</code></td>
+<td>user_id, subject, topic, is_active</td>
+<td>AI tutor chat sessions</td>
+</tr>
+<tr>
+<td><strong>ModerationLog</strong></td>
+<td><code>moderation_logs</code></td>
+<td>user_id, content, action, confidence, was_blocked, reason</td>
+<td>Content moderation audit</td>
+</tr>
+<tr>
+<td><strong>Leaderboard</strong></td>
+<td><code>leaderboard</code></td>
+<td>user_id, classroom_id, total_score, streak, level, xp</td>
+<td>Gamification leaderboard</td>
+</tr>
+<tr>
+<td><strong>StudyNote</strong></td>
+<td><code>study_notes</code></td>
+<td>user_id, title, content, subject, topic, note_type, is_public</td>
+<td>AI-generated or user notes</td>
+</tr>
+<tr>
+<td><strong>AssessmentChallenge</strong></td>
+<td><code>assessment_challenges</code></td>
+<td>sender_id, recipient_id, assessment_id, status, scores</td>
+<td>Peer challenge tracking</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-file-classroom.py-193-lines-3-models">Model File: <code>classroom.py</code> (193 lines — 3 models)</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 34%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th>Table</th>
+<th>Key Fields</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Classroom</strong></td>
+<td><code>classrooms</code></td>
+<td>name, grade, section, subject, join_code, teacher_id, organization_id, syllabus_url</td>
+<td>Google Classroom-style with 6-char join codes</td>
+</tr>
+<tr>
+<td><strong>StudentClassroom</strong></td>
+<td><code>student_classrooms</code></td>
+<td>student_id, classroom_id, joined_at, is_active</td>
+<td>Many-to-many join table</td>
+</tr>
+<tr>
+<td><strong>ClassroomMaterial</strong></td>
+<td><code>classroom_materials</code></td>
+<td>classroom_id, name, file_url, file_type, source, indexing_status, chunk_count</td>
+<td>Uploaded materials with RAG indexing status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-file-curriculum.py-996-lines-16-models">Model File: <code>curriculum.py</code> (996 lines — 16 models)</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 34%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th>Table</th>
+<th>Key Fields</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subject</strong></td>
+<td><code>subjects</code></td>
+<td>name, description, grade_level, classroom_id</td>
+<td>Subject definitions</td>
+</tr>
+<tr>
+<td><strong>Topic</strong></td>
+<td><code>topics</code></td>
+<td>name, description, subject_id, order, estimated_hours</td>
+<td>Topics within subjects</td>
+</tr>
+<tr>
+<td><strong>Subtopic</strong></td>
+<td><code>subtopics</code></td>
+<td>name, description, topic_id, difficulty, order</td>
+<td>Subtopics within topics</td>
+</tr>
+<tr>
+<td><strong>SubtopicAssessment</strong></td>
+<td><code>subtopic_assessments</code></td>
+<td>subtopic_id, questions (JSON), num_questions, difficulty</td>
+<td>MCQ assessments per subtopic</td>
+</tr>
+<tr>
+<td><strong>StudentSubtopicProgress</strong></td>
+<td><code>student_subtopic_progress</code></td>
+<td>user_id, subtopic_id, score, attempts, mastery_level</td>
+<td>Per-subtopic mastery tracking</td>
+</tr>
+<tr>
+<td><strong>Syllabus</strong></td>
+<td><code>syllabi</code></td>
+<td>classroom_id, subject_id, file_url, extraction_status, extracted_topics (JSON)</td>
+<td>Syllabus documents</td>
+</tr>
+<tr>
+<td><strong>QuestionBank</strong></td>
+<td><code>question_banks</code></td>
+<td>classroom_id, subject_id, name, total_questions</td>
+<td>Question collections</td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td><code>questions</code></td>
+<td>question_bank_id, text, options (JSON), correct_answer, difficulty, analytics</td>
+<td>Individual questions with analytics</td>
+</tr>
+<tr>
+<td><strong>Chapter</strong></td>
+<td><code>chapters</code></td>
+<td>classroom_id, name, description, order, color</td>
+<td>Chapter/lesson groupings</td>
+</tr>
+<tr>
+<td><strong>ClassroomTopic</strong></td>
+<td><code>classroom_topics</code></td>
+<td>chapter_id, classroom_id, name, description, difficulty, total_questions</td>
+<td>Shared classroom topics</td>
+</tr>
+<tr>
+<td><strong>TopicQuestion</strong></td>
+<td><code>topic_questions</code></td>
+<td>topic_id, classroom_id, question_text, question_type, options (JSON), analytics</td>
+<td>MCQ + descriptive questions</td>
+</tr>
+<tr>
+<td><strong>StudentTopicScore</strong></td>
+<td><code>student_topic_scores</code></td>
+<td>user_id, topic_id, mcq_score, descriptive_score, mastery_percentage</td>
+<td>Cumulative mastery tracking</td>
+</tr>
+<tr>
+<td><strong>StudentQuestionResponse</strong></td>
+<td><code>student_question_responses</code></td>
+<td>user_id, question_id, selected_answer, is_correct, time_taken, source</td>
+<td>Individual answer records</td>
+</tr>
+<tr>
+<td><strong>StudyScheduleEntry</strong></td>
+<td><code>study_schedule_entries</code></td>
+<td>user_id, classroom_topic_id, scheduled_date, duration_minutes, status</td>
+<td>Drag-and-drop study calendar</td>
+</tr>
+<tr>
+<td><strong>QuestionEffectiveness</strong></td>
+<td><code>question_effectiveness</code></td>
+<td>question_id, times_shown, times_correct, discrimination_index</td>
+<td>Type 5 agent quality metrics</td>
+</tr>
+<tr>
+<td><strong>LearningAgentMemory</strong></td>
+<td><code>learning_agent_memory</code></td>
+<td>topic_id, classroom_id, memory_data (JSON), generation_count</td>
+<td>Persistent agent learning state</td>
+</tr>
+</tbody>
+</table>
+<h3 id="other-model-files">Other Model Files</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Models</th>
+<th>Lines</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>organization.py</code></td>
+<td>Organization, LicensePurchase</td>
+<td>~130</td>
+<td>Multi-tenant organization management</td>
+</tr>
+<tr>
+<td><code>student_profile.py</code></td>
+<td>StudentProfile, ParentStudentLink, TeacherClassAssignment</td>
+<td>~200</td>
+<td>Extended profiles, parent-student linking</td>
+</tr>
+<tr>
+<td><code>notes.py</code></td>
+<td>NoteProcessingJob, DigitizedNotePage, NoteEmbedding, NoteSearchHistory</td>
+<td>~250</td>
+<td>Note digitization pipeline tracking</td>
+</tr>
+<tr>
+<td><code>assignment.py</code></td>
+<td>Assignment, AssignmentAttachment, Submission, SubmissionFile</td>
+<td>~200</td>
+<td>Teacher assignments and submissions</td>
+</tr>
+<tr>
+<td><code>exam_evaluation.py</code></td>
+<td>ExamSession, StudentEvaluation</td>
+<td>~180</td>
+<td>Exam evaluation sessions</td>
+</tr>
+<tr>
+<td><code>notification.py</code></td>
+<td>Notification</td>
+<td>~80</td>
+<td>Push/in-app notifications</td>
+</tr>
+<tr>
+<td><code>meeting.py</code></td>
+<td>Meeting, MeetingParticipant, MeetingRecording</td>
+<td>241</td>
+<td>Video conferencing with recordings</td>
+</tr>
+<tr>
+<td><code>chat.py</code></td>
+<td>ChatConversation, ChatMessage, ChatSource</td>
+<td>~200</td>
+<td>Rich chat with source citations</td>
+</tr>
+<tr>
+<td><code>feedback.py</code></td>
+<td>AgentInteraction, InteractionFeedback, LearningExample, AgentPerformanceMetrics</td>
+<td>~250</td>
+<td>Agent feedback and performance</td>
+</tr>
+<tr>
+<td><code>interact.py</code></td>
+<td>InteractionSession data models</td>
+<td>~150</td>
+<td>Interactive study sessions</td>
+</tr>
+<tr>
+<td><code>interview_questions.py</code></td>
+<td>InterviewQuestion, InterviewSession, InterviewResponse</td>
+<td>~200</td>
+<td>Interview preparation tracking</td>
+</tr>
+<tr>
+<td><code>document.py</code></td>
+<td>Document processing models</td>
+<td>~150</td>
+<td>Document ingestion tracking</td>
+</tr>
+<tr>
+<td><code>document_intelligence.py</code></td>
+<td>DocumentIntelligence models</td>
+<td>~100</td>
+<td>AI document analysis</td>
+</tr>
+<tr>
+<td><code>announcement.py</code></td>
+<td>Announcement model</td>
+<td>~80</td>
+<td>Classroom announcements</td>
+</tr>
+<tr>
+<td><code>progress.py</code></td>
+<td>Additional progress tracking</td>
+<td>~100</td>
+<td>Extended progress models</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="entity-relationship-overview">11.4 Entity Relationship Overview</h2>
+<pre class="mermaid">erDiagram
+    User ||--o{ StudentClassroom : enrolls
+    StudentClassroom }o--|| Classroom : belongs_to
+    Classroom }o--|| Organization : part_of
+    Classroom ||--o{ Chapter : contains
+    Chapter ||--o{ ClassroomTopic : groups
+    ClassroomTopic ||--o{ TopicQuestion : has
+    ClassroomTopic ||--o{ StudentTopicScore : tracks
+    ClassroomTopic ||--o{ StudentQuestionResponse : records
+    Classroom ||--o{ ClassroomMaterial : stores
+    Classroom ||--o{ Syllabus : references
+    Classroom ||--o{ Meeting : hosts
+    Meeting ||--o{ MeetingRecording : captures
+    Classroom ||--o{ Assignment : assigns
+    Assignment ||--o{ Submission : receives
+    User ||--o{ Progress : tracks
+    User ||--o{ Assessment : takes
+    Assessment ||--o{ AssessmentResult : produces
+    User ||--o{ ChatSession : starts
+    User ||--o{ Leaderboard : ranks
+    User ||--o{ StudyNote : creates
+    User ||--o{ Notification : receives
+    User ||--|| StudentProfile : has
+    StudentProfile ||--o{ ParentStudentLink : links</pre>
+<hr />
+<h2 id="database-indexes">11.5 Database Indexes</h2>
+<p>Key performance indexes across models:</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Index</th>
+<th>Table</th>
+<th>Columns</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>idx_progress_user_subject</code></td>
+<td>progress</td>
+<td>user_id, subject</td>
+<td>Fast progress lookups</td>
+</tr>
+<tr>
+<td><code>idx_result_user_assessment</code></td>
+<td>assessment_results</td>
+<td>user_id, assessment_id</td>
+<td>Assessment result queries</td>
+</tr>
+<tr>
+<td><code>idx_challenge_sender</code></td>
+<td>assessment_challenges</td>
+<td>sender_id</td>
+<td>Sent challenges lookup</td>
+</tr>
+<tr>
+<td><code>idx_challenge_recipient</code></td>
+<td>assessment_challenges</td>
+<td>recipient_id</td>
+<td>Received challenges lookup</td>
+</tr>
+<tr>
+<td><code>idx_chapter_classroom</code></td>
+<td>chapters</td>
+<td>classroom_id</td>
+<td>Chapter listing</td>
+</tr>
+<tr>
+<td><code>idx_classroom_topic_chapter</code></td>
+<td>classroom_topics</td>
+<td>chapter_id</td>
+<td>Topic hierarchy</td>
+</tr>
+<tr>
+<td><code>idx_classroom_topic_classroom</code></td>
+<td>classroom_topics</td>
+<td>classroom_id</td>
+<td>All topics in classroom</td>
+</tr>
+<tr>
+<td><code>idx_response_user</code></td>
+<td>student_question_responses</td>
+<td>user_id</td>
+<td>Student answer history</td>
+</tr>
+<tr>
+<td><code>idx_response_question</code></td>
+<td>student_question_responses</td>
+<td>question_id</td>
+<td>Question analytics</td>
+</tr>
+<tr>
+<td><code>idx_schedule_user_date</code></td>
+<td>study_schedule_entries</td>
+<td>user_id, scheduled_date</td>
+<td>Daily schedule lookup</td>
+</tr>
+<tr>
+<td><code>idx_learning_memory_topic</code></td>
+<td>learning_agent_memory</td>
+<td>topic_id</td>
+<td>Agent memory retrieval</td>
+</tr>
+<tr>
+<td><code>unique_student_classroom</code></td>
+<td>student_classrooms</td>
+<td>student_id, classroom_id</td>
+<td>Prevents duplicate enrollment</td>
+</tr>
+<tr>
+<td><code>unique_user_subtopic</code></td>
+<td>student_subtopic_progress</td>
+<td>user_id, subtopic_id</td>
+<td>One progress per subtopic</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

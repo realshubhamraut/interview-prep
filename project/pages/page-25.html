@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 25: Production Readiness, Scalability &amp;amp; Future Roadmap</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-24.html">&larr; Previous</a> <a href="page-26.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-25-production-readiness-scalability-future-roadmap">Page 25: Production Readiness, Scalability &amp; Future Roadmap</h1>
+<hr />
+<h2 id="current-production-readiness">25.1 Current Production Readiness</h2>
+<h3 id="readiness-assessment">Readiness Assessment</h3>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 26%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core API</strong></td>
+<td>Production-ready</td>
+<td>Gunicorn, healthchecks, RDS support</td>
+</tr>
+<tr>
+<td><strong>AI Service</strong></td>
+<td>Production-ready</td>
+<td>Uvicorn workers, model caching, streaming</td>
+</tr>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>Production-ready</td>
+<td>Next.js SSR, NextAuth, optimized builds</td>
+</tr>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>Production-ready</td>
+<td>AWS RDS support, migrations, connection pooling</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>Production-ready</td>
+<td>Persistent storage, snapshot support</td>
+</tr>
+<tr>
+<td><strong>Redis</strong></td>
+<td>Production-ready</td>
+<td>Data persistence, LRU eviction</td>
+</tr>
+<tr>
+<td><strong>MongoDB</strong></td>
+<td>Production-ready</td>
+<td>Auth, Atlas support</td>
+</tr>
+<tr>
+<td><strong>Kafka</strong></td>
+<td>Optional</td>
+<td>Works but can be deferred</td>
+</tr>
+<tr>
+<td><strong>Cassandra</strong></td>
+<td>Optional</td>
+<td>Analytics can use PostgreSQL initially</td>
+</tr>
+<tr>
+<td><strong>Proctoring</strong></td>
+<td>Production-ready</td>
+<td>Full pipeline with ML models</td>
+</tr>
+<tr>
+<td><strong>Soft Skills</strong></td>
+<td>Production-ready</td>
+<td>Trained models included</td>
+</tr>
+<tr>
+<td><strong>MLflow</strong></td>
+<td>Development only</td>
+<td>Used for training, not runtime</td>
+</tr>
+<tr>
+<td><strong>Dashboards</strong></td>
+<td>Development only</td>
+<td>Streamlit for internal use</td>
+</tr>
+<tr>
+<td><strong>Docker Compose</strong></td>
+<td>Production-ready</td>
+<td>Separate dev/prod compose files</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="scalability-architecture">25.2 Scalability Architecture</h2>
+<h3 id="current-bottlenecks-mitigations">Current Bottlenecks &amp; Mitigations</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 42%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Bottleneck</th>
+<th>Current Capacity</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM API calls</td>
+<td>Rate-limited by provider</td>
+<td>Multi-provider fallback, response caching</td>
+</tr>
+<tr>
+<td>Embedding computation</td>
+<td>~32 docs/batch</td>
+<td>Batch processing, embedding cache</td>
+</tr>
+<tr>
+<td>Qdrant search</td>
+<td>~1000 QPS</td>
+<td>Collection sharding, gRPC</td>
+</tr>
+<tr>
+<td>OCR processing</td>
+<td>1 document at a time</td>
+<td>Async processing via Kafka</td>
+</tr>
+<tr>
+<td>Proctoring frames</td>
+<td>1 FPS per student</td>
+<td>Lazy-loaded detectors</td>
+</tr>
+<tr>
+<td>File uploads</td>
+<td>500 MB max</td>
+<td>MinIO/S3 offloading</td>
+</tr>
+</tbody>
+</table>
+<h3 id="horizontal-scaling-strategy">Horizontal Scaling Strategy</h3>
+<pre class="mermaid">flowchart TB
+    LB["Load Balancer<br/>(Nginx / AWS ALB)"]
+    LB --> CA1["Core API-1<br/>(Gunicorn)"]
+    LB --> CA2["Core API-2<br/>(Gunicorn)"]
+    LB --> CA3["Core API-3<br/>(Gunicorn)"]
+
+    CA1 & CA2 & CA3 --> PG["PostgreSQL (RDS)"]
+
+    PG --> AI1["AI Service-1<br/>(Uvicorn)"]
+    PG --> AI2["AI Service-2<br/>(Uvicorn)"]
+    PG --> AI3["AI Service-3<br/>(Uvicorn)"]
+
+    AI1 & AI2 & AI3 --> QD["Qdrant"]
+    AI1 & AI2 & AI3 --> RD["Redis"]
+    AI1 & AI2 & AI3 --> MDB["MongoDB"]</pre>
+<hr />
+<h2 id="testing-infrastructure">25.3 Testing Infrastructure</h2>
+<h3 id="test-files-project-root">Test Files (Project Root)</h3>
+<table>
+<thead>
+<tr>
+<th>Test File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_agentic_crawl.py</code></td>
+<td>Web crawling agent tests</td>
+</tr>
+<tr>
+<td><code>test_cache_api.py</code></td>
+<td>Cache API integration tests</td>
+</tr>
+<tr>
+<td><code>test_cache.py</code></td>
+<td>Redis caching unit tests</td>
+</tr>
+<tr>
+<td><code>test_chunk_only.py</code></td>
+<td>Text chunking tests</td>
+</tr>
+<tr>
+<td><code>test_chunking.py</code></td>
+<td>Advanced chunking tests</td>
+</tr>
+<tr>
+<td><code>test_full_pipeline.py</code></td>
+<td>End-to-end pipeline tests</td>
+</tr>
+<tr>
+<td><code>test_groq_classifier.py</code></td>
+<td>Groq LLM classifier tests</td>
+</tr>
+<tr>
+<td><code>test_learning_agent_standalone.py</code></td>
+<td>Learning agent isolation tests</td>
+</tr>
+<tr>
+<td><code>test_ocr_model.py</code></td>
+<td>OCR model accuracy tests</td>
+</tr>
+<tr>
+<td><code>test_qdrant.py</code></td>
+<td>Qdrant vector DB tests</td>
+</tr>
+<tr>
+<td><code>test_subject_classifier.py</code></td>
+<td>Subject classification tests</td>
+</tr>
+<tr>
+<td><code>test_topic_chaining.py</code></td>
+<td>Topic dependency tests</td>
+</tr>
+<tr>
+<td><code>test_worker6.py</code></td>
+<td>Kafka worker tests</td>
+</tr>
+<tr>
+<td><code>test_workers.py</code></td>
+<td>Multi-worker tests</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pytest-configuration">pytest Configuration</h3>
+<div class="sourceCode" id="cb189"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pytest.ini</span></span>
+<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[pytest]</span></span>
+<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a><span class="dt">testpaths </span><span class="ot">=</span><span class="st"> tests</span></span>
+<span id="cb189-4"><a href="#cb189-4" aria-hidden="true" tabindex="-1"></a><span class="dt">python_files </span><span class="ot">=</span><span class="st"> test_*.py</span></span>
+<span id="cb189-5"><a href="#cb189-5" aria-hidden="true" tabindex="-1"></a><span class="dt">python_classes </span><span class="ot">=</span><span class="st"> Test*</span></span>
+<span id="cb189-6"><a href="#cb189-6" aria-hidden="true" tabindex="-1"></a><span class="dt">python_functions </span><span class="ot">=</span><span class="st"> test_*</span></span></code></pre></div>
+<h3 id="test-execution">Test Execution</h3>
+<div class="sourceCode" id="cb190"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="co"># All tests</span></span>
+<span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test</span>
+<span id="cb190-3"><a href="#cb190-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-4"><a href="#cb190-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Core service tests</span></span>
+<span id="cb190-5"><a href="#cb190-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend/core-service <span class="kw">&amp;&amp;</span> <span class="ex">pytest</span> tests/ <span class="at">-v</span></span>
+<span id="cb190-6"><a href="#cb190-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-7"><a href="#cb190-7" aria-hidden="true" tabindex="-1"></a><span class="co"># AI service tests</span></span>
+<span id="cb190-8"><a href="#cb190-8" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend/ai-service <span class="kw">&amp;&amp;</span> <span class="ex">pytest</span> tests/ <span class="at">-v</span></span>
+<span id="cb190-9"><a href="#cb190-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-10"><a href="#cb190-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ML model tests</span></span>
+<span id="cb190-11"><a href="#cb190-11" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test-ml</span></code></pre></div>
+<hr />
+<h2 id="seed-data-database-initialization">25.4 Seed Data &amp; Database Initialization</h2>
+<h3 id="seed_database.py"><code>seed_database.py</code></h3>
+<p>Seeds the PostgreSQL database with initial data: - Default admin user - Sample organizations - Demo classrooms - Subject/topic hierarchies</p>
+<h3 id="seed_progress_data.py"><code>seed_progress_data.py</code></h3>
+<p>Seeds student progress data for demo purposes: - Simulated assessment scores - Progress records - Leaderboard data</p>
+<hr />
+<h2 id="performance-characteristics-2">25.5 Performance Characteristics</h2>
+<h3 id="api-response-times-development">API Response Times (Development)</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Avg Response</th>
+<th>P95 Response</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/auth/login</code></td>
+<td>50ms</td>
+<td>100ms</td>
+<td>bcrypt verification</td>
+</tr>
+<tr>
+<td><code>GET /api/progress</code></td>
+<td>20ms</td>
+<td>50ms</td>
+<td>PostgreSQL query</td>
+</tr>
+<tr>
+<td><code>POST /api/tutor/chat</code></td>
+<td>2-5s TTFB</td>
+<td>8s</td>
+<td>LLM streaming</td>
+</tr>
+<tr>
+<td><code>POST /api/index/document</code></td>
+<td>5-30s</td>
+<td>60s</td>
+<td>Async processing</td>
+</tr>
+<tr>
+<td><code>POST /api/proctoring/analyze-frame</code></td>
+<td>200ms</td>
+<td>500ms</td>
+<td>ML inference</td>
+</tr>
+<tr>
+<td><code>GET /api/web-resources/search</code></td>
+<td>1-3s</td>
+<td>5s</td>
+<td>Web search + cache</td>
+</tr>
+<tr>
+<td><code>POST /api/meetings/transcribe</code></td>
+<td>10-60s</td>
+<td>120s</td>
+<td>Whisper API</td>
+</tr>
+</tbody>
+</table>
+<h3 id="memory-footprint">Memory Footprint</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Base Memory</th>
+<th>With Models</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core API</td>
+<td>150 MB</td>
+<td>150 MB</td>
+<td>No ML models</td>
+</tr>
+<tr>
+<td>AI Service</td>
+<td>300 MB</td>
+<td>1.5 GB</td>
+<td>Embeddings + OCR models</td>
+</tr>
+<tr>
+<td>AI Service + Proctoring</td>
+<td>300 MB</td>
+<td>2.5 GB</td>
+<td>+ face/object detection</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>200 MB</td>
+<td>200 MB</td>
+<td>Node.js</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>100 MB</td>
+<td>Variable</td>
+<td>Data-dependent</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>200 MB</td>
+<td>Variable</td>
+<td>Vector-dependent</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>50 MB</td>
+<td>256 MB max</td>
+<td>LRU eviction</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="cicd-pipeline">25.6 CI/CD Pipeline</h2>
+<h3 id="source-.github-github-actions">Source: <code>.github/</code> (GitHub Actions)</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 34%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>Trigger</th>
+<th>Steps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Build &amp; Test</strong></td>
+<td>Push/PR to main</td>
+<td>Lint → Test → Build Docker images</td>
+</tr>
+<tr>
+<td><strong>Deploy</strong></td>
+<td>Tag release</td>
+<td>Build → Push to registry → Deploy to EC2</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="technology-summary">25.7 Technology Summary</h2>
+<h3 id="complete-stack">Complete Stack</h3>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technologies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>Next.js 14, TypeScript, TailwindCSS, Zustand, NextAuth, LiveKit, Three.js</td>
+</tr>
+<tr>
+<td><strong>Core Backend</strong></td>
+<td>Flask, SQLAlchemy, Flask-Migrate, PyJWT, Werkzeug</td>
+</tr>
+<tr>
+<td><strong>AI Backend</strong></td>
+<td>FastAPI, LangGraph, sentence-transformers, OpenCV, MediaPipe</td>
+</tr>
+<tr>
+<td><strong>LLM Providers</strong></td>
+<td>OpenAI GPT-4, Google Gemini, Groq, Ollama (Mistral-7B)</td>
+</tr>
+<tr>
+<td><strong>Speech</strong></td>
+<td>OpenAI Whisper (STT), AWS Polly (TTS), local Whisper fallback</td>
+</tr>
+<tr>
+<td><strong>ML/DL</strong></td>
+<td>PyTorch, LightGBM, XGBoost, YOLOv11n, dlib, DeepFace</td>
+</tr>
+<tr>
+<td><strong>Databases</strong></td>
+<td>PostgreSQL 15, Qdrant, Redis 7, MongoDB 7, Cassandra 4</td>
+</tr>
+<tr>
+<td><strong>Streaming</strong></td>
+<td>Apache Kafka, Apache Spark Structured Streaming</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>MinIO (dev), AWS S3 (prod)</td>
+</tr>
+<tr>
+<td><strong>Monitoring</strong></td>
+<td>MLflow, Streamlit, Docker healthchecks, Sentry (optional)</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>Docker Compose, Nginx, mkcert (TLS), Makefile</td>
+</tr>
+<tr>
+<td><strong>Cloud</strong></td>
+<td>AWS EC2, RDS, S3, IAM</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="future-roadmap">25.8 Future Roadmap</h2>
+<h3 id="near-term-improvements">Near-Term Improvements</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 32%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Enhancement</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>High</strong></td>
+<td>Kubernetes deployment</td>
+<td>Moving beyond single-node Docker Compose</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>Database migration management</td>
+<td>Alembic migrations for production schema changes</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>Rate limiting</td>
+<td>Per-user API rate limits for LLM endpoints</td>
+</tr>
+<tr>
+<td><strong>Medium</strong></td>
+<td>WebSocket for chat</td>
+<td>Replace SSE with bidirectional WebSocket</td>
+</tr>
+<tr>
+<td><strong>Medium</strong></td>
+<td>CDN for static assets</td>
+<td>CloudFront for frontend and uploaded files</td>
+</tr>
+<tr>
+<td><strong>Medium</strong></td>
+<td>Database connection pooling</td>
+<td>PgBouncer for PostgreSQL connection management</td>
+</tr>
+</tbody>
+</table>
+<h3 id="long-term-vision">Long-Term Vision</h3>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr>
+<th>Area</th>
+<th>Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Multi-language support</strong></td>
+<td>i18n for frontend, multilingual tutoring</td>
+</tr>
+<tr>
+<td><strong>Mobile app</strong></td>
+<td>React Native wrapper for iOS/Android</td>
+</tr>
+<tr>
+<td><strong>Advanced proctoring</strong></td>
+<td>Browser lockdown mode, multi-camera support</td>
+</tr>
+<tr>
+<td><strong>Adaptive learning v2</strong></td>
+<td>Reinforcement learning for personalized paths</td>
+</tr>
+<tr>
+<td><strong>Federated analytics</strong></td>
+<td>Privacy-preserving cross-organization insights</td>
+</tr>
+<tr>
+<td><strong>Plugin ecosystem</strong></td>
+<td>Third-party agent and tool integrations via MCP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="documentation-index">25.9 Documentation Index</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 37%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Page</th>
+<th>Topic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Project Overview</td>
+<td>Executive summary, tech stack, metrics</td>
+</tr>
+<tr>
+<td>02</td>
+<td>System Architecture</td>
+<td>Service decomposition, communication patterns</td>
+</tr>
+<tr>
+<td>03</td>
+<td>Multi-Agent System</td>
+<td>Orchestrator, BaseAgent, MCP protocol</td>
+</tr>
+<tr>
+<td>04</td>
+<td>Tutor Agent</td>
+<td>ABCR, TAL, MCP integration</td>
+</tr>
+<tr>
+<td>05</td>
+<td>RAG Pipeline</td>
+<td>Ingestion, retrieval, vector search</td>
+</tr>
+<tr>
+<td>06</td>
+<td>Research &amp; Web Enrichment</td>
+<td>LangGraph research, web caching</td>
+</tr>
+<tr>
+<td>07</td>
+<td>Curriculum Agent</td>
+<td>Topological sort, spaced repetition</td>
+</tr>
+<tr>
+<td>08</td>
+<td>Learning Agent (Type 5)</td>
+<td>Critic-learner-performance cycle</td>
+</tr>
+<tr>
+<td>09</td>
+<td>Document Processing</td>
+<td>7-stage pipeline, OCR, chunking</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Notes, Assessment, Question</td>
+<td>Supporting agents matrix</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Core Service Architecture</td>
+<td>Flask factory, 40+ SQLAlchemy models</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Core Service Routes</td>
+<td>29 blueprints, JWT, RBAC</td>
+</tr>
+<tr>
+<td>13</td>
+<td>AI Service API</td>
+<td>27 FastAPI routers, SSE streaming</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Database Architecture</td>
+<td>5-database polyglot persistence</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Frontend Architecture</td>
+<td>Next.js 14, 53 components, LiveKit</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Proctoring System</td>
+<td>8 detectors, LightGBM + LSTM</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Soft Skills Evaluation</td>
+<td>Gaze, posture, gestures, speech</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Meeting System</td>
+<td>LiveKit, Whisper, Gemini, meeting RAG</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Kafka Event Streaming</td>
+<td>8 topics, Spark Streaming</td>
+</tr>
+<tr>
+<td>20</td>
+<td>ML Training Pipeline</td>
+<td>3 PyTorch models, 15 notebooks</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Infrastructure &amp; Docker</td>
+<td>12-service dev, 6-service prod, AWS</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Security Architecture</td>
+<td>JWT, RBAC, TLS, moderation</td>
+</tr>
+<tr>
+<td>23</td>
+<td>LLM Provider Strategy</td>
+<td>4 providers, cost optimization</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Observability &amp; Logging</td>
+<td>MLflow, Streamlit, healthchecks</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Production Readiness</td>
+<td>Scalability, testing, roadmap</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

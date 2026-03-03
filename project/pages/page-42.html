@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 42: Dockerfile Architecture — Multi-Stage Builds</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-41.html">&larr; Previous</a> <a href="page-43.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-42-dockerfile-architecture-multi-stage-builds">Page 42: Dockerfile Architecture — Multi-Stage Builds</h1>
+<hr />
+<h2 id="overview-32">42.1 Overview</h2>
+<p>ensureStudy uses <strong>5 Dockerfiles</strong> (3 development, 2 production) with multi-stage builds, layer caching, non-root users, and health checks. This page documents every Dockerfile line-by-line.</p>
+<hr />
+<h2 id="dockerfile-comparison-matrix">42.2 Dockerfile Comparison Matrix</h2>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 18%" />
+<col style="width: 13%" />
+<col style="width: 15%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr>
+<th>Property</th>
+<th>Core Dev</th>
+<th>Core Prod</th>
+<th>AI Dev</th>
+<th>AI Prod</th>
+<th>Frontend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base Image</td>
+<td>python:3.11-slim</td>
+<td>python:3.11-slim</td>
+<td>python:3.11-slim</td>
+<td>python:3.11-slim</td>
+<td>node:20</td>
+</tr>
+<tr>
+<td>Stages</td>
+<td>1</td>
+<td>2 (builder + runtime)</td>
+<td>1</td>
+<td>2 (builder + runtime)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>Flask dev server</td>
+<td>Gunicorn (2W, 4T)</td>
+<td>Uvicorn</td>
+<td>Uvicorn</td>
+<td>Next.js</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>8000</td>
+<td>8000</td>
+<td>8001</td>
+<td>8001</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>User</td>
+<td>root</td>
+<td>appuser (1000)</td>
+<td>root</td>
+<td>appuser (1000)</td>
+<td>root</td>
+</tr>
+<tr>
+<td>Healthcheck</td>
+<td>curl</td>
+<td>Python urllib</td>
+<td>curl</td>
+<td>Python urllib</td>
+<td>—</td>
+</tr>
+<tr>
+<td>System Deps</td>
+<td>gcc, libpq-dev</td>
+<td>libpq5</td>
+<td>gcc, libreoffice, tesseract</td>
+<td>ffmpeg</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="core-service-development-dockerfile">42.3 Core Service — Development (<code>Dockerfile</code>)</h2>
+<div class="sourceCode" id="cb259"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb259-1"><a href="#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11-slim</span>
+<span id="cb259-2"><a href="#cb259-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb259-3"><a href="#cb259-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-4"><a href="#cb259-4" aria-hidden="true" tabindex="-1"></a><span class="co"># System deps for psycopg compilation</span></span>
+<span id="cb259-5"><a href="#cb259-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> <span class="dt">\</span></span>
+<span id="cb259-6"><a href="#cb259-6" aria-hidden="true" tabindex="-1"></a>    gcc libpq-dev curl <span class="dt">\</span></span>
+<span id="cb259-7"><a href="#cb259-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span>
+<span id="cb259-8"><a href="#cb259-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-9"><a href="#cb259-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependency layer (cached if requirements unchanged)</span></span>
+<span id="cb259-10"><a href="#cb259-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> requirements.txt .</span>
+<span id="cb259-11"><a href="#cb259-11" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install <span class="at">--no-cache-dir</span> <span class="at">-r</span> requirements.txt</span>
+<span id="cb259-12"><a href="#cb259-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-13"><a href="#cb259-13" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
+<span id="cb259-14"><a href="#cb259-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-15"><a href="#cb259-15" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> FLASK_APP=app</span>
+<span id="cb259-16"><a href="#cb259-16" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> FLASK_ENV=development</span>
+<span id="cb259-17"><a href="#cb259-17" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> PYTHONPATH=/app</span>
+<span id="cb259-18"><a href="#cb259-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-19"><a href="#cb259-19" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8000</span>
+<span id="cb259-20"><a href="#cb259-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-21"><a href="#cb259-21" aria-hidden="true" tabindex="-1"></a><span class="kw">HEALTHCHECK</span> <span class="op">--interval=30s</span> <span class="op">--timeout=10s</span> <span class="op">--start-period=5s</span> <span class="op">--retries=3</span> \</span>
+<span id="cb259-22"><a href="#cb259-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CMD</span> <span class="ex">curl</span> <span class="at">-f</span> http://localhost:8000/health <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb259-23"><a href="#cb259-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-24"><a href="#cb259-24" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;flask&quot;</span>, <span class="st">&quot;run&quot;</span>, <span class="st">&quot;--host&quot;</span>, <span class="st">&quot;0.0.0.0&quot;</span>, <span class="st">&quot;--port&quot;</span>, <span class="st">&quot;8000&quot;</span>]</span></code></pre></div>
+<hr />
+<h2 id="core-service-production-dockerfile.prod">42.4 Core Service — Production (<code>Dockerfile.prod</code>)</h2>
+<p><strong>Multi-stage build</strong> separating build tools from runtime:</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb260-1"><a href="#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stage 1: BUILD — includes gcc, cmake, build-essential</span></span>
+<span id="cb260-2"><a href="#cb260-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11-slim as builder</span>
+<span id="cb260-3"><a href="#cb260-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb260-4"><a href="#cb260-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> build-essential libpq-dev</span>
+<span id="cb260-5"><a href="#cb260-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> requirements.txt .</span>
+<span id="cb260-6"><a href="#cb260-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install <span class="at">--no-cache-dir</span> <span class="at">--user</span> <span class="at">-r</span> requirements.txt</span>
+<span id="cb260-7"><a href="#cb260-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install <span class="at">--no-cache-dir</span> <span class="at">--user</span> gunicorn</span>
+<span id="cb260-8"><a href="#cb260-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-9"><a href="#cb260-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Stage 2: RUNTIME — minimal, no build tools</span></span>
+<span id="cb260-10"><a href="#cb260-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11-slim</span>
+<span id="cb260-11"><a href="#cb260-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb260-12"><a href="#cb260-12" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> libpq5           <span class="co"># Only runtime lib</span></span>
+<span id="cb260-13"><a href="#cb260-13" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /root/.local /root/.local</span>
+<span id="cb260-14"><a href="#cb260-14" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> PATH=/root/.local/bin:$PATH</span>
+<span id="cb260-15"><a href="#cb260-15" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
+<span id="cb260-16"><a href="#cb260-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-17"><a href="#cb260-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create directories for file uploads</span></span>
+<span id="cb260-18"><a href="#cb260-18" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> /app/uploads /app/recordings</span>
+<span id="cb260-19"><a href="#cb260-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-20"><a href="#cb260-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Security: non-root user</span></span>
+<span id="cb260-21"><a href="#cb260-21" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-u</span> 1000 appuser <span class="kw">&amp;&amp;</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb260-22"><a href="#cb260-22" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb260-23"><a href="#cb260-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-24"><a href="#cb260-24" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> FLASK_APP=app</span>
+<span id="cb260-25"><a href="#cb260-25" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> FLASK_ENV=production</span>
+<span id="cb260-26"><a href="#cb260-26" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> PYTHONUNBUFFERED=1</span>
+<span id="cb260-27"><a href="#cb260-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-28"><a href="#cb260-28" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8000</span>
+<span id="cb260-29"><a href="#cb260-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-30"><a href="#cb260-30" aria-hidden="true" tabindex="-1"></a><span class="kw">HEALTHCHECK</span> <span class="op">--interval=30s</span> <span class="op">--timeout=10s</span> <span class="op">--start-period=30s</span> <span class="op">--retries=3</span> \</span>
+<span id="cb260-31"><a href="#cb260-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CMD</span> <span class="ex">python</span> <span class="at">-c</span> <span class="st">&quot;import urllib.request; urllib.request.urlopen(&#39;http://localhost:8000/health&#39;)&quot;</span></span>
+<span id="cb260-32"><a href="#cb260-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-33"><a href="#cb260-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Gunicorn: 2 workers, 4 threads, 120s timeout</span></span>
+<span id="cb260-34"><a href="#cb260-34" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;gunicorn&quot;</span>, <span class="st">&quot;--bind&quot;</span>, <span class="st">&quot;0.0.0.0:8000&quot;</span>, <span class="st">&quot;--workers&quot;</span>, <span class="st">&quot;2&quot;</span>, </span>
+<span id="cb260-35"><a href="#cb260-35" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;--threads&quot;</span>, <span class="st">&quot;4&quot;</span>, <span class="st">&quot;--timeout&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;app:create_app()&quot;</span>]</span></code></pre></div>
+<hr />
+<h2 id="ai-service-development-dockerfile">42.5 AI Service — Development (<code>Dockerfile</code>)</h2>
+<p>Includes <strong>LibreOffice</strong> and <strong>Tesseract OCR</strong> for document processing:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb261-1"><a href="#cb261-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11-slim</span>
+<span id="cb261-2"><a href="#cb261-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb261-3"><a href="#cb261-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb261-4"><a href="#cb261-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> <span class="dt">\</span></span>
+<span id="cb261-5"><a href="#cb261-5" aria-hidden="true" tabindex="-1"></a>    gcc libpq-dev curl <span class="dt">\</span></span>
+<span id="cb261-6"><a href="#cb261-6" aria-hidden="true" tabindex="-1"></a>    libreoffice-writer libreoffice-impress libreoffice-common <span class="dt">\ </span> <span class="co"># PPTX/DOCX→PDF</span></span>
+<span id="cb261-7"><a href="#cb261-7" aria-hidden="true" tabindex="-1"></a>    tesseract-ocr tesseract-ocr-eng \                            <span class="co"># OCR</span></span>
+<span id="cb261-8"><a href="#cb261-8" aria-hidden="true" tabindex="-1"></a>    fonts-liberation fonts-dejavu-core \                          <span class="co"># Document fonts</span></span>
+<span id="cb261-9"><a href="#cb261-9" aria-hidden="true" tabindex="-1"></a>    &amp;&amp; rm -rf /var/lib/apt/lists/*</span>
+<span id="cb261-10"><a href="#cb261-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb261-11"><a href="#cb261-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> requirements.txt .</span>
+<span id="cb261-12"><a href="#cb261-12" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install <span class="at">--no-cache-dir</span> <span class="at">-r</span> requirements.txt</span>
+<span id="cb261-13"><a href="#cb261-13" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
+<span id="cb261-14"><a href="#cb261-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb261-15"><a href="#cb261-15" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> PYTHONPATH=/app</span>
+<span id="cb261-16"><a href="#cb261-16" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8001</span>
+<span id="cb261-17"><a href="#cb261-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb261-18"><a href="#cb261-18" aria-hidden="true" tabindex="-1"></a><span class="kw">HEALTHCHECK</span> <span class="op">--interval=30s</span> <span class="op">--timeout=10s</span> <span class="op">--start-period=5s</span> <span class="op">--retries=3</span> \</span>
+<span id="cb261-19"><a href="#cb261-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CMD</span> <span class="ex">curl</span> <span class="at">-f</span> http://localhost:8001/health <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb261-20"><a href="#cb261-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb261-21"><a href="#cb261-21" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;uvicorn&quot;</span>, <span class="st">&quot;app.main:app&quot;</span>, <span class="st">&quot;--host&quot;</span>, <span class="st">&quot;0.0.0.0&quot;</span>, <span class="st">&quot;--port&quot;</span>, <span class="st">&quot;8001&quot;</span>]</span></code></pre></div>
+<hr />
+<h2 id="ai-service-production-dockerfile.prod">42.6 AI Service — Production (<code>Dockerfile.prod</code>)</h2>
+<p>Multi-stage build with <strong>pre-downloaded Whisper model</strong>:</p>
+<div class="sourceCode" id="cb262"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb262-1"><a href="#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stage 1: BUILD — includes cmake/boost for dlib compilation</span></span>
+<span id="cb262-2"><a href="#cb262-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11-slim as builder</span>
+<span id="cb262-3"><a href="#cb262-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> build-essential cmake libboost-python-dev libboost-system-dev</span>
+<span id="cb262-4"><a href="#cb262-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> requirements.txt .</span>
+<span id="cb262-5"><a href="#cb262-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install <span class="at">--no-cache-dir</span> <span class="at">--user</span> <span class="at">-r</span> requirements.txt</span>
+<span id="cb262-6"><a href="#cb262-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-7"><a href="#cb262-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Stage 2: RUNTIME</span></span>
+<span id="cb262-8"><a href="#cb262-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11-slim</span>
+<span id="cb262-9"><a href="#cb262-9" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> ffmpeg            <span class="co"># Required for Whisper audio processing</span></span>
+<span id="cb262-10"><a href="#cb262-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /root/.local /root/.local</span>
+<span id="cb262-11"><a href="#cb262-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> PATH=/root/.local/bin:$PATH</span>
+<span id="cb262-12"><a href="#cb262-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
+<span id="cb262-13"><a href="#cb262-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-14"><a href="#cb262-14" aria-hidden="true" tabindex="-1"></a><span class="co"># PRE-DOWNLOAD Whisper model during build (not runtime)</span></span>
+<span id="cb262-15"><a href="#cb262-15" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> WHISPER_MODEL=small</span>
+<span id="cb262-16"><a href="#cb262-16" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> WHISPER_MODEL=${WHISPER_MODEL}</span>
+<span id="cb262-17"><a href="#cb262-17" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">python</span> <span class="at">-c</span> <span class="st">&quot;import whisper; whisper.load_model(&#39;</span><span class="va">${WHISPER_MODEL}</span><span class="st">&#39;)&quot;</span></span>
+<span id="cb262-18"><a href="#cb262-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-19"><a href="#cb262-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Security: non-root user</span></span>
+<span id="cb262-20"><a href="#cb262-20" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-u</span> 1000 appuser <span class="kw">&amp;&amp;</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb262-21"><a href="#cb262-21" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb262-22"><a href="#cb262-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-23"><a href="#cb262-23" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8001</span>
+<span id="cb262-24"><a href="#cb262-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-25"><a href="#cb262-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Longer start-period (60s) for model loading</span></span>
+<span id="cb262-26"><a href="#cb262-26" aria-hidden="true" tabindex="-1"></a><span class="kw">HEALTHCHECK</span> <span class="op">--interval=30s</span> <span class="op">--timeout=10s</span> <span class="op">--start-period=60s</span> <span class="op">--retries=3</span> \</span>
+<span id="cb262-27"><a href="#cb262-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CMD</span> <span class="ex">python</span> <span class="at">-c</span> <span class="st">&quot;import urllib.request; urllib.request.urlopen(&#39;http://localhost:8001/health&#39;)&quot;</span></span>
+<span id="cb262-28"><a href="#cb262-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-29"><a href="#cb262-29" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;uvicorn&quot;</span>, <span class="st">&quot;app.main:app&quot;</span>, <span class="st">&quot;--host&quot;</span>, <span class="st">&quot;0.0.0.0&quot;</span>, <span class="st">&quot;--port&quot;</span>, <span class="st">&quot;8001&quot;</span>]</span></code></pre></div>
+<hr />
+<h2 id="image-size-estimates">42.7 Image Size Estimates</h2>
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Dev Size</th>
+<th>Prod Size</th>
+<th>Reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core Service</td>
+<td>~500 MB</td>
+<td>~300 MB</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>AI Service</td>
+<td>~4 GB</td>
+<td>~3 GB</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>~500 MB</td>
+<td>~200 MB</td>
+<td>60%</td>
+</tr>
+</tbody>
+</table>
+<p>The AI Service image is large due to PyTorch (~2 GB), sentence-transformers, and Whisper model weights.</p>
+<hr />
+<h2 id="docker-build-best-practices-used">42.8 Docker Build Best Practices Used</h2>
+<table>
+<thead>
+<tr>
+<th>Practice</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Layer caching</strong></td>
+<td><code>COPY requirements.txt</code> before <code>COPY .</code></td>
+</tr>
+<tr>
+<td><strong>Multi-stage builds</strong></td>
+<td>Separate builder and runtime stages</td>
+</tr>
+<tr>
+<td><strong>Non-root user</strong></td>
+<td><code>appuser</code> (UID 1000) in production</td>
+</tr>
+<tr>
+<td><strong>No cache</strong></td>
+<td><code>pip install --no-cache-dir</code></td>
+</tr>
+<tr>
+<td><strong>Apt cleanup</strong></td>
+<td><code>rm -rf /var/lib/apt/lists/*</code></td>
+</tr>
+<tr>
+<td><strong>Health checks</strong></td>
+<td>HTTP endpoint polling</td>
+</tr>
+<tr>
+<td><strong>Build args</strong></td>
+<td><code>WHISPER_MODEL</code> configurable at build time</td>
+</tr>
+<tr>
+<td><strong>Unbuffered Python</strong></td>
+<td><code>PYTHONUNBUFFERED=1</code> for log visibility</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

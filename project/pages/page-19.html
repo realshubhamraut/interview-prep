@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 19: Kafka Event Streaming &amp;amp; Data Pipelines</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-18.html">&larr; Previous</a> <a href="page-20.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-19-kafka-event-streaming-data-pipelines">Page 19: Kafka Event Streaming &amp; Data Pipelines</h1>
+<hr />
+<h2 id="overview-11">19.1 Overview</h2>
+<p>ensureStudy uses <strong>Apache Kafka</strong> as its event streaming backbone to decouple real-time user actions from asynchronous processing. Events flow from the Core Service through Kafka to consumers that trigger AI agents, update analytics, and maintain system state.</p>
+<h3 id="source-backendkafkaconfigkafka_config.py-91-lines">Source: <code>backend/kafka/config/kafka_config.py</code> (91 lines)</h3>
+<hr />
+<h2 id="kafka-configuration">19.2 Kafka Configuration</h2>
+<div class="sourceCode" id="cb143"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Environment-driven configuration</span></span>
+<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a>KAFKA_BOOTSTRAP_SERVERS <span class="op">=</span> <span class="st">&quot;localhost:9092&quot;</span>     <span class="co"># Comma-separated</span></span>
+<span id="cb143-3"><a href="#cb143-3" aria-hidden="true" tabindex="-1"></a>KAFKA_CLIENT_ID <span class="op">=</span> <span class="st">&quot;ensurestudy-client&quot;</span></span>
+<span id="cb143-4"><a href="#cb143-4" aria-hidden="true" tabindex="-1"></a>KAFKA_GROUP_ID <span class="op">=</span> <span class="st">&quot;ensurestudy-consumers&quot;</span></span>
+<span id="cb143-5"><a href="#cb143-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-6"><a href="#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Producer settings</span></span>
+<span id="cb143-7"><a href="#cb143-7" aria-hidden="true" tabindex="-1"></a>producer <span class="op">=</span> KafkaProducer(</span>
+<span id="cb143-8"><a href="#cb143-8" aria-hidden="true" tabindex="-1"></a>    bootstrap_servers<span class="op">=</span>config[<span class="st">&quot;bootstrap_servers&quot;</span>],</span>
+<span id="cb143-9"><a href="#cb143-9" aria-hidden="true" tabindex="-1"></a>    value_serializer<span class="op">=</span><span class="kw">lambda</span> v: json.dumps(v).encode(<span class="st">&quot;utf-8&quot;</span>),</span>
+<span id="cb143-10"><a href="#cb143-10" aria-hidden="true" tabindex="-1"></a>    key_serializer<span class="op">=</span><span class="kw">lambda</span> k: k.encode(<span class="st">&quot;utf-8&quot;</span>) <span class="cf">if</span> k <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb143-11"><a href="#cb143-11" aria-hidden="true" tabindex="-1"></a>    acks<span class="op">=</span><span class="st">&quot;all&quot;</span>,                                <span class="co"># Wait for all replicas</span></span>
+<span id="cb143-12"><a href="#cb143-12" aria-hidden="true" tabindex="-1"></a>    retries<span class="op">=</span><span class="dv">3</span>,                                 <span class="co"># Retry on failure</span></span>
+<span id="cb143-13"><a href="#cb143-13" aria-hidden="true" tabindex="-1"></a>    max_in_flight_requests_per_connection<span class="op">=</span><span class="dv">1</span>     <span class="co"># Preserve ordering</span></span>
+<span id="cb143-14"><a href="#cb143-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb143-15"><a href="#cb143-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-16"><a href="#cb143-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Consumer settings</span></span>
+<span id="cb143-17"><a href="#cb143-17" aria-hidden="true" tabindex="-1"></a>consumer <span class="op">=</span> KafkaConsumer(</span>
+<span id="cb143-18"><a href="#cb143-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>topics,</span>
+<span id="cb143-19"><a href="#cb143-19" aria-hidden="true" tabindex="-1"></a>    bootstrap_servers<span class="op">=</span>config[<span class="st">&quot;bootstrap_servers&quot;</span>],</span>
+<span id="cb143-20"><a href="#cb143-20" aria-hidden="true" tabindex="-1"></a>    group_id<span class="op">=</span>config[<span class="st">&quot;group_id&quot;</span>],</span>
+<span id="cb143-21"><a href="#cb143-21" aria-hidden="true" tabindex="-1"></a>    auto_offset_reset<span class="op">=</span><span class="st">&quot;earliest&quot;</span>,</span>
+<span id="cb143-22"><a href="#cb143-22" aria-hidden="true" tabindex="-1"></a>    enable_auto_commit<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb143-23"><a href="#cb143-23" aria-hidden="true" tabindex="-1"></a>    value_deserializer<span class="op">=</span><span class="kw">lambda</span> m: json.loads(m.decode(<span class="st">&quot;utf-8&quot;</span>)),</span>
+<span id="cb143-24"><a href="#cb143-24" aria-hidden="true" tabindex="-1"></a>    key_deserializer<span class="op">=</span><span class="kw">lambda</span> k: k.decode(<span class="st">&quot;utf-8&quot;</span>) <span class="cf">if</span> k <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb143-25"><a href="#cb143-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="topic-inventory">19.3 Topic Inventory</h2>
+<div class="sourceCode" id="cb144"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Topics:</span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a>    STUDENT_EVENTS <span class="op">=</span> <span class="st">&quot;student-events&quot;</span></span>
+<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a>    CHAT_MESSAGES <span class="op">=</span> <span class="st">&quot;chat-messages&quot;</span></span>
+<span id="cb144-4"><a href="#cb144-4" aria-hidden="true" tabindex="-1"></a>    ASSESSMENT_SUBMISSIONS <span class="op">=</span> <span class="st">&quot;assessment-submissions&quot;</span></span>
+<span id="cb144-5"><a href="#cb144-5" aria-hidden="true" tabindex="-1"></a>    MODERATION_EVENTS <span class="op">=</span> <span class="st">&quot;moderation-events&quot;</span></span>
+<span id="cb144-6"><a href="#cb144-6" aria-hidden="true" tabindex="-1"></a>    LEADERBOARD_UPDATES <span class="op">=</span> <span class="st">&quot;leaderboard-updates&quot;</span></span>
+<span id="cb144-7"><a href="#cb144-7" aria-hidden="true" tabindex="-1"></a>    PROGRESS_UPDATES <span class="op">=</span> <span class="st">&quot;progress-updates&quot;</span></span>
+<span id="cb144-8"><a href="#cb144-8" aria-hidden="true" tabindex="-1"></a>    ANALYTICS_EVENTS <span class="op">=</span> <span class="st">&quot;analytics-events&quot;</span></span>
+<span id="cb144-9"><a href="#cb144-9" aria-hidden="true" tabindex="-1"></a>    DOCUMENT_PROCESSING <span class="op">=</span> <span class="st">&quot;document-processing&quot;</span></span></code></pre></div>
+<h3 id="topic-details">Topic Details</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 21%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Partitions</th>
+<th>Producer</th>
+<th>Consumer</th>
+<th>Event Shape</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>student-events</code></td>
+<td>3</td>
+<td>Core Service</td>
+<td>Analytics consumer</td>
+<td><code>{user_id, event_type, subject, timestamp, metadata}</code></td>
+</tr>
+<tr>
+<td><code>chat-messages</code></td>
+<td>3</td>
+<td>AI Service</td>
+<td>Chat history consumer</td>
+<td><code>{session_id, user_id, message, response, tokens_used}</code></td>
+</tr>
+<tr>
+<td><code>assessment-submissions</code></td>
+<td>3</td>
+<td>Core Service</td>
+<td>Learning Agent</td>
+<td><code>{user_id, assessment_id, topic_id, responses[], score}</code></td>
+</tr>
+<tr>
+<td><code>moderation-events</code></td>
+<td>3</td>
+<td>AI Service</td>
+<td>Moderation log consumer</td>
+<td><code>{user_id, content, action, confidence, was_blocked}</code></td>
+</tr>
+<tr>
+<td><code>leaderboard-updates</code></td>
+<td>3</td>
+<td>Core Service</td>
+<td>Leaderboard aggregator</td>
+<td><code>{user_id, classroom_id, score_delta, streak_update}</code></td>
+</tr>
+<tr>
+<td><code>progress-updates</code></td>
+<td>3</td>
+<td>Core Service</td>
+<td>Progress aggregator</td>
+<td><code>{user_id, topic_id, score, mastery_level}</code></td>
+</tr>
+<tr>
+<td><code>analytics-events</code></td>
+<td>3</td>
+<td>All services</td>
+<td>Cassandra writer</td>
+<td><code>{event_type, dimensions, value, timestamp}</code></td>
+</tr>
+<tr>
+<td><code>document-processing</code></td>
+<td>3</td>
+<td>Core Service</td>
+<td>Document Agent</td>
+<td><code>{document_id, classroom_id, file_url, file_type}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="topic-creation">Topic Creation</h3>
+<div class="sourceCode" id="cb145"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_topics(topics_config):</span>
+<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a>    admin_client <span class="op">=</span> KafkaAdminClient(</span>
+<span id="cb145-3"><a href="#cb145-3" aria-hidden="true" tabindex="-1"></a>        bootstrap_servers<span class="op">=</span>config[<span class="st">&quot;bootstrap_servers&quot;</span>]</span>
+<span id="cb145-4"><a href="#cb145-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb145-5"><a href="#cb145-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb145-6"><a href="#cb145-6" aria-hidden="true" tabindex="-1"></a>    new_topics <span class="op">=</span> [NewTopic(</span>
+<span id="cb145-7"><a href="#cb145-7" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span>topic[<span class="st">&quot;name&quot;</span>],</span>
+<span id="cb145-8"><a href="#cb145-8" aria-hidden="true" tabindex="-1"></a>        num_partitions<span class="op">=</span>topic.get(<span class="st">&quot;partitions&quot;</span>, <span class="dv">3</span>),</span>
+<span id="cb145-9"><a href="#cb145-9" aria-hidden="true" tabindex="-1"></a>        replication_factor<span class="op">=</span>topic.get(<span class="st">&quot;replication_factor&quot;</span>, <span class="dv">1</span>)</span>
+<span id="cb145-10"><a href="#cb145-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">for</span> topic <span class="kw">in</span> topics_config]</span>
+<span id="cb145-11"><a href="#cb145-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb145-12"><a href="#cb145-12" aria-hidden="true" tabindex="-1"></a>    admin_client.create_topics(new_topics<span class="op">=</span>new_topics)</span></code></pre></div>
+<hr />
+<h2 id="event-flow-patterns">19.4 Event Flow Patterns</h2>
+<h3 id="pattern-1-assessment-learning-agent-async-ai-trigger">Pattern 1: Assessment → Learning Agent (Async AI Trigger)</h3>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant CS as Core Service
+    participant PG as PostgreSQL
+    participant K as Kafka<br/>assessment-submissions
+    participant AC as Agent Consumer
+    participant LA as Learning Agent
+
+    S->>CS: Submit assessment
+    CS->>PG: Save responses + score
+    CS->>K: Publish {user_id, topic_id, responses, score}
+    K->>AC: Deliver to consumer group
+    AC->>LA: trigger_on_assessment_submit()
+
+    rect rgb(59, 130, 246, 0.1)
+        Note over LA: Type 5 Learning Cycle
+        LA->>LA: 🔍 Critic: analyze_performance()
+        LA->>LA: 🧠 Learner: update_learning()
+        LA->>LA: ⚙️ Threshold: check_threshold()
+    end
+
+    alt ≥80% questions attempted
+        LA->>LA: Generate new MCQs
+        LA->>CS: POST /api/questions
+        CS->>PG: Store new questions
+    end</pre>
+<h3 id="pattern-2-document-upload-rag-pipeline-async-processing">Pattern 2: Document Upload → RAG Pipeline (Async Processing)</h3>
+<pre class="mermaid">sequenceDiagram
+    participant T as Teacher
+    participant CS as Core Service
+    participant K as Kafka<br/>document-processing
+    participant DA as Document Agent
+    participant QD as Qdrant
+
+    T->>CS: Upload PDF
+    CS->>CS: Save file + create ClassroomMaterial
+    CS->>K: Publish {document_id, classroom_id, file_url, file_type}
+    K->>DA: Deliver to consumer
+
+    rect rgb(16, 185, 129, 0.1)
+        Note over DA: 7-Stage Pipeline
+        DA->>DA: ①Validate → ②Preprocess
+        DA->>DA: ③OCR (if scanned)
+        DA->>DA: ④Chunk (512 tokens)
+        DA->>DA: ⑤Embed (all-mpnet-base-v2)
+        DA->>QD: ⑥Index in Qdrant
+        DA->>CS: ⑦Complete (SSE notification)
+    end</pre>
+<h3 id="pattern-3-student-activity-analytics-time-series">Pattern 3: Student Activity → Analytics (Time-Series)</h3>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant App as Frontend / Backend
+    participant K as Kafka<br/>analytics-events
+    participant AC as Analytics Consumer
+    participant C as Cassandra
+
+    S->>App: Perform action (study, quiz, etc.)
+    App->>K: Emit {user_id, event_type, subject, duration, timestamp}
+    K->>AC: Deliver to analytics consumer
+    AC->>C: Write to student_activity (time-series)
+    Note over C: Used for engagement prediction,<br/>dashboard reports, at-risk detection</pre>
+<hr />
+<h2 id="kafka-spark-streaming-pipeline">19.5 Kafka-Spark Streaming Pipeline</h2>
+<h3 id="source-backenddata-pipelinesstreamingkafka_spark_streaming.py">Source: <code>backend/data-pipelines/streaming/kafka_spark_streaming.py</code></h3>
+<p>For complex analytics, events are processed through Apache Spark Structured Streaming:</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read from Kafka</span></span>
+<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.readStream <span class="op">\</span></span>
+<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">format</span>(<span class="st">&quot;kafka&quot;</span>) <span class="op">\</span></span>
+<span id="cb149-4"><a href="#cb149-4" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;kafka.bootstrap.servers&quot;</span>, <span class="st">&quot;localhost:9092&quot;</span>) <span class="op">\</span></span>
+<span id="cb149-5"><a href="#cb149-5" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;subscribe&quot;</span>, <span class="st">&quot;analytics-events&quot;</span>) <span class="op">\</span></span>
+<span id="cb149-6"><a href="#cb149-6" aria-hidden="true" tabindex="-1"></a>    .load()</span>
+<span id="cb149-7"><a href="#cb149-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-8"><a href="#cb149-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Parse JSON events</span></span>
+<span id="cb149-9"><a href="#cb149-9" aria-hidden="true" tabindex="-1"></a>parsed <span class="op">=</span> df.select(</span>
+<span id="cb149-10"><a href="#cb149-10" aria-hidden="true" tabindex="-1"></a>    from_json(col(<span class="st">&quot;value&quot;</span>).cast(<span class="st">&quot;string&quot;</span>), schema).alias(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb149-11"><a href="#cb149-11" aria-hidden="true" tabindex="-1"></a>).select(<span class="st">&quot;data.*&quot;</span>)</span>
+<span id="cb149-12"><a href="#cb149-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-13"><a href="#cb149-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Window aggregation (5-minute tumbling windows)</span></span>
+<span id="cb149-14"><a href="#cb149-14" aria-hidden="true" tabindex="-1"></a>windowed <span class="op">=</span> parsed <span class="op">\</span></span>
+<span id="cb149-15"><a href="#cb149-15" aria-hidden="true" tabindex="-1"></a>    .withWatermark(<span class="st">&quot;timestamp&quot;</span>, <span class="st">&quot;1 minute&quot;</span>) <span class="op">\</span></span>
+<span id="cb149-16"><a href="#cb149-16" aria-hidden="true" tabindex="-1"></a>    .groupBy(</span>
+<span id="cb149-17"><a href="#cb149-17" aria-hidden="true" tabindex="-1"></a>        window(<span class="st">&quot;timestamp&quot;</span>, <span class="st">&quot;5 minutes&quot;</span>),</span>
+<span id="cb149-18"><a href="#cb149-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;event_type&quot;</span>,</span>
+<span id="cb149-19"><a href="#cb149-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;user_id&quot;</span></span>
+<span id="cb149-20"><a href="#cb149-20" aria-hidden="true" tabindex="-1"></a>    ).agg(</span>
+<span id="cb149-21"><a href="#cb149-21" aria-hidden="true" tabindex="-1"></a>        count(<span class="st">&quot;*&quot;</span>).alias(<span class="st">&quot;event_count&quot;</span>),</span>
+<span id="cb149-22"><a href="#cb149-22" aria-hidden="true" tabindex="-1"></a>        avg(<span class="st">&quot;duration&quot;</span>).alias(<span class="st">&quot;avg_duration&quot;</span>)</span>
+<span id="cb149-23"><a href="#cb149-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb149-24"><a href="#cb149-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-25"><a href="#cb149-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to Cassandra</span></span>
+<span id="cb149-26"><a href="#cb149-26" aria-hidden="true" tabindex="-1"></a>windowed.writeStream <span class="op">\</span></span>
+<span id="cb149-27"><a href="#cb149-27" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">format</span>(<span class="st">&quot;org.apache.spark.sql.cassandra&quot;</span>) <span class="op">\</span></span>
+<span id="cb149-28"><a href="#cb149-28" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;keyspace&quot;</span>, <span class="st">&quot;ensure_study&quot;</span>) <span class="op">\</span></span>
+<span id="cb149-29"><a href="#cb149-29" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;table&quot;</span>, <span class="st">&quot;daily_metrics&quot;</span>) <span class="op">\</span></span>
+<span id="cb149-30"><a href="#cb149-30" aria-hidden="true" tabindex="-1"></a>    .start()</span></code></pre></div>
+<hr />
+<h2 id="docker-deployment">19.6 Docker Deployment</h2>
+<div class="sourceCode" id="cb150"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml</span></span>
+<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zookeeper</span><span class="kw">:</span></span>
+<span id="cb150-3"><a href="#cb150-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> confluentinc/cp-zookeeper:7.5.0</span></span>
+<span id="cb150-4"><a href="#cb150-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb150-5"><a href="#cb150-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ZOOKEEPER_CLIENT_PORT</span><span class="kw">:</span><span class="at"> </span><span class="dv">2181</span></span>
+<span id="cb150-6"><a href="#cb150-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-7"><a href="#cb150-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kafka</span><span class="kw">:</span></span>
+<span id="cb150-8"><a href="#cb150-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> confluentinc/cp-kafka:7.5.0</span></span>
+<span id="cb150-9"><a href="#cb150-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb150-10"><a href="#cb150-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> zookeeper</span></span>
+<span id="cb150-11"><a href="#cb150-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb150-12"><a href="#cb150-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;9092:9092&quot;</span></span>
+<span id="cb150-13"><a href="#cb150-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb150-14"><a href="#cb150-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">KAFKA_BROKER_ID</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb150-15"><a href="#cb150-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">KAFKA_ZOOKEEPER_CONNECT</span><span class="kw">:</span><span class="at"> zookeeper:2181</span></span>
+<span id="cb150-16"><a href="#cb150-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">KAFKA_ADVERTISED_LISTENERS</span><span class="kw">:</span><span class="at"> PLAINTEXT://kafka:9092</span></span>
+<span id="cb150-17"><a href="#cb150-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
+<hr />
+<h2 id="design-decisions">19.7 Design Decisions</h2>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>acks=all</code></td>
+<td>Ensures no event loss for assessment submissions</td>
+</tr>
+<tr>
+<td><code>max_in_flight=1</code></td>
+<td>Preserves ordering within partitions</td>
+</tr>
+<tr>
+<td><code>auto_offset_reset=earliest</code></td>
+<td>New consumers process historical events</td>
+</tr>
+<tr>
+<td><code>enable_auto_commit=True</code></td>
+<td>Simplified offset management</td>
+</tr>
+<tr>
+<td>3 partitions per topic</td>
+<td>Balance between parallelism and resource usage</td>
+</tr>
+<tr>
+<td>JSON serialization</td>
+<td>Human-readable, schema-flexible</td>
+</tr>
+<tr>
+<td>Replication factor 1</td>
+<td>Development setting; increase for production</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

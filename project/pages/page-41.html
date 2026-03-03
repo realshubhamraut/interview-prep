@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 41: Pre-Trained Models &amp;amp; Model Registry</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-40.html">&larr; Previous</a> <a href="page-42.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-41-pre-trained-models-model-registry">Page 41: Pre-Trained Models &amp; Model Registry</h1>
+<hr />
+<h2 id="overview-31">41.1 Overview</h2>
+<p>ensureStudy ships with <strong>16 pre-trained model files</strong> across 3 directories, covering exam proctoring, student engagement prediction, and object detection. Models are versioned with timestamps and include metadata files for reproducibility.</p>
+<hr />
+<h2 id="model-inventory">41.2 Model Inventory</h2>
+<h3 id="source-models-directory">Source: <code>models/</code> directory</h3>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model File</th>
+<th>Size</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>models-pretrained/OEP_YOLOv11n.pt</code></td>
+<td>~6 MB</td>
+<td>YOLO</td>
+<td>Object detection (phone, book, earbuds)</td>
+</tr>
+<tr>
+<td><code>models-pretrained/engagement_model.pth</code></td>
+<td>~1 MB</td>
+<td>PyTorch</td>
+<td>Student engagement prediction</td>
+</tr>
+<tr>
+<td><code>models-pretrained/lightgbm_cheating_model_20250818_132555.pkl</code></td>
+<td>~500 KB</td>
+<td>LightGBM</td>
+<td>Per-frame cheating classification</td>
+</tr>
+<tr>
+<td><code>models-pretrained/model_metadata_20250818_132555.pkl</code></td>
+<td>~5 KB</td>
+<td>Pickle</td>
+<td>Feature names, thresholds, training stats</td>
+</tr>
+<tr>
+<td><code>models-pretrained/scaler_20250818_132555.pkl</code></td>
+<td>~10 KB</td>
+<td>Pickle</td>
+<td>Feature normalization scaler</td>
+</tr>
+<tr>
+<td><code>models-pretrained/temporal_proctor_trained_on_processed.pt</code></td>
+<td>~2 MB</td>
+<td>PyTorch</td>
+<td>LSTM temporal behavior classifier</td>
+</tr>
+<tr>
+<td><code>models-pretrained/face_landmarker.task</code></td>
+<td>~5 MB</td>
+<td>MediaPipe</td>
+<td>468-point face landmark detection</td>
+</tr>
+<tr>
+<td><code>Models_new/xgboost_cheating_model_20251230_105224.pkl</code></td>
+<td>~800 KB</td>
+<td>XGBoost</td>
+<td>Updated cheating classifier</td>
+</tr>
+<tr>
+<td><code>Models_new/xgboost_cheating_model_20251230_105224_metadata.pkl</code></td>
+<td>~5 KB</td>
+<td>Pickle</td>
+<td>Updated model metadata</td>
+</tr>
+<tr>
+<td><code>engagement_model.pth</code></td>
+<td>~1 MB</td>
+<td>PyTorch</td>
+<td>Engagement model (root copy)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="proctoring-best-models-proctoringbest_models">Proctoring Best Models: <code>proctoring/best_models/</code></h3>
+<p>Mirror of <code>models-pretrained/</code> for deployment:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OEP_YOLOv11n.pt</code></td>
+<td>YOLO object detection</td>
+</tr>
+<tr>
+<td><code>face_landmarker.task</code></td>
+<td>MediaPipe face landmarks</td>
+</tr>
+<tr>
+<td><code>lightgbm_cheating_model_20250818_132555.pkl</code></td>
+<td>Static classifier</td>
+</tr>
+<tr>
+<td><code>model_metadata_20250818_132555.pkl</code></td>
+<td>Model metadata</td>
+</tr>
+<tr>
+<td><code>scaler_20250818_132555.pkl</code></td>
+<td>Feature scaler</td>
+</tr>
+<tr>
+<td><code>temporal_proctor_trained_on_processed.pt</code></td>
+<td>LSTM temporal</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="model-architecture-details">41.3 Model Architecture Details</h2>
+<h3 id="yolov11n-object-detection">YOLOv11n (Object Detection)</h3>
+<pre><code>Architecture: YOLOv11-nano
+Parameters: ~2.6M
+Input: 640×640 RGB frame
+Output: Bounding boxes + class labels
+Classes: phone, book, earbuds, person, laptop, screen
+Inference: ~15ms per frame (CPU)</code></pre>
+<h3 id="lightgbm-static-classifier">LightGBM Static Classifier</h3>
+<pre><code>Algorithm: LightGBM (Gradient Boosted Trees)
+Features: 15 per-frame features from 8 detectors
+  - face_detected (bool)
+  - gaze_x, gaze_y (float)
+  - head_yaw, head_pitch, head_roll (float)
+  - eye_aspect_ratio_left, right (float)
+  - mouth_aspect_ratio (float)
+  - object_count (int)
+  - phone_detected, book_detected (bool)
+  - audio_level (float)
+  - hand_near_face (bool)
+Output: P(cheating) ∈ [0, 1]
+Training: Labeled proctoring frames (cheating/not_cheating)</code></pre>
+<h3 id="lstm-temporal-predictor">LSTM Temporal Predictor</h3>
+<pre><code>Architecture: 2-layer LSTM
+Input: Sequence of 30 static predictions
+Hidden: 64 units
+Output: P(cheating_sequence) ∈ [0, 1]
+Purpose: Detect sustained suspicious behavior</code></pre>
+<h3 id="engagement-model-pytorch">Engagement Model (PyTorch)</h3>
+<pre><code>Architecture: Multi-layer Feedforward (64 → 32 → 16 → 1)
+Input: Student interaction features
+Output: Engagement score ∈ [0, 1]
+Features: time_on_task, click_rate, scroll_depth, quiz_attempts
+Training: Student behavioral data</code></pre>
+<hr />
+<h2 id="model-loading-pattern">41.4 Model Loading Pattern</h2>
+<div class="sourceCode" id="cb257"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb257-1"><a href="#cb257-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ModelRegistry:</span>
+<span id="cb257-2"><a href="#cb257-2" aria-hidden="true" tabindex="-1"></a>    MODELS_DIR <span class="op">=</span> <span class="st">&quot;models/models-pretrained&quot;</span></span>
+<span id="cb257-3"><a href="#cb257-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb257-4"><a href="#cb257-4" aria-hidden="true" tabindex="-1"></a>    _instances <span class="op">=</span> {}</span>
+<span id="cb257-5"><a href="#cb257-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb257-6"><a href="#cb257-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">@classmethod</span></span>
+<span id="cb257-7"><a href="#cb257-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_model(cls, name: <span class="bu">str</span>):</span>
+<span id="cb257-8"><a href="#cb257-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> name <span class="kw">not</span> <span class="kw">in</span> cls._instances:</span>
+<span id="cb257-9"><a href="#cb257-9" aria-hidden="true" tabindex="-1"></a>            path <span class="op">=</span> os.path.join(cls.MODELS_DIR, name)</span>
+<span id="cb257-10"><a href="#cb257-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> name.endswith(<span class="st">&#39;.pt&#39;</span>) <span class="kw">or</span> name.endswith(<span class="st">&#39;.pth&#39;</span>):</span>
+<span id="cb257-11"><a href="#cb257-11" aria-hidden="true" tabindex="-1"></a>                cls._instances[name] <span class="op">=</span> torch.load(path, map_location<span class="op">=</span><span class="st">&#39;cpu&#39;</span>)</span>
+<span id="cb257-12"><a href="#cb257-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> name.endswith(<span class="st">&#39;.pkl&#39;</span>):</span>
+<span id="cb257-13"><a href="#cb257-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">with</span> <span class="bu">open</span>(path, <span class="st">&#39;rb&#39;</span>) <span class="im">as</span> f:</span>
+<span id="cb257-14"><a href="#cb257-14" aria-hidden="true" tabindex="-1"></a>                    cls._instances[name] <span class="op">=</span> pickle.load(f)</span>
+<span id="cb257-15"><a href="#cb257-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> name.endswith(<span class="st">&#39;.task&#39;</span>):</span>
+<span id="cb257-16"><a href="#cb257-16" aria-hidden="true" tabindex="-1"></a>                cls._instances[name] <span class="op">=</span> MediaPipeLandmarker(path)</span>
+<span id="cb257-17"><a href="#cb257-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cls._instances[name]</span></code></pre></div>
+<hr />
+<h2 id="training-datasets">41.5 Training Datasets</h2>
+<h3 id="source-datasetsproctoring_training">Source: <code>datasets/proctoring_training/</code></h3>
+<table>
+<colgroup>
+<col style="width: 55%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cheating_frames/</code></td>
+<td>Labeled positive examples (face turned away, phone visible, etc.)</td>
+</tr>
+<tr>
+<td><code>not_cheating_frames/</code></td>
+<td>Labeled negative examples (normal exam behavior)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="model-versioning">41.6 Model Versioning</h2>
+<p>Models are versioned with timestamps in filenames:</p>
+<pre><code>Format: {algorithm}_{task}_{YYYYMMDD}_{HHMMSS}.pkl
+
+Examples:
+  lightgbm_cheating_model_20250818_132555.pkl   (Aug 18, 2025)
+  xgboost_cheating_model_20251230_105224.pkl    (Dec 30, 2025)</code></pre>
+<p>Each model has a corresponding <code>_metadata.pkl</code> containing: - Feature names and order - Training hyperparameters - Validation metrics (precision, recall, F1) - Training data statistics</p>
+<hr />
+
+</body>
+</html>

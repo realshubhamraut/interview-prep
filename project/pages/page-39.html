@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 39: Frontend Components — UI Building Blocks</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-38.html">&larr; Previous</a> <a href="page-40.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-39-frontend-components-ui-building-blocks">Page 39: Frontend Components — UI Building Blocks</h1>
+<hr />
+<h2 id="overview-30">39.1 Overview</h2>
+<p>The Next.js 14 frontend has <strong>53+ reusable components</strong> across shared components, feature-specific components, and page-level compositions. This page documents the component library, state management, and key UI patterns.</p>
+<hr />
+<h2 id="shared-components-11-files">39.2 Shared Components (11 files)</h2>
+<h3 id="source-frontendcomponents">Source: <code>frontend/components/</code></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Providers.tsx</code></td>
+<td>Root provider wrapper (NextAuth, Zustand, Theme)</td>
+</tr>
+<tr>
+<td><code>NotificationBell.tsx</code></td>
+<td>Real-time notification indicator</td>
+</tr>
+<tr>
+<td><code>NotificationProvider.tsx</code></td>
+<td>Notification context and polling</td>
+</tr>
+<tr>
+<td><code>LatexRenderer.tsx</code></td>
+<td>Render LaTeX math expressions (KaTeX)</td>
+</tr>
+<tr>
+<td><code>PDFViewer.tsx</code></td>
+<td>In-browser PDF viewer</td>
+</tr>
+<tr>
+<td><code>PDFViewerWithHighlight.tsx</code></td>
+<td>PDF viewer with text highlighting</td>
+</tr>
+<tr>
+<td><code>PptxToPdfViewer.tsx</code></td>
+<td>PowerPoint → PDF conversion viewer</td>
+</tr>
+<tr>
+<td><code>ImageViewer.tsx</code></td>
+<td>Image viewer with zoom/pan</td>
+</tr>
+<tr>
+<td><code>DocumentSidebar.tsx</code></td>
+<td>Document navigation sidebar</td>
+</tr>
+<tr>
+<td><code>DocumentContextPanel.tsx</code></td>
+<td>Document context and metadata panel</td>
+</tr>
+<tr>
+<td><code>SessionDecisionBadge.tsx</code></td>
+<td>Session intelligence decision indicator</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="feature-components-by-domain">39.3 Feature Components by Domain</h2>
+<h3 id="chat-tutor">Chat &amp; Tutor</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ChatInterface</code></td>
+<td>Main chat UI with message list and input</td>
+</tr>
+<tr>
+<td><code>ChatInput</code></td>
+<td>Message input with attachments</td>
+</tr>
+<tr>
+<td><code>ChatMessage</code></td>
+<td>Individual message bubble (supports Markdown, LaTeX)</td>
+</tr>
+<tr>
+<td><code>StreamingResponse</code></td>
+<td>Real-time SSE rendering</td>
+</tr>
+<tr>
+<td><code>ContextPanel</code></td>
+<td>RAG context display</td>
+</tr>
+<tr>
+<td><code>SessionSelector</code></td>
+<td>Chat session picker</td>
+</tr>
+</tbody>
+</table>
+<h3 id="classroom">Classroom</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ClassroomCard</code></td>
+<td>Classroom preview card</td>
+</tr>
+<tr>
+<td><code>ClassroomList</code></td>
+<td>Grid/list of classrooms</td>
+</tr>
+<tr>
+<td><code>MaterialUploader</code></td>
+<td>Drag-and-drop file upload</td>
+</tr>
+<tr>
+<td><code>SyllabusViewer</code></td>
+<td>Syllabus display with topics</td>
+</tr>
+<tr>
+<td><code>JoinClassroomForm</code></td>
+<td>Join via code form</td>
+</tr>
+<tr>
+<td><code>MemberList</code></td>
+<td>Classroom members</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assessment">Assessment</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AssessmentCard</code></td>
+<td>Assessment preview</td>
+</tr>
+<tr>
+<td><code>QuestionRenderer</code></td>
+<td>Render MCQ / descriptive questions</td>
+</tr>
+<tr>
+<td><code>AnswerInput</code></td>
+<td>Answer input (radio, text, code)</td>
+</tr>
+<tr>
+<td><code>ResultsSummary</code></td>
+<td>Assessment results dashboard</td>
+</tr>
+<tr>
+<td><code>ProctoringOverlay</code></td>
+<td>Webcam feed + integrity indicator</td>
+</tr>
+</tbody>
+</table>
+<h3 id="progress-analytics">Progress &amp; Analytics</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ProgressChart</code></td>
+<td>Subject progress (Recharts)</td>
+</tr>
+<tr>
+<td><code>WeakTopicsList</code></td>
+<td>Topics needing improvement</td>
+</tr>
+<tr>
+<td><code>StudyStreak</code></td>
+<td>Daily study streak display</td>
+</tr>
+<tr>
+<td><code>LeaderboardTable</code></td>
+<td>Ranked student table</td>
+</tr>
+<tr>
+<td><code>PerformanceRadar</code></td>
+<td>Multi-subject radar chart</td>
+</tr>
+</tbody>
+</table>
+<h3 id="proctoring">Proctoring</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WebcamCapture</code></td>
+<td>Webcam video feed</td>
+</tr>
+<tr>
+<td><code>IntegrityMeter</code></td>
+<td>Real-time integrity score</td>
+</tr>
+<tr>
+<td><code>FlagAlert</code></td>
+<td>Flag notification popup</td>
+</tr>
+<tr>
+<td><code>ProctoringReport</code></td>
+<td>Post-exam integrity report</td>
+</tr>
+</tbody>
+</table>
+<h3 id="soft-skills">Soft Skills</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VideoRecorder</code></td>
+<td>Record video for analysis</td>
+</tr>
+<tr>
+<td><code>GazeIndicator</code></td>
+<td>Eye contact metric display</td>
+</tr>
+<tr>
+<td><code>PostureFeedback</code></td>
+<td>Real-time posture feedback</td>
+</tr>
+<tr>
+<td><code>FluencyScore</code></td>
+<td>Speech fluency visualization</td>
+</tr>
+<tr>
+<td><code>GestureOverlay</code></td>
+<td>Hand gesture detection overlay</td>
+</tr>
+</tbody>
+</table>
+<h3 id="meeting">Meeting</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VideoRoom</code></td>
+<td>LiveKit video conference</td>
+</tr>
+<tr>
+<td><code>ParticipantGrid</code></td>
+<td>Video grid layout</td>
+</tr>
+<tr>
+<td><code>ChatSidebar</code></td>
+<td>In-meeting chat</td>
+</tr>
+<tr>
+<td><code>TranscriptView</code></td>
+<td>Post-meeting transcript</td>
+</tr>
+<tr>
+<td><code>MeetingSummary</code></td>
+<td>AI-generated summary display</td>
+</tr>
+</tbody>
+</table>
+<h3 id="navigation-layout">Navigation &amp; Layout</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Sidebar</code></td>
+<td>Role-based navigation sidebar</td>
+</tr>
+<tr>
+<td><code>TopNav</code></td>
+<td>Top navigation bar</td>
+</tr>
+<tr>
+<td><code>BreadcrumbNav</code></td>
+<td>Breadcrumb navigation</td>
+</tr>
+<tr>
+<td><code>DashboardLayout</code></td>
+<td>Dashboard page layout</td>
+</tr>
+<tr>
+<td><code>LoadingSpinner</code></td>
+<td>Loading state indicator</td>
+</tr>
+<tr>
+<td><code>EmptyState</code></td>
+<td>Empty data placeholder</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="state-management">39.4 State Management</h2>
+<h3 id="zustand-stores">Zustand Stores</h3>
+<div class="sourceCode" id="cb250"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb250-1"><a href="#cb250-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Example: Chat store</span></span>
+<span id="cb250-2"><a href="#cb250-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { create } <span class="im">from</span> <span class="st">&#39;zustand&#39;</span></span>
+<span id="cb250-3"><a href="#cb250-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb250-4"><a href="#cb250-4" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> ChatStore {</span>
+<span id="cb250-5"><a href="#cb250-5" aria-hidden="true" tabindex="-1"></a>    sessions<span class="op">:</span> ChatSession[]</span>
+<span id="cb250-6"><a href="#cb250-6" aria-hidden="true" tabindex="-1"></a>    activeSession<span class="op">:</span> <span class="dt">string</span> <span class="op">|</span> <span class="dt">null</span></span>
+<span id="cb250-7"><a href="#cb250-7" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">:</span> Message[]</span>
+<span id="cb250-8"><a href="#cb250-8" aria-hidden="true" tabindex="-1"></a>    isStreaming<span class="op">:</span> <span class="dt">boolean</span></span>
+<span id="cb250-9"><a href="#cb250-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb250-10"><a href="#cb250-10" aria-hidden="true" tabindex="-1"></a>    setActiveSession<span class="op">:</span> (id<span class="op">:</span> <span class="dt">string</span>) <span class="kw">=&gt;</span> <span class="dt">void</span></span>
+<span id="cb250-11"><a href="#cb250-11" aria-hidden="true" tabindex="-1"></a>    addMessage<span class="op">:</span> (msg<span class="op">:</span> Message) <span class="kw">=&gt;</span> <span class="dt">void</span></span>
+<span id="cb250-12"><a href="#cb250-12" aria-hidden="true" tabindex="-1"></a>    appendToLastMessage<span class="op">:</span> (chunk<span class="op">:</span> <span class="dt">string</span>) <span class="kw">=&gt;</span> <span class="dt">void</span></span>
+<span id="cb250-13"><a href="#cb250-13" aria-hidden="true" tabindex="-1"></a>    clearMessages<span class="op">:</span> () <span class="kw">=&gt;</span> <span class="dt">void</span></span>
+<span id="cb250-14"><a href="#cb250-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb250-15"><a href="#cb250-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb250-16"><a href="#cb250-16" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> useChatStore <span class="op">=</span> <span class="fu">create</span><span class="op">&lt;</span>ChatStore<span class="op">&gt;</span>((<span class="kw">set</span>) <span class="kw">=&gt;</span> ({</span>
+<span id="cb250-17"><a href="#cb250-17" aria-hidden="true" tabindex="-1"></a>    sessions<span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb250-18"><a href="#cb250-18" aria-hidden="true" tabindex="-1"></a>    activeSession<span class="op">:</span> <span class="dt">null</span><span class="op">,</span></span>
+<span id="cb250-19"><a href="#cb250-19" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb250-20"><a href="#cb250-20" aria-hidden="true" tabindex="-1"></a>    isStreaming<span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb250-21"><a href="#cb250-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb250-22"><a href="#cb250-22" aria-hidden="true" tabindex="-1"></a>    setActiveSession<span class="op">:</span> (id) <span class="kw">=&gt;</span> <span class="kw">set</span>({ activeSession<span class="op">:</span> id })<span class="op">,</span></span>
+<span id="cb250-23"><a href="#cb250-23" aria-hidden="true" tabindex="-1"></a>    addMessage<span class="op">:</span> (msg) <span class="kw">=&gt;</span> <span class="kw">set</span>((s) <span class="kw">=&gt;</span> ({ messages<span class="op">:</span> [<span class="op">...</span>s<span class="op">.</span><span class="at">messages</span><span class="op">,</span> msg] }))<span class="op">,</span></span>
+<span id="cb250-24"><a href="#cb250-24" aria-hidden="true" tabindex="-1"></a>    appendToLastMessage<span class="op">:</span> (chunk) <span class="kw">=&gt;</span> <span class="kw">set</span>((s) <span class="kw">=&gt;</span> ({</span>
+<span id="cb250-25"><a href="#cb250-25" aria-hidden="true" tabindex="-1"></a>        messages<span class="op">:</span> s<span class="op">.</span><span class="at">messages</span><span class="op">.</span><span class="fu">map</span>((m<span class="op">,</span> i) <span class="kw">=&gt;</span> </span>
+<span id="cb250-26"><a href="#cb250-26" aria-hidden="true" tabindex="-1"></a>            i <span class="op">===</span> s<span class="op">.</span><span class="at">messages</span><span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span> </span>
+<span id="cb250-27"><a href="#cb250-27" aria-hidden="true" tabindex="-1"></a>                <span class="op">?</span> { <span class="op">...</span>m<span class="op">,</span> content<span class="op">:</span> m<span class="op">.</span><span class="at">content</span> <span class="op">+</span> chunk } </span>
+<span id="cb250-28"><a href="#cb250-28" aria-hidden="true" tabindex="-1"></a>                <span class="op">:</span> m</span>
+<span id="cb250-29"><a href="#cb250-29" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb250-30"><a href="#cb250-30" aria-hidden="true" tabindex="-1"></a>    }))<span class="op">,</span></span>
+<span id="cb250-31"><a href="#cb250-31" aria-hidden="true" tabindex="-1"></a>}))</span></code></pre></div>
+<h3 id="key-stores">Key Stores</h3>
+<table>
+<thead>
+<tr>
+<th>Store</th>
+<th>State Managed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>useChatStore</code></td>
+<td>Active session, messages, streaming state</td>
+</tr>
+<tr>
+<td><code>useClassroomStore</code></td>
+<td>Current classroom, materials, members</td>
+</tr>
+<tr>
+<td><code>useAuthStore</code></td>
+<td>User profile, role, JWT token</td>
+</tr>
+<tr>
+<td><code>useProgressStore</code></td>
+<td>Progress data, weak topics</td>
+</tr>
+<tr>
+<td><code>useProctoringStore</code></td>
+<td>Webcam state, integrity score, flags</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sse-streaming-implementation">39.5 SSE Streaming Implementation</h2>
+<div class="sourceCode" id="cb251"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb251-1"><a href="#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">streamChat</span>(message<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> sessionId<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb251-2"><a href="#cb251-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> response <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">&#39;/api/tutor/chat&#39;</span><span class="op">,</span> {</span>
+<span id="cb251-3"><a href="#cb251-3" aria-hidden="true" tabindex="-1"></a>        method<span class="op">:</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span></span>
+<span id="cb251-4"><a href="#cb251-4" aria-hidden="true" tabindex="-1"></a>        headers<span class="op">:</span> { </span>
+<span id="cb251-5"><a href="#cb251-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;Content-Type&#39;</span><span class="op">:</span> <span class="st">&#39;application/json&#39;</span><span class="op">,</span></span>
+<span id="cb251-6"><a href="#cb251-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;Authorization&#39;</span><span class="op">:</span> <span class="vs">`Bearer </span><span class="sc">${</span>token<span class="sc">}</span><span class="vs">`</span> </span>
+<span id="cb251-7"><a href="#cb251-7" aria-hidden="true" tabindex="-1"></a>        }<span class="op">,</span></span>
+<span id="cb251-8"><a href="#cb251-8" aria-hidden="true" tabindex="-1"></a>        body<span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ message<span class="op">,</span> session_id<span class="op">:</span> sessionId })</span>
+<span id="cb251-9"><a href="#cb251-9" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb251-10"><a href="#cb251-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb251-11"><a href="#cb251-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> reader <span class="op">=</span> response<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="fu">getReader</span>()<span class="op">;</span></span>
+<span id="cb251-12"><a href="#cb251-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> decoder <span class="op">=</span> <span class="kw">new</span> <span class="fu">TextDecoder</span>()<span class="op">;</span></span>
+<span id="cb251-13"><a href="#cb251-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb251-14"><a href="#cb251-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (<span class="kw">true</span>) {</span>
+<span id="cb251-15"><a href="#cb251-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> { done<span class="op">,</span> value } <span class="op">=</span> <span class="cf">await</span> reader<span class="op">.</span><span class="fu">read</span>()<span class="op">;</span></span>
+<span id="cb251-16"><a href="#cb251-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (done) <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb251-17"><a href="#cb251-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb251-18"><a href="#cb251-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> chunk <span class="op">=</span> decoder<span class="op">.</span><span class="fu">decode</span>(value)<span class="op">;</span></span>
+<span id="cb251-19"><a href="#cb251-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> lines <span class="op">=</span> chunk<span class="op">.</span><span class="fu">split</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)<span class="op">;</span></span>
+<span id="cb251-20"><a href="#cb251-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb251-21"><a href="#cb251-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (<span class="kw">const</span> line <span class="kw">of</span> lines) {</span>
+<span id="cb251-22"><a href="#cb251-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (line<span class="op">.</span><span class="fu">startsWith</span>(<span class="st">&#39;data: &#39;</span>)) {</span>
+<span id="cb251-23"><a href="#cb251-23" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> data <span class="op">=</span> line<span class="op">.</span><span class="fu">slice</span>(<span class="dv">6</span>)<span class="op">;</span></span>
+<span id="cb251-24"><a href="#cb251-24" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (data <span class="op">===</span> <span class="st">&#39;[DONE]&#39;</span>) <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb251-25"><a href="#cb251-25" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb251-26"><a href="#cb251-26" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> parsed <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(data)<span class="op">;</span></span>
+<span id="cb251-27"><a href="#cb251-27" aria-hidden="true" tabindex="-1"></a>                useChatStore<span class="op">.</span><span class="fu">getState</span>()<span class="op">.</span><span class="fu">appendToLastMessage</span>(parsed<span class="op">.</span><span class="at">content</span>)<span class="op">;</span></span>
+<span id="cb251-28"><a href="#cb251-28" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb251-29"><a href="#cb251-29" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb251-30"><a href="#cb251-30" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb251-31"><a href="#cb251-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="three.js-3d-elements">39.6 Three.js 3D Elements</h2>
+<div class="sourceCode" id="cb252"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb252-1"><a href="#cb252-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Landing page 3D visualization</span></span>
+<span id="cb252-2"><a href="#cb252-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { Canvas } <span class="im">from</span> <span class="st">&#39;@react-three/fiber&#39;</span></span>
+<span id="cb252-3"><a href="#cb252-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { OrbitControls<span class="op">,</span> Sphere } <span class="im">from</span> <span class="st">&#39;@react-three/drei&#39;</span></span>
+<span id="cb252-4"><a href="#cb252-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb252-5"><a href="#cb252-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">Hero3D</span>() {</span>
+<span id="cb252-6"><a href="#cb252-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="cb252-7"><a href="#cb252-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>Canvas<span class="op">&gt;</span></span>
+<span id="cb252-8"><a href="#cb252-8" aria-hidden="true" tabindex="-1"></a>            <span class="op">&lt;</span>ambientLight <span class="op">/&gt;</span></span>
+<span id="cb252-9"><a href="#cb252-9" aria-hidden="true" tabindex="-1"></a>            <span class="op">&lt;</span>pointLight position<span class="op">=</span>{[<span class="dv">10</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">10</span>]} <span class="op">/&gt;</span></span>
+<span id="cb252-10"><a href="#cb252-10" aria-hidden="true" tabindex="-1"></a>            <span class="op">&lt;</span>AnimatedSphere <span class="op">/&gt;</span></span>
+<span id="cb252-11"><a href="#cb252-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">&lt;</span>OrbitControls enableZoom<span class="op">=</span>{<span class="kw">false</span>} <span class="op">/&gt;</span></span>
+<span id="cb252-12"><a href="#cb252-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;/</span>Canvas<span class="op">&gt;</span></span>
+<span id="cb252-13"><a href="#cb252-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb252-14"><a href="#cb252-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Used on the landing page for premium visual differentiation with animated 3D elements.</p>
+<hr />
+
+</body>
+</html>

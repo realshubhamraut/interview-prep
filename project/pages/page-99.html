@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Part II: Multi-Agent System</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-98.html">&larr; Previous</a> <a href="page-100.html">Next &rarr;</a>
+  </div>
+  <h1 id="part-ii-multi-agent-system">Part II: Multi-Agent System</h1>
+<h2 id="agent-classification-russell-norvig-taxonomy">Agent Classification (Russell &amp; Norvig Taxonomy)</h2>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 31%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr>
+<th>Agent Type</th>
+<th>Description</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type 1: Simple Reflex</strong></td>
+<td>Action based on current percept</td>
+<td>Proctoring (YOLO detections)</td>
+</tr>
+<tr>
+<td><strong>Type 2: Model-Based</strong></td>
+<td>Maintains internal state</td>
+<td>Session memory in Redis</td>
+</tr>
+<tr>
+<td><strong>Type 3: Goal-Based</strong></td>
+<td>Plans to achieve goals</td>
+<td>Orchestrator, Research, Curriculum</td>
+</tr>
+<tr>
+<td><strong>Type 5: Learning</strong></td>
+<td>Improves over time</td>
+<td><strong>Tutor Agent</strong> with feedback loop</td>
+</tr>
+</tbody>
+</table>
+<h2 id="agent-hierarchy">Agent Hierarchy</h2>
+<pre class="mermaid">flowchart TB
+    subgraph "Orchestration Layer"
+        Orch[Orchestrator Agent<br/>Supervisor Pattern]
+    end
+    
+    subgraph "Specialized Agents"
+        Tutor[Tutor Agent<br/>Type 5 Learning]
+        Research[Research Agent<br/>Web + PDF + YouTube]
+        Curriculum[Curriculum Agent<br/>Learning Paths]
+        Document[Document Agent<br/>7-Stage Pipeline]
+        Notes[Notes Agent]
+        Assessment[Assessment Agent]
+        WebEnrich[Web Enrichment Agent]
+    end
+    
+    subgraph "Support Services"
+        Moderate[Content Moderation]
+        ABCR[ABCR Routing]
+        TAL[Topic Anchoring]
+        MCP[Memory Context]
+    end
+    
+    Orch --> Tutor
+    Orch --> Research
+    Orch --> Curriculum
+    Orch --> Assessment
+    
+    Tutor --> Moderate
+    Tutor --> ABCR
+    Tutor --> TAL
+    Tutor --> MCP</pre>
+<hr />
+<h2 id="orchestrator-agent-1">Orchestrator Agent</h2>
+<p>The central coordinator using the <strong>Supervisor Pattern</strong> to route requests to specialized sub-agents.</p>
+<h3 id="intent-classification">Intent Classification</h3>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> Analyze: User Query
+    Analyze --> LEARN: "What is...", "Explain..."
+    Analyze --> RESEARCH: "Find...", "Search..."
+    Analyze --> CREATE: "Generate...", "Make..."
+    Analyze --> EVALUATE: "Check...", "Assess..."
+    
+    LEARN --> TutorAgent
+    RESEARCH --> ResearchAgent
+    CREATE --> ContentAgent
+    EVALUATE --> AssessmentAgent
+    
+    TutorAgent --> Synthesize
+    ResearchAgent --> Synthesize
+    ContentAgent --> Synthesize
+    AssessmentAgent --> Synthesize
+    
+    Synthesize --> [*]: Final Response</pre>
+<h3 id="intent-keywords">Intent Keywords</h3>
+<table>
+<thead>
+<tr>
+<th>Intent</th>
+<th>Trigger Keywords</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LEARN</strong></td>
+<td>what is, explain, how does, why, define, tell me about</td>
+</tr>
+<tr>
+<td><strong>RESEARCH</strong></td>
+<td>find, search, resources, pdf, download, look up</td>
+</tr>
+<tr>
+<td><strong>CREATE</strong></td>
+<td>create, generate, notes, quiz, summary, flashcards</td>
+</tr>
+<tr>
+<td><strong>EVALUATE</strong></td>
+<td>grade, check, evaluate, score, feedback, review</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tutor-agent-type-5-learning-agent">Tutor Agent (Type 5 Learning Agent)</h2>
+<p>The primary learning assistant with advanced context management and <strong>continuous improvement through feedback</strong>.</p>
+<h3 id="core-components-1">Core Components</h3>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 35%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Full Name</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ABCR</strong></td>
+<td>Attention-Based Context Routing</td>
+<td>Detects follow-up vs new topic queries</td>
+</tr>
+<tr>
+<td><strong>TAL</strong></td>
+<td>Topic Anchor Layer</td>
+<td>Maintains topic continuity across turns</td>
+</tr>
+<tr>
+<td><strong>MCP</strong></td>
+<td>Memory Context Processor</td>
+<td>Isolates web vs classroom content</td>
+</tr>
+<tr>
+<td><strong>Learning Element</strong></td>
+<td>Few-Shot Injector</td>
+<td>Injects high-rated examples into prompts</td>
+</tr>
+</tbody>
+</table>
+<h3 id="processing-pipeline">Processing Pipeline</h3>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> Receive: User message
+    Receive --> Moderate: Content check
+    Moderate --> ABCR: Classify query type
+    
+    ABCR --> FollowUp: Related query
+    ABCR --> NewTopic: New topic
+    
+    FollowUp --> KeepAnchor: Use existing context
+    NewTopic --> TAL: Create topic anchor
+    
+    KeepAnchor --> Retrieve
+    TAL --> Retrieve: Vector search
+    
+    Retrieve --> MCP: Apply isolation rules
+    MCP --> FetchExamples: Get learning examples
+    FetchExamples --> Generate: Few-shot enhanced prompt
+    Generate --> LogExperience: Store interaction
+    LogExperience --> [*]: Return response</pre>
+<h3 id="learning-loop-architecture">Learning Loop Architecture</h3>
+<pre class="mermaid">flowchart TB
+    subgraph "Performance Element"
+        Query[Student Query] --> Moderate[Moderation]
+        Moderate --> Retrieve[RAG Retrieval]
+        Retrieve --> Generate[LLM Generation]
+    end
+    
+    subgraph "Learning Element"
+        Examples[(Learning Examples)]
+        FewShot[Few-Shot Injection]
+        Examples --> FewShot
+        FewShot --> Generate
+    end
+    
+    subgraph "Critic (Feedback Loop)"
+        Generate --> Response[Response]
+        Response --> User[Student]
+        User --> Feedback{👍 / 👎}
+        Feedback --> Store[Store Feedback]
+        Store --> Analyze[Analyze Patterns]
+        Analyze --> Examples
+    end</pre>
+<h3 id="abcr-service-attention-based-context-routing">ABCR Service (Attention-Based Context Routing)</h3>
+<p>Determines if a query is a follow-up using <strong>semantic similarity</strong> with hysteresis:</p>
+<div class="sourceCode" id="cb622"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb622-1"><a href="#cb622-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ABCRService:</span>
+<span id="cb622-2"><a href="#cb622-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb622-3"><a href="#cb622-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.embedding_model <span class="op">=</span> SentenceTransformer(<span class="st">&#39;all-MiniLM-L6-v2&#39;</span>)</span>
+<span id="cb622-4"><a href="#cb622-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.attention_threshold <span class="op">=</span> <span class="fl">0.65</span></span>
+<span id="cb622-5"><a href="#cb622-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hysteresis_factor <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb622-6"><a href="#cb622-6" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb622-7"><a href="#cb622-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> is_followup(<span class="va">self</span>, query: <span class="bu">str</span>, history: List[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb622-8"><a href="#cb622-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb622-9"><a href="#cb622-9" aria-hidden="true" tabindex="-1"></a><span class="co">        Compare query embedding against recent turns.</span></span>
+<span id="cb622-10"><a href="#cb622-10" aria-hidden="true" tabindex="-1"></a><span class="co">        Apply hysteresis to prevent rapid topic switching.</span></span>
+<span id="cb622-11"><a href="#cb622-11" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb622-12"><a href="#cb622-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> history:</span>
+<span id="cb622-13"><a href="#cb622-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb622-14"><a href="#cb622-14" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb622-15"><a href="#cb622-15" aria-hidden="true" tabindex="-1"></a>        recent_context <span class="op">=</span> [h[<span class="st">&#39;content&#39;</span>] <span class="cf">for</span> h <span class="kw">in</span> history[<span class="op">-</span><span class="dv">3</span>:]]</span>
+<span id="cb622-16"><a href="#cb622-16" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> <span class="va">self</span>.compute_attention_scores(query, recent_context)</span>
+<span id="cb622-17"><a href="#cb622-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb622-18"><a href="#cb622-18" aria-hidden="true" tabindex="-1"></a>        max_score <span class="op">=</span> <span class="bu">max</span>(scores)</span>
+<span id="cb622-19"><a href="#cb622-19" aria-hidden="true" tabindex="-1"></a>        adjusted_threshold <span class="op">=</span> <span class="va">self</span>.attention_threshold <span class="op">-</span> <span class="va">self</span>.hysteresis_factor</span>
+<span id="cb622-20"><a href="#cb622-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb622-21"><a href="#cb622-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> max_score <span class="op">&gt;</span> adjusted_threshold</span></code></pre></div>
+<hr />
+<h2 id="research-agent-1">Research Agent</h2>
+<p>Discovers and indexes educational content from multiple sources.</p>
+<h3 id="content-discovery-pipeline">Content Discovery Pipeline</h3>
+<pre class="mermaid">flowchart LR
+    Query[User Query] --> Analyze[Analyze Intent]
+    
+    Analyze --> Web[Web Search<br/>DuckDuckGo]
+    Analyze --> PDF[PDF Search<br/>Google Scholar]
+    Analyze --> YT[YouTube Search]
+    Analyze --> Wiki[Wikipedia API]
+    
+    Web --> Articles[Article Results]
+    PDF --> Download[Download PDFs]
+    YT --> Videos[Video Results]
+    Wiki --> Content[Full Articles]
+    
+    Download --> Process[Extract Text]
+    Process --> Chunk[Semantic Chunking]
+    Chunk --> Embed[Generate Embeddings]
+    Embed --> Index[Index in Qdrant]
+    
+    Articles --> Compile[Compile Summary]
+    Index --> Compile
+    Videos --> Compile
+    Content --> Compile
+    
+    Compile --> Response[Research Summary]</pre>
+<h3 id="web-ingest-workers">Web Ingest Workers</h3>
+<table>
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th>Worker</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W1: Topic Extractor</td>
+<td>Extracts key topics from query using LLM</td>
+</tr>
+<tr>
+<td>W2: DuckDuckGo</td>
+<td>Searches web for articles</td>
+</tr>
+<tr>
+<td>W3: Wikipedia Search</td>
+<td>Finds Wikipedia articles</td>
+</tr>
+<tr>
+<td>W4: Wikipedia Content</td>
+<td>Fetches full article content</td>
+</tr>
+<tr>
+<td>W5: Parallel Crawler</td>
+<td>Downloads pages concurrently (httpx)</td>
+</tr>
+<tr>
+<td>W6: Content Cleaner</td>
+<td>Removes boilerplate HTML</td>
+</tr>
+<tr>
+<td>W6B: PDF Search</td>
+<td>Searches and downloads educational PDFs</td>
+</tr>
+<tr>
+<td>W7: Chunk &amp; Embed</td>
+<td>Splits text, generates embeddings, stores in Qdrant</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="curriculum-agent-1">Curriculum Agent</h2>
+<p>Creates personalized learning paths based on syllabus and student progress.</p>
+<h3 id="learning-path-generation">Learning Path Generation</h3>
+<pre class="mermaid">flowchart LR
+    Syllabus[Syllabus Document] --> Parse[Parse Topics]
+    Parse --> Deps[Analyze Dependencies]
+    Deps --> Graph[Build Dependency Graph]
+    Graph --> Sort[Topological Sort]
+    Sort --> Assess[Assess Prior Knowledge]
+    Assess --> Schedule[Generate Schedule]
+    Schedule --> Milestones[Add Milestones]
+    Milestones --> Curriculum[Final Learning Path]</pre>
+<h3 id="schedule-output">Schedule Output</h3>
+<div class="sourceCode" id="cb625"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb625-1"><a href="#cb625-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LearningPath:</span>
+<span id="cb625-2"><a href="#cb625-2" aria-hidden="true" tabindex="-1"></a>    topics: List[TopicSchedule]</span>
+<span id="cb625-3"><a href="#cb625-3" aria-hidden="true" tabindex="-1"></a>    total_hours: <span class="bu">int</span></span>
+<span id="cb625-4"><a href="#cb625-4" aria-hidden="true" tabindex="-1"></a>    daily_hours: <span class="bu">int</span></span>
+<span id="cb625-5"><a href="#cb625-5" aria-hidden="true" tabindex="-1"></a>    milestones: List[Milestone]</span>
+<span id="cb625-6"><a href="#cb625-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb625-7"><a href="#cb625-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TopicSchedule:</span>
+<span id="cb625-8"><a href="#cb625-8" aria-hidden="true" tabindex="-1"></a>    topic: <span class="bu">str</span></span>
+<span id="cb625-9"><a href="#cb625-9" aria-hidden="true" tabindex="-1"></a>    day: <span class="bu">int</span></span>
+<span id="cb625-10"><a href="#cb625-10" aria-hidden="true" tabindex="-1"></a>    duration_hours: <span class="bu">float</span></span>
+<span id="cb625-11"><a href="#cb625-11" aria-hidden="true" tabindex="-1"></a>    resources: List[Resource]</span>
+<span id="cb625-12"><a href="#cb625-12" aria-hidden="true" tabindex="-1"></a>    prerequisites: List[<span class="bu">str</span>]</span></code></pre></div>
+<hr />
+<h2 id="document-processing-agent-1">Document Processing Agent</h2>
+<p>Ingests and indexes documents for RAG retrieval.</p>
+<h3 id="stage-pipeline-1">7-Stage Pipeline</h3>
+<pre class="mermaid">flowchart LR
+    Upload[1. Upload] --> Validate[2. Validate]
+    Validate --> Extract[3. Extract Text]
+    Extract --> OCR[4. OCR if needed]
+    OCR --> Chunk[5. Semantic Chunking]
+    Chunk --> Embed[6. Generate Embeddings]
+    Embed --> Index[7. Index in Qdrant]</pre>
+<h3 id="supported-formats">Supported Formats</h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Extraction Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF (text)</td>
+<td>PyMuPDF</td>
+</tr>
+<tr>
+<td>PDF (scanned)</td>
+<td>PyMuPDF + TrOCR</td>
+</tr>
+<tr>
+<td>Images</td>
+<td>TrOCR / Pytesseract</td>
+</tr>
+<tr>
+<td>DOCX</td>
+<td>python-docx</td>
+</tr>
+<tr>
+<td>PPTX</td>
+<td>python-pptx</td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td>Direct parse</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

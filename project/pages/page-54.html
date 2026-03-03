@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 54: Notification System — In-App, Email &amp;amp; Real-Time</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-53.html">&larr; Previous</a> <a href="page-55.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-54-notification-system-in-app-email-real-time">Page 54: Notification System — In-App, Email &amp; Real-Time</h1>
+<hr />
+<h2 id="overview-42">54.1 Overview</h2>
+<p>ensureStudy has a <strong>multi-channel notification system</strong> that delivers in-app notifications, real-time updates, and event-driven alerts. Notifications are triggered by assessments, classrooms, meetings, grading, and system events.</p>
+<hr />
+<h2 id="notification-model">54.2 Notification Model</h2>
+<h3 id="source-backendcore-serviceappmodelsnotification.py">Source: <code>backend/core-service/app/models/notification.py</code></h3>
+<div class="sourceCode" id="cb346"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb346-1"><a href="#cb346-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Notification(db.Model):</span>
+<span id="cb346-2"><a href="#cb346-2" aria-hidden="true" tabindex="-1"></a>    __tablename__ <span class="op">=</span> <span class="st">&quot;notifications&quot;</span></span>
+<span id="cb346-3"><a href="#cb346-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb346-4"><a href="#cb346-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>          <span class="op">=</span> Column(String(<span class="dv">36</span>), primary_key<span class="op">=</span><span class="va">True</span>, default<span class="op">=</span>uuid4)</span>
+<span id="cb346-5"><a href="#cb346-5" aria-hidden="true" tabindex="-1"></a>    user_id     <span class="op">=</span> Column(String(<span class="dv">36</span>), ForeignKey(<span class="st">&quot;users.id&quot;</span>), nullable<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb346-6"><a href="#cb346-6" aria-hidden="true" tabindex="-1"></a>    title       <span class="op">=</span> Column(String(<span class="dv">200</span>), nullable<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb346-7"><a href="#cb346-7" aria-hidden="true" tabindex="-1"></a>    message     <span class="op">=</span> Column(Text, nullable<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb346-8"><a href="#cb346-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span>        <span class="op">=</span> Column(String(<span class="dv">50</span>))     <span class="co"># assessment, classroom, meeting, system</span></span>
+<span id="cb346-9"><a href="#cb346-9" aria-hidden="true" tabindex="-1"></a>    priority    <span class="op">=</span> Column(String(<span class="dv">20</span>), default<span class="op">=</span><span class="st">&quot;normal&quot;</span>)  <span class="co"># low, normal, high, urgent</span></span>
+<span id="cb346-10"><a href="#cb346-10" aria-hidden="true" tabindex="-1"></a>    is_read     <span class="op">=</span> Column(Boolean, default<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb346-11"><a href="#cb346-11" aria-hidden="true" tabindex="-1"></a>    action_url  <span class="op">=</span> Column(String(<span class="dv">500</span>))    <span class="co"># Deep link URL</span></span>
+<span id="cb346-12"><a href="#cb346-12" aria-hidden="true" tabindex="-1"></a>    metadata    <span class="op">=</span> Column(JSON)           <span class="co"># Additional data</span></span>
+<span id="cb346-13"><a href="#cb346-13" aria-hidden="true" tabindex="-1"></a>    created_at  <span class="op">=</span> Column(DateTime, default<span class="op">=</span>datetime.utcnow)</span>
+<span id="cb346-14"><a href="#cb346-14" aria-hidden="true" tabindex="-1"></a>    read_at     <span class="op">=</span> Column(DateTime)</span></code></pre></div>
+<hr />
+<h2 id="notification-types">54.3 Notification Types</h2>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 26%" />
+<col style="width: 29%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>Type</th>
+<th>Trigger</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assessment_available</code></td>
+<td>Teacher creates assessment</td>
+<td>High</td>
+<td>“New Physics Assessment available”</td>
+</tr>
+<tr>
+<td><code>assessment_graded</code></td>
+<td>AI grading complete</td>
+<td>High</td>
+<td>“Your Chemistry quiz has been graded: 85%”</td>
+</tr>
+<tr>
+<td><code>classroom_joined</code></td>
+<td>Student joins classroom</td>
+<td>Normal</td>
+<td>“You’ve joined ‘Advanced Math’”</td>
+</tr>
+<tr>
+<td><code>material_uploaded</code></td>
+<td>Teacher uploads material</td>
+<td>Normal</td>
+<td>“New study material: Chapter 5.pdf”</td>
+</tr>
+<tr>
+<td><code>meeting_scheduled</code></td>
+<td>Teacher schedules meeting</td>
+<td>High</td>
+<td>“Meeting scheduled: Tomorrow 3 PM”</td>
+</tr>
+<tr>
+<td><code>meeting_starting</code></td>
+<td>Meeting about to start</td>
+<td>Urgent</td>
+<td>“Live class starting in 5 minutes!”</td>
+</tr>
+<tr>
+<td><code>streak_milestone</code></td>
+<td>Study streak reached</td>
+<td>Normal</td>
+<td>” 7-day streak! +100 XP”</td>
+</tr>
+<tr>
+<td><code>weak_topic_alert</code></td>
+<td>Progress drops below threshold</td>
+<td>High</td>
+<td>” Review needed: Trigonometry”</td>
+</tr>
+<tr>
+<td><code>notes_shared</code></td>
+<td>Notes shared by classmate</td>
+<td>Low</td>
+<td>“Alice shared notes on Algebra”</td>
+</tr>
+<tr>
+<td><code>system_announcement</code></td>
+<td>Platform announcement</td>
+<td>Normal</td>
+<td>“Scheduled maintenance tonight”</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="notification-routes">54.4 Notification Routes</h2>
+<h3 id="source-backendcore-serviceapproutesnotifications.py">Source: <code>backend/core-service/app/routes/notifications.py</code></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/notifications</code></td>
+<td>List notifications (paginated)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/notifications/unread-count</code></td>
+<td>Get unread count</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/notifications/&lt;id&gt;/read</code></td>
+<td>Mark as read</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/notifications/read-all</code></td>
+<td>Mark all as read</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/notifications/&lt;id&gt;</code></td>
+<td>Delete notification</td>
+</tr>
+</tbody>
+</table>
+<h3 id="response-format-1">Response Format</h3>
+<div class="sourceCode" id="cb347"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb347-1"><a href="#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb347-2"><a href="#cb347-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;notifications&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb347-3"><a href="#cb347-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb347-4"><a href="#cb347-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;notif_123&quot;</span><span class="fu">,</span></span>
+<span id="cb347-5"><a href="#cb347-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Assessment Graded&quot;</span><span class="fu">,</span></span>
+<span id="cb347-6"><a href="#cb347-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;message&quot;</span><span class="fu">:</span> <span class="st">&quot;Your Physics quiz scored 85%. Well done!&quot;</span><span class="fu">,</span></span>
+<span id="cb347-7"><a href="#cb347-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;assessment_graded&quot;</span><span class="fu">,</span></span>
+<span id="cb347-8"><a href="#cb347-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;priority&quot;</span><span class="fu">:</span> <span class="st">&quot;high&quot;</span><span class="fu">,</span></span>
+<span id="cb347-9"><a href="#cb347-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;is_read&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb347-10"><a href="#cb347-10" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;action_url&quot;</span><span class="fu">:</span> <span class="st">&quot;/assessments/take/assess_456&quot;</span><span class="fu">,</span></span>
+<span id="cb347-11"><a href="#cb347-11" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;created_at&quot;</span><span class="fu">:</span> <span class="st">&quot;2025-02-27T14:30:00Z&quot;</span></span>
+<span id="cb347-12"><a href="#cb347-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb347-13"><a href="#cb347-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb347-14"><a href="#cb347-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;unread_count&quot;</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb347-15"><a href="#cb347-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;total&quot;</span><span class="fu">:</span> <span class="dv">15</span><span class="fu">,</span></span>
+<span id="cb347-16"><a href="#cb347-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;page&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb347-17"><a href="#cb347-17" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+<h2 id="notification-triggers">54.5 Notification Triggers</h2>
+<h3 id="classroom-events">Classroom Events</h3>
+<div class="sourceCode" id="cb348"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb348-1"><a href="#cb348-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Core Service: routes/classroom.py</span></span>
+<span id="cb348-2"><a href="#cb348-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> handle_material_upload(classroom_id, material):</span>
+<span id="cb348-3"><a href="#cb348-3" aria-hidden="true" tabindex="-1"></a>    students <span class="op">=</span> get_classroom_students(classroom_id)</span>
+<span id="cb348-4"><a href="#cb348-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb348-5"><a href="#cb348-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> student <span class="kw">in</span> students:</span>
+<span id="cb348-6"><a href="#cb348-6" aria-hidden="true" tabindex="-1"></a>        create_notification(</span>
+<span id="cb348-7"><a href="#cb348-7" aria-hidden="true" tabindex="-1"></a>            user_id<span class="op">=</span>student.<span class="bu">id</span>,</span>
+<span id="cb348-8"><a href="#cb348-8" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span><span class="st">&quot;New Study Material&quot;</span>,</span>
+<span id="cb348-9"><a href="#cb348-9" aria-hidden="true" tabindex="-1"></a>            message<span class="op">=</span><span class="ss">f&quot;New material uploaded: </span><span class="sc">{</span>material<span class="sc">.</span>name<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb348-10"><a href="#cb348-10" aria-hidden="true" tabindex="-1"></a>            <span class="bu">type</span><span class="op">=</span><span class="st">&quot;material_uploaded&quot;</span>,</span>
+<span id="cb348-11"><a href="#cb348-11" aria-hidden="true" tabindex="-1"></a>            action_url<span class="op">=</span><span class="ss">f&quot;/classrooms/</span><span class="sc">{</span>classroom_id<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb348-12"><a href="#cb348-12" aria-hidden="true" tabindex="-1"></a>            metadata<span class="op">=</span>{<span class="st">&quot;classroom_id&quot;</span>: classroom_id, <span class="st">&quot;material_id&quot;</span>: material.<span class="bu">id</span>}</span>
+<span id="cb348-13"><a href="#cb348-13" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<h3 id="grading-callbacks">Grading Callbacks</h3>
+<div class="sourceCode" id="cb349"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb349-1"><a href="#cb349-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Core Service: routes/grading_callback.py</span></span>
+<span id="cb349-2"><a href="#cb349-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> handle_grading_complete(assessment_id, user_id, score):</span>
+<span id="cb349-3"><a href="#cb349-3" aria-hidden="true" tabindex="-1"></a>    create_notification(</span>
+<span id="cb349-4"><a href="#cb349-4" aria-hidden="true" tabindex="-1"></a>        user_id<span class="op">=</span>user_id,</span>
+<span id="cb349-5"><a href="#cb349-5" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">&quot;Assessment Graded&quot;</span>,</span>
+<span id="cb349-6"><a href="#cb349-6" aria-hidden="true" tabindex="-1"></a>        message<span class="op">=</span><span class="ss">f&quot;Your assessment scored </span><span class="sc">{</span>score<span class="sc">}</span><span class="ss">%.&quot;</span>,</span>
+<span id="cb349-7"><a href="#cb349-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">type</span><span class="op">=</span><span class="st">&quot;assessment_graded&quot;</span>,</span>
+<span id="cb349-8"><a href="#cb349-8" aria-hidden="true" tabindex="-1"></a>        priority<span class="op">=</span><span class="st">&quot;high&quot;</span>,</span>
+<span id="cb349-9"><a href="#cb349-9" aria-hidden="true" tabindex="-1"></a>        action_url<span class="op">=</span><span class="ss">f&quot;/assessments/take/</span><span class="sc">{</span>assessment_id<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb349-10"><a href="#cb349-10" aria-hidden="true" tabindex="-1"></a>        metadata<span class="op">=</span>{<span class="st">&quot;assessment_id&quot;</span>: assessment_id, <span class="st">&quot;score&quot;</span>: score}</span>
+<span id="cb349-11"><a href="#cb349-11" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<h3 id="meeting-events">Meeting Events</h3>
+<div class="sourceCode" id="cb350"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb350-1"><a href="#cb350-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Core Service: routes/meetings.py</span></span>
+<span id="cb350-2"><a href="#cb350-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> handle_meeting_created(meeting):</span>
+<span id="cb350-3"><a href="#cb350-3" aria-hidden="true" tabindex="-1"></a>    students <span class="op">=</span> get_classroom_students(meeting.classroom_id)</span>
+<span id="cb350-4"><a href="#cb350-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb350-5"><a href="#cb350-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> student <span class="kw">in</span> students:</span>
+<span id="cb350-6"><a href="#cb350-6" aria-hidden="true" tabindex="-1"></a>        create_notification(</span>
+<span id="cb350-7"><a href="#cb350-7" aria-hidden="true" tabindex="-1"></a>            user_id<span class="op">=</span>student.<span class="bu">id</span>,</span>
+<span id="cb350-8"><a href="#cb350-8" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span><span class="st">&quot;Meeting Scheduled&quot;</span>,</span>
+<span id="cb350-9"><a href="#cb350-9" aria-hidden="true" tabindex="-1"></a>            message<span class="op">=</span><span class="ss">f&quot;&#39;</span><span class="sc">{</span>meeting<span class="sc">.</span>title<span class="sc">}</span><span class="ss">&#39; on </span><span class="sc">{</span>meeting<span class="sc">.</span>scheduled_time<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb350-10"><a href="#cb350-10" aria-hidden="true" tabindex="-1"></a>            <span class="bu">type</span><span class="op">=</span><span class="st">&quot;meeting_scheduled&quot;</span>,</span>
+<span id="cb350-11"><a href="#cb350-11" aria-hidden="true" tabindex="-1"></a>            priority<span class="op">=</span><span class="st">&quot;high&quot;</span>,</span>
+<span id="cb350-12"><a href="#cb350-12" aria-hidden="true" tabindex="-1"></a>            action_url<span class="op">=</span><span class="ss">f&quot;/meet/</span><span class="sc">{</span>meeting<span class="sc">.</span><span class="bu">id</span><span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb350-13"><a href="#cb350-13" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<hr />
+<h2 id="frontend-notification-components">54.6 Frontend Notification Components</h2>
+<h3 id="notificationbell">NotificationBell</h3>
+<div class="sourceCode" id="cb351"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb351-1"><a href="#cb351-1" aria-hidden="true" tabindex="-1"></a><span class="co">// components/NotificationBell.tsx</span></span>
+<span id="cb351-2"><a href="#cb351-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">NotificationBell</span>() {</span>
+<span id="cb351-3"><a href="#cb351-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> { unreadCount } <span class="op">=</span> <span class="fu">useNotifications</span>()<span class="op">;</span></span>
+<span id="cb351-4"><a href="#cb351-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb351-5"><a href="#cb351-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="cb351-6"><a href="#cb351-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>button className<span class="op">=</span><span class="st">&quot;relative&quot;</span><span class="op">&gt;</span></span>
+<span id="cb351-7"><a href="#cb351-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">&lt;</span>BellIcon <span class="op">/&gt;</span></span>
+<span id="cb351-8"><a href="#cb351-8" aria-hidden="true" tabindex="-1"></a>            {unreadCount <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> (</span>
+<span id="cb351-9"><a href="#cb351-9" aria-hidden="true" tabindex="-1"></a>                <span class="op">&lt;</span>span className<span class="op">=</span><span class="st">&quot;badge&quot;</span><span class="op">&gt;</span>{unreadCount}<span class="op">&lt;/</span>span<span class="op">&gt;</span></span>
+<span id="cb351-10"><a href="#cb351-10" aria-hidden="true" tabindex="-1"></a>            )}</span>
+<span id="cb351-11"><a href="#cb351-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;/</span>button<span class="op">&gt;</span></span>
+<span id="cb351-12"><a href="#cb351-12" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb351-13"><a href="#cb351-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="notificationprovider">NotificationProvider</h3>
+<div class="sourceCode" id="cb352"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb352-1"><a href="#cb352-1" aria-hidden="true" tabindex="-1"></a><span class="co">// components/NotificationProvider.tsx</span></span>
+<span id="cb352-2"><a href="#cb352-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">NotificationProvider</span>({ children }) {</span>
+<span id="cb352-3"><a href="#cb352-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Poll for new notifications every 30 seconds</span></span>
+<span id="cb352-4"><a href="#cb352-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">useEffect</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb352-5"><a href="#cb352-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> interval <span class="op">=</span> <span class="pp">setInterval</span>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb352-6"><a href="#cb352-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> { unread_count } <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetchUnreadCount</span>()<span class="op">;</span></span>
+<span id="cb352-7"><a href="#cb352-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">setUnreadCount</span>(unread_count)<span class="op">;</span></span>
+<span id="cb352-8"><a href="#cb352-8" aria-hidden="true" tabindex="-1"></a>        }<span class="op">,</span> <span class="dv">30000</span>)<span class="op">;</span></span>
+<span id="cb352-9"><a href="#cb352-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb352-10"><a href="#cb352-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> () <span class="kw">=&gt;</span> <span class="pp">clearInterval</span>(interval)<span class="op">;</span></span>
+<span id="cb352-11"><a href="#cb352-11" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span> [])<span class="op">;</span></span>
+<span id="cb352-12"><a href="#cb352-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb352-13"><a href="#cb352-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">&lt;</span>NotificationContext<span class="op">.</span><span class="at">Provider</span> value<span class="op">=</span>{<span class="op">...</span>}<span class="op">&gt;</span></span>
+<span id="cb352-14"><a href="#cb352-14" aria-hidden="true" tabindex="-1"></a>        {children}</span>
+<span id="cb352-15"><a href="#cb352-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;/</span>NotificationContext<span class="op">.</span><span class="at">Provider</span><span class="op">&gt;;</span></span>
+<span id="cb352-16"><a href="#cb352-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="notification-pages">54.7 Notification Pages</h2>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Role</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/notifications</code></td>
+<td>Student</td>
+<td>Student notification center</td>
+</tr>
+<tr>
+<td><code>/parent/notifications</code></td>
+<td>Parent</td>
+<td>Parent notification center</td>
+</tr>
+<tr>
+<td><code>/teacher/dashboard</code></td>
+<td>Teacher</td>
+<td>Includes notification section</td>
+</tr>
+<tr>
+<td><code>/admin/dashboard</code></td>
+<td>Admin</td>
+<td>System-wide notifications</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 16: Proctoring System — Detectors, Scoring &amp;amp; ML Models</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-15.html">&larr; Previous</a> <a href="page-17.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-16-proctoring-system-detectors-scoring-ml-models">Page 16: Proctoring System — Detectors, Scoring &amp; ML Models</h1>
+<hr />
+<h2 id="overview-8">16.1 Overview</h2>
+<p>The proctoring system provides <strong>real-time exam integrity monitoring</strong> using computer vision, audio analysis, and machine learning. It processes webcam frames at ~1 FPS, runs 8 independent detectors, aggregates results through static (LightGBM) and temporal (LSTM) classifiers, and produces a final integrity score.</p>
+<h3 id="source-backendai-serviceappproctor-34-files">Source: <code>backend/ai-service/app/proctor/</code> (34 files)</h3>
+<hr />
+<h2 id="architecture">16.2 Architecture</h2>
+<pre class="mermaid">flowchart TB
+    CAM["📹 Webcam Frame (1 FPS)"] --> PS
+
+    subgraph PS["ProctorSession.process_frame()"]
+        direction TB
+        subgraph DET["8 Detectors (parallel)"]
+            direction LR
+            D1["Face Detector<br/>(MediaPipe)"]
+            D2["Head Pose<br/>(68-landmark)"]
+            D3["Gaze Tracker<br/>(pupil ratio)"]
+            D4["Object Det.<br/>(YOLOv11n)"]
+            D5["Hand Detector<br/>(MediaPipe)"]
+            D6["Blink Det.<br/>(EAR ratio)"]
+            D7["Audio Det.<br/>(energy/freq)"]
+            D8["Face Verifier<br/>(DeepFace)"]
+        end
+
+        DET --> FP["Feature Processor<br/>_format_for_autooep()"]
+        FP --> SC["Static Classifier<br/>(LightGBM)"]
+        FP --> TP["Temporal Predictor<br/>(LSTM, 30-frame)"]
+        SC & TP --> IS["Integrity Scorer + Flag Generator<br/>→ final_score (0-100) + active_flags"]
+    end
+</pre>
+<hr />
+<h2 id="detectors-8-total">16.3 Detectors (8 Total)</h2>
+<h3 id="detector-inventory">Detector Inventory</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 17%" />
+<col style="width: 31%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr>
+<th>Detector</th>
+<th>File</th>
+<th>Technology</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FaceDetector</strong></td>
+<td><code>detectors/face_detector.py</code></td>
+<td>MediaPipe Face Detection</td>
+<td>face_present, face_count, bounding_box</td>
+</tr>
+<tr>
+<td><strong>HeadPoseEstimator</strong></td>
+<td><code>detectors/head_pose.py</code></td>
+<td>dlib 68-landmark + solvePnP</td>
+<td>yaw, pitch, roll angles</td>
+</tr>
+<tr>
+<td><strong>GazeTracker</strong></td>
+<td><code>detectors/gaze_tracker.py</code></td>
+<td>Pupil-iris ratio analysis</td>
+<td>direction (center/left/right/up/down)</td>
+</tr>
+<tr>
+<td><strong>ProhibitedObjectDetector</strong></td>
+<td><code>detectors/object_detector.py</code></td>
+<td>YOLOv11n (custom trained)</td>
+<td>phone, book, earphone, second_screen</td>
+</tr>
+<tr>
+<td><strong>HandDetector</strong></td>
+<td><code>detectors/hand_detector.py</code></td>
+<td>MediaPipe Hands</td>
+<td>hand_visible, hand_count, near_face</td>
+</tr>
+<tr>
+<td><strong>AudioDetector</strong></td>
+<td><code>detectors/audio_detector.py</code></td>
+<td>Energy + frequency analysis</td>
+<td>noise_level, speech_detected, multiple_voices</td>
+</tr>
+<tr>
+<td><strong>BlinkDetector</strong></td>
+<td><code>detectors/blink_detector.py</code></td>
+<td>Eye Aspect Ratio (EAR)</td>
+<td>blink_rate, prolonged_closure</td>
+</tr>
+<tr>
+<td><strong>FaceVerifier</strong></td>
+<td><code>detectors/face_verifier.py</code></td>
+<td>DeepFace</td>
+<td>identity_match, confidence</td>
+</tr>
+</tbody>
+</table>
+<h3 id="lazy-loading-pattern">Lazy Loading Pattern</h3>
+<p>All detectors use <code>@property</code> lazy loading to avoid loading ML models until needed:</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="at">@property</span></span>
+<span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> face_detector(<span class="va">self</span>):</span>
+<span id="cb128-3"><a href="#cb128-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="va">self</span>._face_detector <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb128-4"><a href="#cb128-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._face_detector <span class="op">=</span> FaceDetector()</span>
+<span id="cb128-5"><a href="#cb128-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>._face_detector</span></code></pre></div>
+<h3 id="key-detector-details">Key Detector Details</h3>
+<p><strong>Object Detector (YOLOv11n)</strong>: - Custom-trained model: <code>models/weights/OEP_YOLOv11n.pt</code> - Prohibited items: phone, book, earphone, second screen, another person - Confidence threshold: 0.5</p>
+<p><strong>Head Pose Estimator</strong>: - Uses dlib’s 68 face landmarks + OpenCV <code>solvePnP</code> - Suspicious thresholds: |yaw| &gt; 30°, |pitch| &gt; 25° - Shape predictor: <code>models/weights/shape_predictor_68_face_landmarks.dat</code></p>
+<p><strong>Gaze Tracker</strong>: - Calculates pupil-to-iris center ratio - Directions: center, left, right, up, down - Numeric encoding: center=0, left=1, right=2, up=3, down=4</p>
+<hr />
+<h2 id="ml-models">16.4 ML Models</h2>
+<h3 id="static-classifier-lightgbm">Static Classifier (LightGBM)</h3>
+<pre><code>Input:  Per-frame feature vector (face, gaze, head pose, objects, hands)
+Output: Binary classification — cheating / not cheating
+Model:  models/weights/lightgbm_cheating_model_20250818_132555.pkl
+Scaler: models/weights/scaler_20250818_132555.pkl</code></pre>
+<h3 id="temporal-predictor-lstm">Temporal Predictor (LSTM)</h3>
+<pre><code>Input:  Sequence of 30 frames of features (sliding window)
+Output: Cheating probability (0-1)
+Model:  models/weights/temporal_proctor_trained_on_processed.pt</code></pre>
+<p>The temporal predictor captures <strong>behavioral patterns over time</strong> — a student briefly looking away is fine, but sustained off-screen gaze combined with hand movement triggers higher confidence.</p>
+<hr />
+<h2 id="scoring-system">16.5 Scoring System</h2>
+<h3 id="integrityscorer">IntegrityScorer</h3>
+<p>Source: <code>proctor/scoring/integrity_scorer.py</code></p>
+<p>Computes a <strong>0-100 integrity score</strong> from aggregated detections:</p>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 29%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Weight</th>
+<th>Metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Face presence</td>
+<td>25%</td>
+<td>face_visible_ratio, face_count_anomalies</td>
+</tr>
+<tr>
+<td>Gaze behavior</td>
+<td>20%</td>
+<td>off_screen_ratio, gaze_direction_shifts</td>
+</tr>
+<tr>
+<td>Head pose</td>
+<td>15%</td>
+<td>suspicious_angle_ratio, sudden_movements</td>
+</tr>
+<tr>
+<td>Object detection</td>
+<td>20%</td>
+<td>prohibited_items_count, phone_detection_time</td>
+</tr>
+<tr>
+<td>Audio behavior</td>
+<td>10%</td>
+<td>speech_segments, multiple_voices</td>
+</tr>
+<tr>
+<td>Identity</td>
+<td>10%</td>
+<td>face_match_confidence</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flaggenerator">FlagGenerator</h3>
+<p>Source: <code>proctor/scoring/flag_generator.py</code></p>
+<p>Generates human-readable flags for review:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Trigger Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NO_FACE_DETECTED</code></td>
+<td>Face absent &gt; 10 seconds</td>
+</tr>
+<tr>
+<td><code>MULTIPLE_FACES</code></td>
+<td>&gt; 1 face detected</td>
+</tr>
+<tr>
+<td><code>SUSPICIOUS_GAZE</code></td>
+<td>Off-center gaze &gt; 30% of time</td>
+</tr>
+<tr>
+<td><code>HEAD_TURNED</code></td>
+<td>Head yaw &gt; 30° sustained</td>
+</tr>
+<tr>
+<td><code>PHONE_DETECTED</code></td>
+<td>Phone visible in frame</td>
+</tr>
+<tr>
+<td><code>PROHIBITED_OBJECT</code></td>
+<td>Book, earphone, or second screen</td>
+</tr>
+<tr>
+<td><code>IDENTITY_MISMATCH</code></td>
+<td>Face verification &lt; 0.6 confidence</td>
+</tr>
+<tr>
+<td><code>AUDIO_ANOMALY</code></td>
+<td>Multiple voices or sustained speech</td>
+</tr>
+<tr>
+<td><code>TAB_SWITCH</code></td>
+<td>Browser tab/window change</td>
+</tr>
+<tr>
+<td><code>PROLONGED_ABSENCE</code></td>
+<td>Face absent &gt; 30 seconds</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cheatscore">CheatScore</h3>
+<p>Source: <code>proctor/scoring/cheat_score.py</code></p>
+<p>Final cheat score combining static + temporal predictions:</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a>final_score <span class="op">=</span> <span class="fl">0.4</span> <span class="op">*</span> static_prediction <span class="op">+</span> <span class="fl">0.6</span> <span class="op">*</span> temporal_prediction</span></code></pre></div>
+<hr />
+<h2 id="session-lifecycle">16.6 Session Lifecycle</h2>
+<div class="sourceCode" id="cb132"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Start session</span></span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>session <span class="op">=</span> ProctorSession(assessment_id<span class="op">=</span><span class="st">&quot;asmt_123&quot;</span>, student_id<span class="op">=</span><span class="st">&quot;user_456&quot;</span>)</span>
+<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Process frames (called at ~1 FPS from frontend)</span></span>
+<span id="cb132-5"><a href="#cb132-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> session.process_frame(frame<span class="op">=</span>cv2_image, timestamp<span class="op">=</span>elapsed_seconds)</span>
+<span id="cb132-6"><a href="#cb132-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Returns: {current_score: 87, active_flags: [&quot;SUSPICIOUS_GAZE&quot;], detections: {...}}</span></span>
+<span id="cb132-7"><a href="#cb132-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-8"><a href="#cb132-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Tab switch events (from browser visibility API)</span></span>
+<span id="cb132-9"><a href="#cb132-9" aria-hidden="true" tabindex="-1"></a>session.add_tab_switch()</span>
+<span id="cb132-10"><a href="#cb132-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-11"><a href="#cb132-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Finalize session</span></span>
+<span id="cb132-12"><a href="#cb132-12" aria-hidden="true" tabindex="-1"></a>final_results <span class="op">=</span> session.finalize()</span>
+<span id="cb132-13"><a href="#cb132-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Returns: {integrity_score: 82, flags: [...], frame_count: 1800, duration: 1800}</span></span></code></pre></div>
+<h3 id="frame-processing-pipeline">Frame Processing Pipeline</h3>
+<div class="sourceCode" id="cb133"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_frame(<span class="va">self</span>, frame, timestamp<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb133-2"><a href="#cb133-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Check frame quality (blur, darkness)</span></span>
+<span id="cb133-3"><a href="#cb133-3" aria-hidden="true" tabindex="-1"></a>    quality <span class="op">=</span> check_frame_quality(frame)</span>
+<span id="cb133-4"><a href="#cb133-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> quality[<span class="st">&quot;acceptable&quot;</span>]:</span>
+<span id="cb133-5"><a href="#cb133-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="st">&quot;current_score&quot;</span>: <span class="va">self</span>._get_current_score(), <span class="st">&quot;quality_issue&quot;</span>: <span class="va">True</span>}</span>
+<span id="cb133-6"><a href="#cb133-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-7"><a href="#cb133-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Run all 8 detectors</span></span>
+<span id="cb133-8"><a href="#cb133-8" aria-hidden="true" tabindex="-1"></a>    detections <span class="op">=</span> <span class="va">self</span>._run_detectors(frame)</span>
+<span id="cb133-9"><a href="#cb133-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-10"><a href="#cb133-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Format for AutoOEP models</span></span>
+<span id="cb133-11"><a href="#cb133-11" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> <span class="va">self</span>._format_for_autooep(detections)</span>
+<span id="cb133-12"><a href="#cb133-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-13"><a href="#cb133-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Static classification (per-frame)</span></span>
+<span id="cb133-14"><a href="#cb133-14" aria-hidden="true" tabindex="-1"></a>    static_pred <span class="op">=</span> <span class="va">self</span>.static_classifier.predict(features)</span>
+<span id="cb133-15"><a href="#cb133-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-16"><a href="#cb133-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 5. Add to temporal buffer (30-frame window)</span></span>
+<span id="cb133-17"><a href="#cb133-17" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._feature_buffer.append(features)</span>
+<span id="cb133-18"><a href="#cb133-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-19"><a href="#cb133-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 6. Temporal prediction (if buffer full)</span></span>
+<span id="cb133-20"><a href="#cb133-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(<span class="va">self</span>._feature_buffer) <span class="op">&gt;=</span> <span class="dv">30</span>:</span>
+<span id="cb133-21"><a href="#cb133-21" aria-hidden="true" tabindex="-1"></a>        temporal_pred <span class="op">=</span> <span class="va">self</span>.temporal_predictor.predict(<span class="bu">list</span>(<span class="va">self</span>._feature_buffer))</span>
+<span id="cb133-22"><a href="#cb133-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-23"><a href="#cb133-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 7. Update metrics aggregator</span></span>
+<span id="cb133-24"><a href="#cb133-24" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._metrics.update(detections, static_pred, temporal_pred)</span>
+<span id="cb133-25"><a href="#cb133-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-26"><a href="#cb133-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 8. Generate flags</span></span>
+<span id="cb133-27"><a href="#cb133-27" aria-hidden="true" tabindex="-1"></a>    flags <span class="op">=</span> <span class="va">self</span>._flag_generator.check(<span class="va">self</span>._metrics)</span>
+<span id="cb133-28"><a href="#cb133-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb133-29"><a href="#cb133-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb133-30"><a href="#cb133-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;current_score&quot;</span>: <span class="va">self</span>._get_current_score(),</span>
+<span id="cb133-31"><a href="#cb133-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;active_flags&quot;</span>: flags,</span>
+<span id="cb133-32"><a href="#cb133-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;detections&quot;</span>: detections</span>
+<span id="cb133-33"><a href="#cb133-33" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
+<hr />
+<h2 id="model-weights">16.7 Model Weights</h2>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th>File</th>
+<th>Size</th>
+<th>Training</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YOLOv11n (objects)</td>
+<td><code>OEP_YOLOv11n.pt</code></td>
+<td>~6 MB</td>
+<td>Custom dataset</td>
+</tr>
+<tr>
+<td>Face landmarks</td>
+<td><code>shape_predictor_68_face_landmarks.dat</code></td>
+<td>~99 MB</td>
+<td>dlib pre-trained</td>
+</tr>
+<tr>
+<td>Face landmarker</td>
+<td><code>face_landmarker.task</code></td>
+<td>~5 MB</td>
+<td>MediaPipe</td>
+</tr>
+<tr>
+<td>LightGBM (static)</td>
+<td><code>lightgbm_cheating_model_*.pkl</code></td>
+<td>~500 KB</td>
+<td>Custom proctoring data</td>
+</tr>
+<tr>
+<td>Feature scaler</td>
+<td><code>scaler_*.pkl</code></td>
+<td>~10 KB</td>
+<td>Fitted on training data</td>
+</tr>
+<tr>
+<td>LSTM (temporal)</td>
+<td><code>temporal_proctor_trained_on_processed.pt</code></td>
+<td>~2 MB</td>
+<td>30-frame sequences</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

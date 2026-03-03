@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 38: Error Handling, Resilience &amp;amp; Graceful Degradation</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-37.html">&larr; Previous</a> <a href="page-39.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-38-error-handling-resilience-graceful-degradation">Page 38: Error Handling, Resilience &amp; Graceful Degradation</h1>
+<hr />
+<h2 id="overview-29">38.1 Overview</h2>
+<p>ensureStudy implements <strong>defensive error handling</strong> across all services, using try-catch wrappers, graceful fallbacks, optional dependency loading, and structured error responses. This ensures the platform remains functional even when individual AI components fail.</p>
+<hr />
+<h2 id="api-error-response-format">38.2 API Error Response Format</h2>
+<h3 id="core-service-flask-1">Core Service (Flask)</h3>
+<div class="sourceCode" id="cb240"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb240-1"><a href="#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.errorhandler</span>(<span class="dv">400</span>)</span>
+<span id="cb240-2"><a href="#cb240-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bad_request(error):</span>
+<span id="cb240-3"><a href="#cb240-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="bu">str</span>(error.description)}), <span class="dv">400</span></span>
+<span id="cb240-4"><a href="#cb240-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb240-5"><a href="#cb240-5" aria-hidden="true" tabindex="-1"></a><span class="at">@app.errorhandler</span>(<span class="dv">401</span>)</span>
+<span id="cb240-6"><a href="#cb240-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unauthorized(error):</span>
+<span id="cb240-7"><a href="#cb240-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Authentication required&quot;</span>}), <span class="dv">401</span></span>
+<span id="cb240-8"><a href="#cb240-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb240-9"><a href="#cb240-9" aria-hidden="true" tabindex="-1"></a><span class="at">@app.errorhandler</span>(<span class="dv">403</span>)</span>
+<span id="cb240-10"><a href="#cb240-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forbidden(error):</span>
+<span id="cb240-11"><a href="#cb240-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Access denied&quot;</span>}), <span class="dv">403</span></span>
+<span id="cb240-12"><a href="#cb240-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb240-13"><a href="#cb240-13" aria-hidden="true" tabindex="-1"></a><span class="at">@app.errorhandler</span>(<span class="dv">404</span>)</span>
+<span id="cb240-14"><a href="#cb240-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> not_found(error):</span>
+<span id="cb240-15"><a href="#cb240-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Resource not found&quot;</span>}), <span class="dv">404</span></span>
+<span id="cb240-16"><a href="#cb240-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb240-17"><a href="#cb240-17" aria-hidden="true" tabindex="-1"></a><span class="at">@app.errorhandler</span>(<span class="dv">500</span>)</span>
+<span id="cb240-18"><a href="#cb240-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> internal_error(error):</span>
+<span id="cb240-19"><a href="#cb240-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Internal server error&quot;</span>}), <span class="dv">500</span></span></code></pre></div>
+<h3 id="ai-service-fastapi-1">AI Service (FastAPI)</h3>
+<div class="sourceCode" id="cb241"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb241-1"><a href="#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastapi <span class="im">import</span> HTTPException</span>
+<span id="cb241-2"><a href="#cb241-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb241-3"><a href="#cb241-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Structured error responses</span></span>
+<span id="cb241-4"><a href="#cb241-4" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> HTTPException(</span>
+<span id="cb241-5"><a href="#cb241-5" aria-hidden="true" tabindex="-1"></a>    status_code<span class="op">=</span><span class="dv">422</span>,</span>
+<span id="cb241-6"><a href="#cb241-6" aria-hidden="true" tabindex="-1"></a>    detail<span class="op">=</span>{</span>
+<span id="cb241-7"><a href="#cb241-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;error&quot;</span>: <span class="st">&quot;Processing failed&quot;</span>,</span>
+<span id="cb241-8"><a href="#cb241-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;message&quot;</span>: <span class="st">&quot;Could not extract text from PDF&quot;</span>,</span>
+<span id="cb241-9"><a href="#cb241-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;suggestion&quot;</span>: <span class="st">&quot;Ensure the file is a valid PDF&quot;</span></span>
+<span id="cb241-10"><a href="#cb241-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb241-11"><a href="#cb241-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="llm-fallback-chain">38.3 LLM Fallback Chain</h2>
+<p>The most critical resilience pattern — ensures tutoring continues even if a provider is down:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb242-1"><a href="#cb242-1" aria-hidden="true" tabindex="-1"></a>FALLBACK_ORDER <span class="op">=</span> [<span class="st">&quot;openai&quot;</span>, <span class="st">&quot;gemini&quot;</span>, <span class="st">&quot;groq&quot;</span>, <span class="st">&quot;ollama&quot;</span>]</span>
+<span id="cb242-2"><a href="#cb242-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb242-3"><a href="#cb242-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> generate_with_fallback(prompt, <span class="op">**</span>kwargs):</span>
+<span id="cb242-4"><a href="#cb242-4" aria-hidden="true" tabindex="-1"></a>    errors <span class="op">=</span> []</span>
+<span id="cb242-5"><a href="#cb242-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb242-6"><a href="#cb242-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> provider <span class="kw">in</span> FALLBACK_ORDER:</span>
+<span id="cb242-7"><a href="#cb242-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb242-8"><a href="#cb242-8" aria-hidden="true" tabindex="-1"></a>            response <span class="op">=</span> <span class="cf">await</span> generate(prompt, provider<span class="op">=</span>provider, <span class="op">**</span>kwargs)</span>
+<span id="cb242-9"><a href="#cb242-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> provider <span class="op">!=</span> FALLBACK_ORDER[<span class="dv">0</span>]:</span>
+<span id="cb242-10"><a href="#cb242-10" aria-hidden="true" tabindex="-1"></a>                logger.info(<span class="ss">f&quot;Used fallback provider: </span><span class="sc">{</span>provider<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb242-11"><a href="#cb242-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> response</span>
+<span id="cb242-12"><a href="#cb242-12" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb242-13"><a href="#cb242-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> RateLimitError <span class="im">as</span> e:</span>
+<span id="cb242-14"><a href="#cb242-14" aria-hidden="true" tabindex="-1"></a>            logger.warning(<span class="ss">f&quot;</span><span class="sc">{</span>provider<span class="sc">}</span><span class="ss"> rate limited: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb242-15"><a href="#cb242-15" aria-hidden="true" tabindex="-1"></a>            errors.append((provider, <span class="st">&quot;rate_limit&quot;</span>))</span>
+<span id="cb242-16"><a href="#cb242-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb242-17"><a href="#cb242-17" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb242-18"><a href="#cb242-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">TimeoutError</span> <span class="im">as</span> e:</span>
+<span id="cb242-19"><a href="#cb242-19" aria-hidden="true" tabindex="-1"></a>            logger.warning(<span class="ss">f&quot;</span><span class="sc">{</span>provider<span class="sc">}</span><span class="ss"> timeout: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb242-20"><a href="#cb242-20" aria-hidden="true" tabindex="-1"></a>            errors.append((provider, <span class="st">&quot;timeout&quot;</span>))</span>
+<span id="cb242-21"><a href="#cb242-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb242-22"><a href="#cb242-22" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb242-23"><a href="#cb242-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> APIError <span class="im">as</span> e:</span>
+<span id="cb242-24"><a href="#cb242-24" aria-hidden="true" tabindex="-1"></a>            logger.error(<span class="ss">f&quot;</span><span class="sc">{</span>provider<span class="sc">}</span><span class="ss"> API error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb242-25"><a href="#cb242-25" aria-hidden="true" tabindex="-1"></a>            errors.append((provider, <span class="bu">str</span>(e)))</span>
+<span id="cb242-26"><a href="#cb242-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb242-27"><a href="#cb242-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb242-28"><a href="#cb242-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># All providers failed</span></span>
+<span id="cb242-29"><a href="#cb242-29" aria-hidden="true" tabindex="-1"></a>    logger.critical(<span class="ss">f&quot;All LLM providers failed: </span><span class="sc">{</span>errors<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb242-30"><a href="#cb242-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> AllProvidersFailedError(errors)</span></code></pre></div>
+<hr />
+<h2 id="optional-dependency-loading">38.4 Optional Dependency Loading</h2>
+<p>Many AI components gracefully handle missing dependencies:</p>
+<div class="sourceCode" id="cb243"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb243-1"><a href="#cb243-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DeepFace — optional, graceful fallback</span></span>
+<span id="cb243-2"><a href="#cb243-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb243-3"><a href="#cb243-3" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> deepface <span class="im">import</span> DeepFace</span>
+<span id="cb243-4"><a href="#cb243-4" aria-hidden="true" tabindex="-1"></a>    DEEPFACE_AVAILABLE <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb243-5"><a href="#cb243-5" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb243-6"><a href="#cb243-6" aria-hidden="true" tabindex="-1"></a>    DEEPFACE_AVAILABLE <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb243-7"><a href="#cb243-7" aria-hidden="true" tabindex="-1"></a>    logger.warning(<span class="st">&quot;DeepFace not installed, face verification disabled&quot;</span>)</span>
+<span id="cb243-8"><a href="#cb243-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb243-9"><a href="#cb243-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Audio detection — optional</span></span>
+<span id="cb243-10"><a href="#cb243-10" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb243-11"><a href="#cb243-11" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pyaudio</span>
+<span id="cb243-12"><a href="#cb243-12" aria-hidden="true" tabindex="-1"></a>    AUDIO_AVAILABLE <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb243-13"><a href="#cb243-13" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb243-14"><a href="#cb243-14" aria-hidden="true" tabindex="-1"></a>    AUDIO_AVAILABLE <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb243-15"><a href="#cb243-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb243-16"><a href="#cb243-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Cassandra — optional analytics storage</span></span>
+<span id="cb243-17"><a href="#cb243-17" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb243-18"><a href="#cb243-18" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> cassandra.cluster <span class="im">import</span> Cluster</span>
+<span id="cb243-19"><a href="#cb243-19" aria-hidden="true" tabindex="-1"></a>    CASSANDRA_AVAILABLE <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb243-20"><a href="#cb243-20" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb243-21"><a href="#cb243-21" aria-hidden="true" tabindex="-1"></a>    CASSANDRA_AVAILABLE <span class="op">=</span> <span class="va">False</span></span></code></pre></div>
+<h3 id="components-with-graceful-fallbacks">Components with Graceful Fallbacks</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 20%" />
+<col style="width: 23%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Primary</th>
+<th>Fallback</th>
+<th>Degradation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Face verification</td>
+<td>DeepFace</td>
+<td>Face detection only</td>
+<td>No identity verification</td>
+</tr>
+<tr>
+<td>Audio detection</td>
+<td>PyAudio</td>
+<td>None</td>
+<td>Skip audio analysis</td>
+</tr>
+<tr>
+<td>Speaker diarization</td>
+<td>simple-diarizer</td>
+<td>Single-speaker mode</td>
+<td>No speaker labels</td>
+</tr>
+<tr>
+<td>OCR</td>
+<td>Tesseract + EasyOCR + Surya</td>
+<td>Text extraction only</td>
+<td>Skip handwritten text</td>
+</tr>
+<tr>
+<td>Cassandra analytics</td>
+<td>Cassandra</td>
+<td>Skip storage</td>
+<td>No meeting analytics</td>
+</tr>
+<tr>
+<td>Qdrant embeddings</td>
+<td>Qdrant client</td>
+<td>Log and skip</td>
+<td>No vector search</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="http-request-error-handling">38.5 HTTP Request Error Handling</h2>
+<h3 id="ai-service-middleware">AI Service Middleware</h3>
+<div class="sourceCode" id="cb244"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb244-1"><a href="#cb244-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.middleware</span>(<span class="st">&quot;http&quot;</span>)</span>
+<span id="cb244-2"><a href="#cb244-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> log_requests(request: Request, call_next):</span>
+<span id="cb244-3"><a href="#cb244-3" aria-hidden="true" tabindex="-1"></a>    start <span class="op">=</span> time.time()</span>
+<span id="cb244-4"><a href="#cb244-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb244-5"><a href="#cb244-5" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> <span class="cf">await</span> call_next(request)</span>
+<span id="cb244-6"><a href="#cb244-6" aria-hidden="true" tabindex="-1"></a>        duration <span class="op">=</span> time.time() <span class="op">-</span> start</span>
+<span id="cb244-7"><a href="#cb244-7" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="ss">f&quot;</span><span class="sc">{</span>request<span class="sc">.</span>method<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>request<span class="sc">.</span>url<span class="sc">.</span>path<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>response<span class="sc">.</span>status_code<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>duration<span class="sc">:.2f}</span><span class="ss">s)&quot;</span>)</span>
+<span id="cb244-8"><a href="#cb244-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> response</span>
+<span id="cb244-9"><a href="#cb244-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb244-10"><a href="#cb244-10" aria-hidden="true" tabindex="-1"></a>        duration <span class="op">=</span> time.time() <span class="op">-</span> start</span>
+<span id="cb244-11"><a href="#cb244-11" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="ss">f&quot;</span><span class="sc">{</span>request<span class="sc">.</span>method<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>request<span class="sc">.</span>url<span class="sc">.</span>path<span class="sc">}</span><span class="ss"> → ERROR (</span><span class="sc">{</span>duration<span class="sc">:.2f}</span><span class="ss">s): </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb244-12"><a href="#cb244-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> JSONResponse(</span>
+<span id="cb244-13"><a href="#cb244-13" aria-hidden="true" tabindex="-1"></a>            status_code<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb244-14"><a href="#cb244-14" aria-hidden="true" tabindex="-1"></a>            content<span class="op">=</span>{<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Internal server error&quot;</span>, <span class="st">&quot;detail&quot;</span>: <span class="bu">str</span>(e)}</span>
+<span id="cb244-15"><a href="#cb244-15" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<hr />
+<h2 id="database-connection-resilience">38.6 Database Connection Resilience</h2>
+<h3 id="connection-pool-configuration">Connection Pool Configuration</h3>
+<div class="sourceCode" id="cb245"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb245-1"><a href="#cb245-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SQLAlchemy connection pooling with pre-ping</span></span>
+<span id="cb245-2"><a href="#cb245-2" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> create_engine(</span>
+<span id="cb245-3"><a href="#cb245-3" aria-hidden="true" tabindex="-1"></a>    DATABASE_URL,</span>
+<span id="cb245-4"><a href="#cb245-4" aria-hidden="true" tabindex="-1"></a>    pool_pre_ping<span class="op">=</span><span class="va">True</span>,           <span class="co"># Test connection before use</span></span>
+<span id="cb245-5"><a href="#cb245-5" aria-hidden="true" tabindex="-1"></a>    pool_size<span class="op">=</span><span class="dv">5</span>,                  <span class="co"># Base pool size</span></span>
+<span id="cb245-6"><a href="#cb245-6" aria-hidden="true" tabindex="-1"></a>    max_overflow<span class="op">=</span><span class="dv">10</span>,              <span class="co"># Additional connections</span></span>
+<span id="cb245-7"><a href="#cb245-7" aria-hidden="true" tabindex="-1"></a>    pool_recycle<span class="op">=</span><span class="dv">300</span>,             <span class="co"># Recycle connections after 5 min</span></span>
+<span id="cb245-8"><a href="#cb245-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="redis-connection-handling">Redis Connection Handling</h3>
+<div class="sourceCode" id="cb246"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb246-1"><a href="#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb246-2"><a href="#cb246-2" aria-hidden="true" tabindex="-1"></a>    redis_client <span class="op">=</span> Redis.from_url(REDIS_URL)</span>
+<span id="cb246-3"><a href="#cb246-3" aria-hidden="true" tabindex="-1"></a>    redis_client.ping()</span>
+<span id="cb246-4"><a href="#cb246-4" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">&quot;Redis connected&quot;</span>)</span>
+<span id="cb246-5"><a href="#cb246-5" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ConnectionError</span>:</span>
+<span id="cb246-6"><a href="#cb246-6" aria-hidden="true" tabindex="-1"></a>    redis_client <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb246-7"><a href="#cb246-7" aria-hidden="true" tabindex="-1"></a>    logger.warning(<span class="st">&quot;Redis unavailable, caching disabled&quot;</span>)</span></code></pre></div>
+<hr />
+<h2 id="document-processing-error-recovery">38.7 Document Processing Error Recovery</h2>
+<p>Each stage in the 7-stage pipeline has independent error handling:</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb247-1"><a href="#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> process_document(file_path: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb247-2"><a href="#cb247-2" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> {<span class="st">&quot;status&quot;</span>: <span class="st">&quot;processing&quot;</span>, <span class="st">&quot;stages&quot;</span>: {}}</span>
+<span id="cb247-3"><a href="#cb247-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb247-4"><a href="#cb247-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage 1: Validate</span></span>
+<span id="cb247-5"><a href="#cb247-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb247-6"><a href="#cb247-6" aria-hidden="true" tabindex="-1"></a>        validated <span class="op">=</span> validate_file(file_path)</span>
+<span id="cb247-7"><a href="#cb247-7" aria-hidden="true" tabindex="-1"></a>        result[<span class="st">&quot;stages&quot;</span>][<span class="st">&quot;validate&quot;</span>] <span class="op">=</span> <span class="st">&quot;success&quot;</span></span>
+<span id="cb247-8"><a href="#cb247-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> ValidationError <span class="im">as</span> e:</span>
+<span id="cb247-9"><a href="#cb247-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="st">&quot;status&quot;</span>: <span class="st">&quot;failed&quot;</span>, <span class="st">&quot;error&quot;</span>: <span class="ss">f&quot;Validation: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>}</span>
+<span id="cb247-10"><a href="#cb247-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb247-11"><a href="#cb247-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage 3: OCR (non-fatal, skip if fails)</span></span>
+<span id="cb247-12"><a href="#cb247-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb247-13"><a href="#cb247-13" aria-hidden="true" tabindex="-1"></a>        ocr_text <span class="op">=</span> run_ocr(file_path)</span>
+<span id="cb247-14"><a href="#cb247-14" aria-hidden="true" tabindex="-1"></a>        result[<span class="st">&quot;stages&quot;</span>][<span class="st">&quot;ocr&quot;</span>] <span class="op">=</span> <span class="st">&quot;success&quot;</span></span>
+<span id="cb247-15"><a href="#cb247-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> OCRError <span class="im">as</span> e:</span>
+<span id="cb247-16"><a href="#cb247-16" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="ss">f&quot;OCR failed, continuing without: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb247-17"><a href="#cb247-17" aria-hidden="true" tabindex="-1"></a>        ocr_text <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb247-18"><a href="#cb247-18" aria-hidden="true" tabindex="-1"></a>        result[<span class="st">&quot;stages&quot;</span>][<span class="st">&quot;ocr&quot;</span>] <span class="op">=</span> <span class="st">&quot;skipped&quot;</span></span>
+<span id="cb247-19"><a href="#cb247-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb247-20"><a href="#cb247-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage 6: Embedding (non-fatal, retry)</span></span>
+<span id="cb247-21"><a href="#cb247-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> attempt <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb247-22"><a href="#cb247-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb247-23"><a href="#cb247-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">await</span> embed_chunks(chunks)</span>
+<span id="cb247-24"><a href="#cb247-24" aria-hidden="true" tabindex="-1"></a>            result[<span class="st">&quot;stages&quot;</span>][<span class="st">&quot;embedding&quot;</span>] <span class="op">=</span> <span class="st">&quot;success&quot;</span></span>
+<span id="cb247-25"><a href="#cb247-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb247-26"><a href="#cb247-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> QdrantError <span class="im">as</span> e:</span>
+<span id="cb247-27"><a href="#cb247-27" aria-hidden="true" tabindex="-1"></a>            logger.warning(<span class="ss">f&quot;Embedding attempt </span><span class="sc">{</span>attempt<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss"> failed: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb247-28"><a href="#cb247-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">await</span> asyncio.sleep(<span class="dv">2</span> <span class="op">**</span> attempt)</span>
+<span id="cb247-29"><a href="#cb247-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb247-30"><a href="#cb247-30" aria-hidden="true" tabindex="-1"></a>        result[<span class="st">&quot;stages&quot;</span>][<span class="st">&quot;embedding&quot;</span>] <span class="op">=</span> <span class="st">&quot;failed&quot;</span></span>
+<span id="cb247-31"><a href="#cb247-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb247-32"><a href="#cb247-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div>
+<hr />
+<h2 id="proctoring-error-isolation">38.8 Proctoring Error Isolation</h2>
+<div class="sourceCode" id="cb248"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb248-1"><a href="#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ProctorSession:</span>
+<span id="cb248-2"><a href="#cb248-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> analyze_frame(<span class="va">self</span>, frame):</span>
+<span id="cb248-3"><a href="#cb248-3" aria-hidden="true" tabindex="-1"></a>        detections <span class="op">=</span> {}</span>
+<span id="cb248-4"><a href="#cb248-4" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb248-5"><a href="#cb248-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> name, detector <span class="kw">in</span> <span class="va">self</span>.detectors.items():</span>
+<span id="cb248-6"><a href="#cb248-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb248-7"><a href="#cb248-7" aria-hidden="true" tabindex="-1"></a>                detections[name] <span class="op">=</span> detector.detect(frame)</span>
+<span id="cb248-8"><a href="#cb248-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb248-9"><a href="#cb248-9" aria-hidden="true" tabindex="-1"></a>                logger.error(<span class="ss">f&quot;Detector </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> failed: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb248-10"><a href="#cb248-10" aria-hidden="true" tabindex="-1"></a>                detections[name] <span class="op">=</span> <span class="va">None</span>  <span class="co"># Skip this detector</span></span>
+<span id="cb248-11"><a href="#cb248-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb248-12"><a href="#cb248-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Scoring works with whatever detectors succeeded</span></span>
+<span id="cb248-13"><a href="#cb248-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.scorer.calculate(detections)</span></code></pre></div>
+<hr />
+<h2 id="frontend-error-boundaries">38.9 Frontend Error Boundaries</h2>
+<div class="sourceCode" id="cb249"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb249-1"><a href="#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="co">// React Error Boundary for graceful UI failures</span></span>
+<span id="cb249-2"><a href="#cb249-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ErrorBoundary <span class="kw">extends</span> React<span class="op">.</span><span class="at">Component</span> {</span>
+<span id="cb249-3"><a href="#cb249-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">componentDidCatch</span>(error<span class="op">,</span> errorInfo) {</span>
+<span id="cb249-4"><a href="#cb249-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">&#39;Component error:&#39;</span><span class="op">,</span> error<span class="op">,</span> errorInfo)<span class="op">;</span></span>
+<span id="cb249-5"><a href="#cb249-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb249-6"><a href="#cb249-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb249-7"><a href="#cb249-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">render</span>() {</span>
+<span id="cb249-8"><a href="#cb249-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="at">state</span><span class="op">.</span><span class="at">hasError</span>) {</span>
+<span id="cb249-9"><a href="#cb249-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="op">&lt;</span>ErrorFallback message<span class="op">=</span><span class="st">&quot;Something went wrong&quot;</span> <span class="op">/&gt;;</span></span>
+<span id="cb249-10"><a href="#cb249-10" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb249-11"><a href="#cb249-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">props</span><span class="op">.</span><span class="at">children</span><span class="op">;</span></span>
+<span id="cb249-12"><a href="#cb249-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb249-13"><a href="#cb249-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb249-14"><a href="#cb249-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-15"><a href="#cb249-15" aria-hidden="true" tabindex="-1"></a><span class="co">// API call wrapper with retry</span></span>
+<span id="cb249-16"><a href="#cb249-16" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">fetchWithRetry</span>(url<span class="op">,</span> options<span class="op">,</span> retries <span class="op">=</span> <span class="dv">3</span>) {</span>
+<span id="cb249-17"><a href="#cb249-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> retries<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb249-18"><a href="#cb249-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
+<span id="cb249-19"><a href="#cb249-19" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> res <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(url<span class="op">,</span> options)<span class="op">;</span></span>
+<span id="cb249-20"><a href="#cb249-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (res<span class="op">.</span><span class="at">ok</span>) <span class="cf">return</span> res<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
+<span id="cb249-21"><a href="#cb249-21" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (e) {</span>
+<span id="cb249-22"><a href="#cb249-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (i <span class="op">===</span> retries <span class="op">-</span> <span class="dv">1</span>) <span class="cf">throw</span> e<span class="op">;</span></span>
+<span id="cb249-23"><a href="#cb249-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">await</span> <span class="kw">new</span> <span class="bu">Promise</span>(r <span class="kw">=&gt;</span> <span class="pp">setTimeout</span>(r<span class="op">,</span> <span class="dv">1000</span> <span class="op">*</span> (i <span class="op">+</span> <span class="dv">1</span>)))<span class="op">;</span></span>
+<span id="cb249-24"><a href="#cb249-24" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb249-25"><a href="#cb249-25" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb249-26"><a href="#cb249-26" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+
+</body>
+</html>

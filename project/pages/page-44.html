@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 44: Gamification — Leaderboard, XP, Streaks &amp;amp; Rewards</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-43.html">&larr; Previous</a> <a href="page-45.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-44-gamification-leaderboard-xp-streaks-rewards">Page 44: Gamification — Leaderboard, XP, Streaks &amp; Rewards</h1>
+<hr />
+<h2 id="overview-34">44.1 Overview</h2>
+<p>ensureStudy implements a <strong>comprehensive gamification system</strong> with experience points (XP), levels, study streaks, global and classroom leaderboards, and achievement tracking. This system drives student engagement through visible progress and competition.</p>
+<hr />
+<h2 id="data-models-2">44.2 Data Models</h2>
+<h3 id="leaderboard-model">Leaderboard Model</h3>
+<div class="sourceCode" id="cb274"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb274-1"><a href="#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Leaderboard(db.Model):</span>
+<span id="cb274-2"><a href="#cb274-2" aria-hidden="true" tabindex="-1"></a>    __tablename__ <span class="op">=</span> <span class="st">&quot;leaderboard&quot;</span></span>
+<span id="cb274-3"><a href="#cb274-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb274-4"><a href="#cb274-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>             <span class="op">=</span> Column(String(<span class="dv">36</span>), primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb274-5"><a href="#cb274-5" aria-hidden="true" tabindex="-1"></a>    user_id        <span class="op">=</span> Column(String(<span class="dv">36</span>), ForeignKey(<span class="st">&quot;users.id&quot;</span>), unique<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb274-6"><a href="#cb274-6" aria-hidden="true" tabindex="-1"></a>    global_points  <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">0</span>)     <span class="co"># Total XP</span></span>
+<span id="cb274-7"><a href="#cb274-7" aria-hidden="true" tabindex="-1"></a>    class_points   <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">0</span>)     <span class="co"># Classroom-specific XP</span></span>
+<span id="cb274-8"><a href="#cb274-8" aria-hidden="true" tabindex="-1"></a>    study_streak   <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">0</span>)     <span class="co"># Consecutive days studied</span></span>
+<span id="cb274-9"><a href="#cb274-9" aria-hidden="true" tabindex="-1"></a>    level          <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">1</span>)     <span class="co"># Current level</span></span>
+<span id="cb274-10"><a href="#cb274-10" aria-hidden="true" tabindex="-1"></a>    xp             <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">0</span>)     <span class="co"># XP within current level</span></span>
+<span id="cb274-11"><a href="#cb274-11" aria-hidden="true" tabindex="-1"></a>    created_at     <span class="op">=</span> Column(DateTime, default<span class="op">=</span>datetime.utcnow)</span>
+<span id="cb274-12"><a href="#cb274-12" aria-hidden="true" tabindex="-1"></a>    updated_at     <span class="op">=</span> Column(DateTime, onupdate<span class="op">=</span>datetime.utcnow)</span></code></pre></div>
+<hr />
+<h2 id="xp-system">44.3 XP System</h2>
+<h3 id="xp-award-events">XP Award Events</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>XP Awarded</th>
+<th>Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Complete assessment</td>
+<td>50-200</td>
+<td>Per assessment</td>
+</tr>
+<tr>
+<td>Score &gt; 80%</td>
+<td>+50 bonus</td>
+<td>Per assessment</td>
+</tr>
+<tr>
+<td>Study a topic</td>
+<td>10</td>
+<td>Per topic/day</td>
+</tr>
+<tr>
+<td>Complete review session</td>
+<td>25</td>
+<td>Per session</td>
+</tr>
+<tr>
+<td>First login of day</td>
+<td>5</td>
+<td>Daily</td>
+</tr>
+<tr>
+<td>Reach study streak milestone</td>
+<td>100</td>
+<td>Weekly</td>
+</tr>
+<tr>
+<td>Upload notes</td>
+<td>15</td>
+<td>Per upload</td>
+</tr>
+<tr>
+<td>Answer tutor question correctly</td>
+<td>10</td>
+<td>Per answer</td>
+</tr>
+<tr>
+<td>Complete curriculum topic</td>
+<td>30</td>
+<td>Per topic</td>
+</tr>
+</tbody>
+</table>
+<h3 id="level-progression">Level Progression</h3>
+<pre><code>Level 1: 0 XP
+Level 2: 100 XP
+Level 3: 250 XP
+Level 4: 500 XP
+Level 5: 1,000 XP
+Level N: previous_threshold × 1.5
+
+XP_for_level(n) = floor(100 × 1.5^(n-2))</code></pre>
+<hr />
+<h2 id="study-streak">44.4 Study Streak</h2>
+<h3 id="streak-rules">Streak Rules</h3>
+<ul>
+<li><strong>Increment</strong>: Any study activity (quiz, notes, tutor chat, review)</li>
+<li><strong>Reset</strong>: Missing a calendar day</li>
+<li><strong>Protection</strong>: Streak freeze (future feature — not yet implemented)</li>
+</ul>
+<h3 id="streak-milestones">Streak Milestones</h3>
+<table>
+<thead>
+<tr>
+<th>Streak</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3 days</td>
+<td>Fire badge</td>
+</tr>
+<tr>
+<td>7 days</td>
+<td>Weekly warrior badge + 100 XP</td>
+</tr>
+<tr>
+<td>14 days</td>
+<td>Two-week champion + 250 XP</td>
+</tr>
+<tr>
+<td>30 days</td>
+<td>Monthly master + 500 XP</td>
+</tr>
+<tr>
+<td>100 days</td>
+<td>Century champion + 2,000 XP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="leaderboard-api">44.5 Leaderboard API</h2>
+<h3 id="endpoints">Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/leaderboard</code></td>
+<td>Global top-N leaderboard</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/leaderboard/classroom/&lt;id&gt;</code></td>
+<td>Classroom leaderboard</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/leaderboard/me</code></td>
+<td>Current user’s rank and stats</td>
+</tr>
+</tbody>
+</table>
+<h3 id="response-format">Response Format</h3>
+<div class="sourceCode" id="cb276"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb276-1"><a href="#cb276-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb276-2"><a href="#cb276-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;leaderboard&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb276-3"><a href="#cb276-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb276-4"><a href="#cb276-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;rank&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb276-5"><a href="#cb276-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;username&quot;</span><span class="fu">:</span> <span class="st">&quot;student_1&quot;</span><span class="fu">,</span></span>
+<span id="cb276-6"><a href="#cb276-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;global_points&quot;</span><span class="fu">:</span> <span class="dv">5420</span><span class="fu">,</span></span>
+<span id="cb276-7"><a href="#cb276-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;level&quot;</span><span class="fu">:</span> <span class="dv">12</span><span class="fu">,</span></span>
+<span id="cb276-8"><a href="#cb276-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;study_streak&quot;</span><span class="fu">:</span> <span class="dv">23</span><span class="fu">,</span></span>
+<span id="cb276-9"><a href="#cb276-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;profile_image&quot;</span><span class="fu">:</span> <span class="st">&quot;/avatars/1.png&quot;</span></span>
+<span id="cb276-10"><a href="#cb276-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb276-11"><a href="#cb276-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb276-12"><a href="#cb276-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;my_rank&quot;</span><span class="fu">:</span> <span class="dv">5</span><span class="fu">,</span></span>
+<span id="cb276-13"><a href="#cb276-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;total_students&quot;</span><span class="fu">:</span> <span class="dv">42</span></span>
+<span id="cb276-14"><a href="#cb276-14" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+<h2 id="frontend-display">44.6 Frontend Display</h2>
+<h3 id="leaderboard-page"><code>/leaderboard</code> Page</h3>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Overview"]
+        direction TB
+        N0["🏆 LEADERBOARD                       (Global )"]
+        N1["#1  ⭐ Alice     Level 15   8,420 XP  🔥 45d"]
+        N2["#2     Bob       Level 12   5,210 XP  🔥 23d"]
+        N3["#3     Charlie   Level 11   4,890 XP  🔥 12d"]
+        N4["YOU"]
+        N5["#5     You       Level 8    2,150 XP  🔥 7d"]
+        N6["Your Stats"]
+        N7["Level: 8  ████████░░ (73% to Level 9)"]
+        N8["Streak: 7 days 🔥"]
+        N9["Topics mastered: 14/27"]
+    end
+</pre>
+<h3 id="progress-page-gamification-widgets"><code>/progress</code> Page — Gamification Widgets</h3>
+<ul>
+<li><strong>XP Progress Bar</strong>: Visual level progress</li>
+<li><strong>Streak Calendar</strong>: Heat-map of study activity</li>
+<li><strong>Achievement Badges</strong>: Unlocked milestones</li>
+<li><strong>Subject Radar</strong>: Multi-subject strength visualization</li>
+</ul>
+<hr />
+<h2 id="progress-tracking">44.7 Progress Tracking</h2>
+<h3 id="progress-model-integration">Progress Model Integration</h3>
+<div class="sourceCode" id="cb278"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb278-1"><a href="#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Progress(db.Model):</span>
+<span id="cb278-2"><a href="#cb278-2" aria-hidden="true" tabindex="-1"></a>    confidence_score <span class="op">=</span> Column(Float)      <span class="co"># 0-100, affects mastery display</span></span>
+<span id="cb278-3"><a href="#cb278-3" aria-hidden="true" tabindex="-1"></a>    times_studied    <span class="op">=</span> Column(Integer)    <span class="co"># Increments per study action</span></span>
+<span id="cb278-4"><a href="#cb278-4" aria-hidden="true" tabindex="-1"></a>    is_weak          <span class="op">=</span> Column(Boolean)    <span class="co"># Flagged for extra attention</span></span>
+<span id="cb278-5"><a href="#cb278-5" aria-hidden="true" tabindex="-1"></a>    tal_level        <span class="op">=</span> Column(Integer)    <span class="co"># 1-5, Teaching Adaptation Level</span></span></code></pre></div>
+<h3 id="weak-topic-detection">Weak Topic Detection</h3>
+<div class="sourceCode" id="cb279"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb279-1"><a href="#cb279-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A topic is marked &quot;weak&quot; when:</span></span>
+<span id="cb279-2"><a href="#cb279-2" aria-hidden="true" tabindex="-1"></a>is_weak <span class="op">=</span> (confidence_score <span class="op">&lt;</span> <span class="dv">50</span>) <span class="kw">or</span> (</span>
+<span id="cb279-3"><a href="#cb279-3" aria-hidden="true" tabindex="-1"></a>    times_studied <span class="op">&gt;</span> <span class="dv">3</span> <span class="kw">and</span> confidence_score <span class="op">&lt;</span> <span class="dv">70</span></span>
+<span id="cb279-4"><a href="#cb279-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="analytics-dashboard-data">44.8 Analytics Dashboard Data</h2>
+<p>The gamification data flows to the teacher dashboard:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Source</th>
+<th>Dashboard Widget</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Average class XP</td>
+<td>Leaderboard</td>
+<td>Class overview</td>
+</tr>
+<tr>
+<td>Streak distribution</td>
+<td>Leaderboard</td>
+<td>Engagement chart</td>
+</tr>
+<tr>
+<td>Weak topic count</td>
+<td>Progress</td>
+<td>Attention needed</td>
+</tr>
+<tr>
+<td>Assessment completion</td>
+<td>AssessmentResult</td>
+<td>Completion rate</td>
+</tr>
+<tr>
+<td>Top performers</td>
+<td>Leaderboard</td>
+<td>Top-5 students</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

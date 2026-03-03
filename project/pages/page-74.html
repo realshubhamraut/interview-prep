@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 74: Makefile &amp;amp; Development Automation</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-73.html">&larr; Previous</a> <a href="page-75.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-74-makefile-development-automation">Page 74: Makefile &amp; Development Automation</h1>
+<hr />
+<h2 id="overview-62">74.1 Overview</h2>
+<p>The project Makefile provides <strong>17 targets</strong> for common development operations: starting/stopping Docker services, running tests, training ML models, managing databases, and creating Kafka topics.</p>
+<h3 id="source-makefile-92-lines-1">Source: <code>Makefile</code> (92 lines)</h3>
+<hr />
+<h2 id="complete-target-reference">74.2 Complete Target Reference</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 34%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Target</th>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help</code></td>
+<td>Prints available commands</td>
+<td>Quick reference</td>
+</tr>
+<tr>
+<td><code>up</code></td>
+<td><code>docker-compose up -d</code> + health check</td>
+<td>Start all services</td>
+</tr>
+<tr>
+<td><code>down</code></td>
+<td><code>docker-compose down</code></td>
+<td>Stop all services</td>
+</tr>
+<tr>
+<td><code>logs</code></td>
+<td><code>docker-compose logs -f</code></td>
+<td>Tail service logs</td>
+</tr>
+<tr>
+<td><code>health-check</code></td>
+<td>curl/exec health probes</td>
+<td>Verify all services</td>
+</tr>
+<tr>
+<td><code>db-init</code></td>
+<td><code>flask db upgrade</code></td>
+<td>Run migrations</td>
+</tr>
+<tr>
+<td><code>load-docs</code></td>
+<td><code>python scripts/load_documents.py</code></td>
+<td>Seed Qdrant</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>pytest across 3 services</td>
+<td>Run all tests</td>
+</tr>
+<tr>
+<td><code>test-ml</code></td>
+<td>pytest on ml-training</td>
+<td>ML-specific tests</td>
+</tr>
+<tr>
+<td><code>dev-frontend</code></td>
+<td><code>npm run dev</code></td>
+<td>Start Next.js dev</td>
+</tr>
+<tr>
+<td><code>dev-ai-service</code></td>
+<td><code>uvicorn --reload</code></td>
+<td>Start AI service</td>
+</tr>
+<tr>
+<td><code>dev-core-service</code></td>
+<td><code>flask run</code></td>
+<td>Start Core service</td>
+</tr>
+<tr>
+<td><code>dev</code></td>
+<td>Print instructions</td>
+<td>Dev mode guide</td>
+</tr>
+<tr>
+<td><code>clean</code></td>
+<td>Remove containers, caches, node_modules</td>
+<td>Full cleanup</td>
+</tr>
+<tr>
+<td><code>train-moderation</code></td>
+<td><code>python train_moderation.py</code></td>
+<td>Train content mod model</td>
+</tr>
+<tr>
+<td><code>train-difficulty</code></td>
+<td><code>python train_difficulty.py</code></td>
+<td>Train difficulty model</td>
+</tr>
+<tr>
+<td><code>run-etl</code></td>
+<td>PySpark ETL pipeline</td>
+<td>Run data extraction</td>
+</tr>
+<tr>
+<td><code>dashboards</code></td>
+<td><code>streamlit run live_demo.py</code></td>
+<td>Launch dashboards</td>
+</tr>
+<tr>
+<td><code>kafka-topics</code></td>
+<td>Create 5 Kafka topics</td>
+<td>Initialize messaging</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="service-startup-make-up">74.3 Service Startup (<code>make up</code>)</h2>
+<div class="sourceCode" id="cb471"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb471-1"><a href="#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="dv">up:</span></span>
+<span id="cb471-2"><a href="#cb471-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>docker-compose up -d</span>
+<span id="cb471-3"><a href="#cb471-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;Waiting for services to start...&quot;</span></span>
+<span id="cb471-4"><a href="#cb471-4" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">sleep 30</span></span>
+<span id="cb471-5"><a href="#cb471-5" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">make health-check</span></span></code></pre></div>
+<h3 id="startup-sequence">Startup Sequence</h3>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Overview"]
+        direction TB
+        N0["1. docker-compose up -d          # Start all 14 containers"]
+        N1["2. sleep 30                       # Wait for initialization"]
+        N2["3. make health-check              # Verify readiness"]
+        N3["curl Qdrant /health"]
+        N4["pg_isready (PostgreSQL)"]
+        N5["redis-cli ping"]
+        N6["kafka-topics.sh --list"]
+    end
+</pre>
+<hr />
+<h2 id="health-check-make-health-check">74.4 Health Check (<code>make health-check</code>)</h2>
+<div class="sourceCode" id="cb473"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb473-1"><a href="#cb473-1" aria-hidden="true" tabindex="-1"></a><span class="dv">health-check:</span></span>
+<span id="cb473-2"><a href="#cb473-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;Checking Qdrant...&quot;</span></span>
+<span id="cb473-3"><a href="#cb473-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">curl -s http://localhost:6333/health | head -c 50</span></span>
+<span id="cb473-4"><a href="#cb473-4" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;Checking PostgreSQL...&quot;</span></span>
+<span id="cb473-5"><a href="#cb473-5" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">docker-compose exec -T postgres pg_isready -U ensure_study_user</span></span>
+<span id="cb473-6"><a href="#cb473-6" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;Checking Redis...&quot;</span></span>
+<span id="cb473-7"><a href="#cb473-7" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">docker-compose exec -T redis redis-cli ping</span></span>
+<span id="cb473-8"><a href="#cb473-8" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;Checking Kafka...&quot;</span></span>
+<span id="cb473-9"><a href="#cb473-9" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">docker-compose exec -T kafka kafka-topics.sh --list </span><span class="ch">\</span></span>
+<span id="cb473-10"><a href="#cb473-10" aria-hidden="true" tabindex="-1"></a><span class="fu">        --bootstrap-server localhost:9092 2&gt;/dev/null | head -1</span></span></code></pre></div>
+<hr />
+<h2 id="testing-make-test">74.5 Testing (<code>make test</code>)</h2>
+<div class="sourceCode" id="cb474"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb474-1"><a href="#cb474-1" aria-hidden="true" tabindex="-1"></a><span class="dv">test:</span></span>
+<span id="cb474-2"><a href="#cb474-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>cd backend/core-service &amp;&amp; pytest tests/ -v</span>
+<span id="cb474-3"><a href="#cb474-3" aria-hidden="true" tabindex="-1"></a>    cd backend/ai-service &amp;&amp; pytest tests/ -v</span>
+<span id="cb474-4"><a href="#cb474-4" aria-hidden="true" tabindex="-1"></a>    cd backend/kafka &amp;&amp; pytest tests/ -v</span></code></pre></div>
+<p>Runs tests across all 3 backend services sequentially. Exit on first failure.</p>
+<hr />
+<h2 id="ml-training-targets">74.6 ML Training Targets</h2>
+<div class="sourceCode" id="cb475"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb475-1"><a href="#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="dv">train-moderation:</span></span>
+<span id="cb475-2"><a href="#cb475-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>cd backend/ml-training &amp;&amp; python training/train_moderation.py</span>
+<span id="cb475-3"><a href="#cb475-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-4"><a href="#cb475-4" aria-hidden="true" tabindex="-1"></a><span class="dv">train-difficulty:</span></span>
+<span id="cb475-5"><a href="#cb475-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>cd backend/ml-training &amp;&amp; python training/train_difficulty.py</span></code></pre></div>
+<p>These produce model artifacts in <code>models/</code> used by the AI service.</p>
+<hr />
+<h2 id="kafka-topic-creation-make-kafka-topics">74.7 Kafka Topic Creation (<code>make kafka-topics</code>)</h2>
+<div class="sourceCode" id="cb476"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb476-1"><a href="#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="dv">kafka-topics:</span></span>
+<span id="cb476-2"><a href="#cb476-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>docker-compose exec kafka kafka-topics.sh --create \</span>
+<span id="cb476-3"><a href="#cb476-3" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-topic student-events --partitions 3 --replication-factor 1</span></span>
+<span id="cb476-4"><a href="#cb476-4" aria-hidden="true" tabindex="-1"></a>    docker-compose exec kafka kafka-topics.sh --create \</span>
+<span id="cb476-5"><a href="#cb476-5" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-topic chat-messages --partitions 3 --replication-factor 1</span></span>
+<span id="cb476-6"><a href="#cb476-6" aria-hidden="true" tabindex="-1"></a>    docker-compose exec kafka kafka-topics.sh --create \</span>
+<span id="cb476-7"><a href="#cb476-7" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-topic assessment-submissions --partitions 3 --replication-factor 1</span></span>
+<span id="cb476-8"><a href="#cb476-8" aria-hidden="true" tabindex="-1"></a>    docker-compose exec kafka kafka-topics.sh --create \</span>
+<span id="cb476-9"><a href="#cb476-9" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-topic moderation-events --partitions 3 --replication-factor 1</span></span>
+<span id="cb476-10"><a href="#cb476-10" aria-hidden="true" tabindex="-1"></a>    docker-compose exec kafka kafka-topics.sh --create \</span>
+<span id="cb476-11"><a href="#cb476-11" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-topic leaderboard-updates --partitions 3 --replication-factor 1</span></span></code></pre></div>
+<p>Creates 5 topics with 3 partitions each.</p>
+<hr />
+<h2 id="cleanup-make-clean">74.8 Cleanup (<code>make clean</code>)</h2>
+<div class="sourceCode" id="cb477"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb477-1"><a href="#cb477-1" aria-hidden="true" tabindex="-1"></a><span class="dv">clean:</span></span>
+<span id="cb477-2"><a href="#cb477-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>docker-compose down -v --remove-orphans</span>
+<span id="cb477-3"><a href="#cb477-3" aria-hidden="true" tabindex="-1"></a>    find . -type d -name <span class="st">&quot;__pycache__&quot;</span> -exec rm -rf {} + 2&gt;/dev/null || true</span>
+<span id="cb477-4"><a href="#cb477-4" aria-hidden="true" tabindex="-1"></a>    find . -type d -name <span class="st">&quot;.pytest_cache&quot;</span> -exec rm -rf {} + 2&gt;/dev/null || true</span>
+<span id="cb477-5"><a href="#cb477-5" aria-hidden="true" tabindex="-1"></a>    find . -type d -name <span class="st">&quot;node_modules&quot;</span> -exec rm -rf {} + 2&gt;/dev/null || true</span></code></pre></div>
+<p>Removes: - All Docker containers and volumes (<code>-v</code>) - Python bytecode caches - Pytest caches - Node.js dependencies</p>
+<hr />
+<h2 id="development-workflow">74.9 Development Workflow</h2>
+<div class="sourceCode" id="cb478"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb478-1"><a href="#cb478-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First time setup</span></span>
+<span id="cb478-2"><a href="#cb478-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> up                    <span class="co"># Start infrastructure</span></span>
+<span id="cb478-3"><a href="#cb478-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> db-init               <span class="co"># Run migrations</span></span>
+<span id="cb478-4"><a href="#cb478-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> kafka-topics          <span class="co"># Create Kafka topics</span></span>
+<span id="cb478-5"><a href="#cb478-5" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> load-docs             <span class="co"># Seed sample data</span></span>
+<span id="cb478-6"><a href="#cb478-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb478-7"><a href="#cb478-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Daily development</span></span>
+<span id="cb478-8"><a href="#cb478-8" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> up                    <span class="co"># Ensure services running</span></span>
+<span id="cb478-9"><a href="#cb478-9" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> dev-frontend          <span class="co"># Terminal 1</span></span>
+<span id="cb478-10"><a href="#cb478-10" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> dev-ai-service        <span class="co"># Terminal 2</span></span>
+<span id="cb478-11"><a href="#cb478-11" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> dev-core-service      <span class="co"># Terminal 3</span></span>
+<span id="cb478-12"><a href="#cb478-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb478-13"><a href="#cb478-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing</span></span>
+<span id="cb478-14"><a href="#cb478-14" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test                  <span class="co"># All tests</span></span>
+<span id="cb478-15"><a href="#cb478-15" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test-ml               <span class="co"># ML tests only</span></span>
+<span id="cb478-16"><a href="#cb478-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb478-17"><a href="#cb478-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup</span></span>
+<span id="cb478-18"><a href="#cb478-18" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> clean                 <span class="co"># Full reset</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 46: LangGraph State Machines — 11 Agent Workflows</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-45.html">&larr; Previous</a> <a href="page-47.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-46-langgraph-state-machines-11-agent-workflows">Page 46: LangGraph State Machines — 11 Agent Workflows</h1>
+<hr />
+<h2 id="overview-35">46.1 Overview</h2>
+<p>ensureStudy uses <strong>LangGraph</strong> (from LangChain) to build <strong>11 stateful, graph-based agent workflows</strong>. Each agent is modeled as a directed state graph where nodes are processing steps and edges represent transitions based on the current state.</p>
+<h3 id="core-concept">Core Concept</h3>
+<div class="sourceCode" id="cb286"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb286-1"><a href="#cb286-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.graph <span class="im">import</span> StateGraph, END</span>
+<span id="cb286-2"><a href="#cb286-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb286-3"><a href="#cb286-3" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> StateGraph(AgentState)</span>
+<span id="cb286-4"><a href="#cb286-4" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;research&quot;</span>, research_node)</span>
+<span id="cb286-5"><a href="#cb286-5" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;synthesize&quot;</span>, synthesis_node)</span>
+<span id="cb286-6"><a href="#cb286-6" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;research&quot;</span>, <span class="st">&quot;synthesize&quot;</span>)</span>
+<span id="cb286-7"><a href="#cb286-7" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;synthesize&quot;</span>, END)</span>
+<span id="cb286-8"><a href="#cb286-8" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> graph.<span class="bu">compile</span>()</span></code></pre></div>
+<hr />
+<h2 id="agents-using-stategraph">46.2 Agents Using StateGraph</h2>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 25%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Agent File</th>
+<th>Nodes</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orchestrator.py</code></td>
+<td>3</td>
+<td>Route task → Select agent → Execute</td>
+</tr>
+<tr>
+<td><code>tutor_agent.py</code></td>
+<td>5</td>
+<td>ABCR cycle: Assess → Build → Challenge → Reflect → Respond</td>
+</tr>
+<tr>
+<td><code>research_agent.py</code></td>
+<td>4</td>
+<td>Query → Search → Extract → Summarize</td>
+</tr>
+<tr>
+<td><code>curriculum_agent.py</code></td>
+<td>4</td>
+<td>Extract → Dependencies → Order → Path</td>
+</tr>
+<tr>
+<td><code>learning_agent.py</code></td>
+<td>4</td>
+<td>Critic → Learner → Performance → Iterate</td>
+</tr>
+<tr>
+<td><code>web_enrichment_agent.py</code></td>
+<td>3</td>
+<td>Search → Fetch → Enrich</td>
+</tr>
+<tr>
+<td><code>document_agent.py</code></td>
+<td>5</td>
+<td>Validate → Extract → OCR → Chunk → Index</td>
+</tr>
+<tr>
+<td><code>assessment_agent.py</code></td>
+<td>3</td>
+<td>Generate → Validate → Score</td>
+</tr>
+<tr>
+<td><code>interview_question_agent.py</code></td>
+<td>3</td>
+<td>Topic → Generate → Format</td>
+</tr>
+<tr>
+<td><code>revision_assessment_agent.py</code></td>
+<td>3</td>
+<td>Review → Assess → Schedule</td>
+</tr>
+<tr>
+<td><code>study_planner.py</code></td>
+<td>4</td>
+<td>Analyze → Plan → Schedule → Suggest</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="state-schema-pattern">46.3 State Schema Pattern</h2>
+<p>Every agent defines a typed state dictionary:</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> TypedDict, Annotated</span>
+<span id="cb287-2"><a href="#cb287-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.graph <span class="im">import</span> add_messages</span>
+<span id="cb287-3"><a href="#cb287-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-4"><a href="#cb287-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TutorState(TypedDict):</span>
+<span id="cb287-5"><a href="#cb287-5" aria-hidden="true" tabindex="-1"></a>    messages: Annotated[<span class="bu">list</span>, add_messages]   <span class="co"># Chat history</span></span>
+<span id="cb287-6"><a href="#cb287-6" aria-hidden="true" tabindex="-1"></a>    student_id: <span class="bu">str</span></span>
+<span id="cb287-7"><a href="#cb287-7" aria-hidden="true" tabindex="-1"></a>    topic: <span class="bu">str</span></span>
+<span id="cb287-8"><a href="#cb287-8" aria-hidden="true" tabindex="-1"></a>    tal_level: <span class="bu">int</span>                              <span class="co"># 1-5</span></span>
+<span id="cb287-9"><a href="#cb287-9" aria-hidden="true" tabindex="-1"></a>    abcr_phase: <span class="bu">str</span>                            <span class="co"># assess/build/challenge/reflect</span></span>
+<span id="cb287-10"><a href="#cb287-10" aria-hidden="true" tabindex="-1"></a>    context: <span class="bu">list</span>                              <span class="co"># RAG chunks</span></span>
+<span id="cb287-11"><a href="#cb287-11" aria-hidden="true" tabindex="-1"></a>    response: <span class="bu">str</span>                              <span class="co"># Final answer</span></span>
+<span id="cb287-12"><a href="#cb287-12" aria-hidden="true" tabindex="-1"></a>    moderation_flag: <span class="bu">bool</span>                      <span class="co"># Content safety</span></span></code></pre></div>
+<hr />
+<h2 id="orchestrator-graph">46.4 Orchestrator Graph</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Orchestrator Graph "]
+        direction TB
+        N0["Task Input      CLASSIFY      Determine agent type"]
+        N1["SELECT_AGENT    Route to specialist"]
+        N2["(Tutor)      (Research)   (Curriculum)  ... (11 agents)"]
+        N3["RESPOND       Format and return"]
+    end
+</pre>
+<hr />
+<h2 id="tutor-agent-graph-abcr-cycle">46.5 Tutor Agent Graph (ABCR Cycle)</h2>
+<div class="sourceCode" id="cb289"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb289-1"><a href="#cb289-1" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> StateGraph(TutorState)</span>
+<span id="cb289-2"><a href="#cb289-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-3"><a href="#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Nodes</span></span>
+<span id="cb289-4"><a href="#cb289-4" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;assess&quot;</span>, assess_student_level)</span>
+<span id="cb289-5"><a href="#cb289-5" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;build&quot;</span>, build_context_and_prompt)</span>
+<span id="cb289-6"><a href="#cb289-6" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;challenge&quot;</span>, generate_challenge)</span>
+<span id="cb289-7"><a href="#cb289-7" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;reflect&quot;</span>, reflect_on_interaction)</span>
+<span id="cb289-8"><a href="#cb289-8" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;respond&quot;</span>, generate_response)</span>
+<span id="cb289-9"><a href="#cb289-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-10"><a href="#cb289-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Edges</span></span>
+<span id="cb289-11"><a href="#cb289-11" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;assess&quot;</span>, <span class="st">&quot;build&quot;</span>)</span>
+<span id="cb289-12"><a href="#cb289-12" aria-hidden="true" tabindex="-1"></a>graph.add_conditional_edges(</span>
+<span id="cb289-13"><a href="#cb289-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;build&quot;</span>,</span>
+<span id="cb289-14"><a href="#cb289-14" aria-hidden="true" tabindex="-1"></a>    should_challenge,</span>
+<span id="cb289-15"><a href="#cb289-15" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;yes&quot;</span>: <span class="st">&quot;challenge&quot;</span>, <span class="st">&quot;no&quot;</span>: <span class="st">&quot;respond&quot;</span>}</span>
+<span id="cb289-16"><a href="#cb289-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb289-17"><a href="#cb289-17" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;challenge&quot;</span>, <span class="st">&quot;respond&quot;</span>)</span>
+<span id="cb289-18"><a href="#cb289-18" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;respond&quot;</span>, <span class="st">&quot;reflect&quot;</span>)</span>
+<span id="cb289-19"><a href="#cb289-19" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;reflect&quot;</span>, END)</span></code></pre></div>
+<h3 id="conditional-edge-should_challenge">Conditional Edge: <code>should_challenge</code></h3>
+<div class="sourceCode" id="cb290"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb290-1"><a href="#cb290-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> should_challenge(state: TutorState) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb290-2"><a href="#cb290-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Challenge every 3rd interaction for engaged students</span></span>
+<span id="cb290-3"><a href="#cb290-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> state[<span class="st">&quot;tal_level&quot;</span>] <span class="op">&gt;=</span> <span class="dv">3</span> <span class="kw">and</span> interaction_count <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb290-4"><a href="#cb290-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;yes&quot;</span></span>
+<span id="cb290-5"><a href="#cb290-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot;no&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="learning-agent-graph-type-5-self-improving">46.6 Learning Agent Graph (Type 5 Self-Improving)</h2>
+<div class="sourceCode" id="cb291"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb291-1"><a href="#cb291-1" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> StateGraph(LearningState)</span>
+<span id="cb291-2"><a href="#cb291-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb291-3"><a href="#cb291-3" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;critic&quot;</span>, critic_evaluate)</span>
+<span id="cb291-4"><a href="#cb291-4" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;learner&quot;</span>, learner_update)</span>
+<span id="cb291-5"><a href="#cb291-5" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;performance&quot;</span>, check_performance)</span>
+<span id="cb291-6"><a href="#cb291-6" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;iterate&quot;</span>, decide_next)</span>
+<span id="cb291-7"><a href="#cb291-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb291-8"><a href="#cb291-8" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;critic&quot;</span>, <span class="st">&quot;learner&quot;</span>)</span>
+<span id="cb291-9"><a href="#cb291-9" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;learner&quot;</span>, <span class="st">&quot;performance&quot;</span>)</span>
+<span id="cb291-10"><a href="#cb291-10" aria-hidden="true" tabindex="-1"></a>graph.add_conditional_edges(</span>
+<span id="cb291-11"><a href="#cb291-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;performance&quot;</span>,</span>
+<span id="cb291-12"><a href="#cb291-12" aria-hidden="true" tabindex="-1"></a>    should_iterate,</span>
+<span id="cb291-13"><a href="#cb291-13" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;continue&quot;</span>: <span class="st">&quot;iterate&quot;</span>, <span class="st">&quot;stop&quot;</span>: END}</span>
+<span id="cb291-14"><a href="#cb291-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb291-15"><a href="#cb291-15" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;iterate&quot;</span>, <span class="st">&quot;critic&quot;</span>)  <span class="co"># Loop back</span></span></code></pre></div>
+<h3 id="convergence-condition">Convergence Condition</h3>
+<div class="sourceCode" id="cb292"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> should_iterate(state: LearningState) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb292-2"><a href="#cb292-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> state[<span class="st">&quot;iteration&quot;</span>] <span class="op">&gt;=</span> MAX_ITERATIONS:</span>
+<span id="cb292-3"><a href="#cb292-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;stop&quot;</span></span>
+<span id="cb292-4"><a href="#cb292-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> state[<span class="st">&quot;improvement_delta&quot;</span>] <span class="op">&lt;</span> CONVERGENCE_THRESHOLD:</span>
+<span id="cb292-5"><a href="#cb292-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;stop&quot;</span></span>
+<span id="cb292-6"><a href="#cb292-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot;continue&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="research-agent-graph">46.7 Research Agent Graph</h2>
+<div class="sourceCode" id="cb293"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb293-1"><a href="#cb293-1" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> StateGraph(ResearchState)</span>
+<span id="cb293-2"><a href="#cb293-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-3"><a href="#cb293-3" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;plan_queries&quot;</span>, generate_search_queries)</span>
+<span id="cb293-4"><a href="#cb293-4" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;search&quot;</span>, execute_web_searches)</span>
+<span id="cb293-5"><a href="#cb293-5" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;extract&quot;</span>, extract_key_information)</span>
+<span id="cb293-6"><a href="#cb293-6" aria-hidden="true" tabindex="-1"></a>graph.add_node(<span class="st">&quot;synthesize&quot;</span>, synthesize_findings)</span>
+<span id="cb293-7"><a href="#cb293-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-8"><a href="#cb293-8" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;plan_queries&quot;</span>, <span class="st">&quot;search&quot;</span>)</span>
+<span id="cb293-9"><a href="#cb293-9" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;search&quot;</span>, <span class="st">&quot;extract&quot;</span>)</span>
+<span id="cb293-10"><a href="#cb293-10" aria-hidden="true" tabindex="-1"></a>graph.add_conditional_edges(</span>
+<span id="cb293-11"><a href="#cb293-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;extract&quot;</span>,</span>
+<span id="cb293-12"><a href="#cb293-12" aria-hidden="true" tabindex="-1"></a>    needs_more_search,</span>
+<span id="cb293-13"><a href="#cb293-13" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;yes&quot;</span>: <span class="st">&quot;plan_queries&quot;</span>, <span class="st">&quot;no&quot;</span>: <span class="st">&quot;synthesize&quot;</span>}</span>
+<span id="cb293-14"><a href="#cb293-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb293-15"><a href="#cb293-15" aria-hidden="true" tabindex="-1"></a>graph.add_edge(<span class="st">&quot;synthesize&quot;</span>, END)</span></code></pre></div>
+<hr />
+<h2 id="error-handling-in-graphs">46.8 Error Handling in Graphs</h2>
+<div class="sourceCode" id="cb294"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb294-1"><a href="#cb294-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each node wraps execution in try/except</span></span>
+<span id="cb294-2"><a href="#cb294-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> research_node(state: ResearchState) <span class="op">-&gt;</span> ResearchState:</span>
+<span id="cb294-3"><a href="#cb294-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb294-4"><a href="#cb294-4" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> web_search(state[<span class="st">&quot;query&quot;</span>])</span>
+<span id="cb294-5"><a href="#cb294-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="op">**</span>state, <span class="st">&quot;results&quot;</span>: results, <span class="st">&quot;error&quot;</span>: <span class="va">None</span>}</span>
+<span id="cb294-6"><a href="#cb294-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb294-7"><a href="#cb294-7" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="ss">f&quot;Research failed: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb294-8"><a href="#cb294-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="op">**</span>state, <span class="st">&quot;results&quot;</span>: [], <span class="st">&quot;error&quot;</span>: <span class="bu">str</span>(e)}</span>
+<span id="cb294-9"><a href="#cb294-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-10"><a href="#cb294-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Conditional edges handle errors</span></span>
+<span id="cb294-11"><a href="#cb294-11" aria-hidden="true" tabindex="-1"></a>graph.add_conditional_edges(</span>
+<span id="cb294-12"><a href="#cb294-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;research&quot;</span>,</span>
+<span id="cb294-13"><a href="#cb294-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> s: <span class="st">&quot;fallback&quot;</span> <span class="cf">if</span> s.get(<span class="st">&quot;error&quot;</span>) <span class="cf">else</span> <span class="st">&quot;synthesize&quot;</span>,</span>
+<span id="cb294-14"><a href="#cb294-14" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;fallback&quot;</span>: <span class="st">&quot;fallback_node&quot;</span>, <span class="st">&quot;synthesize&quot;</span>: <span class="st">&quot;synthesize&quot;</span>}</span>
+<span id="cb294-15"><a href="#cb294-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+
+</body>
+</html>

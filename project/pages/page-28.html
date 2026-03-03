@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 28: CI/CD Pipeline — GitHub Actions</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-27.html">&larr; Previous</a> <a href="page-29.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-28-cicd-pipeline-github-actions">Page 28: CI/CD Pipeline — GitHub Actions</h1>
+<hr />
+<h2 id="overview-19">28.1 Overview</h2>
+<p>ensureStudy uses <strong>GitHub Actions</strong> for continuous integration and deployment, with two workflow files implementing lint → test → build → deploy across three services.</p>
+<h3 id="source-.githubworkflows">Source: <code>.github/workflows/</code></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Lines</th>
+<th>Trigger</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ci.yml</code></td>
+<td>266</td>
+<td>Push/PR to <code>main</code>, <code>develop</code></td>
+<td>Test, lint, build</td>
+</tr>
+<tr>
+<td><code>deploy.yml</code></td>
+<td>101</td>
+<td>Push to <code>main</code>, tags <code>v*</code></td>
+<td>Build, push, deploy</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ci-pipeline-ci.yml">28.2 CI Pipeline (<code>ci.yml</code>)</h2>
+<h3 id="pipeline-visualization">Pipeline Visualization</h3>
+<pre class="mermaid">flowchart TB
+    PUSH["Push/PR to main or develop"] --> LINT["lint<br/>Black + Flake8"]
+    PUSH --> TC["test-core-service<br/>PostgreSQL + pytest --cov"]
+    PUSH --> TA["test-ai-service<br/>pytest --cov"]
+    PUSH --> TF["test-frontend<br/>npm ci + lint + build"]
+    TC & TA --> INT["integration-tests<br/>PostgreSQL + Redis<br/>pytest tests/integration/"]
+    TC & TA & TF --> BUILD{"On main push?"}
+    BUILD -->|Yes| IMG["build-images<br/>Docker build + push"]
+</pre>
+<h3 id="job-1-lint-type-check">Job 1: Lint &amp; Type Check</h3>
+<div class="sourceCode" id="cb201"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lint</span><span class="kw">:</span></span>
+<span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb201-4"><a href="#cb201-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pip install flake8 black mypy</span></span>
+<span id="cb201-5"><a href="#cb201-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> black --check backend/</span><span class="co">           # Format check</span></span>
+<span id="cb201-6"><a href="#cb201-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> flake8 backend/ --max-line-length=120 --ignore=E501,W503</span><span class="co">  # Style check</span></span></code></pre></div>
+<h3 id="job-2-core-service-tests">Job 2: Core Service Tests</h3>
+<div class="sourceCode" id="cb202"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb202-1"><a href="#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test-core-service</span><span class="kw">:</span></span>
+<span id="cb202-2"><a href="#cb202-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb202-3"><a href="#cb202-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">postgres</span><span class="kw">:</span></span>
+<span id="cb202-4"><a href="#cb202-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">image</span><span class="kw">:</span><span class="at"> postgres:15</span></span>
+<span id="cb202-5"><a href="#cb202-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb202-6"><a href="#cb202-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">POSTGRES_USER</span><span class="kw">:</span><span class="at"> test</span></span>
+<span id="cb202-7"><a href="#cb202-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">POSTGRES_PASSWORD</span><span class="kw">:</span><span class="at"> test</span></span>
+<span id="cb202-8"><a href="#cb202-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">POSTGRES_DB</span><span class="kw">:</span><span class="at"> test_db</span></span>
+<span id="cb202-9"><a href="#cb202-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb202-10"><a href="#cb202-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pip install -r requirements.txt</span></span>
+<span id="cb202-11"><a href="#cb202-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pip install pytest pytest-cov pytest-flask</span></span>
+<span id="cb202-12"><a href="#cb202-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pytest tests/ -v --cov=app --cov-report=xml</span></span>
+<span id="cb202-13"><a href="#cb202-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> codecov/codecov-action@v3</span><span class="co">    # Upload coverage</span></span></code></pre></div>
+<h3 id="job-3-ai-service-tests">Job 3: AI Service Tests</h3>
+<div class="sourceCode" id="cb203"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb203-1"><a href="#cb203-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test-ai-service</span><span class="kw">:</span></span>
+<span id="cb203-2"><a href="#cb203-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb203-3"><a href="#cb203-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pip install -r requirements.txt</span></span>
+<span id="cb203-4"><a href="#cb203-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pip install pytest pytest-cov pytest-asyncio</span></span>
+<span id="cb203-5"><a href="#cb203-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pytest tests/ -v --cov=app --cov-report=xml</span></span>
+<span id="cb203-6"><a href="#cb203-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> codecov/codecov-action@v3</span></span></code></pre></div>
+<h3 id="job-4-frontend-tests">Job 4: Frontend Tests</h3>
+<div class="sourceCode" id="cb204"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test-frontend</span><span class="kw">:</span></span>
+<span id="cb204-2"><a href="#cb204-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb204-3"><a href="#cb204-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-node@v4 (Node 20)</span></span>
+<span id="cb204-4"><a href="#cb204-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> npm ci</span></span>
+<span id="cb204-5"><a href="#cb204-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> npm run lint</span></span>
+<span id="cb204-6"><a href="#cb204-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> npm run build</span></span></code></pre></div>
+<h3 id="job-5-docker-image-builds">Job 5: Docker Image Builds</h3>
+<p>Only runs on <code>main</code> push after all tests pass:</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="fu">build-images</span><span class="kw">:</span></span>
+<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">needs</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">test-core-service</span><span class="kw">,</span><span class="at"> test-ai-service</span><span class="kw">,</span><span class="at"> test-frontend</span><span class="kw">]</span></span>
+<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">if</span><span class="kw">:</span><span class="at"> github.event_name == &#39;push&#39; &amp;&amp; github.ref == &#39;refs/heads/main&#39;</span></span>
+<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> docker/build-push-action@v5</span></span>
+<span id="cb205-6"><a href="#cb205-6" aria-hidden="true" tabindex="-1"></a><span class="co">      # core-service, ai-service, frontend</span></span>
+<span id="cb205-7"><a href="#cb205-7" aria-hidden="true" tabindex="-1"></a><span class="co">      # Uses GitHub Actions cache (type=gha)</span></span></code></pre></div>
+<h3 id="job-6-integration-tests">Job 6: Integration Tests</h3>
+<p>Spins up real services with PostgreSQL + Redis:</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">integration-tests</span><span class="kw">:</span></span>
+<span id="cb206-2"><a href="#cb206-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">needs</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">test-core-service</span><span class="kw">,</span><span class="at"> test-ai-service</span><span class="kw">]</span></span>
+<span id="cb206-3"><a href="#cb206-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb206-4"><a href="#cb206-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">postgres</span><span class="kw">:</span><span class="at"> postgres:15</span></span>
+<span id="cb206-5"><a href="#cb206-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">redis</span><span class="kw">:</span><span class="at"> redis:7</span></span>
+<span id="cb206-6"><a href="#cb206-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb206-7"><a href="#cb206-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> flask run --port 8000 &amp;</span></span>
+<span id="cb206-8"><a href="#cb206-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> uvicorn app.main:app --port 8001 &amp;</span></span>
+<span id="cb206-9"><a href="#cb206-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> sleep 10</span></span>
+<span id="cb206-10"><a href="#cb206-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pytest tests/integration/ -v -m integration</span></span></code></pre></div>
+<hr />
+<h2 id="deployment-pipeline-deploy.yml">28.3 Deployment Pipeline (<code>deploy.yml</code>)</h2>
+<h3 id="pipeline-visualization-1">Pipeline Visualization</h3>
+<pre class="mermaid">flowchart TB
+    MAIN["Push to main"] --> BP
+    TAG["Tag v*"] --> BP
+    BP["build-and-push<br/>(matrix: 4 services)<br/>Login ghcr.io + Build + Push"]
+    BP --> STG{"Branch?"}
+    STG -->|main| STAGING["deploy-staging<br/>environment: staging"]
+    STG -->|"tag v*"| PROD["deploy-production<br/>environment: production"]
+</pre>
+<h3 id="matrix-strategy">Matrix Strategy</h3>
+<div class="sourceCode" id="cb208"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb208-2"><a href="#cb208-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">matrix</span><span class="kw">:</span></span>
+<span id="cb208-3"><a href="#cb208-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span></span>
+<span id="cb208-4"><a href="#cb208-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">service</span><span class="kw">:</span><span class="at"> core-service</span></span>
+<span id="cb208-5"><a href="#cb208-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">context</span><span class="kw">:</span><span class="at"> backend/core-service</span></span>
+<span id="cb208-6"><a href="#cb208-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">service</span><span class="kw">:</span><span class="at"> ai-service</span></span>
+<span id="cb208-7"><a href="#cb208-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">context</span><span class="kw">:</span><span class="at"> backend/ai-service</span></span>
+<span id="cb208-8"><a href="#cb208-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">service</span><span class="kw">:</span><span class="at"> frontend</span></span>
+<span id="cb208-9"><a href="#cb208-9" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">context</span><span class="kw">:</span><span class="at"> frontend</span></span>
+<span id="cb208-10"><a href="#cb208-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">service</span><span class="kw">:</span><span class="at"> dashboards</span></span>
+<span id="cb208-11"><a href="#cb208-11" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">context</span><span class="kw">:</span><span class="at"> dashboards</span></span></code></pre></div>
+<h3 id="container-registry">Container Registry</h3>
+<pre><code>ghcr.io/${github.repository}/core-service:${sha}
+ghcr.io/${github.repository}/ai-service:${sha}
+ghcr.io/${github.repository}/frontend:${sha}
+ghcr.io/${github.repository}/dashboards:${sha}</code></pre>
+<h3 id="image-tagging">Image Tagging</h3>
+<div class="sourceCode" id="cb210"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb210-1"><a href="#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tags</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb210-2"><a href="#cb210-2" aria-hidden="true" tabindex="-1"></a>  type=ref,event=branch      # main, develop</span>
+<span id="cb210-3"><a href="#cb210-3" aria-hidden="true" tabindex="-1"></a>  type=ref,event=tag          # v1.0.0</span>
+<span id="cb210-4"><a href="#cb210-4" aria-hidden="true" tabindex="-1"></a>  type=sha,prefix=             # abc1234 (commit SHA)</span></code></pre></div>
+<hr />
+<h2 id="environment-configuration-1">28.4 Environment Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Trigger</th>
+<th>Protection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>staging</code></td>
+<td>Push to <code>main</code></td>
+<td>Required reviewers (optional)</td>
+</tr>
+<tr>
+<td><code>production</code></td>
+<td>Tag <code>v*</code></td>
+<td>Required reviewers</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tooling-versions">28.5 Tooling Versions</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>3.11</td>
+<td>Backend services</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>20</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>15</td>
+<td>Test service container</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>7</td>
+<td>Integration test container</td>
+</tr>
+<tr>
+<td>Docker Buildx</td>
+<td>Latest</td>
+<td>Multi-platform builds</td>
+</tr>
+<tr>
+<td>Codecov</td>
+<td>v3</td>
+<td>Coverage reporting</td>
+</tr>
+<tr>
+<td>actions/checkout</td>
+<td>v4</td>
+<td>Repository checkout</td>
+</tr>
+<tr>
+<td>actions/setup-python</td>
+<td>v5</td>
+<td>Python setup</td>
+</tr>
+<tr>
+<td>actions/setup-node</td>
+<td>v4</td>
+<td>Node.js setup</td>
+</tr>
+<tr>
+<td>docker/build-push-action</td>
+<td>v5</td>
+<td>Docker builds</td>
+</tr>
+<tr>
+<td>docker/login-action</td>
+<td>v3</td>
+<td>Registry auth</td>
+</tr>
+<tr>
+<td>docker/metadata-action</td>
+<td>v5</td>
+<td>Image tagging</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

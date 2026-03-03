@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 81: Mock Interview System</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-80.html">&larr; Previous</a> <a href="page-82.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-81-mock-interview-system">Page 81: Mock Interview System</h1>
+<blockquote>
+<p>Full AI-powered mock interview system with LangGraph-based question generation, real-time answer evaluation, and adaptive difficulty.</p>
+</blockquote>
+<hr />
+<h2 id="architecture-overview-2">81.1 Architecture Overview</h2>
+<pre class="mermaid">flowchart LR
+    FE["🎭 Frontend<br/>Avatar + Speech→Text"] <-->|WebSocket| API["📡 Mock Interview API<br/>/api/mock-interview"]
+    API <-->|CRUD| DB["🗄️ Core Service DB<br/>Questions Store"]
+    API --> IE["🎯 InterviewEvaluator<br/>Groq LLM Scoring<br/>llama-3.3-70b"]
+    IE --> IQA["🧠 InterviewQuestion Agent<br/>Type 5 LangGraph<br/>Self-improving"]
+    IQA -.->|"New questions"| DB
+</pre>
+<h3 id="source-files">Source Files</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interview Question Agent</td>
+<td><code>backend/ai-service/app/agents/interview_question_agent.py</code></td>
+<td>798 lines</td>
+</tr>
+<tr>
+<td>Mock Interview Routes</td>
+<td><code>backend/ai-service/app/api/routes/mock_interview.py</code></td>
+<td>1,038 lines</td>
+</tr>
+<tr>
+<td>Interview Evaluator</td>
+<td><code>backend/ai-service/app/services/interview_evaluator.py</code></td>
+<td>297 lines</td>
+</tr>
+<tr>
+<td>Core Service Routes</td>
+<td><code>backend/core-service/app/routes/interview_questions.py</code></td>
+<td>12KB</td>
+</tr>
+<tr>
+<td>Core Service Models</td>
+<td><code>backend/core-service/app/models/interview_questions.py</code></td>
+<td>5KB</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="interviewquestionagent-type-5-learning-agent">81.2 InterviewQuestionAgent — Type 5 Learning Agent</h2>
+<h3 id="langgraph-state">LangGraph State</h3>
+<div class="sourceCode" id="cb519"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb519-1"><a href="#cb519-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InterviewLearningState(TypedDict):</span>
+<span id="cb519-2"><a href="#cb519-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input</span></span>
+<span id="cb519-3"><a href="#cb519-3" aria-hidden="true" tabindex="-1"></a>    task_type: <span class="bu">str</span>           <span class="co"># &quot;learn&quot; | &quot;generate&quot; | &quot;evaluate&quot;</span></span>
+<span id="cb519-4"><a href="#cb519-4" aria-hidden="true" tabindex="-1"></a>    topic_id: <span class="bu">str</span></span>
+<span id="cb519-5"><a href="#cb519-5" aria-hidden="true" tabindex="-1"></a>    topic_name: <span class="bu">str</span></span>
+<span id="cb519-6"><a href="#cb519-6" aria-hidden="true" tabindex="-1"></a>    topic_description: <span class="bu">str</span></span>
+<span id="cb519-7"><a href="#cb519-7" aria-hidden="true" tabindex="-1"></a>    classroom_id: Optional[<span class="bu">str</span>]</span>
+<span id="cb519-8"><a href="#cb519-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb519-9"><a href="#cb519-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Learning Memory (persistent)</span></span>
+<span id="cb519-10"><a href="#cb519-10" aria-hidden="true" tabindex="-1"></a>    memory: Dict[<span class="bu">str</span>, Any]   <span class="co"># calibrated_difficulty, target_avg_score,</span></span>
+<span id="cb519-11"><a href="#cb519-11" aria-hidden="true" tabindex="-1"></a>                             <span class="co"># preferred_question_types, avoided_patterns,</span></span>
+<span id="cb519-12"><a href="#cb519-12" aria-hidden="true" tabindex="-1"></a>                             <span class="co"># successful_prompts, learning_iterations</span></span>
+<span id="cb519-13"><a href="#cb519-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb519-14"><a href="#cb519-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Performance Data</span></span>
+<span id="cb519-15"><a href="#cb519-15" aria-hidden="true" tabindex="-1"></a>    recent_responses: List[Dict]    <span class="co"># Last N interview evaluations</span></span>
+<span id="cb519-16"><a href="#cb519-16" aria-hidden="true" tabindex="-1"></a>    existing_questions: List[Dict]  <span class="co"># Current question pool</span></span>
+<span id="cb519-17"><a href="#cb519-17" aria-hidden="true" tabindex="-1"></a>    questions_attempted: <span class="bu">int</span></span>
+<span id="cb519-18"><a href="#cb519-18" aria-hidden="true" tabindex="-1"></a>    total_questions: <span class="bu">int</span></span>
+<span id="cb519-19"><a href="#cb519-19" aria-hidden="true" tabindex="-1"></a>    attempt_percentage: <span class="bu">float</span></span>
+<span id="cb519-20"><a href="#cb519-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb519-21"><a href="#cb519-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generation</span></span>
+<span id="cb519-22"><a href="#cb519-22" aria-hidden="true" tabindex="-1"></a>    generation_strategy: Dict[<span class="bu">str</span>, Any]</span>
+<span id="cb519-23"><a href="#cb519-23" aria-hidden="true" tabindex="-1"></a>    generated_questions: List[Dict]</span>
+<span id="cb519-24"><a href="#cb519-24" aria-hidden="true" tabindex="-1"></a>    deduplicated_questions: List[Dict]</span>
+<span id="cb519-25"><a href="#cb519-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb519-26"><a href="#cb519-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Output</span></span>
+<span id="cb519-27"><a href="#cb519-27" aria-hidden="true" tabindex="-1"></a>    questions: List[Dict]</span>
+<span id="cb519-28"><a href="#cb519-28" aria-hidden="true" tabindex="-1"></a>    output: Dict</span>
+<span id="cb519-29"><a href="#cb519-29" aria-hidden="true" tabindex="-1"></a>    error: Optional[<span class="bu">str</span>]</span></code></pre></div>
+<h3 id="node-langgraph-workflow">7-Node LangGraph Workflow</h3>
+<pre class="mermaid">graph LR
+    A[load_memory] --> B[analyze]
+    B --> C[learn]
+    C --> D[check_threshold]
+    D -->|≥80% attempted| E[generate]
+    D -->|<80%| G[output]
+    E --> F[deduplicate]
+    F --> G[output]
+    G --> END</pre>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 40%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th>Node</th>
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>load_memory</code></td>
+<td><code>load_interview_memory()</code></td>
+<td>Load persistent learning memory from DB</td>
+</tr>
+<tr>
+<td><code>analyze</code></td>
+<td><code>analyze_interview_performance()</code></td>
+<td>Calculate avg scores, identify weak concepts</td>
+</tr>
+<tr>
+<td><code>learn</code></td>
+<td><code>update_interview_learning()</code></td>
+<td>Adjust difficulty calibration (±0.1), focus on weak areas</td>
+</tr>
+<tr>
+<td><code>check_threshold</code></td>
+<td><code>check_interview_threshold()</code></td>
+<td>Trigger generation if ≥80% questions attempted</td>
+</tr>
+<tr>
+<td><code>generate</code></td>
+<td><code>generate_interview_questions()</code></td>
+<td>LLM-based question generation with learned strategy</td>
+</tr>
+<tr>
+<td><code>deduplicate</code></td>
+<td><code>deduplicate_interview_questions()</code></td>
+<td>Hash + word-overlap (&gt;70%) deduplication</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td><code>format_interview_output()</code></td>
+<td>Format final response with metrics</td>
+</tr>
+</tbody>
+</table>
+<h3 id="adaptive-difficulty-calibration">Adaptive Difficulty Calibration</h3>
+<div class="sourceCode" id="cb521"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb521-1"><a href="#cb521-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If students scoring too high → increase difficulty</span></span>
+<span id="cb521-2"><a href="#cb521-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> avg_score <span class="op">&gt;</span> target_score <span class="op">+</span> <span class="dv">10</span>:</span>
+<span id="cb521-3"><a href="#cb521-3" aria-hidden="true" tabindex="-1"></a>    difficulty <span class="op">=</span> <span class="bu">min</span>(<span class="fl">1.0</span>, difficulty <span class="op">+</span> <span class="fl">0.1</span>)</span>
+<span id="cb521-4"><a href="#cb521-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb521-5"><a href="#cb521-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If scoring too low → decrease difficulty</span></span>
+<span id="cb521-6"><a href="#cb521-6" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> avg_score <span class="op">&lt;</span> target_score <span class="op">-</span> <span class="dv">10</span>:</span>
+<span id="cb521-7"><a href="#cb521-7" aria-hidden="true" tabindex="-1"></a>    difficulty <span class="op">=</span> <span class="bu">max</span>(<span class="fl">0.0</span>, difficulty <span class="op">-</span> <span class="fl">0.1</span>)</span>
+<span id="cb521-8"><a href="#cb521-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb521-9"><a href="#cb521-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Difficulty bands: &lt;0.33 = easy, 0.33-0.66 = medium, &gt;0.66 = hard</span></span></code></pre></div>
+<h3 id="multi-layer-deduplication-1">Multi-Layer Deduplication</h3>
+<ol type="1">
+<li><strong>Hash-based</strong>: SHA-256 of normalized question text</li>
+<li><strong>Word overlap</strong>: Jaccard similarity &gt; 0.7 triggers duplicate flag</li>
+</ol>
+<hr />
+<h2 id="mock-interview-api-routes">81.3 Mock Interview API Routes</h2>
+<h3 id="two-interview-systems">Two Interview Systems</h3>
+<h4 id="system-1-subject-based-static">System 1: Subject-Based (Static)</h4>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 25%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/mock-interview/start</code></td>
+<td>POST</td>
+<td>Start session with subject + chapter</td>
+</tr>
+<tr>
+<td><code>POST /api/mock-interview/submit</code></td>
+<td>POST</td>
+<td>Submit answer, get evaluation + next question</td>
+</tr>
+<tr>
+<td><code>GET /api/mock-interview/summary/{session_id}</code></td>
+<td>GET</td>
+<td>Get completed interview summary</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request Schema:</strong></p>
+<div class="sourceCode" id="cb522"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb522-1"><a href="#cb522-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StartInterviewRequest(BaseModel):</span>
+<span id="cb522-2"><a href="#cb522-2" aria-hidden="true" tabindex="-1"></a>    user_id: <span class="bu">str</span></span>
+<span id="cb522-3"><a href="#cb522-3" aria-hidden="true" tabindex="-1"></a>    subject: <span class="bu">str</span>        <span class="co"># math, physics, chemistry</span></span>
+<span id="cb522-4"><a href="#cb522-4" aria-hidden="true" tabindex="-1"></a>    chapter: <span class="bu">str</span>        <span class="co"># topic within subject</span></span>
+<span id="cb522-5"><a href="#cb522-5" aria-hidden="true" tabindex="-1"></a>    avatar: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;female&quot;</span>  <span class="co"># male or female</span></span></code></pre></div>
+<h4 id="system-2-topic-based-db-backed-learning-agent">System 2: Topic-Based (DB-backed, Learning Agent)</h4>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 25%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/mock-interview/topics/start</code></td>
+<td>POST</td>
+<td>Start with ClassroomTopic IDs</td>
+</tr>
+<tr>
+<td><code>POST /api/mock-interview/topics/submit</code></td>
+<td>POST</td>
+<td>Submit with evaluation + learning trigger</td>
+</tr>
+<tr>
+<td><code>GET /api/mock-interview/topics/summary/{session_id}</code></td>
+<td>GET</td>
+<td>Get topic-level mastery summary</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request Schema:</strong></p>
+<div class="sourceCode" id="cb523"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb523-1"><a href="#cb523-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StartTopicInterviewRequest(BaseModel):</span>
+<span id="cb523-2"><a href="#cb523-2" aria-hidden="true" tabindex="-1"></a>    user_id: <span class="bu">str</span></span>
+<span id="cb523-3"><a href="#cb523-3" aria-hidden="true" tabindex="-1"></a>    topic_ids: List[<span class="bu">str</span>]           <span class="co"># ClassroomTopic IDs</span></span>
+<span id="cb523-4"><a href="#cb523-4" aria-hidden="true" tabindex="-1"></a>    avatar: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;female&quot;</span></span>
+<span id="cb523-5"><a href="#cb523-5" aria-hidden="true" tabindex="-1"></a>    questions_per_topic: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>   <span class="co"># 1-10</span></span>
+<span id="cb523-6"><a href="#cb523-6" aria-hidden="true" tabindex="-1"></a>    token: <span class="bu">str</span>                     <span class="co"># Auth token for API calls</span></span></code></pre></div>
+<h3 id="interview-flow-1">Interview Flow</h3>
+<pre><code>1. POST /start → Creates session → Returns first question
+2. POST /submit → Evaluates answer via LLM → Returns score + next question
+    If final question → triggers learning agent
+3. GET /summary → Returns overall score, concept mastery, weak topics, recommendations</code></pre>
+<hr />
+<h2 id="interviewevaluator-service">81.4 InterviewEvaluator Service</h2>
+<h3 id="evaluationresult">EvaluationResult</h3>
+<div class="sourceCode" id="cb525"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb525-1"><a href="#cb525-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb525-2"><a href="#cb525-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EvaluationResult:</span>
+<span id="cb525-3"><a href="#cb525-3" aria-hidden="true" tabindex="-1"></a>    score: <span class="bu">float</span>                  <span class="co"># 0-100</span></span>
+<span id="cb525-4"><a href="#cb525-4" aria-hidden="true" tabindex="-1"></a>    feedback: <span class="bu">str</span>                 <span class="co"># Narrative feedback</span></span>
+<span id="cb525-5"><a href="#cb525-5" aria-hidden="true" tabindex="-1"></a>    key_points_covered: List[<span class="bu">str</span>] <span class="co"># What the student got right</span></span>
+<span id="cb525-6"><a href="#cb525-6" aria-hidden="true" tabindex="-1"></a>    key_points_missed: List[<span class="bu">str</span>]  <span class="co"># What was missed</span></span>
+<span id="cb525-7"><a href="#cb525-7" aria-hidden="true" tabindex="-1"></a>    clarity_score: <span class="bu">float</span>          <span class="co"># 0-100</span></span>
+<span id="cb525-8"><a href="#cb525-8" aria-hidden="true" tabindex="-1"></a>    relevance_score: <span class="bu">float</span>        <span class="co"># 0-100</span></span>
+<span id="cb525-9"><a href="#cb525-9" aria-hidden="true" tabindex="-1"></a>    completeness_score: <span class="bu">float</span>     <span class="co"># 0-100</span></span>
+<span id="cb525-10"><a href="#cb525-10" aria-hidden="true" tabindex="-1"></a>    suggestions: List[<span class="bu">str</span>]        <span class="co"># Improvement suggestions</span></span></code></pre></div>
+<h3 id="evaluation-pipeline">Evaluation Pipeline</h3>
+<ol type="1">
+<li><strong>LLM Evaluation</strong> (primary): Groq <code>llama-3.3-70b-versatile</code> scores the answer against expected answer and key concepts</li>
+<li><strong>Heuristic Fallback</strong>: If LLM unavailable, uses word count, keyword matching, and structure analysis</li>
+<li><strong>Concept Scoring</strong>: Identifies covered vs missed concepts from key_concepts list</li>
+</ol>
+<h3 id="scoring-prompt-structure">Scoring Prompt Structure</h3>
+<pre><code>Evaluate this interview answer:
+Question: {question}
+Student&#39;s Answer: {user_answer}
+Expected Answer: {expected_answer}
+Difficulty: {difficulty}
+
+Score (0-100):
+Key Points Covered:
+Key Points Missed:
+Clarity (0-100):
+Relevance (0-100):
+Completeness (0-100):
+Feedback:
+Suggestions:</code></pre>
+<hr />
+<h2 id="interview-summary">81.5 Interview Summary</h2>
+<p>After completing all questions, generates:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td>str</td>
+<td>Interview session UUID</td>
+</tr>
+<tr>
+<td><code>average_score</code></td>
+<td>float</td>
+<td>Mean across all answers</td>
+</tr>
+<tr>
+<td><code>concept_mastery</code></td>
+<td>dict</td>
+<td>Per-concept score mapping</td>
+</tr>
+<tr>
+<td><code>weak_topics</code></td>
+<td>List[str]</td>
+<td>Topics scoring &lt; 60%</td>
+</tr>
+<tr>
+<td><code>recommendations</code></td>
+<td>List[str]</td>
+<td>LLM-generated improvement tips</td>
+</tr>
+<tr>
+<td><code>duration_minutes</code></td>
+<td>float</td>
+<td>Total interview time</td>
+</tr>
+</tbody>
+</table>
+<h3 id="learning-trigger">Learning Trigger</h3>
+<p>After interview completion, the system calls:</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb527-1"><a href="#cb527-1" aria-hidden="true" tabindex="-1"></a>agent.trigger_on_interview_complete(</span>
+<span id="cb527-2"><a href="#cb527-2" aria-hidden="true" tabindex="-1"></a>    topic_id, topic_name,</span>
+<span id="cb527-3"><a href="#cb527-3" aria-hidden="true" tabindex="-1"></a>    evaluations<span class="op">=</span>session_evaluations,</span>
+<span id="cb527-4"><a href="#cb527-4" aria-hidden="true" tabindex="-1"></a>    existing_questions<span class="op">=</span>current_pool,</span>
+<span id="cb527-5"><a href="#cb527-5" aria-hidden="true" tabindex="-1"></a>    questions_attempted<span class="op">=</span>attempted_count,</span>
+<span id="cb527-6"><a href="#cb527-6" aria-hidden="true" tabindex="-1"></a>    total_questions<span class="op">=</span>pool_size</span>
+<span id="cb527-7"><a href="#cb527-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>This triggers the learning pipeline to adapt future question difficulty.</p>
+<hr />
+
+</body>
+</html>

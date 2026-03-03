@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 4: Tutor Agent — ABCR, TAL, MCP Integration</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-03.html">&larr; Previous</a> <a href="page-05.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-4-tutor-agent-abcr-tal-mcp-integration">Page 4: Tutor Agent — ABCR, TAL, MCP Integration</h1>
+<hr />
+<h2 id="overview">4.1 Overview</h2>
+<p>The Tutor Agent is the <strong>primary learning assistant</strong> and the most sophisticated agent in the ensureStudy platform. It implements three key subsystems that collectively provide context-aware, topic-coherent, and source-isolated tutoring:</p>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 34%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr>
+<th>Subsystem</th>
+<th>Full Name</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ABCR</strong></td>
+<td>Attention-Based Context Routing</td>
+<td>Determines whether a query is a follow-up to the current topic or a new topic</td>
+</tr>
+<tr>
+<td><strong>TAL</strong></td>
+<td>Topic Anchor Layer</td>
+<td>Maintains topic continuity across conversation turns by “anchoring” to a subject</td>
+</tr>
+<tr>
+<td><strong>MCP</strong></td>
+<td>Memory Context Processor</td>
+<td>Isolates web-sourced content from classroom-uploaded content in RAG retrieval</td>
+</tr>
+</tbody>
+</table>
+<h3 id="source-backendai-serviceappagentstutor_agent.py-687-lines">Source: <code>backend/ai-service/app/agents/tutor_agent.py</code> (687 lines)</h3>
+<hr />
+<h2 id="langgraph-state-machine">4.2 LangGraph State Machine</h2>
+<p>The Tutor Agent’s processing pipeline is defined as a LangGraph <code>StateGraph</code> with 4 nodes and conditional routing:</p>
+<pre class="mermaid">flowchart TB
+    START([Student Question]) --> moderate_query[Moderate Query]
+    moderate_query --> decision{Blocked?}
+    decision -->|Yes| BLOCKED[Blocked Response]
+    decision -->|No| context_routing
+
+    subgraph context_routing[Context Routing]
+        direction LR
+        ABCR[ABCR Classification] --> TAL[TAL Anchor Management]
+    end
+
+    context_routing --> retrieve
+
+    subgraph retrieve[Retrieve with MCP]
+        direction LR
+        QDRANT[Qdrant Vector Search] --> MCP_FILTER[MCP Context Isolation]
+    end
+
+    retrieve --> generate
+
+    subgraph generate[Generate Answer]
+        direction LR
+        PROMPT[Build Prompt] --> LLM[Mistral 7B Inference] --> SOURCES[Source Attribution]
+    end
+
+    generate --> RESULT([Answer + Sources + Suggestions])
+    BLOCKED --> END_BLOCKED([Blocked Response Returned])</pre>
+<h3 id="tutorstate-typeddict-full-state-definition">TutorState (TypedDict) — Full State Definition</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TutorState(TypedDict):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># === INPUT ===</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    query: <span class="bu">str</span>                          <span class="co"># Student&#39;s question</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    user_id: <span class="bu">str</span>                        <span class="co"># Authenticated user ID</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    session_id: <span class="bu">str</span>                     <span class="co"># Conversation session ID</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    request_id: <span class="bu">str</span>                     <span class="co"># Unique request trace ID</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    classroom_id: <span class="bu">str</span>                   <span class="co"># Active classroom context</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    clicked_suggestion: <span class="bu">bool</span>            <span class="co"># Whether user clicked a suggested question</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># === CONVERSATION MEMORY ===</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    turn_texts: List[<span class="bu">str</span>]               <span class="co"># All conversation turns in session</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># === ABCR STATE ===</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    last_abcr_decision: <span class="bu">str</span>             <span class="co"># &quot;follow_up&quot; | &quot;new_topic&quot; | &quot;&quot;</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    abcr_confidence: <span class="bu">float</span>              <span class="co"># Confidence of ABCR classification</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    is_followup: <span class="bu">bool</span>                   <span class="co"># Final determination</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># === TAL STATE ===</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    anchor_topic: <span class="bu">str</span>                   <span class="co"># Currently anchored topic</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    anchor_keywords: List[<span class="bu">str</span>]          <span class="co"># Keywords for the anchored topic</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    confirm_new_topic: <span class="bu">bool</span>             <span class="co"># Whether topic change needs confirmation</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># === RAG &amp; MCP STATE ===</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    raw_chunks: List[Dict]              <span class="co"># Raw Qdrant retrieval results</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    mcp_chunks: List[Dict]              <span class="co"># Chunks after MCP filtering</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    mcp_reason: <span class="bu">str</span>                     <span class="co"># Reason for MCP filtering decision</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    anchor_hits: <span class="bu">int</span>                    <span class="co"># Number of chunks matching anchor topic</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>    web_filtered_count: <span class="bu">int</span>             <span class="co"># Number of web chunks filtered out</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>    context_sources: List[<span class="bu">str</span>]          <span class="co"># Sources included in context</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># === OUTPUT ===</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>    answer: <span class="bu">str</span>                         <span class="co"># Generated answer text</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>    sources: List[Dict]                 <span class="co"># Source attributions with page numbers</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>    blocked: <span class="bu">bool</span>                       <span class="co"># Whether query was blocked by moderation</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>    error: <span class="bu">str</span>                          <span class="co"># Error message if any</span></span></code></pre></div>
+<hr />
+<h2 id="node-1-content-moderation-moderate_query">4.3 Node 1: Content Moderation (<code>moderate_query</code>)</h2>
+<p>The first node in the pipeline validates that the query is academic in nature:</p>
+<h3 id="process">Process</h3>
+<ol type="1">
+<li><strong>Skip check</strong>: If <code>SKIP_MODERATION</code> environment variable is <code>true</code>, bypass entirely</li>
+<li><strong>Classifier inference</strong>: Uses facebook/bart-large-mnli for zero-shot classification</li>
+<li><strong>Label matching</strong>: Checks query against academic vs. non-academic categories</li>
+<li><strong>Decision routing</strong>: Sets <code>blocked=True</code> if non-academic, allowing the conditional edge to terminate early</li>
+</ol>
+<h3 id="routing-logic">Routing Logic</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> route_moderation(state: TutorState):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Route based on moderation result&quot;&quot;&quot;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> state[<span class="st">&quot;blocked&quot;</span>]:</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> END</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot;context_routing&quot;</span></span></code></pre></div>
+<h3 id="design-decision">Design Decision</h3>
+<p>Content moderation is implemented at the <strong>agent level</strong> rather than at the API gateway level. This allows per-agent moderation policies — for example, the Research Agent may have looser content restrictions than the Tutor Agent since research queries may legitimately span broader topics.</p>
+<hr />
+<h2 id="node-2-abcr-attention-based-context-routing-context_routing">4.4 Node 2: ABCR — Attention-Based Context Routing (<code>context_routing</code>)</h2>
+<h3 id="purpose">Purpose</h3>
+<p>ABCR solves a fundamental problem in multi-turn tutoring: <strong>determining whether a student’s query continues the current topic or introduces a new one</strong>. This distinction is critical because:</p>
+<ul>
+<li><strong>Follow-up queries</strong> should reuse the existing topic anchor and conversation context</li>
+<li><strong>New topic queries</strong> should create a new anchor and potentially reset the context window</li>
+</ul>
+<h3 id="source-backendai-serviceappservicesabcr_service.py-16852-bytes">Source: <code>backend/ai-service/app/services/abcr_service.py</code> (16,852 bytes)</h3>
+<h3 id="abcr-decision-flowchart">ABCR Decision Flowchart</h3>
+<pre class="mermaid">flowchart TB
+    Q["New Student Query"] --> S1{"Explicit redirect?<br/>'new topic', 'different question'"}
+    S1 -- Yes --> NT["🆕 new_topic<br/>confidence: 0.95"]
+    S1 -- No --> S2{"Pronoun detected?<br/>'it', 'this', 'that', 'they'"}
+    S2 -- Yes --> FU1["🔄 follow_up<br/>confidence: 0.85"]
+    S2 -- No --> S3{"Reference pattern?<br/>'more about', 'continue', 'also'"}
+    S3 -- Yes --> FU2["🔄 follow_up<br/>confidence: 0.80"]
+    S3 -- No --> S4{"Lexical overlap<br/>with previous turns > 40%?"}
+    S4 -- Yes --> S5{"Topic similarity<br/>with anchor > 0.6?"}
+    S5 -- Yes --> FU3["🔄 follow_up<br/>confidence: overlap score"]
+    S5 -- No --> NT2["🆕 new_topic<br/>confidence: 0.70"]
+    S4 -- No --> NT3["🆕 new_topic<br/>confidence: 0.90"]
+</pre>
+<h3 id="classification-signals">Classification Signals</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 30%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Weight</th>
+<th>Indicates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Explicit redirections</strong></td>
+<td>Highest</td>
+<td>“new topic”, “different question” → new_topic</td>
+</tr>
+<tr>
+<td><strong>Pronoun detection</strong></td>
+<td>High</td>
+<td>“it”, “this”, “that” → follow_up</td>
+</tr>
+<tr>
+<td><strong>Reference patterns</strong></td>
+<td>Medium-high</td>
+<td>“more about”, “continue” → follow_up</td>
+</tr>
+<tr>
+<td><strong>Lexical overlap</strong></td>
+<td>Medium</td>
+<td>Keyword overlap between query and previous turns</td>
+</tr>
+<tr>
+<td><strong>Topic similarity</strong></td>
+<td>Medium</td>
+<td>Semantic similarity with current anchor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="abcr-decision-output">ABCR Decision Output</h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;decision&quot;</span>: <span class="st">&quot;follow_up&quot;</span> <span class="op">|</span> <span class="st">&quot;new_topic&quot;</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;confidence&quot;</span>: <span class="fl">0.0</span> <span class="op">-</span> <span class="fl">1.0</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;reasoning&quot;</span>: <span class="st">&quot;Detected pronoun reference &#39;it&#39; with 78</span><span class="sc">% le</span><span class="st">xical overlap&quot;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="integration-in-context_routing-node">Integration in <code>context_routing</code> Node</h3>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> context_routing(state: TutorState):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">    ABCR + TAL integration:</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Run ABCR to detect if query is follow-up or new topic</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">    2. If follow-up -&gt; keep existing anchor, no confirmation needed</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">    3. If new topic -&gt; create new anchor, may need confirmation</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    session <span class="op">=</span> get_session_state(state[<span class="st">&quot;session_id&quot;</span>])</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run ABCR classification</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    abcr_result <span class="op">=</span> <span class="cf">await</span> abcr_service.classify(</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        query<span class="op">=</span>state[<span class="st">&quot;query&quot;</span>],</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>        turn_history<span class="op">=</span>state[<span class="st">&quot;turn_texts&quot;</span>],</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>        current_anchor<span class="op">=</span>session.get(<span class="st">&quot;anchor_topic&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    is_followup <span class="op">=</span> abcr_result[<span class="st">&quot;decision&quot;</span>] <span class="op">==</span> <span class="st">&quot;follow_up&quot;</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_followup:</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Keep existing anchor — TAL stays locked</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;is_followup&quot;</span>: <span class="va">True</span>,</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_topic&quot;</span>: session[<span class="st">&quot;anchor_topic&quot;</span>],</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_keywords&quot;</span>: session[<span class="st">&quot;anchor_keywords&quot;</span>],</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;abcr_confidence&quot;</span>: abcr_result[<span class="st">&quot;confidence&quot;</span>]</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># New topic — extract and set new anchor via TAL</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>        new_anchor <span class="op">=</span> <span class="cf">await</span> topic_anchor_service.extract_anchor(state[<span class="st">&quot;query&quot;</span>])</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>        update_session_state(state[<span class="st">&quot;session_id&quot;</span>], {</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_topic&quot;</span>: new_anchor[<span class="st">&quot;topic&quot;</span>],</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_keywords&quot;</span>: new_anchor[<span class="st">&quot;keywords&quot;</span>]</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;is_followup&quot;</span>: <span class="va">False</span>,</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_topic&quot;</span>: new_anchor[<span class="st">&quot;topic&quot;</span>],</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_keywords&quot;</span>: new_anchor[<span class="st">&quot;keywords&quot;</span>],</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;abcr_confidence&quot;</span>: abcr_result[<span class="st">&quot;confidence&quot;</span>],</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;confirm_new_topic&quot;</span>: <span class="va">True</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<h3 id="abcr-performance-characteristics">ABCR Performance Characteristics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inference time</td>
+<td>&lt; 50ms (keyword-based, no ML model)</td>
+</tr>
+<tr>
+<td>Accuracy (estimated)</td>
+<td>~85-90% for clear follow-ups</td>
+</tr>
+<tr>
+<td>False positive rate</td>
+<td>Higher for vague queries like “tell me more”</td>
+</tr>
+<tr>
+<td>Fallback</td>
+<td>Defaults to “new_topic” when uncertain</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="node-2-continued-tal-topic-anchor-layer">4.5 Node 2 (continued): TAL — Topic Anchor Layer</h2>
+<h3 id="purpose-1">Purpose</h3>
+<p>TAL maintains <strong>topic continuity</strong> across conversation turns. When a student asks about “neural networks” and then asks “how does backpropagation work?”, TAL ensures the RAG retrieval is still scoped to neural networks content.</p>
+<h3 id="source-backendai-serviceappservicestopic_anchor_service.py-16248-bytes">Source: <code>backend/ai-service/app/services/topic_anchor_service.py</code> (16,248 bytes)</h3>
+<h3 id="anchor-structure">Anchor Structure</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;topic&quot;</span>: <span class="st">&quot;Neural Networks&quot;</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;keywords&quot;</span>: [<span class="st">&quot;neural&quot;</span>, <span class="st">&quot;network&quot;</span>, <span class="st">&quot;neuron&quot;</span>, <span class="st">&quot;layer&quot;</span>, <span class="st">&quot;activation&quot;</span>],</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;scope&quot;</span>: <span class="st">&quot;classroom_materials&quot;</span>,  <span class="co"># or &quot;web_content&quot;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;created_at&quot;</span>: <span class="st">&quot;2026-02-27T10:30:00Z&quot;</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;turn_count&quot;</span>: <span class="dv">3</span>  <span class="co"># Number of turns on this topic</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="tal-operations">TAL Operations</h3>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 32%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Trigger</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Create Anchor</strong></td>
+<td>New topic detected by ABCR</td>
+<td>Extracts topic and keywords from query using LLM</td>
+</tr>
+<tr>
+<td><strong>Maintain Anchor</strong></td>
+<td>Follow-up detected</td>
+<td>Keeps current anchor, increments turn count</td>
+</tr>
+<tr>
+<td><strong>Refresh Anchor</strong></td>
+<td>Keywords become stale</td>
+<td>Re-extracts keywords with accumulated context</td>
+</tr>
+<tr>
+<td><strong>Destroy Anchor</strong></td>
+<td>Explicit topic change or session end</td>
+<td>Clears anchor state</td>
+</tr>
+</tbody>
+</table>
+<h3 id="keyword-extraction">Keyword Extraction</h3>
+<p>TAL uses the LLM to extract topic keywords:</p>
+<pre><code>Prompt: &quot;Extract the main topic and 5-10 relevant keywords 
+         from this student query: &#39;{query}&#39;&quot;
+
+Response: {
+    &quot;topic&quot;: &quot;Backpropagation in Neural Networks&quot;,
+    &quot;keywords&quot;: [&quot;backpropagation&quot;, &quot;gradient&quot;, &quot;chain rule&quot;, 
+                 &quot;loss function&quot;, &quot;weight update&quot;, &quot;neural network&quot;]
+}</code></pre>
+<hr />
+<h2 id="node-3-rag-retrieval-with-mcp-retrieve_with_mcp">4.6 Node 3: RAG Retrieval with MCP (<code>retrieve_with_mcp</code>)</h2>
+<h3 id="purpose-2">Purpose</h3>
+<p>This node performs semantic search against Qdrant and then applies MCP isolation rules to filter the results based on the active context.</p>
+<h3 id="two-phase-process">Two-Phase Process</h3>
+<p><strong>Phase 1: Vector Retrieval</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve raw chunks from Qdrant</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>raw_chunks <span class="op">=</span> <span class="cf">await</span> qdrant_service.search(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    query<span class="op">=</span>state[<span class="st">&quot;query&quot;</span>],</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    collection<span class="op">=</span>classroom_collection,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    limit<span class="op">=</span>settings.TOP_K_RESULTS,  <span class="co"># 8</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    score_threshold<span class="op">=</span>settings.SIMILARITY_THRESHOLD  <span class="co"># 0.5</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>The retrieval uses: - <code>sentence-transformers/all-mpnet-base-v2</code> for query embedding (768 dimensions) - Cosine similarity scoring in Qdrant - Top-K=8 results with minimum similarity threshold of 0.5</p>
+<p><strong>Phase 2: MCP Filtering</strong></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply MCP context isolation</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>mcp_chunks <span class="op">=</span> []</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>web_filtered <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> chunk <span class="kw">in</span> raw_chunks:</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    source_type <span class="op">=</span> chunk.get(<span class="st">&quot;metadata&quot;</span>, {}).get(<span class="st">&quot;source_type&quot;</span>, <span class="st">&quot;unknown&quot;</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> state[<span class="st">&quot;anchor_topic&quot;</span>] <span class="kw">and</span> state[<span class="st">&quot;classroom_id&quot;</span>]:</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Active classroom anchor — filter web content</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> source_type <span class="op">==</span> <span class="st">&quot;web_content&quot;</span>:</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>            web_filtered <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    mcp_chunks.append(chunk)</span></code></pre></div>
+<h3 id="mcp-filtering-rules">MCP Filtering Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Web Content</th>
+<th>Classroom Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active classroom + anchor topic</td>
+<td><strong>BLOCKED</strong></td>
+<td>Allowed</td>
+</tr>
+<tr>
+<td>Active classroom + no anchor</td>
+<td>Allowed (lower priority)</td>
+<td>Allowed</td>
+</tr>
+<tr>
+<td>No classroom context</td>
+<td>Allowed</td>
+<td>Allowed</td>
+</tr>
+<tr>
+<td>Explicit web research request</td>
+<td>Allowed</td>
+<td>Allowed</td>
+</tr>
+</tbody>
+</table>
+<h3 id="source-backendai-serviceappservicesmcp_context.py-15161-bytes">Source: <code>backend/ai-service/app/services/mcp_context.py</code> (15,161 bytes)</h3>
+<p>The MCP context service provides a more sophisticated implementation:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MCPContextManager:</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Memory Context Processor — manages context isolation between</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">    different content sources (classroom vs web).</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Rules:</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co">    1. When a topic anchor is active from classroom materials,</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">       web content is filtered out to prevent confusion</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">    2. When no anchor is active, all sources contribute equally</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Explicit web research requests bypass filtering</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="anchor-boosted-retrieval">Anchor-Boosted Retrieval</h3>
+<p>When a TAL anchor is active, retrieval uses a <strong>boosting strategy</strong>:</p>
+<ol type="1">
+<li>Primary query: Student’s question embedded normally</li>
+<li>Anchor boost: Anchor keywords are appended to the query</li>
+<li>Result ranking: Chunks matching anchor keywords receive a score boost</li>
+</ol>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Effective query with anchor boost</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>effective_query <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>state[<span class="st">&#39;query&#39;</span>]<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="st">&#39; &#39;</span><span class="sc">.</span>join(state[<span class="st">&#39;anchor_keywords&#39;</span>])<span class="sc">}</span><span class="ss">&quot;</span></span></code></pre></div>
+<p>This ensures that retrieval results stay topically coherent even when the student’s follow-up question is vague (e.g., “What about the other type?”).</p>
+<hr />
+<h2 id="node-4-answer-generation-generate_answer">4.7 Node 4: Answer Generation (<code>generate_answer</code>)</h2>
+<h3 id="purpose-3">Purpose</h3>
+<p>The final node constructs a prompt from the filtered chunks and generates an answer using the LLM.</p>
+<h3 id="llm-configuration">LLM Configuration</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 24%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>Mistral-7B-Instruct-v0.2</td>
+<td>Best open-source choice for RAG-grounded educational QA</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>0.3</td>
+<td>Low for factual consistency</td>
+</tr>
+<tr>
+<td>Max tokens</td>
+<td>1024</td>
+<td>Sufficient for detailed explanations</td>
+</tr>
+<tr>
+<td>API</td>
+<td>HuggingFace Inference API</td>
+<td>Free tier, no GPU required locally</td>
+</tr>
+</tbody>
+</table>
+<h3 id="prompt-construction">Prompt Construction</h3>
+<p>The prompt is structured with several components:</p>
+<pre><code>System: You are an AI tutor for academic subjects. Answer questions 
+        based ONLY on the provided context. If the context doesn&#39;t 
+        contain enough information, say so clearly.
+
+Context: [MCP-filtered chunks with source citations]
+
+Topic Anchor: {anchor_topic}
+Session Context: {previous_turn_summaries}
+
+Student Question: {query}
+
+Instructions:
+- Provide clear, educational explanations
+- Reference specific sources with page numbers
+- If this is a follow-up, build on previous answers
+- Use examples where appropriate
+- Indicate confidence level in your answer</code></pre>
+<h3 id="source-attribution">Source Attribution</h3>
+<p>Each answer includes source citations mapped back to the original documents:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sources <span class="op">=</span> [</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;document&quot;</span>: <span class="st">&quot;Introduction to Machine Learning.pdf&quot;</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;page&quot;</span>: <span class="dv">42</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;chunk_text&quot;</span>: <span class="st">&quot;Neural networks consist of...&quot;</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;similarity_score&quot;</span>: <span class="fl">0.87</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;source_type&quot;</span>: <span class="st">&quot;classroom_material&quot;</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<h3 id="learning-enhancement">Learning Enhancement</h3>
+<p>The answer generation node also integrates with the <strong>suggestion engine</strong> and <strong>followup generator</strong>:</p>
+<ul>
+<li><strong>Suggestion Engine</strong> (<code>services/suggestion_engine.py</code>): Generates 3-5 follow-up question suggestions based on the answer and topic</li>
+<li><strong>Followup Generator</strong> (<code>services/followup_generator.py</code>): Creates contextual follow-up prompts to encourage deeper learning</li>
+</ul>
+<hr />
+<h2 id="session-management">4.8 Session Management</h2>
+<h3 id="in-memory-session-store">In-Memory Session Store</h3>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>_session_states: Dict[<span class="bu">str</span>, Dict] <span class="op">=</span> {}</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_session_state(session_id: <span class="bu">str</span>):</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> session_id <span class="kw">not</span> <span class="kw">in</span> _session_states:</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        _session_states[session_id] <span class="op">=</span> {</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_topic&quot;</span>: <span class="st">&quot;&quot;</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;anchor_keywords&quot;</span>: [],</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;turn_count&quot;</span>: <span class="dv">0</span>,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;turn_texts&quot;</span>: [],</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;last_abcr_decision&quot;</span>: <span class="st">&quot;&quot;</span>,</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _session_states[session_id]</span></code></pre></div>
+<blockquote>
+<p><strong>Production Note</strong>: The comment in the source code acknowledges this should be Redis/DB-backed in production. The in-memory store works for single-instance deployment but will lose state on service restart.</p>
+</blockquote>
+<h3 id="session-intelligence">Session Intelligence</h3>
+<p>Beyond basic session state, the platform includes a sophisticated session intelligence service:</p>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/session_intelligence.py</code> (12,986 bytes)</p>
+<p>This service tracks: - <strong>Session quality metrics</strong>: Answer confidence over time - <strong>Topic depth</strong>: How deep the student goes into a subject - <strong>Learning velocity</strong>: Questions per time unit - <strong>Engagement signals</strong>: Follow-up rate, suggestion click rate</p>
+<h3 id="session-cache">Session Cache</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/session_cache.py</code> (8,740 bytes)</p>
+<p>The session cache provides Redis-backed storage for: - Recent query-response pairs (for ABCR context) - Active topic anchor state - Session telemetry data</p>
+<hr />
+<h2 id="tutoragent-class-interface">4.9 TutorAgent Class Interface</h2>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TutorAgent:</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">    LangGraph-based Tutor Agent with TAL/ABCR/MCP Integration</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Features:</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co">    - ABCR for follow-up detection</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">    - TAL for topic anchoring</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co">    - MCP for web isolation</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co">    - Hugging Face LLM (Mistral-7B)</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.graph <span class="op">=</span> build_tutor_graph()</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> execute(<span class="va">self</span>, input_data: Dict[<span class="bu">str</span>, Any]):</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="co">        Process a student question</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="co">        Args:</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="co">            input_data: {</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="co">                query: str,</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="co">                user_id: str,</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="co">                session_id: str (optional),</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="co">                classroom_id: str (optional),</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a><span class="co">                clicked_suggestion: bool (optional)</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="co">            }</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns: {</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a><span class="co">            answer: str,</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a><span class="co">            sources: List[Dict],</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a><span class="co">            anchor_topic: str,</span></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a><span class="co">            is_followup: bool,</span></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a><span class="co">            abcr_confidence: float,</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a><span class="co">            context_sources: List[str],</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a><span class="co">            blocked: bool,</span></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a><span class="co">            confirm_new_topic: bool</span></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a><span class="co">        }</span></span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="abcr-cache-layer">4.10 ABCR Cache Layer</h2>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/abcr_cache.py</code> (8,153 bytes)</p>
+<p>To avoid redundant ABCR classifications, a cache layer stores recent decisions:</p>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 30%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Cache Key</th>
+<th>Value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abcr:{session_id}:{query_hash}</code></td>
+<td><code>{decision, confidence}</code></td>
+<td>Session duration</td>
+</tr>
+</tbody>
+</table>
+<p>This is particularly useful when: - The same query is retried (network issues) - The frontend refreshes and replays the last message - Multiple tabs are open on the same session</p>
+<hr />
+<h2 id="end-to-end-request-flow">4.11 End-to-End Request Flow</h2>
+<pre><code>1. Student types: &quot;How does backpropagation work?&quot;
+   ↓
+2. Frontend → POST /api/tutor/chat
+   ↓
+3. AI Service → TutorAgent.execute({
+       query: &quot;How does backpropagation work?&quot;,
+       user_id: &quot;u123&quot;,
+       session_id: &quot;s456&quot;,
+       classroom_id: &quot;c789&quot;
+   })
+   ↓
+4. Node: moderate_query
+   → bart-large-mnli classifies as &quot;academic question&quot; (0.94)
+   → PASS
+   ↓
+5. Node: context_routing
+   → ABCR: No previous turns → &quot;new_topic&quot; (confidence: 0.95)
+   → TAL: Extract anchor → {topic: &quot;Backpropagation&quot;, keywords: [...]}
+   → Session state updated
+   ↓
+6. Node: retrieve_with_mcp
+   → Embed query + anchor keywords via all-mpnet-base-v2
+   → Qdrant search → 8 chunks retrieved
+   → MCP filter: 2 web chunks removed (classroom_id active)
+   → 6 chunks passed to generation
+   ↓
+7. Node: generate_answer
+   → Build prompt: system + context (6 chunks) + session + query
+   → Mistral-7B inference via HuggingFace API
+   → Answer: &quot;Backpropagation is an algorithm for training neural networks...&quot;
+   → Sources: [{document: &quot;ML_Textbook.pdf&quot;, page: 156, score: 0.91}]
+   → Suggestions: [&quot;What&#39;s the chain rule?&quot;, &quot;How are weights updated?&quot;, ...]
+   ↓
+8. Response → Frontend
+   → {answer, sources, anchor_topic, is_followup: false, suggestions}</code></pre>
+<h4 id="follow-up-query-same-session">Follow-up Query (same session):</h4>
+<pre><code>1. Student types: &quot;What about the chain rule?&quot;
+   ↓
+2-3. Same routing...
+   ↓
+4. moderate_query → PASS
+   ↓
+5. context_routing
+   → ABCR: &quot;chain rule&quot; relates to &quot;Backpropagation&quot; → &quot;follow_up&quot; (0.88)
+   → TAL: Maintain anchor &quot;Backpropagation&quot;, add &quot;chain rule&quot; to keywords
+   ↓
+6. retrieve_with_mcp
+   → Query: &quot;What about the chain rule? backpropagation gradient chain rule...&quot;
+   → Anchor-boosted retrieval → more relevant chunks about calculus in backprop
+   → MCP: Web chunks filtered
+   ↓
+7. generate_answer
+   → Previous turn context included in prompt
+   → Answer builds on previous explanation</code></pre>
+<hr />
+
+</body>
+</html>

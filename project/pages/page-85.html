@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 85: OCR Multi-Backend Pipeline</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-84.html">&larr; Previous</a> <a href="page-86.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-85-ocr-multi-backend-pipeline">Page 85: OCR Multi-Backend Pipeline</h1>
+<blockquote>
+<p>Full document digitization pipeline: image enhancement → layout detection → multi-backend OCR (TrOCR, SageMaker, EasyOCR) → searchable PDF generation.</p>
+</blockquote>
+<hr />
+<h2 id="pipeline-architecture">85.1 Pipeline Architecture</h2>
+<pre class="mermaid">flowchart TB
+    INPUT["📄 Input Image/PDF"] --> IE["ImageEnhancer<br/>19KB — contrast, denoise,<br/>deskew, binarize"]
+    IE --> LS["LayoutService<br/>12KB — region detection,<br/>column analysis"]
+    LS --> OA["OCR Adapter<br/>(config-driven)"]
+
+    OA -->|"OCR_ADAPTER=trocr"| TR["TrOCRAdapter<br/>microsoft/trocr-base-handwritten<br/>Best for handwriting"]
+    OA -->|"OCR_ADAPTER=sagemaker"| SM["SageMakerAdapter<br/>Nanonets-OCR2-3B<br/>High-quality printed"]
+    OA -->|"OCR_ADAPTER=easyocr"| EO["EasyOCRAdapter<br/>80+ languages<br/>Multi-language fallback"]
+
+    TR & SM & EO --> HO["HybridOCRService<br/>Tesseract layout + TrOCR line-by-line"]
+    HO --> SP["SearchablePDF<br/>6.7KB — overlay text on scanned pages"]
+</pre>
+<h3 id="source-files-2">Source Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>services/image_enhancer.py</code></td>
+<td>19KB</td>
+<td>Image preprocessing</td>
+</tr>
+<tr>
+<td><code>services/layout_service.py</code></td>
+<td>12KB</td>
+<td>Document layout analysis</td>
+</tr>
+<tr>
+<td><code>services/ocr_adapter.py</code></td>
+<td>17KB</td>
+<td>Abstract adapter + 3 backends</td>
+</tr>
+<tr>
+<td><code>services/hybrid_ocr.py</code></td>
+<td>12KB</td>
+<td>Hybrid Tesseract+TrOCR</td>
+</tr>
+<tr>
+<td><code>services/ocr_service.py</code></td>
+<td>16KB</td>
+<td>High-level OCR orchestration</td>
+</tr>
+<tr>
+<td><code>services/nanonets_ocr.py</code></td>
+<td>9KB</td>
+<td>Nanonets API integration</td>
+</tr>
+<tr>
+<td><code>services/sagemaker_ocr.py</code></td>
+<td>13KB</td>
+<td>AWS SageMaker endpoint</td>
+</tr>
+<tr>
+<td><code>services/searchable_pdf.py</code></td>
+<td>7KB</td>
+<td>Searchable PDF generation</td>
+</tr>
+<tr>
+<td><code>services/latex_converter.py</code></td>
+<td>12KB</td>
+<td>LaTeX ↔︎ text conversion</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ocr-adapter-pattern-1">85.2 OCR Adapter Pattern</h2>
+<h3 id="abstract-base">Abstract Base</h3>
+<div class="sourceCode" id="cb551"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb551-1"><a href="#cb551-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OCRAdapter(ABC):</span>
+<span id="cb551-2"><a href="#cb551-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb551-3"><a href="#cb551-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> extract_lines(<span class="va">self</span>, image_bytes: <span class="bu">bytes</span>) <span class="op">-&gt;</span> OCRPageResult: ...</span>
+<span id="cb551-4"><a href="#cb551-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb551-5"><a href="#cb551-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb551-6"><a href="#cb551-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_model_name(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>: ...</span>
+<span id="cb551-7"><a href="#cb551-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb551-8"><a href="#cb551-8" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb551-9"><a href="#cb551-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OCRPageResult:</span>
+<span id="cb551-10"><a href="#cb551-10" aria-hidden="true" tabindex="-1"></a>    lines: List[OCRLine]         <span class="co"># Individual text lines</span></span>
+<span id="cb551-11"><a href="#cb551-11" aria-hidden="true" tabindex="-1"></a>    full_text: <span class="bu">str</span>               <span class="co"># Concatenated text</span></span>
+<span id="cb551-12"><a href="#cb551-12" aria-hidden="true" tabindex="-1"></a>    avg_confidence: <span class="bu">float</span>        <span class="co"># 0-1</span></span>
+<span id="cb551-13"><a href="#cb551-13" aria-hidden="true" tabindex="-1"></a>    model_used: <span class="bu">str</span>              <span class="co"># e.g. &quot;trocr-base-handwritten&quot;</span></span>
+<span id="cb551-14"><a href="#cb551-14" aria-hidden="true" tabindex="-1"></a>    processing_time_ms: <span class="bu">int</span></span></code></pre></div>
+<h3 id="backend-implementations">Backend Implementations</h3>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 20%" />
+<col style="width: 29%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Adapter</th>
+<th>Model</th>
+<th>Best For</th>
+<th>Config</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TrOCRAdapter</code></td>
+<td><code>microsoft/trocr-base-handwritten</code></td>
+<td>Handwritten notes</td>
+<td><code>OCR_ADAPTER=trocr</code></td>
+</tr>
+<tr>
+<td><code>SageMakerAdapter</code></td>
+<td><code>Nanonets-OCR2-3B</code></td>
+<td>High-quality printed</td>
+<td><code>OCR_ADAPTER=sagemaker</code></td>
+</tr>
+<tr>
+<td><code>EasyOCRAdapter</code></td>
+<td>EasyOCR (80+ langs)</td>
+<td>Multi-language</td>
+<td><code>OCR_ADAPTER=easyocr</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="factory-function">Factory Function</h3>
+<div class="sourceCode" id="cb552"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb552-1"><a href="#cb552-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_ocr_adapter(config: <span class="bu">dict</span> <span class="op">=</span> <span class="va">None</span>) <span class="op">-&gt;</span> OCRAdapter:</span>
+<span id="cb552-2"><a href="#cb552-2" aria-hidden="true" tabindex="-1"></a>    adapter_type <span class="op">=</span> config.get(<span class="st">&quot;OCR_ADAPTER&quot;</span>, os.getenv(<span class="st">&quot;OCR_ADAPTER_TYPE&quot;</span>, <span class="st">&quot;trocr&quot;</span>))</span>
+<span id="cb552-3"><a href="#cb552-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> adapter_type <span class="op">==</span> <span class="st">&quot;sagemaker&quot;</span>:</span>
+<span id="cb552-4"><a href="#cb552-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> SageMakerAdapter()</span>
+<span id="cb552-5"><a href="#cb552-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> adapter_type <span class="op">==</span> <span class="st">&quot;easyocr&quot;</span>:</span>
+<span id="cb552-6"><a href="#cb552-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> EasyOCRAdapter(languages<span class="op">=</span>config.get(<span class="st">&quot;EASYOCR_LANGUAGES&quot;</span>, <span class="st">&quot;en&quot;</span>).split(<span class="st">&quot;,&quot;</span>))</span>
+<span id="cb552-7"><a href="#cb552-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb552-8"><a href="#cb552-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> TrOCRAdapter(model_size<span class="op">=</span>config.get(<span class="st">&quot;TROCR_MODEL_SIZE&quot;</span>, <span class="st">&quot;base&quot;</span>))</span></code></pre></div>
+<hr />
+<h2 id="trocr-line-detection">85.3 TrOCR Line Detection</h2>
+<p>Uses horizontal projection profile to detect text lines, then recognizes each line individually:</p>
+<div class="sourceCode" id="cb553"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb553-1"><a href="#cb553-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TrOCRAdapter:</span>
+<span id="cb553-2"><a href="#cb553-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _detect_text_lines(<span class="va">self</span>, image_np) <span class="op">-&gt;</span> List[Tuple]:</span>
+<span id="cb553-3"><a href="#cb553-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Horizontal projection → find gaps → segment lines&quot;&quot;&quot;</span></span>
+<span id="cb553-4"><a href="#cb553-4" aria-hidden="true" tabindex="-1"></a>        gray <span class="op">=</span> cv2.cvtColor(image_np, cv2.COLOR_RGB2GRAY)</span>
+<span id="cb553-5"><a href="#cb553-5" aria-hidden="true" tabindex="-1"></a>        _, binary <span class="op">=</span> cv2.threshold(gray, <span class="dv">0</span>, <span class="dv">255</span>, cv2.THRESH_BINARY_INV <span class="op">+</span> cv2.THRESH_OTSU)</span>
+<span id="cb553-6"><a href="#cb553-6" aria-hidden="true" tabindex="-1"></a>        projection <span class="op">=</span> np.<span class="bu">sum</span>(binary, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb553-7"><a href="#cb553-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Find row ranges where projection &gt; threshold → text lines</span></span>
+<span id="cb553-8"><a href="#cb553-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb553-9"><a href="#cb553-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> extract_lines(<span class="va">self</span>, image_bytes: <span class="bu">bytes</span>) <span class="op">-&gt;</span> OCRPageResult:</span>
+<span id="cb553-10"><a href="#cb553-10" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> <span class="va">self</span>._detect_text_lines(image_np)</span>
+<span id="cb553-11"><a href="#cb553-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> line <span class="kw">in</span> lines:</span>
+<span id="cb553-12"><a href="#cb553-12" aria-hidden="true" tabindex="-1"></a>            crop <span class="op">=</span> image[y_start:y_end, x_start:x_end]</span>
+<span id="cb553-13"><a href="#cb553-13" aria-hidden="true" tabindex="-1"></a>            pixel_values <span class="op">=</span> <span class="va">self</span>.processor(crop, return_tensors<span class="op">=</span><span class="st">&quot;pt&quot;</span>).pixel_values</span>
+<span id="cb553-14"><a href="#cb553-14" aria-hidden="true" tabindex="-1"></a>            generated_ids <span class="op">=</span> <span class="va">self</span>.model.generate(pixel_values, output_scores<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb553-15"><a href="#cb553-15" aria-hidden="true" tabindex="-1"></a>            text <span class="op">=</span> <span class="va">self</span>.processor.batch_decode(generated_ids, skip_special_tokens<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<hr />
+<h2 id="hybridocrservice">85.4 HybridOCRService</h2>
+<p>Combines Tesseract for layout analysis with TrOCR for line recognition:</p>
+<div class="sourceCode" id="cb554"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb554-1"><a href="#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HybridOCRService:</span>
+<span id="cb554-2"><a href="#cb554-2" aria-hidden="true" tabindex="-1"></a>    TROCR_MODEL <span class="op">=</span> <span class="st">&quot;microsoft/trocr-base-handwritten&quot;</span></span>
+<span id="cb554-3"><a href="#cb554-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb554-4"><a href="#cb554-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> extract_text(<span class="va">self</span>, image, use_hybrid<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb554-5"><a href="#cb554-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb554-6"><a href="#cb554-6" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns: (full_text, avg_confidence, lines)</span></span>
+<span id="cb554-7"><a href="#cb554-7" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb554-8"><a href="#cb554-8" aria-hidden="true" tabindex="-1"></a><span class="co">        Hybrid approach:</span></span>
+<span id="cb554-9"><a href="#cb554-9" aria-hidden="true" tabindex="-1"></a><span class="co">        1. Tesseract _detect_lines() → bounding boxes</span></span>
+<span id="cb554-10"><a href="#cb554-10" aria-hidden="true" tabindex="-1"></a><span class="co">        2. TrOCR _recognize_lines_trocr() → text per line</span></span>
+<span id="cb554-11"><a href="#cb554-11" aria-hidden="true" tabindex="-1"></a><span class="co">        3. Fallback: Tesseract full-page if TrOCR fails</span></span>
+<span id="cb554-12"><a href="#cb554-12" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb554-13"><a href="#cb554-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb554-14"><a href="#cb554-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _detect_lines(<span class="va">self</span>, img) <span class="op">-&gt;</span> List[TextLine]:</span>
+<span id="cb554-15"><a href="#cb554-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Tesseract layout analysis with pytesseract.image_to_data()&quot;&quot;&quot;</span></span>
+<span id="cb554-16"><a href="#cb554-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb554-17"><a href="#cb554-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _recognize_lines_trocr(<span class="va">self</span>, img, lines) <span class="op">-&gt;</span> List[TextLine]:</span>
+<span id="cb554-18"><a href="#cb554-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Parallel TrOCR recognition via HuggingFace API&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="environment-configuration-2">85.5 Environment Configuration</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 28%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OCR_ADAPTER_TYPE</code></td>
+<td><code>trocr</code></td>
+<td>Active backend</td>
+</tr>
+<tr>
+<td><code>TROCR_MODEL_SIZE</code></td>
+<td><code>base</code></td>
+<td><code>base</code> or <code>large</code></td>
+</tr>
+<tr>
+<td><code>HUGGINGFACE_API_KEY</code></td>
+<td>—</td>
+<td>For HF Inference API</td>
+</tr>
+<tr>
+<td><code>SAGEMAKER_OCR_ENABLED</code></td>
+<td><code>false</code></td>
+<td>Enable SageMaker</td>
+</tr>
+<tr>
+<td><code>SAGEMAKER_OCR_ENDPOINT</code></td>
+<td><code>ensurestudy-ocr-serverless</code></td>
+<td>AWS endpoint</td>
+</tr>
+<tr>
+<td><code>EASYOCR_LANGUAGES</code></td>
+<td><code>en</code></td>
+<td>Comma-separated codes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

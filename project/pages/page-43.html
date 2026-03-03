@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 43: Spaced Repetition &amp;amp; Adaptive Learning</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-42.html">&larr; Previous</a> <a href="page-44.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-43-spaced-repetition-adaptive-learning">Page 43: Spaced Repetition &amp; Adaptive Learning</h1>
+<hr />
+<h2 id="overview-33">43.1 Overview</h2>
+<p>ensureStudy implements the <strong>SM-2 (SuperMemo 2) algorithm</strong> with VARK learning style adaptation, generating personalized study sessions with optimal review intervals. The system tracks per-topic mastery decay and schedules reviews to maximize long-term retention.</p>
+<h3 id="source-backendai-serviceappservicesspaced_repetition.py-548-lines">Source: <code>backend/ai-service/app/services/spaced_repetition.py</code> (548 lines)</h3>
+<hr />
+<h2 id="sm-2-algorithm">43.2 SM-2 Algorithm</h2>
+<h3 id="core-formula">Core Formula</h3>
+<pre><code>if quality &gt;= 3 (correct response):
+    if repetitions == 0:  interval = 1 day
+    elif repetitions == 1: interval = 6 days
+    else: interval = interval × easiness_factor
+    
+    repetitions += 1
+else (incorrect response):
+    repetitions = 0
+    interval = 1 day
+
+# Easiness Factor update (EF must stay ≥ 1.3)
+EF&#39; = EF + (0.1 - (5 - quality) × (0.08 + (5 - quality) × 0.02))</code></pre>
+<h3 id="quality-scale-reviewquality">Quality Scale (<code>ReviewQuality</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Label</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>BLACKOUT</td>
+<td>Complete failure, no recall</td>
+</tr>
+<tr>
+<td>1</td>
+<td>INCORRECT</td>
+<td>Wrong answer after effort</td>
+</tr>
+<tr>
+<td>2</td>
+<td>HARD</td>
+<td>Correct but with great difficulty</td>
+</tr>
+<tr>
+<td>3</td>
+<td>MEDIUM</td>
+<td>Correct after some thought</td>
+</tr>
+<tr>
+<td>4</td>
+<td>EASY</td>
+<td>Correct with little effort</td>
+</tr>
+<tr>
+<td>5</td>
+<td>PERFECT</td>
+<td>Instant, effortless recall</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-models-1">43.3 Data Models</h2>
+<h3 id="reviewitem">ReviewItem</h3>
+<div class="sourceCode" id="cb264"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb264-1"><a href="#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb264-2"><a href="#cb264-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ReviewItem:</span>
+<span id="cb264-3"><a href="#cb264-3" aria-hidden="true" tabindex="-1"></a>    topic_id: <span class="bu">str</span></span>
+<span id="cb264-4"><a href="#cb264-4" aria-hidden="true" tabindex="-1"></a>    topic_name: <span class="bu">str</span></span>
+<span id="cb264-5"><a href="#cb264-5" aria-hidden="true" tabindex="-1"></a>    easiness_factor: <span class="bu">float</span> <span class="op">=</span> <span class="fl">2.5</span>    <span class="co"># Default EF</span></span>
+<span id="cb264-6"><a href="#cb264-6" aria-hidden="true" tabindex="-1"></a>    interval: <span class="bu">int</span> <span class="op">=</span> <span class="dv">1</span>               <span class="co"># Days until next review</span></span>
+<span id="cb264-7"><a href="#cb264-7" aria-hidden="true" tabindex="-1"></a>    repetitions: <span class="bu">int</span> <span class="op">=</span> <span class="dv">0</span>            <span class="co"># Successful consecutive reviews</span></span>
+<span id="cb264-8"><a href="#cb264-8" aria-hidden="true" tabindex="-1"></a>    next_review: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;&quot;</span>           <span class="co"># ISO date string</span></span>
+<span id="cb264-9"><a href="#cb264-9" aria-hidden="true" tabindex="-1"></a>    last_review: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;&quot;</span>           <span class="co"># ISO date string</span></span>
+<span id="cb264-10"><a href="#cb264-10" aria-hidden="true" tabindex="-1"></a>    mastery: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span>            <span class="co"># 0-100 mastery score</span></span></code></pre></div>
+<h3 id="learningprofile">LearningProfile</h3>
+<div class="sourceCode" id="cb265"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb265-1"><a href="#cb265-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb265-2"><a href="#cb265-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LearningProfile:</span>
+<span id="cb265-3"><a href="#cb265-3" aria-hidden="true" tabindex="-1"></a>    user_id: <span class="bu">str</span></span>
+<span id="cb265-4"><a href="#cb265-4" aria-hidden="true" tabindex="-1"></a>    primary_style: LearningStyle <span class="op">=</span> LearningStyle.VISUAL</span>
+<span id="cb265-5"><a href="#cb265-5" aria-hidden="true" tabindex="-1"></a>    secondary_style: Optional[LearningStyle] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb265-6"><a href="#cb265-6" aria-hidden="true" tabindex="-1"></a>    preferred_session_minutes: <span class="bu">int</span> <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb265-7"><a href="#cb265-7" aria-hidden="true" tabindex="-1"></a>    best_study_time: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;morning&quot;</span></span>
+<span id="cb265-8"><a href="#cb265-8" aria-hidden="true" tabindex="-1"></a>    retention_strength: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span>      <span class="co"># Multiplier for intervals</span></span>
+<span id="cb265-9"><a href="#cb265-9" aria-hidden="true" tabindex="-1"></a>    topics_per_session: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb265-10"><a href="#cb265-10" aria-hidden="true" tabindex="-1"></a>    review_items: Dict[<span class="bu">str</span>, ReviewItem]  <span class="co"># topic_id → ReviewItem</span></span></code></pre></div>
+<hr />
+<h2 id="vark-learning-styles">43.4 VARK Learning Styles</h2>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 33%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th>Style</th>
+<th>Description</th>
+<th>Preferred Resources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Visual</strong></td>
+<td>Learns through seeing</td>
+<td>Diagrams, flowcharts, videos, infographics</td>
+</tr>
+<tr>
+<td><strong>Auditory</strong></td>
+<td>Learns through hearing</td>
+<td>Podcasts, lectures, discussions</td>
+</tr>
+<tr>
+<td><strong>Reading</strong></td>
+<td>Learns through text</td>
+<td>Articles, notes, documentation</td>
+</tr>
+<tr>
+<td><strong>Kinesthetic</strong></td>
+<td>Learns through doing</td>
+<td>Exercises, labs, interactive demos</td>
+</tr>
+</tbody>
+</table>
+<h3 id="learning-style-detection">Learning Style Detection</h3>
+<div class="sourceCode" id="cb266"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb266-1"><a href="#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analyze_learning_style_quiz(<span class="va">self</span>, responses: Dict[<span class="bu">str</span>, <span class="bu">str</span>]):</span>
+<span id="cb266-2"><a href="#cb266-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb266-3"><a href="#cb266-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Analyze VARK quiz responses to determine primary/secondary styles.</span></span>
+<span id="cb266-4"><a href="#cb266-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb266-5"><a href="#cb266-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: Tuple of (primary_style, secondary_style or None)</span></span>
+<span id="cb266-6"><a href="#cb266-6" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="key-functions">43.5 Key Functions</h2>
+<h3 id="calculate_next_review"><code>calculate_next_review()</code></h3>
+<div class="sourceCode" id="cb267"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb267-1"><a href="#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_next_review(<span class="va">self</span>, item: ReviewItem, quality: ReviewQuality):</span>
+<span id="cb267-2"><a href="#cb267-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb267-3"><a href="#cb267-3" aria-hidden="true" tabindex="-1"></a><span class="co">    SM-2 core algorithm. Updates:</span></span>
+<span id="cb267-4"><a href="#cb267-4" aria-hidden="true" tabindex="-1"></a><span class="co">    - easiness_factor: min 1.3, adjusted by quality</span></span>
+<span id="cb267-5"><a href="#cb267-5" aria-hidden="true" tabindex="-1"></a><span class="co">    - interval: 1, 6, or interval × EF</span></span>
+<span id="cb267-6"><a href="#cb267-6" aria-hidden="true" tabindex="-1"></a><span class="co">    - repetitions: reset on failure, increment on success</span></span>
+<span id="cb267-7"><a href="#cb267-7" aria-hidden="true" tabindex="-1"></a><span class="co">    - next_review: today + interval days</span></span>
+<span id="cb267-8"><a href="#cb267-8" aria-hidden="true" tabindex="-1"></a><span class="co">    - mastery: quality × 20 (maps 0-5 → 0-100)</span></span>
+<span id="cb267-9"><a href="#cb267-9" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="get_due_reviews"><code>get_due_reviews()</code></h3>
+<div class="sourceCode" id="cb268"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb268-1"><a href="#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_due_reviews(<span class="va">self</span>, user_id: <span class="bu">str</span>, limit: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10</span>):</span>
+<span id="cb268-2"><a href="#cb268-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb268-3"><a href="#cb268-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Get topics due for review today or overdue.</span></span>
+<span id="cb268-4"><a href="#cb268-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb268-5"><a href="#cb268-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Sorted by urgency:</span></span>
+<span id="cb268-6"><a href="#cb268-6" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Overdue items (most overdue first)</span></span>
+<span id="cb268-7"><a href="#cb268-7" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Due today</span></span>
+<span id="cb268-8"><a href="#cb268-8" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Low mastery items</span></span>
+<span id="cb268-9"><a href="#cb268-9" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="get_optimal_study_session"><code>get_optimal_study_session()</code></h3>
+<div class="sourceCode" id="cb269"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb269-1"><a href="#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_optimal_study_session(<span class="va">self</span>, user_id: <span class="bu">str</span>, available_minutes: <span class="bu">int</span> <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb269-2"><a href="#cb269-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb269-3"><a href="#cb269-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Generate personalized study session:</span></span>
+<span id="cb269-4"><a href="#cb269-4" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Get due reviews (highest priority)</span></span>
+<span id="cb269-5"><a href="#cb269-5" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Add new topics if time permits</span></span>
+<span id="cb269-6"><a href="#cb269-6" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Suggest resources based on learning style</span></span>
+<span id="cb269-7"><a href="#cb269-7" aria-hidden="true" tabindex="-1"></a><span class="co">    4. Respect topics_per_session limit</span></span>
+<span id="cb269-8"><a href="#cb269-8" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb269-9"><a href="#cb269-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb269-10"><a href="#cb269-10" aria-hidden="true" tabindex="-1"></a><span class="co">    {</span></span>
+<span id="cb269-11"><a href="#cb269-11" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;review_topics&quot;: [...],       # Topics to review</span></span>
+<span id="cb269-12"><a href="#cb269-12" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;new_topics&quot;: [...],          # New topics to learn</span></span>
+<span id="cb269-13"><a href="#cb269-13" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;resources&quot;: [...],           # Learning style resources</span></span>
+<span id="cb269-14"><a href="#cb269-14" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;estimated_minutes&quot;: 30,      # Session duration</span></span>
+<span id="cb269-15"><a href="#cb269-15" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;session_type&quot;: &quot;mixed&quot;       # review, new, or mixed</span></span>
+<span id="cb269-16"><a href="#cb269-16" aria-hidden="true" tabindex="-1"></a><span class="co">    }</span></span>
+<span id="cb269-17"><a href="#cb269-17" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="record_review"><code>record_review()</code></h3>
+<div class="sourceCode" id="cb270"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb270-1"><a href="#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> record_review(<span class="va">self</span>, user_id, topic_id, topic_name, quality: <span class="bu">int</span>):</span>
+<span id="cb270-2"><a href="#cb270-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb270-3"><a href="#cb270-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Record a completed review.</span></span>
+<span id="cb270-4"><a href="#cb270-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb270-5"><a href="#cb270-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Steps:</span></span>
+<span id="cb270-6"><a href="#cb270-6" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Get or create ReviewItem for this topic</span></span>
+<span id="cb270-7"><a href="#cb270-7" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Apply SM-2 algorithm</span></span>
+<span id="cb270-8"><a href="#cb270-8" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Update mastery score</span></span>
+<span id="cb270-9"><a href="#cb270-9" aria-hidden="true" tabindex="-1"></a><span class="co">    4. Save to profile</span></span>
+<span id="cb270-10"><a href="#cb270-10" aria-hidden="true" tabindex="-1"></a><span class="co">    5. Return updated ReviewItem with next review date</span></span>
+<span id="cb270-11"><a href="#cb270-11" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="resource-suggestion-engine">43.6 Resource Suggestion Engine</h2>
+<div class="sourceCode" id="cb271"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb271-1"><a href="#cb271-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb271-2"><a href="#cb271-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ResourceSuggestion:</span>
+<span id="cb271-3"><a href="#cb271-3" aria-hidden="true" tabindex="-1"></a>    topic: <span class="bu">str</span></span>
+<span id="cb271-4"><a href="#cb271-4" aria-hidden="true" tabindex="-1"></a>    resource_type: <span class="bu">str</span>       <span class="co"># &quot;video&quot;, &quot;article&quot;, &quot;exercise&quot;, etc.</span></span>
+<span id="cb271-5"><a href="#cb271-5" aria-hidden="true" tabindex="-1"></a>    title: <span class="bu">str</span></span>
+<span id="cb271-6"><a href="#cb271-6" aria-hidden="true" tabindex="-1"></a>    url: <span class="bu">str</span></span>
+<span id="cb271-7"><a href="#cb271-7" aria-hidden="true" tabindex="-1"></a>    description: <span class="bu">str</span></span>
+<span id="cb271-8"><a href="#cb271-8" aria-hidden="true" tabindex="-1"></a>    duration_min: <span class="bu">int</span></span>
+<span id="cb271-9"><a href="#cb271-9" aria-hidden="true" tabindex="-1"></a>    difficulty: <span class="bu">str</span></span>
+<span id="cb271-10"><a href="#cb271-10" aria-hidden="true" tabindex="-1"></a>    learning_styles: List[<span class="bu">str</span>]   <span class="co"># Which styles this suits</span></span>
+<span id="cb271-11"><a href="#cb271-11" aria-hidden="true" tabindex="-1"></a>    relevance_score: <span class="bu">float</span>       <span class="co"># 0-1 match score</span></span></code></pre></div>
+<p>Resources are filtered and ranked based on the student’s VARK profile:</p>
+<pre><code>Visual student → Prioritize: videos, diagrams, flowcharts
+Auditory student → Prioritize: audio lectures, podcasts
+Reading student → Prioritize: articles, documentation
+Kinesthetic student → Prioritize: coding exercises, labs</code></pre>
+<hr />
+<h2 id="integration-with-other-systems">43.7 Integration with Other Systems</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Integration with Other Systems "]
+        direction TB
+        N0["Curriculum Agent     SpacedRepetition     Progress"]
+        N1["Topic list"]
+        N2["Schedule"]
+        N3["Update mastery"]
+        N4["Assessment"]
+        N5["results"]
+        N6["Due reviews  Frontend"]
+        N7["(dashboard)"]
+    end
+</pre>
+<hr />
+
+</body>
+</html>

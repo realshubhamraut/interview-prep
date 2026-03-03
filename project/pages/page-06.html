@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 6: Research Agent &amp;amp; Web Enrichment Agent</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-05.html">&larr; Previous</a> <a href="page-07.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-6-research-agent-web-enrichment-agent">Page 6: Research Agent &amp; Web Enrichment Agent</h1>
+<hr />
+<h2 id="research-agent-overview">6.1 Research Agent Overview</h2>
+<p>The Research Agent is responsible for <strong>discovering and indexing educational content</strong> from external sources. It operates as a LangGraph-based pipeline that searches the web, finds PDFs, discovers YouTube videos, and indexes discovered content into Qdrant for future RAG retrieval.</p>
+<h3 id="source-backendai-serviceappagentsresearch_agent.py-510-lines">Source: <code>backend/ai-service/app/agents/research_agent.py</code> (510 lines)</h3>
+<hr />
+<h2 id="research-agent-langgraph-pipeline">6.2 Research Agent LangGraph Pipeline</h2>
+<h3 id="state-definition">State Definition</h3>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ResearchState(TypedDict):</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    query: <span class="bu">str</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    user_id: <span class="bu">str</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>    session_id: <span class="bu">str</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>    request_id: <span class="bu">str</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Configuration flags</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>    search_web: <span class="bu">bool</span>          <span class="co"># Default: True</span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>    search_pdfs: <span class="bu">bool</span>         <span class="co"># Default: False (auto-detected)</span></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>    search_youtube: <span class="bu">bool</span>      <span class="co"># Default: False (auto-detected)</span></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>    download_pdfs: <span class="bu">bool</span>       <span class="co"># Default: False</span></span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>    index_content: <span class="bu">bool</span>       <span class="co"># Default: True</span></span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>    max_results: <span class="bu">int</span>          <span class="co"># Default: 5</span></span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accumulated results</span></span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a>    web_results: List[Dict]</span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>    pdf_results: List[Dict]</span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a>    downloaded_pdfs: List[Dict]</span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a>    youtube_results: List[Dict]</span>
+<span id="cb54-21"><a href="#cb54-21" aria-hidden="true" tabindex="-1"></a>    indexed_documents: List[Dict]</span>
+<span id="cb54-22"><a href="#cb54-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb54-23"><a href="#cb54-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Output</span></span>
+<span id="cb54-24"><a href="#cb54-24" aria-hidden="true" tabindex="-1"></a>    summary: <span class="bu">str</span></span>
+<span id="cb54-25"><a href="#cb54-25" aria-hidden="true" tabindex="-1"></a>    total_sources: <span class="bu">int</span></span>
+<span id="cb54-26"><a href="#cb54-26" aria-hidden="true" tabindex="-1"></a>    error: Optional[<span class="bu">str</span>]</span></code></pre></div>
+<h3 id="pipeline-flow">Pipeline Flow</h3>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> analyze_query: Research query received
+
+    analyze_query --> web_search: Auto-detect content flags
+    note right of analyze_query
+        "pdf"/"document" → search_pdfs=True
+        "video"/"watch" → search_youtube=True
+    end note
+
+    web_search --> web_search_routing: Web results collected
+
+    state web_search_routing <(choice)>
+    web_search_routing --> pdf_search: search_pdfs = True
+    web_search_routing --> youtube_search: search_youtube = True (no pdfs)
+    web_search_routing --> compile_results: Neither enabled
+
+    pdf_search --> pdf_routing: PDFs found/downloaded
+    state pdf_routing <(choice)>
+    pdf_routing --> youtube_search: search_youtube = True
+    pdf_routing --> index_content: Downloaded PDFs exist
+    pdf_routing --> compile_results: No PDFs to index
+
+    youtube_search --> yt_routing: Videos found
+    state yt_routing <(choice)>
+    yt_routing --> index_content: Downloaded PDFs to index
+    yt_routing --> compile_results: No PDFs
+
+    index_content --> compile_results: Content indexed in Qdrant
+    compile_results --> [*]: Summary + total_sources</pre>
+<p>The routing is <strong>conditional</strong> — each node checks configuration flags to determine the next step:</p>
+<table>
+<thead>
+<tr>
+<th>After Node</th>
+<th>Condition</th>
+<th>Next Node</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web_search</code></td>
+<td><code>search_pdfs=True</code></td>
+<td><code>pdf_search</code></td>
+</tr>
+<tr>
+<td><code>web_search</code></td>
+<td><code>search_youtube=True</code></td>
+<td><code>youtube_search</code></td>
+</tr>
+<tr>
+<td><code>web_search</code></td>
+<td>Neither</td>
+<td><code>compile</code></td>
+</tr>
+<tr>
+<td><code>pdf_search</code></td>
+<td><code>search_youtube=True</code></td>
+<td><code>youtube_search</code></td>
+</tr>
+<tr>
+<td><code>pdf_search</code></td>
+<td>Downloaded PDFs exist</td>
+<td><code>index</code></td>
+</tr>
+<tr>
+<td><code>pdf_search</code></td>
+<td>Neither</td>
+<td><code>compile</code></td>
+</tr>
+<tr>
+<td><code>youtube_search</code></td>
+<td>Downloaded PDFs exist</td>
+<td><code>index</code></td>
+</tr>
+<tr>
+<td><code>youtube_search</code></td>
+<td>No PDFs</td>
+<td><code>compile</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="node-details">Node Details</h3>
+<h4 id="node-1-analyze_query">Node 1: <code>analyze_query</code></h4>
+<ul>
+<li>Auto-detects content type preferences from query keywords</li>
+<li>Keywords containing “pdf”, “document”, “notes” → enable PDF search</li>
+<li>Keywords containing “video”, “watch”, “explain” → enable YouTube search</li>
+<li>Assigns a unique <code>request_id</code> for tracing</li>
+</ul>
+<h4 id="node-2-web_search_node">Node 2: <code>web_search_node</code></h4>
+<ul>
+<li>Invokes the shared <code>web_search</code> tool from <code>agents/tools/</code></li>
+<li>Uses Serper API (Google SERP) as the primary search backend</li>
+<li>Returns up to <code>max_results</code> (default 5) web articles</li>
+<li>Falls back gracefully on failure with empty results</li>
+</ul>
+<h4 id="node-3-pdf_search_node">Node 3: <code>pdf_search_node</code></h4>
+<ul>
+<li>Two-phase operation: <strong>search</strong> then <strong>download</strong></li>
+<li>Searches for PDFs via the <code>pdf_search</code> tool</li>
+<li>If <code>download_pdfs=True</code>, downloads up to 3 PDFs in batch</li>
+<li>Downloaded PDFs are stored locally for indexing</li>
+</ul>
+<h4 id="node-4-youtube_search_node">Node 4: <code>youtube_search_node</code></h4>
+<ul>
+<li>Invokes the <code>youtube_search</code> tool</li>
+<li>Returns up to 3 educational videos</li>
+<li>Results include video metadata (title, URL, thumbnail)</li>
+</ul>
+<h4 id="node-5-index_content_node">Node 5: <code>index_content_node</code></h4>
+<ul>
+<li>Processes downloaded PDFs through text extraction</li>
+<li>Indexes extracted text into Qdrant with <code>source_type: "web_pdf"</code></li>
+<li>Tracks number of chunks indexed per document</li>
+<li>Links back to source URL in metadata</li>
+</ul>
+<h4 id="node-6-compile_results">Node 6: <code>compile_results</code></h4>
+<ul>
+<li>Aggregates counts from all sources</li>
+<li>Builds human-readable summary (e.g., “Found 5 web articles, 2 PDFs downloaded, 3 videos”)</li>
+<li>Sets <code>total_sources</code> for the Orchestrator</li>
+</ul>
+<h3 id="supporting-services">Supporting Services</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 25%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search API</td>
+<td><code>services/search_api.py</code> (16,819 bytes)</td>
+<td>Multi-provider web search (Serper, DuckDuckGo)</td>
+</tr>
+<tr>
+<td>PDF Downloader</td>
+<td><code>services/pdf_downloader.py</code> (11,750 bytes)</td>
+<td>Async PDF download with size limits</td>
+</tr>
+<tr>
+<td>Content Crawler</td>
+<td><code>services/content_crawler.py</code> (10,590 bytes)</td>
+<td>Web page crawling and text extraction</td>
+</tr>
+<tr>
+<td>Fast Fetcher</td>
+<td><code>services/fast_content_fetcher.py</code> (5,505 bytes)</td>
+<td>Lightweight URL content fetcher</td>
+</tr>
+<tr>
+<td>YouTube Video</td>
+<td><code>services/youtube_video_service.py</code> (6,510 bytes)</td>
+<td>YouTube Data API v3 client</td>
+</tr>
+<tr>
+<td>YouTube Transcript</td>
+<td><code>services/youtube_transcript_service.py</code> (3,497 bytes)</td>
+<td>YouTube transcript extraction</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="web-enrichment-agent">6.3 Web Enrichment Agent</h2>
+<h3 id="purpose-4">Purpose</h3>
+<p>While the Research Agent is for <strong>explicit content discovery</strong> (user requests research), the Web Enrichment Agent provides <strong>query-time supplemental sources</strong> for the Tutor Agent. It runs in the background alongside RAG retrieval to provide Wikipedia, Khan Academy, and video links alongside tutor answers.</p>
+<h3 id="source-backendai-serviceappagentsweb_enrichment_agent.py-456-lines">Source: <code>backend/ai-service/app/agents/web_enrichment_agent.py</code> (456 lines)</h3>
+<h3 id="key-design-differences-from-research-agent">Key Design Differences from Research Agent</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Research Agent</th>
+<th>Web Enrichment Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trigger</td>
+<td>Explicit user request</td>
+<td>Every tutor query (background)</td>
+</tr>
+<tr>
+<td>Content indexing</td>
+<td>Yes (into Qdrant)</td>
+<td>No (returned inline)</td>
+</tr>
+<tr>
+<td>PDF download</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Primary source</td>
+<td>Serper (Google)</td>
+<td>DuckDuckGo (no API key)</td>
+</tr>
+<tr>
+<td>Caching</td>
+<td>No</td>
+<td>Yes (Redis, 24h TTL)</td>
+</tr>
+<tr>
+<td>Concurrency</td>
+<td>Sequential nodes</td>
+<td>Parallel fetching</td>
+</tr>
+</tbody>
+</table>
+<h3 id="langgraph-pipeline">LangGraph Pipeline</h3>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> check_cache: Query arrives
+
+    state cache_decision <(choice)>
+    check_cache --> cache_decision
+    cache_decision --> [*]: Cache HIT → return cached sources
+    cache_decision --> search_sources: Cache MISS
+
+    state search_sources {
+        direction LR
+        W: fetch_wikipedia
+        K: fetch_khan_academy
+        V: fetch_educational_videos
+        A: fetch_academic_articles
+    }
+    note right of search_sources
+        4 sources fetched in parallel
+        via asyncio.gather()
+    end note
+
+    search_sources --> filter_and_rank: Raw results merged
+    note right of filter_and_rank
+        Multi-factor scoring:
+        domain trust, snippet quality,
+        result position, video markers
+        → Top 8 sources retained
+    end note
+
+    filter_and_rank --> cache_and_return: Ranked & deduped
+    cache_and_return --> [*]: Redis cache set (TTL 24h)</pre>
+<h3 id="source-fetchers-parallel-execution">Source Fetchers (Parallel Execution)</h3>
+<p>The agent fetches from <strong>4 sources simultaneously</strong> using <code>asyncio.gather</code>:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> <span class="cf">await</span> asyncio.gather(</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    fetch_wikipedia(query),           <span class="co"># site:wikipedia.org via DuckDuckGo</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    fetch_khan_academy(query, subject), <span class="co"># site:khanacademy.org via DuckDuckGo</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    fetch_educational_videos(query),   <span class="co"># DuckDuckGo videos API</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>    fetch_academic_articles(query),    <span class="co"># .edu, Coursera, EdX, MIT</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>    return_exceptions<span class="op">=</span><span class="va">True</span>             <span class="co"># Don&#39;t fail entire pipeline</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="websource-data-structure">WebSource Data Structure</h3>
+<div class="sourceCode" id="cb58"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WebSource:</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>: <span class="bu">str</span>              <span class="co"># e.g., &quot;wiki_0&quot;, &quot;khan_1&quot;, &quot;video_2&quot;</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>    title: <span class="bu">str</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>    url: <span class="bu">str</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>    source_type: <span class="bu">str</span>     <span class="co"># &quot;wikipedia&quot;, &quot;khan_academy&quot;, &quot;video&quot;, &quot;article&quot;</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>    snippet: <span class="bu">str</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>    relevance_score: <span class="bu">float</span>  <span class="co"># 0.0 - 1.0</span></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>    domain: <span class="bu">str</span></span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>    cached_content: Optional[<span class="bu">str</span>] <span class="op">=</span> <span class="va">None</span></span></code></pre></div>
+<h3 id="quality-scoring-ranking">Quality Scoring &amp; Ranking</h3>
+<p>The <code>filter_and_rank</code> node applies a multi-factor scoring system:</p>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Score Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Educational domain (<code>.edu</code>, <code>wikipedia</code>, <code>khanacademy</code>, <code>coursera</code>)</td>
+<td>+0.1</td>
+</tr>
+<tr>
+<td>Empty snippet</td>
+<td>-0.2</td>
+</tr>
+<tr>
+<td>Source-type base score (Wikipedia: 0.9, Khan: 0.92, Video: 0.85, Article: 0.8)</td>
+<td>Base</td>
+</tr>
+<tr>
+<td>Position in results (per source)</td>
+<td>-0.05 to -0.1 per rank</td>
+</tr>
+<tr>
+<td>Educational video markers (“academy”, “edu”, “tutorial”, “khan”, “crash course”)</td>
+<td>+0.15</td>
+</tr>
+</tbody>
+</table>
+<p>After scoring: 1. All sources merged into single list 2. Sorted by <code>relevance_score</code> descending 3. URL-based deduplication 4. Top 8 sources retained</p>
+<h3 id="caching-strategy">Caching Strategy</h3>
+<div class="sourceCode" id="cb59"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Redis caching with 24-hour TTL</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>cache.set_web_resources(</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    query,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;sources&quot;</span>: filtered_sources},</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    ttl<span class="op">=</span><span class="dv">86400</span>  <span class="co"># 24 hours</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><strong>Cache key</strong>: Normalized query string <strong>Cache hit behavior</strong>: Skip search, filter, and cache nodes entirely — go straight to END</p>
+<h3 id="performance-characteristics-1">Performance Characteristics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Typical Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cache hit latency</td>
+<td>&lt; 10ms</td>
+</tr>
+<tr>
+<td>Full search latency</td>
+<td>1-3 seconds</td>
+</tr>
+<tr>
+<td>Source count</td>
+<td>6-8 sources per query</td>
+</tr>
+<tr>
+<td>DuckDuckGo rate limits</td>
+<td>~50 queries/minute (free)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="web-ingest-service">6.4 Web Ingest Service</h2>
+<h3 id="source-backendai-serviceappservicesweb_ingest_service.py-59963-bytes-largest-file-in-codebase">Source: <code>backend/ai-service/app/services/web_ingest_service.py</code> (59,963 bytes — largest file in codebase)</h3>
+<p>The Web Ingest Service is a comprehensive web crawling and content extraction system that supports the Research Agent. Key capabilities:</p>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Agentic crawling</strong></td>
+<td>Multi-page crawling with link following</td>
+</tr>
+<tr>
+<td><strong>Content extraction</strong></td>
+<td>HTML-to-text with boilerplate removal</td>
+</tr>
+<tr>
+<td><strong>PDF ingestion</strong></td>
+<td>Download and chunk web-sourced PDFs</td>
+</tr>
+<tr>
+<td><strong>Trust scoring</strong></td>
+<td>Domain reputation-based content quality scoring</td>
+</tr>
+<tr>
+<td><strong>Rate limiting</strong></td>
+<td>Per-domain request throttling</td>
+</tr>
+<tr>
+<td><strong>Content deduplication</strong></td>
+<td>Hash-based duplicate detection</td>
+</tr>
+<tr>
+<td><strong>Chunking for RAG</strong></td>
+<td>Chunks web content using same chunking service as documents</td>
+</tr>
+<tr>
+<td><strong>Qdrant indexing</strong></td>
+<td>Indexes web content with <code>source_type: "web_content"</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="web-resource-services">Web Resource Services</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 25%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web_resources.py</code></td>
+<td>13,832 bytes</td>
+<td>Resource management and retrieval</td>
+</tr>
+<tr>
+<td><code>web_cache_service.py</code></td>
+<td>14,055 bytes</td>
+<td>Redis caching for web content</td>
+</tr>
+<tr>
+<td><code>content_crawler.py</code></td>
+<td>10,590 bytes</td>
+<td>Concurrent web page crawling</td>
+</tr>
+<tr>
+<td><code>pdf_downloader.py</code></td>
+<td>11,750 bytes</td>
+<td>PDF download with validation</td>
+</tr>
+<tr>
+<td><code>search_api.py</code></td>
+<td>16,819 bytes</td>
+<td>Multi-provider search API</td>
+</tr>
+</tbody>
+</table>
+<h3 id="trust-score-calculation">Trust Score Calculation</h3>
+<p>Web content quality is assessed using domain-based trust scoring:</p>
+<table>
+<thead>
+<tr>
+<th>Domain Category</th>
+<th>Trust Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.edu</code>, <code>.gov</code>, known academic sites</td>
+<td>0.9 - 1.0</td>
+</tr>
+<tr>
+<td>Wikipedia, Khan Academy, Coursera</td>
+<td>0.85 - 0.95</td>
+</tr>
+<tr>
+<td>Medium, tech blogs, Stack Overflow</td>
+<td>0.6 - 0.75</td>
+</tr>
+<tr>
+<td>General web pages</td>
+<td>0.4 - 0.6</td>
+</tr>
+<tr>
+<td>Unknown / low-quality domains</td>
+<td>0.2 - 0.4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

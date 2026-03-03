@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 84: Proctoring Detectors — Deep Dive</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-83.html">&larr; Previous</a> <a href="page-85.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-84-proctoring-detectors-deep-dive">Page 84: Proctoring Detectors — Deep Dive</h1>
+<blockquote>
+<p>Supplements Pages 14, 79 with the full modular detector architecture: BlinkDetector (EAR), FaceVerifier (DeepFace), HandDetector (MediaPipe), AudioDetector, TemporalPredictor (LSTM), and unified CheatScore calculator.</p>
+</blockquote>
+<hr />
+<h2 id="detector-architecture">84.1 Detector Architecture</h2>
+<pre class="mermaid">flowchart TB
+    subgraph DETECTORS["🎥 Frame Detectors"]
+        direction LR
+        FD["face_detector.py<br/>YOLO + MediaPipe"]
+        GT["gaze_tracker.py<br/>Iris-based gaze"]
+        HP["head_pose.py<br/>PnP estimation"]
+        BD["blink_detector.py<br/>EAR algorithm"]
+        FV["face_verifier.py<br/>DeepFace identity"]
+        HD["hand_detector.py<br/>MediaPipe hands"]
+        AD["audio_detector.py<br/>Amplitude analysis"]
+        OD["object_detector.py<br/>YOLO objects"]
+    end
+
+    DETECTORS --> SC["static_classifier.py<br/>LightGBM per-frame"]
+    DETECTORS --> TP["temporal_predictor.py<br/>LSTM sequence (15 frames)"]
+
+    subgraph SCORING["📊 Scoring Pipeline"]
+        direction LR
+        IS["integrity_scorer.py"]
+        CS["cheat_score.py<br/>Unified scorer"]
+        FG["flag_generator.py<br/>Flag rules"]
+    end
+
+    SC -->|"40% weight"| CS
+    TP -->|"60% weight"| CS
+    CS --> FG --> IS
+</pre>
+<hr />
+<h2 id="blinkdetector-eye-aspect-ratio">84.2 BlinkDetector — Eye Aspect Ratio</h2>
+<h3 id="source-proctordetectorsblink_detector.py-246-lines">Source: <code>proctor/detectors/blink_detector.py</code> (246 lines)</h3>
+<p>Uses dlib 68-point facial landmarks (points 36-47) to calculate Eye Aspect Ratio:</p>
+<div class="sourceCode" id="cb542"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb542-1"><a href="#cb542-1" aria-hidden="true" tabindex="-1"></a><span class="co"># EAR = (||p2-p6|| + ||p3-p5||) / (2 * ||p1-p4||)</span></span>
+<span id="cb542-2"><a href="#cb542-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Where p1-p6 are the 6 landmark points of one eye</span></span>
+<span id="cb542-3"><a href="#cb542-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Open eye EAR ≈ 0.2-0.4, Closed eye EAR &lt; 0.25</span></span>
+<span id="cb542-4"><a href="#cb542-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb542-5"><a href="#cb542-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BlinkDetector:</span>
+<span id="cb542-6"><a href="#cb542-6" aria-hidden="true" tabindex="-1"></a>    LEFT_EYE_INDICES <span class="op">=</span> [<span class="dv">36</span>, <span class="dv">37</span>, <span class="dv">38</span>, <span class="dv">39</span>, <span class="dv">40</span>, <span class="dv">41</span>]</span>
+<span id="cb542-7"><a href="#cb542-7" aria-hidden="true" tabindex="-1"></a>    RIGHT_EYE_INDICES <span class="op">=</span> [<span class="dv">42</span>, <span class="dv">43</span>, <span class="dv">44</span>, <span class="dv">45</span>, <span class="dv">46</span>, <span class="dv">47</span>]</span>
+<span id="cb542-8"><a href="#cb542-8" aria-hidden="true" tabindex="-1"></a>    DEFAULT_EAR_THRESHOLD <span class="op">=</span> <span class="fl">0.25</span></span>
+<span id="cb542-9"><a href="#cb542-9" aria-hidden="true" tabindex="-1"></a>    DEFAULT_CONSEC_FRAMES <span class="op">=</span> <span class="dv">2</span>  <span class="co"># Frames to confirm a blink</span></span>
+<span id="cb542-10"><a href="#cb542-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb542-11"><a href="#cb542-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> detect(<span class="va">self</span>, landmarks: np.ndarray) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb542-12"><a href="#cb542-12" aria-hidden="true" tabindex="-1"></a>        left_ear <span class="op">=</span> <span class="va">self</span>._calculate_ear(landmarks[<span class="va">self</span>.LEFT_EYE_INDICES])</span>
+<span id="cb542-13"><a href="#cb542-13" aria-hidden="true" tabindex="-1"></a>        right_ear <span class="op">=</span> <span class="va">self</span>._calculate_ear(landmarks[<span class="va">self</span>.RIGHT_EYE_INDICES])</span>
+<span id="cb542-14"><a href="#cb542-14" aria-hidden="true" tabindex="-1"></a>        avg_ear <span class="op">=</span> (left_ear <span class="op">+</span> right_ear) <span class="op">/</span> <span class="fl">2.0</span></span>
+<span id="cb542-15"><a href="#cb542-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb542-16"><a href="#cb542-16" aria-hidden="true" tabindex="-1"></a>        is_blinking <span class="op">=</span> avg_ear <span class="op">&lt;</span> <span class="va">self</span>.ear_threshold</span>
+<span id="cb542-17"><a href="#cb542-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Count confirmed blinks (consecutive frames above threshold)</span></span>
+<span id="cb542-18"><a href="#cb542-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb542-19"><a href="#cb542-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;is_blinking&quot;</span>: <span class="bu">bool</span>,</span>
+<span id="cb542-20"><a href="#cb542-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;left_ear&quot;</span>: <span class="bu">float</span>,</span>
+<span id="cb542-21"><a href="#cb542-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;right_ear&quot;</span>: <span class="bu">float</span>,</span>
+<span id="cb542-22"><a href="#cb542-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;avg_ear&quot;</span>: <span class="bu">float</span>,</span>
+<span id="cb542-23"><a href="#cb542-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;total_blinks&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb542-24"><a href="#cb542-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;blink_rate&quot;</span>: <span class="bu">float</span>   <span class="co"># blinks per frame</span></span>
+<span id="cb542-25"><a href="#cb542-25" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="faceverifier-identity-verification">84.3 FaceVerifier — Identity Verification</h2>
+<h3 id="source-proctordetectorsface_verifier.py-255-lines">Source: <code>proctor/detectors/face_verifier.py</code> (255 lines)</h3>
+<p>Uses DeepFace library to verify student identity against registered photo.</p>
+<div class="sourceCode" id="cb543"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb543-1"><a href="#cb543-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> FaceVerifier:</span>
+<span id="cb543-2"><a href="#cb543-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Supported backends</span></span>
+<span id="cb543-3"><a href="#cb543-3" aria-hidden="true" tabindex="-1"></a>    DEFAULT_MODEL <span class="op">=</span> <span class="st">&quot;VGG-Face&quot;</span>       <span class="co"># Also: ArcFace, Facenet, OpenFace</span></span>
+<span id="cb543-4"><a href="#cb543-4" aria-hidden="true" tabindex="-1"></a>    DEFAULT_BACKEND <span class="op">=</span> <span class="st">&quot;opencv&quot;</span>       <span class="co"># Also: retinaface, mtcnn</span></span>
+<span id="cb543-5"><a href="#cb543-5" aria-hidden="true" tabindex="-1"></a>    DEFAULT_DISTANCE_METRIC <span class="op">=</span> <span class="st">&quot;cosine&quot;</span>  <span class="co"># Also: euclidean, euclidean_l2</span></span>
+<span id="cb543-6"><a href="#cb543-6" aria-hidden="true" tabindex="-1"></a>    DEFAULT_THRESHOLD <span class="op">=</span> <span class="fl">0.4</span></span>
+<span id="cb543-7"><a href="#cb543-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb543-8"><a href="#cb543-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> register_face(<span class="va">self</span>, face_image: np.ndarray) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb543-9"><a href="#cb543-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Save reference face (temp file for DeepFace)&quot;&quot;&quot;</span></span>
+<span id="cb543-10"><a href="#cb543-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb543-11"><a href="#cb543-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> register_face_base64(<span class="va">self</span>, image_base64: <span class="bu">str</span>) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb543-12"><a href="#cb543-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Register from base64-encoded JPEG&quot;&quot;&quot;</span></span>
+<span id="cb543-13"><a href="#cb543-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb543-14"><a href="#cb543-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> verify(<span class="va">self</span>, frame: np.ndarray) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb543-15"><a href="#cb543-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Compare live frame to registered face&quot;&quot;&quot;</span></span>
+<span id="cb543-16"><a href="#cb543-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns: {verified, confidence, distance, threshold, message}</span></span></code></pre></div>
+<h3 id="verification-flow">Verification Flow</h3>
+<pre><code>1. register_face(photo) → saves to temp file
+2. verify(webcam_frame) → DeepFace.verify(frame, reference)
+   → Returns {verified: bool, confidence: 1 - distance}</code></pre>
+<hr />
+<h2 id="handdetector-mediapipe-hands">84.4 HandDetector — MediaPipe Hands</h2>
+<h3 id="source-proctordetectorshand_detector.py-218-lines">Source: <code>proctor/detectors/hand_detector.py</code> (218 lines)</h3>
+<p>Detects hands using MediaPipe Hands solution (21 landmarks per hand):</p>
+<div class="sourceCode" id="cb545"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb545-1"><a href="#cb545-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HandDetector:</span>
+<span id="cb545-2"><a href="#cb545-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, max_hands<span class="op">=</span><span class="dv">2</span>, min_confidence<span class="op">=</span><span class="fl">0.5</span>):</span>
+<span id="cb545-3"><a href="#cb545-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hands <span class="op">=</span> mp.solutions.hands.Hands(</span>
+<span id="cb545-4"><a href="#cb545-4" aria-hidden="true" tabindex="-1"></a>            static_image_mode<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb545-5"><a href="#cb545-5" aria-hidden="true" tabindex="-1"></a>            max_num_hands<span class="op">=</span>max_hands,</span>
+<span id="cb545-6"><a href="#cb545-6" aria-hidden="true" tabindex="-1"></a>            min_detection_confidence<span class="op">=</span>min_confidence</span>
+<span id="cb545-7"><a href="#cb545-7" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb545-8"><a href="#cb545-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb545-9"><a href="#cb545-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> detect(<span class="va">self</span>, frame: np.ndarray) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb545-10"><a href="#cb545-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns: {num_hands, hands_visible, landmarks[], handedness[]}</span></span></code></pre></div>
+<h3 id="use-in-proctoring">Use in Proctoring</h3>
+<ul>
+<li><code>num_hands &gt; 0</code> during written exam → flag (hands should be on keyboard)</li>
+<li>Hand presence tracking for behavioral analysis</li>
+</ul>
+<hr />
+<h2 id="audiodetector-amplitude-analysis">84.5 AudioDetector — Amplitude Analysis</h2>
+<h3 id="source-proctordetectorsaudio_detector.py-181-lines">Source: <code>proctor/detectors/audio_detector.py</code> (181 lines)</h3>
+<p>Analyzes raw audio samples for suspicious sounds (speech, external noise):</p>
+<div class="sourceCode" id="cb546"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb546-1"><a href="#cb546-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AudioDetector:</span>
+<span id="cb546-2"><a href="#cb546-2" aria-hidden="true" tabindex="-1"></a>    DEFAULT_THRESHOLD <span class="op">=</span> <span class="dv">2000</span>    <span class="co"># int16 amplitude</span></span>
+<span id="cb546-3"><a href="#cb546-3" aria-hidden="true" tabindex="-1"></a>    DEFAULT_SAMPLE_RATE <span class="op">=</span> <span class="dv">44100</span></span>
+<span id="cb546-4"><a href="#cb546-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb546-5"><a href="#cb546-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> analyze_samples(<span class="va">self</span>, audio_data: <span class="bu">bytes</span>) <span class="op">-&gt;</span> AudioAnalysisResult:</span>
+<span id="cb546-6"><a href="#cb546-6" aria-hidden="true" tabindex="-1"></a>        samples <span class="op">=</span> np.frombuffer(audio_data, dtype<span class="op">=</span>np.int16)</span>
+<span id="cb546-7"><a href="#cb546-7" aria-hidden="true" tabindex="-1"></a>        amplitude <span class="op">=</span> <span class="bu">float</span>(np.<span class="bu">max</span>(np.<span class="bu">abs</span>(samples)))</span>
+<span id="cb546-8"><a href="#cb546-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> AudioAnalysisResult(</span>
+<span id="cb546-9"><a href="#cb546-9" aria-hidden="true" tabindex="-1"></a>            suspicious<span class="op">=</span>amplitude <span class="op">&gt;</span> <span class="va">self</span>.threshold,</span>
+<span id="cb546-10"><a href="#cb546-10" aria-hidden="true" tabindex="-1"></a>            amplitude<span class="op">=</span>amplitude,</span>
+<span id="cb546-11"><a href="#cb546-11" aria-hidden="true" tabindex="-1"></a>            message<span class="op">=</span><span class="st">&quot;Suspicious audio detected&quot;</span> <span class="cf">if</span> suspicious <span class="cf">else</span> <span class="st">&quot;Audio normal&quot;</span></span>
+<span id="cb546-12"><a href="#cb546-12" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb546-13"><a href="#cb546-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb546-14"><a href="#cb546-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> analyze_base64(<span class="va">self</span>, audio_base64: <span class="bu">str</span>) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb546-15"><a href="#cb546-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;For WebSocket binary audio data&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="temporalpredictor-lstm-sequence-analysis">84.6 TemporalPredictor — LSTM Sequence Analysis</h2>
+<h3 id="source-proctortemporal_predictor.py-343-lines">Source: <code>proctor/temporal_predictor.py</code> (343 lines)</h3>
+<p>Pre-trained LSTM model from AutoOEP that analyzes <strong>sequences</strong> of frame features:</p>
+<div class="sourceCode" id="cb547"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb547-1"><a href="#cb547-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 15 input features per frame</span></span>
+<span id="cb547-2"><a href="#cb547-2" aria-hidden="true" tabindex="-1"></a>FEATURE_NAMES <span class="op">=</span> [</span>
+<span id="cb547-3"><a href="#cb547-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;face_detected&#39;</span>, <span class="st">&#39;face_count&#39;</span>, <span class="st">&#39;object_count&#39;</span>,</span>
+<span id="cb547-4"><a href="#cb547-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;x_rotation&#39;</span>, <span class="st">&#39;y_rotation&#39;</span>, <span class="st">&#39;z_rotation&#39;</span>,</span>
+<span id="cb547-5"><a href="#cb547-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;radial_distance&#39;</span>, <span class="st">&#39;gaze_direction&#39;</span>, <span class="st">&#39;gaze_zone&#39;</span>,</span>
+<span id="cb547-6"><a href="#cb547-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;watch&#39;</span>, <span class="st">&#39;headphone&#39;</span>, <span class="st">&#39;closedbook&#39;</span>, <span class="st">&#39;earpiece&#39;</span>,</span>
+<span id="cb547-7"><a href="#cb547-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;cell phone&#39;</span>, <span class="st">&#39;openbook&#39;</span>, <span class="st">&#39;chits&#39;</span>, <span class="st">&#39;sheet&#39;</span>,</span>
+<span id="cb547-8"><a href="#cb547-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;H-Distance&#39;</span>, <span class="st">&#39;F-Distance&#39;</span></span>
+<span id="cb547-9"><a href="#cb547-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb547-10"><a href="#cb547-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-11"><a href="#cb547-11" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LSTMModel(nn.Module):</span>
+<span id="cb547-12"><a href="#cb547-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, input_size, hidden_size<span class="op">=</span><span class="dv">128</span>, fc_hidden<span class="op">=</span><span class="dv">32</span>, output_size<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb547-13"><a href="#cb547-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lstm <span class="op">=</span> nn.LSTM(input_size, hidden_size, num_layers<span class="op">=</span><span class="dv">2</span>, batch_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb547-14"><a href="#cb547-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layernorm <span class="op">=</span> nn.LayerNorm(hidden_size)</span>
+<span id="cb547-15"><a href="#cb547-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc1 <span class="op">=</span> nn.Linear(hidden_size, fc_hidden)</span>
+<span id="cb547-16"><a href="#cb547-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc2 <span class="op">=</span> nn.Linear(fc_hidden, output_size)</span>
+<span id="cb547-17"><a href="#cb547-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-18"><a href="#cb547-18" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TemporalPredictor:</span>
+<span id="cb547-19"><a href="#cb547-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, window_size<span class="op">=</span><span class="dv">15</span>, threshold<span class="op">=</span><span class="fl">0.4</span>):</span>
+<span id="cb547-20"><a href="#cb547-20" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Sliding window of 15 frames → LSTM → cheat probability&quot;&quot;&quot;</span></span>
+<span id="cb547-21"><a href="#cb547-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb547-22"><a href="#cb547-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> add_frame(<span class="va">self</span>, detection_results: Dict, timestamp: <span class="bu">float</span>):</span>
+<span id="cb547-23"><a href="#cb547-23" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Extract features and append to buffer&quot;&quot;&quot;</span></span>
+<span id="cb547-24"><a href="#cb547-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb547-25"><a href="#cb547-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb547-26"><a href="#cb547-26" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;When buffer full (15 frames), run LSTM prediction&quot;&quot;&quot;</span></span>
+<span id="cb547-27"><a href="#cb547-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns: {probability, is_cheating, confidence}</span></span></code></pre></div>
+<hr />
+<h2 id="unified-cheatscore-calculator">84.7 Unified CheatScore Calculator</h2>
+<h3 id="source-proctorscoringcheat_score.py-179-lines">Source: <code>proctor/scoring/cheat_score.py</code> (179 lines)</h3>
+<p>Combines static (per-frame LightGBM) + temporal (LSTM) + flag penalties:</p>
+<div class="sourceCode" id="cb548"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb548-1"><a href="#cb548-1" aria-hidden="true" tabindex="-1"></a>FLAG_WEIGHTS <span class="op">=</span> {</span>
+<span id="cb548-2"><a href="#cb548-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;phone_detected&#39;</span>: <span class="fl">0.25</span>,  <span class="st">&#39;multiple_faces&#39;</span>: <span class="fl">0.20</span>,</span>
+<span id="cb548-3"><a href="#cb548-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;no_face&#39;</span>: <span class="fl">0.15</span>,         <span class="st">&#39;book_detected&#39;</span>: <span class="fl">0.15</span>,</span>
+<span id="cb548-4"><a href="#cb548-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;looking_away&#39;</span>: <span class="fl">0.10</span>,    <span class="st">&#39;suspicious_head_pose&#39;</span>: <span class="fl">0.08</span>,</span>
+<span id="cb548-5"><a href="#cb548-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;suspicious_audio&#39;</span>: <span class="fl">0.08</span>, <span class="st">&#39;tab_switch&#39;</span>: <span class="fl">0.05</span>,</span>
+<span id="cb548-6"><a href="#cb548-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;mouth_open_talking&#39;</span>: <span class="fl">0.05</span>, <span class="st">&#39;earpiece_detected&#39;</span>: <span class="fl">0.20</span>,</span>
+<span id="cb548-7"><a href="#cb548-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb548-8"><a href="#cb548-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb548-9"><a href="#cb548-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_cheat_score(</span>
+<span id="cb548-10"><a href="#cb548-10" aria-hidden="true" tabindex="-1"></a>    static_prob,         <span class="co"># LightGBM per-frame (0-1)</span></span>
+<span id="cb548-11"><a href="#cb548-11" aria-hidden="true" tabindex="-1"></a>    temporal_prob,       <span class="co"># LSTM sequence (0-1)</span></span>
+<span id="cb548-12"><a href="#cb548-12" aria-hidden="true" tabindex="-1"></a>    active_flags,        <span class="co"># Current violation flags</span></span>
+<span id="cb548-13"><a href="#cb548-13" aria-hidden="true" tabindex="-1"></a>    static_weight<span class="op">=</span><span class="fl">0.4</span>,   <span class="co"># 40% static</span></span>
+<span id="cb548-14"><a href="#cb548-14" aria-hidden="true" tabindex="-1"></a>    temporal_weight<span class="op">=</span><span class="fl">0.6</span>  <span class="co"># 60% temporal</span></span>
+<span id="cb548-15"><a href="#cb548-15" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb548-16"><a href="#cb548-16" aria-hidden="true" tabindex="-1"></a>    base_score <span class="op">=</span> (static_weight <span class="op">*</span> static_prob) <span class="op">+</span> (temporal_weight <span class="op">*</span> temporal_prob)</span>
+<span id="cb548-17"><a href="#cb548-17" aria-hidden="true" tabindex="-1"></a>    flag_penalty <span class="op">=</span> <span class="bu">sum</span>(FLAG_WEIGHTS.get(f, <span class="fl">0.03</span>) <span class="cf">for</span> f <span class="kw">in</span> active_flags)</span>
+<span id="cb548-18"><a href="#cb548-18" aria-hidden="true" tabindex="-1"></a>    unified_score <span class="op">=</span> <span class="bu">min</span>(<span class="fl">1.0</span>, base_score <span class="op">+</span> flag_penalty)</span>
+<span id="cb548-19"><a href="#cb548-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb548-20"><a href="#cb548-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Severity: &lt;0.3=low, 0.3-0.5=medium, 0.5-0.7=high, &gt;0.7=critical</span></span></code></pre></div>
+<h3 id="session-integrity-report">Session Integrity Report</h3>
+<div class="sourceCode" id="cb549"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb549-1"><a href="#cb549-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_session_integrity(frame_scores, total_flags, tab_switch_count):</span>
+<span id="cb549-2"><a href="#cb549-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Penalties: max_score ≥ 0.8 → -15pts, suspicious_pct/5 → up to -15pts</span></span>
+<span id="cb549-3"><a href="#cb549-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Tab switches → -2pts each (max -10pts)</span></span>
+<span id="cb549-4"><a href="#cb549-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Final: 0-100 integrity score</span></span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Integrity Score</th>
+<th>Severity</th>
+<th>Review Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≥ 80</td>
+<td>Low</td>
+<td>No</td>
+</tr>
+<tr>
+<td>60-79</td>
+<td>Medium</td>
+<td>If suspicious &gt; 20%</td>
+</tr>
+<tr>
+<td>40-59</td>
+<td>High</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>&lt; 40</td>
+<td>Critical</td>
+<td>Yes + flag for manual review</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

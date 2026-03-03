@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 87: Syllabus &amp;amp; Topic Extraction</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-86.html">&larr; Previous</a> <a href="page-88.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-87-syllabus-topic-extraction">Page 87: Syllabus &amp; Topic Extraction</h1>
+<blockquote>
+<p>820-line syllabus processing pipeline: PDF extraction → semantic chunking → Qdrant storage → LLM topic extraction → curriculum model population.</p>
+</blockquote>
+<hr />
+<h2 id="pipeline-architecture-2">87.1 Pipeline Architecture</h2>
+<pre class="mermaid">flowchart TB
+    PDF["📄 Syllabus PDF"] --> SE
+
+    subgraph SE["SyllabusExtractor — 820 lines, 33KB"]
+        direction TB
+        PS["process_syllabus()"]
+        SC["_store_chunks()"] -->|"Vectors"| QD["Qdrant<br/>'syllabus_content'"]
+        ET["_extract_topics()"] -->|"API call"| LLM["LLM<br/>Gemini / Groq"]
+        PC["_populate_curriculum()"] -->|"HTTP"| CS["Core Service API"]
+        PS --> SC --> ET --> PC
+    end
+
+    SE --> TE["topic_extractor.py<br/>36KB — Deep topic analysis<br/>Prerequisites, Bloom's taxonomy"]
+    SE --> SHE["syllabus_hierarchy_extractor.py<br/>16KB — Nested hierarchy builder<br/>Subject→Unit→Chapter→Topic"]
+</pre>
+<h3 id="source-files-4">Source Files</h3>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 28%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Lines</th>
+<th>Size</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>services/syllabus_extractor.py</code></td>
+<td>820</td>
+<td>33KB</td>
+<td>Main pipeline</td>
+</tr>
+<tr>
+<td><code>services/topic_extractor.py</code></td>
+<td>—</td>
+<td>37KB</td>
+<td>Deep topic analysis</td>
+</tr>
+<tr>
+<td><code>services/syllabus_hierarchy_extractor.py</code></td>
+<td>—</td>
+<td>16KB</td>
+<td>Nested hierarchy</td>
+</tr>
+<tr>
+<td><code>api/routes/syllabus.py</code></td>
+<td>—</td>
+<td>17KB</td>
+<td>Syllabus API</td>
+</tr>
+<tr>
+<td><code>api/routes/classroom_syllabus.py</code></td>
+<td>—</td>
+<td>15KB</td>
+<td>Classroom-specific APIs</td>
+</tr>
+<tr>
+<td><code>core-service/app/routes/topics.py</code></td>
+<td>—</td>
+<td>36KB</td>
+<td>Topic CRUD</td>
+</tr>
+<tr>
+<td><code>api/routes/topic_scores.py</code></td>
+<td>—</td>
+<td>11KB</td>
+<td>Topic scoring APIs</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="syllabusextractor-main-pipeline">87.2 SyllabusExtractor — Main Pipeline</h2>
+<h3 id="data-models-8">Data Models</h3>
+<div class="sourceCode" id="cb561"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb561-1"><a href="#cb561-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb561-2"><a href="#cb561-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExtractedTopic:</span>
+<span id="cb561-3"><a href="#cb561-3" aria-hidden="true" tabindex="-1"></a>    name: <span class="bu">str</span></span>
+<span id="cb561-4"><a href="#cb561-4" aria-hidden="true" tabindex="-1"></a>    description: Optional[<span class="bu">str</span>]</span>
+<span id="cb561-5"><a href="#cb561-5" aria-hidden="true" tabindex="-1"></a>    subtopics: List[<span class="bu">str</span>]</span>
+<span id="cb561-6"><a href="#cb561-6" aria-hidden="true" tabindex="-1"></a>    difficulty: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;medium&quot;</span></span>
+<span id="cb561-7"><a href="#cb561-7" aria-hidden="true" tabindex="-1"></a>    estimated_hours: <span class="bu">float</span> <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb561-8"><a href="#cb561-8" aria-hidden="true" tabindex="-1"></a>    keywords: List[<span class="bu">str</span>] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb561-9"><a href="#cb561-9" aria-hidden="true" tabindex="-1"></a>    page_numbers: List[<span class="bu">int</span>] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb561-10"><a href="#cb561-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb561-11"><a href="#cb561-11" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb561-12"><a href="#cb561-12" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExtractionResult:</span>
+<span id="cb561-13"><a href="#cb561-13" aria-hidden="true" tabindex="-1"></a>    success: <span class="bu">bool</span></span>
+<span id="cb561-14"><a href="#cb561-14" aria-hidden="true" tabindex="-1"></a>    syllabus_id: <span class="bu">str</span></span>
+<span id="cb561-15"><a href="#cb561-15" aria-hidden="true" tabindex="-1"></a>    chunks_stored: <span class="bu">int</span></span>
+<span id="cb561-16"><a href="#cb561-16" aria-hidden="true" tabindex="-1"></a>    topics_extracted: <span class="bu">int</span></span>
+<span id="cb561-17"><a href="#cb561-17" aria-hidden="true" tabindex="-1"></a>    lessons_created: <span class="bu">int</span></span>
+<span id="cb561-18"><a href="#cb561-18" aria-hidden="true" tabindex="-1"></a>    processing_time_ms: <span class="bu">int</span></span>
+<span id="cb561-19"><a href="#cb561-19" aria-hidden="true" tabindex="-1"></a>    error: Optional[<span class="bu">str</span>] <span class="op">=</span> <span class="va">None</span></span></code></pre></div>
+<h3 id="main-method">Main Method</h3>
+<div class="sourceCode" id="cb562"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb562-1"><a href="#cb562-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SyllabusExtractor:</span>
+<span id="cb562-2"><a href="#cb562-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> process_syllabus(</span>
+<span id="cb562-3"><a href="#cb562-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb562-4"><a href="#cb562-4" aria-hidden="true" tabindex="-1"></a>        syllabus_id: <span class="bu">str</span>,</span>
+<span id="cb562-5"><a href="#cb562-5" aria-hidden="true" tabindex="-1"></a>        pdf_path: <span class="bu">str</span>,</span>
+<span id="cb562-6"><a href="#cb562-6" aria-hidden="true" tabindex="-1"></a>        classroom_id: <span class="bu">str</span>,</span>
+<span id="cb562-7"><a href="#cb562-7" aria-hidden="true" tabindex="-1"></a>        subject_name: <span class="bu">str</span>,</span>
+<span id="cb562-8"><a href="#cb562-8" aria-hidden="true" tabindex="-1"></a>        title: Optional[<span class="bu">str</span>] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb562-9"><a href="#cb562-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> ExtractionResult:</span>
+<span id="cb562-10"><a href="#cb562-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb562-11"><a href="#cb562-11" aria-hidden="true" tabindex="-1"></a><span class="co">        Full pipeline:</span></span>
+<span id="cb562-12"><a href="#cb562-12" aria-hidden="true" tabindex="-1"></a><span class="co">        1. Extract text from PDF (with chapter detection)</span></span>
+<span id="cb562-13"><a href="#cb562-13" aria-hidden="true" tabindex="-1"></a><span class="co">        2. Chunk text semantically</span></span>
+<span id="cb562-14"><a href="#cb562-14" aria-hidden="true" tabindex="-1"></a><span class="co">        3. Store chunks in Qdrant &quot;syllabus_content&quot; collection</span></span>
+<span id="cb562-15"><a href="#cb562-15" aria-hidden="true" tabindex="-1"></a><span class="co">        4. Extract topics using LLM</span></span>
+<span id="cb562-16"><a href="#cb562-16" aria-hidden="true" tabindex="-1"></a><span class="co">        5. Populate curriculum models via Core Service API</span></span>
+<span id="cb562-17"><a href="#cb562-17" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="qdrant-storage">87.3 Qdrant Storage</h2>
+<p>Chunks stored in <code>syllabus_content</code> collection with metadata:</p>
+<div class="sourceCode" id="cb563"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb563-1"><a href="#cb563-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _store_chunks_in_qdrant(<span class="va">self</span>, chunks, syllabus_id, classroom_id, subject_name):</span>
+<span id="cb563-2"><a href="#cb563-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Vector: all-MiniLM-L6-v2 embedding (384-dim)</span></span>
+<span id="cb563-3"><a href="#cb563-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Payload: {</span></span>
+<span id="cb563-4"><a href="#cb563-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     syllabus_id, classroom_id, subject_name,</span></span>
+<span id="cb563-5"><a href="#cb563-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     chunk_index, page_number, chapter_title,</span></span>
+<span id="cb563-6"><a href="#cb563-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     text_preview (first 200 chars)</span></span>
+<span id="cb563-7"><a href="#cb563-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># }</span></span></code></pre></div>
+<h3 id="search">Search</h3>
+<div class="sourceCode" id="cb564"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb564-1"><a href="#cb564-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search_syllabus_content(<span class="va">self</span>, query, classroom_id<span class="op">=</span><span class="va">None</span>, subject<span class="op">=</span><span class="va">None</span>, top_k<span class="op">=</span><span class="dv">5</span>):</span>
+<span id="cb564-2"><a href="#cb564-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Semantic search across syllabus chunks with filters&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="llm-topic-extraction">87.4 LLM Topic Extraction</h2>
+<p>Three fallback strategies:</p>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 32%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Method</th>
+<th>Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>_extract_with_gemini()</code></td>
+<td>Google Gemini API</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>_extract_with_default_llm()</code></td>
+<td>Groq <code>llama-3.3-70b</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>_extract_from_chapters()</code></td>
+<td>Regex-based chapter heading detection</td>
+</tr>
+</tbody>
+</table>
+<h3 id="llm-prompt">LLM Prompt</h3>
+<pre><code>Given this syllabus content for {subject_name}, extract a structured
+topic hierarchy in JSON format:
+[{
+    &quot;name&quot;: &quot;Topic Name&quot;,
+    &quot;description&quot;: &quot;Brief description&quot;,
+    &quot;subtopics&quot;: [&quot;Subtopic 1&quot;, &quot;Subtopic 2&quot;],
+    &quot;difficulty&quot;: &quot;easy|medium|hard&quot;,
+    &quot;estimated_hours&quot;: 2.0,
+    &quot;keywords&quot;: [&quot;keyword1&quot;, &quot;keyword2&quot;]
+}]</code></pre>
+<hr />
+<h2 id="curriculum-population">87.5 Curriculum Population</h2>
+<p>Makes HTTP calls to Core Service to create database records:</p>
+<div class="sourceCode" id="cb566"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb566-1"><a href="#cb566-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _populate_curriculum(<span class="va">self</span>, topics, syllabus_id, classroom_id, subject_name):</span>
+<span id="cb566-2"><a href="#cb566-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Create Subject (if not exists)</span></span>
+<span id="cb566-3"><a href="#cb566-3" aria-hidden="true" tabindex="-1"></a>    POST <span class="op">/</span>api<span class="op">/</span>classrooms<span class="op">/</span>{classroom_id}<span class="op">/</span>subjects</span>
+<span id="cb566-4"><a href="#cb566-4" aria-hidden="true" tabindex="-1"></a>    → {name, icon, color, syllabus_id}</span>
+<span id="cb566-5"><a href="#cb566-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb566-6"><a href="#cb566-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 2: Create Topics linked to subject</span></span>
+<span id="cb566-7"><a href="#cb566-7" aria-hidden="true" tabindex="-1"></a>    POST <span class="op">/</span>api<span class="op">/</span>classrooms<span class="op">/</span>{classroom_id}<span class="op">/</span>topics</span>
+<span id="cb566-8"><a href="#cb566-8" aria-hidden="true" tabindex="-1"></a>    → {name, description, subject_id, difficulty, estimated_hours}</span>
+<span id="cb566-9"><a href="#cb566-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb566-10"><a href="#cb566-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 3: Create Subtopics linked to topics</span></span>
+<span id="cb566-11"><a href="#cb566-11" aria-hidden="true" tabindex="-1"></a>    POST <span class="op">/</span>api<span class="op">/</span>classrooms<span class="op">/</span>{classroom_id}<span class="op">/</span>topics<span class="op">/</span>{topic_id}<span class="op">/</span>subtopics</span>
+<span id="cb566-12"><a href="#cb566-12" aria-hidden="true" tabindex="-1"></a>    → {name, description}</span>
+<span id="cb566-13"><a href="#cb566-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb566-14"><a href="#cb566-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 4: Link syllabus to subject</span></span>
+<span id="cb566-15"><a href="#cb566-15" aria-hidden="true" tabindex="-1"></a>    PUT <span class="op">/</span>api<span class="op">/</span>syllabi<span class="op">/</span>{syllabus_id}</span>
+<span id="cb566-16"><a href="#cb566-16" aria-hidden="true" tabindex="-1"></a>    → {subject_id}</span></code></pre></div>
+<h3 id="subject-theming">Subject Theming</h3>
+<p>Auto-assigns icons and colors based on subject name:</p>
+<div class="sourceCode" id="cb567"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb567-1"><a href="#cb567-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _get_subject_icon(<span class="va">self</span>, subject_name):</span>
+<span id="cb567-2"><a href="#cb567-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># &quot;math&quot; → &quot;&quot;, &quot;physics&quot; → &quot;&quot;, &quot;chemistry&quot; → &quot;&quot;</span></span>
+<span id="cb567-3"><a href="#cb567-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb567-4"><a href="#cb567-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _get_subject_color(<span class="va">self</span>, subject_name):</span>
+<span id="cb567-5"><a href="#cb567-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># &quot;math&quot; → &quot;#4F46E5&quot;, &quot;physics&quot; → &quot;#7C3AED&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="topicextractor-deep-analysis">87.6 TopicExtractor Deep Analysis</h2>
+<h3 id="source-servicestopic_extractor.py-36kb-largest-service-file">Source: <code>services/topic_extractor.py</code> (36KB — largest service file!)</h3>
+<p>Goes beyond basic extraction to provide:</p>
+<ul>
+<li><strong>Prerequisite mapping</strong>: Which topics depend on others</li>
+<li><strong>Learning objective extraction</strong>: What students should know after each topic</li>
+<li><strong>Bloom’s taxonomy classification</strong>: Remember, Understand, Apply, Analyze, Evaluate, Create</li>
+<li><strong>Cross-reference detection</strong>: Links between topics in different subjects</li>
+<li><strong>Difficulty estimation</strong>: Based on vocabulary complexity and concept density</li>
+</ul>
+<hr />
+<h2 id="syllabus-hierarchy-extractor-1">87.7 Syllabus Hierarchy Extractor</h2>
+<h3 id="source-servicessyllabus_hierarchy_extractor.py-16kb">Source: <code>services/syllabus_hierarchy_extractor.py</code> (16KB)</h3>
+<p>Builds nested hierarchy: <strong>Subject → Unit → Chapter → Topic → Subtopic</strong></p>
+<div class="sourceCode" id="cb568"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb568-1"><a href="#cb568-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SyllabusHierarchyExtractor:</span>
+<span id="cb568-2"><a href="#cb568-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> extract_hierarchy(<span class="va">self</span>, full_text, chapters):</span>
+<span id="cb568-3"><a href="#cb568-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb568-4"><a href="#cb568-4" aria-hidden="true" tabindex="-1"></a><span class="co">        Uses LLM to create nested structure:</span></span>
+<span id="cb568-5"><a href="#cb568-5" aria-hidden="true" tabindex="-1"></a><span class="co">        {</span></span>
+<span id="cb568-6"><a href="#cb568-6" aria-hidden="true" tabindex="-1"></a><span class="co">            &quot;units&quot;: [{</span></span>
+<span id="cb568-7"><a href="#cb568-7" aria-hidden="true" tabindex="-1"></a><span class="co">                &quot;name&quot;: &quot;Unit 1: Mechanics&quot;,</span></span>
+<span id="cb568-8"><a href="#cb568-8" aria-hidden="true" tabindex="-1"></a><span class="co">                &quot;chapters&quot;: [{</span></span>
+<span id="cb568-9"><a href="#cb568-9" aria-hidden="true" tabindex="-1"></a><span class="co">                    &quot;name&quot;: &quot;Newton&#39;s Laws&quot;,</span></span>
+<span id="cb568-10"><a href="#cb568-10" aria-hidden="true" tabindex="-1"></a><span class="co">                    &quot;topics&quot;: [{</span></span>
+<span id="cb568-11"><a href="#cb568-11" aria-hidden="true" tabindex="-1"></a><span class="co">                        &quot;name&quot;: &quot;First Law&quot;,</span></span>
+<span id="cb568-12"><a href="#cb568-12" aria-hidden="true" tabindex="-1"></a><span class="co">                        &quot;subtopics&quot;: [&quot;Inertia&quot;, &quot;Equilibrium&quot;]</span></span>
+<span id="cb568-13"><a href="#cb568-13" aria-hidden="true" tabindex="-1"></a><span class="co">                    }]</span></span>
+<span id="cb568-14"><a href="#cb568-14" aria-hidden="true" tabindex="-1"></a><span class="co">                }]</span></span>
+<span id="cb568-15"><a href="#cb568-15" aria-hidden="true" tabindex="-1"></a><span class="co">            }]</span></span>
+<span id="cb568-16"><a href="#cb568-16" aria-hidden="true" tabindex="-1"></a><span class="co">        }</span></span>
+<span id="cb568-17"><a href="#cb568-17" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

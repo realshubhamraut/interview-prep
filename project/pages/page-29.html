@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 29: Environment Configuration &amp;amp; API Key Reference</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-28.html">&larr; Previous</a> <a href="page-30.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-29-environment-configuration-api-key-reference">Page 29: Environment Configuration &amp; API Key Reference</h1>
+<hr />
+<h2 id="overview-20">29.1 Overview</h2>
+<p>ensureStudy has an extensive configuration surface spanning <strong>114 environment variables</strong> across <code>.env</code> (development) and <code>.env.production.example</code> (production template). This page documents every configuration variable, its purpose, and its consumer service.</p>
+<hr />
+<h2 id="configuration-files">29.2 Configuration Files</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Lines</th>
+<th>Purpose</th>
+<th>Git Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.env</code></td>
+<td>114</td>
+<td>Development configuration</td>
+<td>gitignored</td>
+</tr>
+<tr>
+<td><code>.env.production.example</code></td>
+<td>100</td>
+<td>Production template</td>
+<td>committed</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="complete-variable-reference">29.3 Complete Variable Reference</h2>
+<h3 id="llm-embedding-configuration">LLM &amp; Embedding Configuration</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LLM_MODEL</code></td>
+<td><code>mistralai/Mistral-7B-Instruct-v0.2</code></td>
+<td>AI Service</td>
+<td>Default LLM model</td>
+</tr>
+<tr>
+<td><code>LLM_USE_API</code></td>
+<td><code>true</code></td>
+<td>AI Service</td>
+<td>Use API vs local model</td>
+</tr>
+<tr>
+<td><code>OPENAI_API_KEY</code></td>
+<td><code>sk-...</code></td>
+<td>AI Service</td>
+<td>OpenAI GPT-4 + Whisper</td>
+</tr>
+<tr>
+<td><code>GEMINI_API_KEY</code></td>
+<td><code>AIzaSy...</code></td>
+<td>AI Service</td>
+<td>Google Gemini (supports comma-separated rotation)</td>
+</tr>
+<tr>
+<td><code>GROQ_API_KEY</code></td>
+<td><code>gsk_...</code></td>
+<td>AI Service</td>
+<td>Groq fast inference</td>
+</tr>
+<tr>
+<td><code>MISTRAL_API_KEY</code></td>
+<td><code>3Jim...</code></td>
+<td>AI Service</td>
+<td>Mistral API</td>
+</tr>
+<tr>
+<td><code>HUGGINGFACE_API_KEY</code></td>
+<td><code>hf_...</code></td>
+<td>AI Service</td>
+<td>HuggingFace (supports comma-separated rotation)</td>
+</tr>
+<tr>
+<td><code>EMBEDDING_MODEL</code></td>
+<td><code>sentence-transformers/all-MiniLM-L6-v2</code></td>
+<td>AI Service</td>
+<td>Text embedding model</td>
+</tr>
+<tr>
+<td><code>EMBEDDING_DIMENSIONS</code></td>
+<td><code>1536</code></td>
+<td>AI Service</td>
+<td>Embedding vector size</td>
+</tr>
+<tr>
+<td><code>WHISPER_MODEL</code></td>
+<td><code>medium</code></td>
+<td>AI Service</td>
+<td>Whisper model size (tiny/base/small/medium/large)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="database-configuration">Database Configuration</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td><code>postgresql://user:pass@localhost:5432/ensure_study</code></td>
+<td>Core Service, AI Service</td>
+<td>Full PostgreSQL connection string</td>
+</tr>
+<tr>
+<td><code>DB_HOST</code></td>
+<td><code>localhost</code></td>
+<td>Data Pipelines</td>
+<td>PostgreSQL host</td>
+</tr>
+<tr>
+<td><code>DB_PORT</code></td>
+<td><code>5432</code></td>
+<td>Data Pipelines</td>
+<td>PostgreSQL port</td>
+</tr>
+<tr>
+<td><code>DB_NAME</code></td>
+<td><code>ensure_study</code></td>
+<td>Data Pipelines</td>
+<td>PostgreSQL database name</td>
+</tr>
+<tr>
+<td><code>DB_USER</code></td>
+<td><code>ensure_study_user</code></td>
+<td>Data Pipelines</td>
+<td>PostgreSQL username</td>
+</tr>
+<tr>
+<td><code>DB_PASSWORD</code></td>
+<td><code>secure_password_123</code></td>
+<td>Data Pipelines</td>
+<td>PostgreSQL password</td>
+</tr>
+<tr>
+<td><code>REDIS_URL</code></td>
+<td><code>redis://localhost:6379</code></td>
+<td>Core, AI Service</td>
+<td>Redis connection URL</td>
+</tr>
+<tr>
+<td><code>QDRANT_HOST</code></td>
+<td><code>localhost</code></td>
+<td>AI Service</td>
+<td>Qdrant host</td>
+</tr>
+<tr>
+<td><code>QDRANT_PORT</code></td>
+<td><code>6333</code></td>
+<td>AI Service</td>
+<td>Qdrant HTTP port</td>
+</tr>
+<tr>
+<td><code>QDRANT_API_KEY</code></td>
+<td>(empty)</td>
+<td>AI Service</td>
+<td>Qdrant auth (prod only)</td>
+</tr>
+<tr>
+<td><code>QDRANT_COLLECTION_NAME</code></td>
+<td><code>classroom_materials</code></td>
+<td>AI Service</td>
+<td>Default Qdrant collection</td>
+</tr>
+</tbody>
+</table>
+<h3 id="authentication-security">Authentication &amp; Security</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JWT_SECRET</code></td>
+<td><code>your-super-secret-key-min-32-chars-here</code></td>
+<td>Core Service</td>
+<td>JWT signing key</td>
+</tr>
+<tr>
+<td><code>JWT_EXPIRATION_HOURS</code></td>
+<td><code>24</code></td>
+<td>Core Service</td>
+<td>Token lifetime</td>
+</tr>
+<tr>
+<td><code>REFRESH_TOKEN_SECRET</code></td>
+<td><code>your-refresh-secret-min-32-chars</code></td>
+<td>Core Service</td>
+<td>Refresh token signing</td>
+</tr>
+<tr>
+<td><code>NEXTAUTH_SECRET</code></td>
+<td><code>your-nextauth-secret-here</code></td>
+<td>Frontend</td>
+<td>NextAuth session encryption</td>
+</tr>
+<tr>
+<td><code>NEXTAUTH_URL</code></td>
+<td><code>http://localhost:3000</code></td>
+<td>Frontend</td>
+<td>Canonical URL</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kafka-spark">Kafka &amp; Spark</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KAFKA_BOOTSTRAP_SERVERS</code></td>
+<td><code>localhost:9092</code></td>
+<td>Core, AI, Kafka</td>
+<td>Kafka broker address</td>
+</tr>
+<tr>
+<td><code>KAFKA_GROUP_ID</code></td>
+<td><code>ensure-study-consumers</code></td>
+<td>Kafka consumers</td>
+<td>Consumer group</td>
+</tr>
+<tr>
+<td><code>SPARK_MASTER</code></td>
+<td><code>local[*]</code></td>
+<td>Data Pipelines</td>
+<td>Spark cluster URL</td>
+</tr>
+<tr>
+<td><code>SPARK_DRIVER_MEMORY</code></td>
+<td><code>4g</code></td>
+<td>Data Pipelines</td>
+<td>Spark driver memory</td>
+</tr>
+<tr>
+<td><code>SPARK_EXECUTOR_MEMORY</code></td>
+<td><code>4g</code></td>
+<td>Data Pipelines</td>
+<td>Spark executor memory</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mlflow">MLflow</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MLFLOW_TRACKING_URI</code></td>
+<td><code>http://localhost:5000</code></td>
+<td>ML Training</td>
+<td>MLflow server URL</td>
+</tr>
+<tr>
+<td><code>MLFLOW_EXPERIMENT_NAME</code></td>
+<td><code>ensureStudy</code></td>
+<td>ML Training</td>
+<td>Default experiment</td>
+</tr>
+</tbody>
+</table>
+<h3 id="aws-configuration">AWS Configuration</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AWS_ACCESS_KEY_ID</code></td>
+<td><code>AKIA...</code></td>
+<td>Core, AI Service</td>
+<td>AWS IAM key</td>
+</tr>
+<tr>
+<td><code>AWS_SECRET_ACCESS_KEY</code></td>
+<td><code>8QYd...</code></td>
+<td>Core, AI Service</td>
+<td>AWS IAM secret</td>
+</tr>
+<tr>
+<td><code>AWS_REGION</code></td>
+<td><code>ap-south-1</code></td>
+<td>Core, AI Service</td>
+<td>AWS region</td>
+</tr>
+<tr>
+<td><code>AWS_S3_BUCKET</code></td>
+<td><code>ensure-study-datalake</code></td>
+<td>Core Service</td>
+<td>S3 bucket name</td>
+</tr>
+<tr>
+<td><code>STORAGE_PROVIDER</code></td>
+<td><code>local</code> / <code>s3</code></td>
+<td>Core Service</td>
+<td>Storage backend</td>
+</tr>
+</tbody>
+</table>
+<h3 id="web-search-apis">Web Search &amp; APIs</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SERPER_API_KEY</code></td>
+<td><code>41a6...</code></td>
+<td>AI Service</td>
+<td>Google SERP search</td>
+</tr>
+<tr>
+<td><code>WEB_SEARCH_PROVIDER</code></td>
+<td><code>serper</code></td>
+<td>AI Service</td>
+<td>Search provider</td>
+</tr>
+<tr>
+<td><code>WEB_SEARCH_MAX_RESULTS</code></td>
+<td><code>5</code></td>
+<td>AI Service</td>
+<td>Max results per query</td>
+</tr>
+<tr>
+<td><code>YOUTUBE_API_KEY</code></td>
+<td><code>AIzaSy...</code></td>
+<td>AI Service</td>
+<td>YouTube Data API v3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="livekit-video-conferencing">LiveKit (Video Conferencing)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NEXT_PUBLIC_LIVEKIT_URL</code></td>
+<td><code>wss://ensurestudy-*.livekit.cloud</code></td>
+<td>Frontend</td>
+<td>LiveKit WebSocket URL</td>
+</tr>
+<tr>
+<td><code>LIVEKIT_API_KEY</code></td>
+<td><code>APIQw...</code></td>
+<td>Core Service</td>
+<td>LiveKit API authentication</td>
+</tr>
+<tr>
+<td><code>LIVEKIT_API_SECRET</code></td>
+<td><code>qCbCT...</code></td>
+<td>Core Service</td>
+<td>LiveKit API secret</td>
+</tr>
+</tbody>
+</table>
+<h3 id="application">Application</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Consumer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LOG_LEVEL</code></td>
+<td><code>INFO</code></td>
+<td>All services</td>
+<td>Logging verbosity</td>
+</tr>
+<tr>
+<td><code>ENVIRONMENT</code></td>
+<td><code>development</code></td>
+<td>All services</td>
+<td>Running environment</td>
+</tr>
+<tr>
+<td><code>FRONTEND_URL</code></td>
+<td><code>https://yourdomain.com</code></td>
+<td>Core Service</td>
+<td>CORS allowed origin</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="api-key-rotation">29.4 API Key Rotation</h2>
+<p>Some variables support <strong>comma-separated key rotation</strong>:</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb211-1"><a href="#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple keys separated by commas — the service rotates through them</span></span>
+<span id="cb211-2"><a href="#cb211-2" aria-hidden="true" tabindex="-1"></a><span class="va">HUGGINGFACE_API_KEY</span><span class="op">=</span><span class="st">&quot;hf_key1, hf_key2, hf_key3, hf_key4&quot;</span></span>
+<span id="cb211-3"><a href="#cb211-3" aria-hidden="true" tabindex="-1"></a><span class="va">GEMINI_API_KEY</span><span class="op">=</span><span class="st">&quot;AIzaKey1, AIzaKey2&quot;</span></span></code></pre></div>
+<p>This mechanism distributes API calls across multiple keys to avoid per-key rate limits.</p>
+<hr />
+<h2 id="production-environment-template">29.5 Production Environment Template</h2>
+<p>Key differences from development:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Development</th>
+<th>Production</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td>localhost PostgreSQL</td>
+<td>AWS RDS</td>
+</tr>
+<tr>
+<td><code>STORAGE_PROVIDER</code></td>
+<td><code>local</code></td>
+<td><code>s3</code></td>
+</tr>
+<tr>
+<td><code>FRONTEND_URL</code></td>
+<td><code>http://localhost:3000</code></td>
+<td><code>https://yourdomain.com</code></td>
+</tr>
+<tr>
+<td><code>WHISPER_MODEL</code></td>
+<td><code>medium</code></td>
+<td><code>small</code> (CPU) or <code>medium</code> (GPU)</td>
+</tr>
+<tr>
+<td><code>MONGO_PASSWORD</code></td>
+<td>hardcoded</td>
+<td>strong password</td>
+</tr>
+<tr>
+<td><code>JWT_SECRET</code></td>
+<td>placeholder</td>
+<td><code>openssl rand -base64 32</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="recommended-aws-resources">Recommended AWS Resources</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Spec</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EC2</strong></td>
+<td>t3.small (2 GB) or t3.medium (4 GB)</td>
+<td>Docker hosting</td>
+</tr>
+<tr>
+<td><strong>RDS</strong></td>
+<td>db.t3.micro</td>
+<td>Free tier eligible</td>
+</tr>
+<tr>
+<td><strong>S3</strong></td>
+<td>Standard</td>
+<td>File storage</td>
+</tr>
+<tr>
+<td><strong>IAM</strong></td>
+<td>Programmatic access</td>
+<td>S3 read/write only</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

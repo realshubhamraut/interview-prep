@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ensureStudy — AI Agents Architecture &amp;amp; Automation Analysis</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-95.html">&larr; Previous</a> <a href="page-97.html">Next &rarr;</a>
+  </div>
+  <h1 id="ensurestudy-ai-agents-architecture-automation-analysis">ensureStudy — AI Agents Architecture &amp; Automation Analysis</h1>
+<p>January 2026<br />
+<strong>Project:</strong> ensureStudy — AI-First Learning Platform</p>
+<hr />
+<h2 id="executive-summary">Executive Summary</h2>
+<p>ensureStudy implements a sophisticated <strong>multi-agent AI orchestration system</strong> using <strong>LangGraph StateGraph</strong> patterns. The platform deploys 8 specialized AI agents that work collaboratively to automate critical educational workflows, eliminating the need for human intervention in tutoring, assessment, curriculum planning, research, document processing, and exam proctoring.</p>
+<hr />
+<h2 id="architecture-overview-4">1. Architecture Overview</h2>
+<h3 id="supervisor-pattern-implementation">1.1 Supervisor Pattern Implementation</h3>
+<p>The system follows the <strong>LangGraph Supervisor Pattern</strong> where a central <strong>Orchestrator Agent</strong> acts as a meta-controller, routing requests to specialized sub-agents based on user intent analysis.</p>
+<p><strong>Architecture Flow:</strong></p>
+<ul>
+<li>ORCHESTRATOR (Intent Analysis &amp; Route Decision)
+<ul>
+<li>TUTOR AGENT –&gt; ASSESSMENT AGENT</li>
+<li>RESEARCH AGENT –&gt; CURRICULUM AGENT</li>
+<li>CONTENT AGENT –&gt; DOCUMENT AGENT</li>
+</ul></li>
+</ul>
+<h3 id="intent-classification-system">1.2 Intent Classification System</h3>
+<p>The Orchestrator classifies user queries into four primary intent categories using keyword-based scoring:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 40%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Intent</th>
+<th>Description</th>
+<th>Routed To</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LEARN</strong></td>
+<td>Q&amp;A, explanations, concept clarification</td>
+<td>Tutor Agent</td>
+</tr>
+<tr>
+<td><strong>RESEARCH</strong></td>
+<td>Find content, PDFs, educational resources</td>
+<td>Research Agent</td>
+</tr>
+<tr>
+<td><strong>CREATE</strong></td>
+<td>Generate notes, quizzes, flashcards</td>
+<td>Content Agent</td>
+</tr>
+<tr>
+<td><strong>EVALUATE</strong></td>
+<td>Grade answers, provide feedback</td>
+<td>Evaluation Agent</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="the-eight-ai-agents">2. The Eight AI Agents</h2>
+<h3 id="orchestrator-agent">2.1 Orchestrator Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/orchestrator.py</code></p>
+<p><strong>Human Role Replaced:</strong> Academic Coordinator / Dispatcher</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>Intent Analysis:</strong> Classifies user queries using keyword matching and confidence scoring</li>
+<li><strong>Topic Extraction:</strong> Identifies the main subject matter from natural language queries</li>
+<li><strong>Agent Selection:</strong> Determines which sub-agents to invoke based on intent</li>
+<li><strong>Response Synthesis:</strong> Aggregates outputs from multiple agents into coherent responses</li>
+</ul>
+<p><strong>Technical Implementation:</strong></p>
+<div class="sourceCode" id="cb607"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb607-1"><a href="#cb607-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Intent(<span class="bu">str</span>, Enum):</span>
+<span id="cb607-2"><a href="#cb607-2" aria-hidden="true" tabindex="-1"></a>    LEARN <span class="op">=</span> <span class="st">&quot;learn&quot;</span>          <span class="co"># → TutorAgent</span></span>
+<span id="cb607-3"><a href="#cb607-3" aria-hidden="true" tabindex="-1"></a>    RESEARCH <span class="op">=</span> <span class="st">&quot;research&quot;</span>    <span class="co"># → ResearchAgent</span></span>
+<span id="cb607-4"><a href="#cb607-4" aria-hidden="true" tabindex="-1"></a>    CREATE <span class="op">=</span> <span class="st">&quot;create&quot;</span>        <span class="co"># → ContentAgent</span></span>
+<span id="cb607-5"><a href="#cb607-5" aria-hidden="true" tabindex="-1"></a>    EVALUATE <span class="op">=</span> <span class="st">&quot;evaluate&quot;</span>    <span class="co"># → EvaluationAgent</span></span>
+<span id="cb607-6"><a href="#cb607-6" aria-hidden="true" tabindex="-1"></a>    MIXED <span class="op">=</span> <span class="st">&quot;mixed&quot;</span>          <span class="co"># → Multiple Agents</span></span></code></pre></div>
+<hr />
+<h3 id="tutor-agent">2.2 Tutor Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/tutor_agent.py</code></p>
+<p><strong>Human Role Replaced:</strong> Personal Tutor / Subject Matter Expert</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>ABCR (Attention-Based Context Routing):</strong> Detects whether a query is a follow-up or new topic</li>
+<li><strong>TAL (Topic Anchor Layer):</strong> Maintains conversation continuity across sessions</li>
+<li><strong>MCP (Memory Context Processor):</strong> Isolates web content from classroom content in RAG</li>
+<li><strong>Content Moderation:</strong> Filters non-academic queries using ML classification</li>
+</ul>
+<p><strong>Processing Flow:</strong></p>
+<ul>
+<li>Moderate Query</li>
+<li>Context Routing (ABCR/TAL)</li>
+<li>Retrieve with MCP</li>
+<li>Generate Response</li>
+</ul>
+<p><strong>Session State Management:</strong></p>
+<div class="sourceCode" id="cb608"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb608-1"><a href="#cb608-1" aria-hidden="true" tabindex="-1"></a>_session_states: Dict[<span class="bu">str</span>, Dict] <span class="op">=</span> {</span>
+<span id="cb608-2"><a href="#cb608-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;turn_texts&quot;</span>: [],           <span class="co"># Conversation history</span></span>
+<span id="cb608-3"><a href="#cb608-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;last_abcr_decision&quot;</span>: <span class="st">&quot;&quot;</span>,   <span class="co"># &quot;related&quot; or &quot;new_topic&quot;</span></span>
+<span id="cb608-4"><a href="#cb608-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;consecutive_borderline&quot;</span>: <span class="dv">0</span>,</span>
+<span id="cb608-5"><a href="#cb608-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;topic_anchor_id&quot;</span>: <span class="va">None</span>,</span>
+<span id="cb608-6"><a href="#cb608-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;topic_anchor_title&quot;</span>: <span class="va">None</span></span>
+<span id="cb608-7"><a href="#cb608-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h3 id="research-agent">2.3 Research Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/research_agent.py</code></p>
+<p><strong>Human Role Replaced:</strong> Research Assistant / Librarian</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>Web Search:</strong> Finds educational content via DuckDuckGo</li>
+<li><strong>PDF Discovery:</strong> Searches and downloads academic PDFs</li>
+<li><strong>YouTube Integration:</strong> Discovers relevant educational videos</li>
+<li><strong>Content Indexing:</strong> Stores discovered content in Qdrant vector database</li>
+</ul>
+<p><strong>Processing Pipeline:</strong></p>
+<ol type="1">
+<li>Analyze Query</li>
+<li>Web Search</li>
+<li>PDF Download (if PDF)</li>
+<li>YouTube Search</li>
+<li>Index Content</li>
+</ol>
+<hr />
+<h3 id="assessment-agent-1">2.4 Assessment Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/assessment_agent.py</code></p>
+<p><strong>Human Role Replaced:</strong> Question Paper Setter / Examiner</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>Adaptive MCQ Generation:</strong> Creates questions based on weak topics</li>
+<li><strong>Difficulty Calibration:</strong> Adjusts complexity (easy/medium/hard)</li>
+<li><strong>Explanation Generation:</strong> Provides detailed answer explanations</li>
+<li><strong>Topic Coverage:</strong> Ensures balanced coverage across subjects</li>
+</ul>
+<p><strong>Difficulty Guidance:</strong></p>
+<div class="sourceCode" id="cb609"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb609-1"><a href="#cb609-1" aria-hidden="true" tabindex="-1"></a>difficulty_guidance <span class="op">=</span> {</span>
+<span id="cb609-2"><a href="#cb609-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;easy&quot;</span>: <span class="st">&quot;Basic recall and understanding questions.&quot;</span>,</span>
+<span id="cb609-3"><a href="#cb609-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;medium&quot;</span>: <span class="st">&quot;Application and analysis questions.&quot;</span>,</span>
+<span id="cb609-4"><a href="#cb609-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;hard&quot;</span>: <span class="st">&quot;Synthesis and evaluation - complex scenarios.&quot;</span></span>
+<span id="cb609-5"><a href="#cb609-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h3 id="curriculum-agent">2.5 Curriculum Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/curriculum_agent.py</code></p>
+<p><strong>Human Role Replaced:</strong> Academic Counselor / Curriculum Planner</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>Syllabus Processing:</strong> Loads and parses extracted syllabus topics</li>
+<li><strong>Dependency Analysis:</strong> Uses LLM to identify topic prerequisites</li>
+<li><strong>Knowledge Assessment:</strong> Evaluates student’s current mastery levels</li>
+<li><strong>Learning Path Generation:</strong> Creates optimized topic sequences</li>
+<li><strong>Schedule Creation:</strong> Generates daily/weekly study schedules with milestones</li>
+</ul>
+<p><strong>Processing Flow:</strong></p>
+<ol type="1">
+<li>Load Topics</li>
+<li>Analyze Dependencies</li>
+<li>Knowledge Assessment</li>
+<li>Build Path</li>
+<li>Schedule Generator</li>
+</ol>
+<p><strong>Data Structures:</strong></p>
+<div class="sourceCode" id="cb610"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb610-1"><a href="#cb610-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb610-2"><a href="#cb610-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CurriculumTopic:</span>
+<span id="cb610-3"><a href="#cb610-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>: <span class="bu">str</span></span>
+<span id="cb610-4"><a href="#cb610-4" aria-hidden="true" tabindex="-1"></a>    name: <span class="bu">str</span></span>
+<span id="cb610-5"><a href="#cb610-5" aria-hidden="true" tabindex="-1"></a>    difficulty: <span class="bu">str</span>          <span class="co"># &quot;easy&quot;, &quot;medium&quot;, &quot;hard&quot;</span></span>
+<span id="cb610-6"><a href="#cb610-6" aria-hidden="true" tabindex="-1"></a>    estimated_hours: <span class="bu">float</span></span>
+<span id="cb610-7"><a href="#cb610-7" aria-hidden="true" tabindex="-1"></a>    prerequisites: List[<span class="bu">str</span>]  <span class="co"># Topic IDs</span></span>
+<span id="cb610-8"><a href="#cb610-8" aria-hidden="true" tabindex="-1"></a>    subtopics: List[<span class="bu">str</span>]</span>
+<span id="cb610-9"><a href="#cb610-9" aria-hidden="true" tabindex="-1"></a>    order: <span class="bu">int</span>               <span class="co"># Position in learning path</span></span></code></pre></div>
+<hr />
+<h3 id="study-planner-agent">2.6 Study Planner Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/study_planner.py</code></p>
+<p><strong>Human Role Replaced:</strong> Study Coach / Academic Advisor</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>Topic Prioritization:</strong> Ranks topics by weakness scores</li>
+<li><strong>Resource Allocation:</strong> Distributes study hours optimally</li>
+<li><strong>Milestone Setting:</strong> Creates checkpoints for progress tracking</li>
+<li><strong>Personalized Recommendations:</strong> Provides study tips based on patterns</li>
+</ul>
+<p><strong>Output Structure:</strong></p>
+<div class="sourceCode" id="cb611"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb611-1"><a href="#cb611-1" aria-hidden="true" tabindex="-1"></a>study_plan <span class="op">=</span> {</span>
+<span id="cb611-2"><a href="#cb611-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;daily_schedule&quot;</span>: [...],</span>
+<span id="cb611-3"><a href="#cb611-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;recommendations&quot;</span>: [</span>
+<span id="cb611-4"><a href="#cb611-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Focus on high priority topics first&quot;</span>,</span>
+<span id="cb611-5"><a href="#cb611-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Take regular breaks every 45 minutes&quot;</span>,</span>
+<span id="cb611-6"><a href="#cb611-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Review previous day&#39;s material each morning&quot;</span></span>
+<span id="cb611-7"><a href="#cb611-7" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb611-8"><a href="#cb611-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;milestones&quot;</span>: [</span>
+<span id="cb611-9"><a href="#cb611-9" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;day&quot;</span>: <span class="dv">3</span>, <span class="st">&quot;goal&quot;</span>: <span class="st">&quot;Complete X basics&quot;</span>}</span>
+<span id="cb611-10"><a href="#cb611-10" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb611-11"><a href="#cb611-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h3 id="document-processing-agent">2.7 Document Processing Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/document_agent.py</code></p>
+<p><strong>Human Role Replaced:</strong> Document Processor / Data Entry Specialist</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>Multi-Format Support:</strong> PDF, DOCX, PPTX processing</li>
+<li><strong>OCR Integration:</strong> Extracts text from images and scanned documents</li>
+<li><strong>Intelligent Chunking:</strong> Splits documents for optimal RAG retrieval</li>
+<li><strong>Vector Embedding:</strong> Generates embeddings for semantic search</li>
+<li><strong>Qdrant Indexing:</strong> Stores processed content for retrieval</li>
+</ul>
+<p><strong>7-Stage Pipeline:</strong></p>
+<pre><code>Stage 1: VALIDATE    → Check file exists and is processable
+Stage 2: PREPROCESS  → Convert to standard format
+Stage 3: OCR         → Extract text from images
+Stage 4: CHUNK       → Split into semantic chunks
+Stage 5: EMBED       → Generate vector embeddings
+Stage 6: INDEX       → Store in Qdrant vector database
+Stage 7: COMPLETE    → Finalize and report status</code></pre>
+<p><strong>Processing States:</strong></p>
+<div class="sourceCode" id="cb613"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb613-1"><a href="#cb613-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ProcessingStage(<span class="bu">str</span>, Enum):</span>
+<span id="cb613-2"><a href="#cb613-2" aria-hidden="true" tabindex="-1"></a>    PENDING <span class="op">=</span> <span class="st">&quot;pending&quot;</span></span>
+<span id="cb613-3"><a href="#cb613-3" aria-hidden="true" tabindex="-1"></a>    VALIDATING <span class="op">=</span> <span class="st">&quot;validating&quot;</span></span>
+<span id="cb613-4"><a href="#cb613-4" aria-hidden="true" tabindex="-1"></a>    PREPROCESSING <span class="op">=</span> <span class="st">&quot;preprocessing&quot;</span></span>
+<span id="cb613-5"><a href="#cb613-5" aria-hidden="true" tabindex="-1"></a>    OCR <span class="op">=</span> <span class="st">&quot;ocr&quot;</span></span>
+<span id="cb613-6"><a href="#cb613-6" aria-hidden="true" tabindex="-1"></a>    CHUNKING <span class="op">=</span> <span class="st">&quot;chunking&quot;</span></span>
+<span id="cb613-7"><a href="#cb613-7" aria-hidden="true" tabindex="-1"></a>    EMBEDDING <span class="op">=</span> <span class="st">&quot;embedding&quot;</span></span>
+<span id="cb613-8"><a href="#cb613-8" aria-hidden="true" tabindex="-1"></a>    INDEXING <span class="op">=</span> <span class="st">&quot;indexing&quot;</span></span>
+<span id="cb613-9"><a href="#cb613-9" aria-hidden="true" tabindex="-1"></a>    COMPLETED <span class="op">=</span> <span class="st">&quot;completed&quot;</span></span>
+<span id="cb613-10"><a href="#cb613-10" aria-hidden="true" tabindex="-1"></a>    FAILED <span class="op">=</span> <span class="st">&quot;failed&quot;</span></span></code></pre></div>
+<hr />
+<h3 id="web-enrichment-agent-1">2.8 Web Enrichment Agent</h3>
+<p><strong>File:</strong> <code>backend/ai-service/app/agents/web_enrichment_agent.py</code></p>
+<p><strong>Human Role Replaced:</strong> Research Assistant (Real-Time)</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li><strong>Wikipedia Fetching:</strong> Retrieves relevant encyclopedia articles</li>
+<li><strong>Khan Academy Integration:</strong> Finds educational content</li>
+<li><strong>Quality Filtering:</strong> Scores and ranks sources by relevance</li>
+<li><strong>Redis Caching:</strong> Stores results for faster subsequent retrieval</li>
+</ul>
+<p><strong>Source Types:</strong></p>
+<div class="sourceCode" id="cb614"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb614-1"><a href="#cb614-1" aria-hidden="true" tabindex="-1"></a>source_types <span class="op">=</span> [<span class="st">&#39;wikipedia&#39;</span>, <span class="st">&#39;khan_academy&#39;</span>, <span class="st">&#39;video&#39;</span>, <span class="st">&#39;article&#39;</span>]</span></code></pre></div>
+<hr />
+<h2 id="proctoring-system">3. Proctoring System</h2>
+<p><strong>File:</strong> <code>backend/ai-service/app/proctor/session.py</code></p>
+<p><strong>Human Role Replaced:</strong> Exam Invigilator / Proctor</p>
+<h3 id="multi-modal-detection">3.1 Multi-Modal Detection</h3>
+<p>The proctoring system runs multiple ML detectors simultaneously:</p>
+<table>
+<thead>
+<tr>
+<th>Detector</th>
+<th>Model</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Face Detector</strong></td>
+<td>MediaPipe</td>
+<td>Detects face presence</td>
+</tr>
+<tr>
+<td><strong>Head Pose Estimator</strong></td>
+<td>MediaPipe</td>
+<td>Tracks head orientation</td>
+</tr>
+<tr>
+<td><strong>Gaze Tracker</strong></td>
+<td>Custom CNN</td>
+<td>Monitors eye direction</td>
+</tr>
+<tr>
+<td><strong>Object Detector</strong></td>
+<td>YOLOv11</td>
+<td>Identifies phones, books, people</td>
+</tr>
+<tr>
+<td><strong>Hand Detector</strong></td>
+<td>MediaPipe</td>
+<td>Tracks hand positions</td>
+</tr>
+<tr>
+<td><strong>Audio Detector</strong></td>
+<td>Whisper</td>
+<td>Detects voice/sounds</td>
+</tr>
+<tr>
+<td><strong>Blink Detector</strong></td>
+<td>Custom</td>
+<td>Monitors blink patterns</td>
+</tr>
+<tr>
+<td><strong>Face Verifier</strong></td>
+<td>FaceNet</td>
+<td>Verifies student identity</td>
+</tr>
+</tbody>
+</table>
+<h3 id="integrity-scoring">3.2 Integrity Scoring</h3>
+<div class="sourceCode" id="cb615"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb615-1"><a href="#cb615-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ProctorSession:</span>
+<span id="cb615-2"><a href="#cb615-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, assessment_id, student_id):</span>
+<span id="cb615-3"><a href="#cb615-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.metrics <span class="op">=</span> MetricsAggregator(session_id<span class="op">=</span><span class="va">self</span>.<span class="bu">id</span>)</span>
+<span id="cb615-4"><a href="#cb615-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.scorer <span class="op">=</span> IntegrityScorer()</span>
+<span id="cb615-5"><a href="#cb615-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.flagger <span class="op">=</span> FlagGenerator()</span></code></pre></div>
+<hr />
+<h2 id="human-tasks-automated">4. Human Tasks Automated</h2>
+<table>
+<thead>
+<tr>
+<th>Human Role</th>
+<th>AI Replacement</th>
+<th>Time Saved</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Personal Tutor</td>
+<td>Tutor Agent + ABCR</td>
+<td>24/7 availability</td>
+</tr>
+<tr>
+<td>Question Setter</td>
+<td>Assessment Agent</td>
+<td>Instant quiz generation</td>
+</tr>
+<tr>
+<td>Academic Counselor</td>
+<td>Curriculum Agent</td>
+<td>Automated path planning</td>
+</tr>
+<tr>
+<td>Research Assistant</td>
+<td>Research Agent</td>
+<td>Minutes vs hours</td>
+</tr>
+<tr>
+<td>Librarian</td>
+<td>Document Agent</td>
+<td>Automated indexing</td>
+</tr>
+<tr>
+<td>Exam Invigilator</td>
+<td>Proctor Session</td>
+<td>Multi-modal monitoring</td>
+</tr>
+<tr>
+<td>Study Coach</td>
+<td>Study Planner Agent</td>
+<td>Personalized schedules</td>
+</tr>
+<tr>
+<td>Coordinator</td>
+<td>Orchestrator Agent</td>
+<td>Intelligent routing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="technical-stack">5. Technical Stack</h2>
+<h3 id="aiml-frameworks">5.1 AI/ML Frameworks</h3>
+<ul>
+<li><strong>LangGraph</strong> — Agent orchestration and state management</li>
+<li><strong>LangChain</strong> — LLM integration and prompt management</li>
+<li><strong>PyTorch</strong> — Deep learning models (proctoring, temporal analysis)</li>
+<li><strong>Hugging Face Transformers</strong> — NLP models and embeddings</li>
+<li><strong>MediaPipe</strong> — Face landmarks and pose estimation</li>
+<li><strong>YOLOv11</strong> — Real-time object detection</li>
+<li><strong>Whisper</strong> — Speech-to-text transcription</li>
+</ul>
+<h3 id="data-infrastructure">5.2 Data Infrastructure</h3>
+<ul>
+<li><strong>Qdrant</strong> — Vector database for RAG</li>
+<li><strong>PostgreSQL</strong> — Relational data storage</li>
+<li><strong>MongoDB</strong> — Document storage (transcripts)</li>
+<li><strong>Redis</strong> — Session caching and real-time data</li>
+<li><strong>Apache Kafka</strong> — Event streaming</li>
+</ul>
+<h3 id="backend-services">5.3 Backend Services</h3>
+<ul>
+<li><strong>FastAPI</strong> — AI service endpoints</li>
+<li><strong>Flask</strong> — Core service (auth, CRUD)</li>
+<li><strong>Docker</strong> — Containerization</li>
+</ul>
+<hr />
+<h2 id="conclusion">6. Conclusion</h2>
+<p>The ensureStudy platform demonstrates a production-grade implementation of autonomous AI agents that collectively replace multiple human roles in educational workflows. The LangGraph-based architecture enables:</p>
+<ol type="1">
+<li><strong>Intelligent Routing</strong> — Automatic query classification and agent selection</li>
+<li><strong>Context Awareness</strong> — Conversation continuity via ABCR/TAL</li>
+<li><strong>Adaptive Learning</strong> — Personalized content based on student performance</li>
+<li><strong>Automated Assessment</strong> — Dynamic quiz generation and evaluation</li>
+<li><strong>Real-Time Monitoring</strong> — Multi-modal exam proctoring</li>
+<li><strong>Knowledge Management</strong> — Automated document processing and indexing</li>
+</ol>
+<p>This multi-agent system provides 24/7 educational support while maintaining the quality and personalization traditionally requiring human intervention.</p>
+<hr />
+<p><strong>Document Generated:</strong> January 2026<br />
+<strong>Technology:</strong> LangGraph, PyTorch, Qdrant, FastAPI<br />
+<strong>Repository:</strong> github.com/realshubhamraut/ensureStudy</p>
+<hr />
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 93: YouTube &amp;amp; Video Integration</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-92.html">&larr; Previous</a> <a href="page-94.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-93-youtube-video-integration">Page 93: YouTube &amp; Video Integration</h1>
+<blockquote>
+<p>YouTube video search via Data API v3, transcript extraction for RAG context, and educational video embedding.</p>
+</blockquote>
+<hr />
+<h2 id="architecture-5">93.1 Architecture</h2>
+<pre class="mermaid">flowchart TB
+    Q["User Query"] --> YVS["YouTubeVideoService"]
+    Q --> YTS["YouTubeTranscriptService"]
+    YVS --> API["YouTube Data API v3"]
+    API --> SEARCH["Search + Metadata"]
+    YTS --> CAPT["youtube-transcript-api"]
+    CAPT --> CONTEXT["Transcript for RAG Context"]
+    SEARCH --> EMBED["Frontend Embed via iframe"]</pre>
+<h3 id="source-files-7">Source Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Lines</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>services/youtube_video_service.py</code></td>
+<td>179</td>
+<td>6.5KB</td>
+</tr>
+<tr>
+<td><code>services/youtube_transcript_service.py</code></td>
+<td>108</td>
+<td>3.5KB</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="youtube-video-search">93.2 YouTube Video Search</h2>
+<h3 id="source-servicesyoutube_video_service.py">Source: <code>services/youtube_video_service.py</code></h3>
+<div class="sourceCode" id="cb596"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb596-1"><a href="#cb596-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> search_videos_youtube(</span>
+<span id="cb596-2"><a href="#cb596-2" aria-hidden="true" tabindex="-1"></a>    query: <span class="bu">str</span>,</span>
+<span id="cb596-3"><a href="#cb596-3" aria-hidden="true" tabindex="-1"></a>    max_results: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>,</span>
+<span id="cb596-4"><a href="#cb596-4" aria-hidden="true" tabindex="-1"></a>    educational_filter: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb596-5"><a href="#cb596-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> List[Dict]:</span>
+<span id="cb596-6"><a href="#cb596-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb596-7"><a href="#cb596-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Two-step search:</span></span>
+<span id="cb596-8"><a href="#cb596-8" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Search API → get video IDs + snippets</span></span>
+<span id="cb596-9"><a href="#cb596-9" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Videos API → get duration + view count</span></span>
+<span id="cb596-10"><a href="#cb596-10" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="search-parameters">Search Parameters</h3>
+<div class="sourceCode" id="cb597"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb597-1"><a href="#cb597-1" aria-hidden="true" tabindex="-1"></a>search_params <span class="op">=</span> {</span>
+<span id="cb597-2"><a href="#cb597-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;part&quot;</span>: <span class="st">&quot;snippet&quot;</span>,</span>
+<span id="cb597-3"><a href="#cb597-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;q&quot;</span>: <span class="ss">f&quot;</span><span class="sc">{</span>query<span class="sc">}</span><span class="ss"> tutorial explanation educational&quot;</span>,  <span class="co"># Add educational keywords</span></span>
+<span id="cb597-4"><a href="#cb597-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;type&quot;</span>: <span class="st">&quot;video&quot;</span>,</span>
+<span id="cb597-5"><a href="#cb597-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;maxResults&quot;</span>: <span class="bu">min</span>(max_results <span class="op">*</span> <span class="dv">2</span>, <span class="dv">10</span>),</span>
+<span id="cb597-6"><a href="#cb597-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;relevanceLanguage&quot;</span>: <span class="st">&quot;en&quot;</span>,</span>
+<span id="cb597-7"><a href="#cb597-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;safeSearch&quot;</span>: <span class="st">&quot;strict&quot;</span>,</span>
+<span id="cb597-8"><a href="#cb597-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;videoEmbeddable&quot;</span>: <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb597-9"><a href="#cb597-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;order&quot;</span>: <span class="st">&quot;relevance&quot;</span></span>
+<span id="cb597-10"><a href="#cb597-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="response-format-2">Response Format</h3>
+<div class="sourceCode" id="cb598"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb598-1"><a href="#cb598-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb598-2"><a href="#cb598-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;yt_dQw4w9WgXcQ&quot;</span><span class="fu">,</span></span>
+<span id="cb598-3"><a href="#cb598-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Newton&#39;s Third Law Explained&quot;</span><span class="fu">,</span></span>
+<span id="cb598-4"><a href="#cb598-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;url&quot;</span><span class="fu">:</span> <span class="st">&quot;https://www.youtube.com/watch?v=dQw4w9WgXcQ&quot;</span><span class="fu">,</span></span>
+<span id="cb598-5"><a href="#cb598-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;thumbnailUrl&quot;</span><span class="fu">:</span> <span class="st">&quot;https://i.ytimg.com/vi/.../hqdefault.jpg&quot;</span><span class="fu">,</span></span>
+<span id="cb598-6"><a href="#cb598-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;embedUrl&quot;</span><span class="fu">:</span> <span class="st">&quot;https://www.youtube.com/embed/dQw4w9WgXcQ&quot;</span><span class="fu">,</span></span>
+<span id="cb598-7"><a href="#cb598-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;duration&quot;</span><span class="fu">:</span> <span class="st">&quot;12:34&quot;</span><span class="fu">,</span></span>
+<span id="cb598-8"><a href="#cb598-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;source&quot;</span><span class="fu">:</span> <span class="st">&quot;Khan Academy&quot;</span><span class="fu">,</span></span>
+<span id="cb598-9"><a href="#cb598-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;relevance&quot;</span><span class="fu">:</span> <span class="dv">95</span><span class="fu">,</span></span>
+<span id="cb598-10"><a href="#cb598-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;viewCount&quot;</span><span class="fu">:</span> <span class="dv">1500000</span></span>
+<span id="cb598-11"><a href="#cb598-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="sorting">Sorting</h3>
+<p>Videos sorted by <strong>view count</strong> (descending) — popular educational content tends to be higher quality.</p>
+<hr />
+<h2 id="youtube-transcript-service">93.3 YouTube Transcript Service</h2>
+<h3 id="source-servicesyoutube_transcript_service.py">Source: <code>services/youtube_transcript_service.py</code></h3>
+<div class="sourceCode" id="cb599"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb599-1"><a href="#cb599-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> get_youtube_transcript(video_id: <span class="bu">str</span>, max_chars: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2000</span>) <span class="op">-&gt;</span> Optional[<span class="bu">str</span>]:</span>
+<span id="cb599-2"><a href="#cb599-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb599-3"><a href="#cb599-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Transcript preference order:</span></span>
+<span id="cb599-4"><a href="#cb599-4" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Manually created English transcript</span></span>
+<span id="cb599-5"><a href="#cb599-5" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Auto-generated English transcript</span></span>
+<span id="cb599-6"><a href="#cb599-6" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Any available transcript</span></span>
+<span id="cb599-7"><a href="#cb599-7" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb599-8"><a href="#cb599-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: Plain text transcript (max 2000 chars)</span></span>
+<span id="cb599-9"><a href="#cb599-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Timeout: 5 seconds</span></span>
+<span id="cb599-10"><a href="#cb599-10" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="url-extraction">URL Extraction</h3>
+<div class="sourceCode" id="cb600"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb600-1"><a href="#cb600-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_video_id(url: <span class="bu">str</span>) <span class="op">-&gt;</span> Optional[<span class="bu">str</span>]:</span>
+<span id="cb600-2"><a href="#cb600-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Supports:</span></span>
+<span id="cb600-3"><a href="#cb600-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># youtube.com/watch?v=VIDEO_ID</span></span>
+<span id="cb600-4"><a href="#cb600-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># youtu.be/VIDEO_ID</span></span>
+<span id="cb600-5"><a href="#cb600-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># youtube.com/embed/VIDEO_ID</span></span>
+<span id="cb600-6"><a href="#cb600-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Just the 11-char ID</span></span></code></pre></div>
+<h3 id="use-in-rag-pipeline">Use in RAG Pipeline</h3>
+<p>Transcripts are fed as additional context to the LLM:</p>
+<div class="sourceCode" id="cb601"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb601-1"><a href="#cb601-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In the research agent:</span></span>
+<span id="cb601-2"><a href="#cb601-2" aria-hidden="true" tabindex="-1"></a>transcript <span class="op">=</span> <span class="cf">await</span> get_youtube_transcript(video_id)</span>
+<span id="cb601-3"><a href="#cb601-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> transcript:</span>
+<span id="cb601-4"><a href="#cb601-4" aria-hidden="true" tabindex="-1"></a>    context_chunks.append({</span>
+<span id="cb601-5"><a href="#cb601-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;source&quot;</span>: <span class="st">&quot;youtube&quot;</span>,</span>
+<span id="cb601-6"><a href="#cb601-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;text&quot;</span>: transcript,</span>
+<span id="cb601-7"><a href="#cb601-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;url&quot;</span>: <span class="ss">f&quot;https://youtube.com/watch?v=</span><span class="sc">{</span>video_id<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb601-8"><a href="#cb601-8" aria-hidden="true" tabindex="-1"></a>    })</span></code></pre></div>
+<hr />
+<h2 id="configuration-9">93.4 Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YOUTUBE_API_KEY</code></td>
+<td>Yes</td>
+<td>YouTube Data API v3 key</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Without <code>YOUTUBE_API_KEY</code>, video search silently returns empty results. Transcript extraction works without an API key (uses caption endpoint).</p>
+</blockquote>
+<hr />
+
+</body>
+</html>

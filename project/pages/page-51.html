@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 51: Prompt Engineering Patterns &amp;amp; LLM Orchestration</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-50.html">&larr; Previous</a> <a href="page-52.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-51-prompt-engineering-patterns-llm-orchestration">Page 51: Prompt Engineering Patterns &amp; LLM Orchestration</h1>
+<hr />
+<h2 id="overview-39">51.1 Overview</h2>
+<p>ensureStudy uses <strong>structured prompt engineering</strong> across all LLM-powered features: tutoring, question generation, grading, summarization, curriculum extraction, and content moderation. This page catalogs every prompt template, composition pattern, and output parsing strategy.</p>
+<hr />
+<h2 id="prompt-architecture">51.2 Prompt Architecture</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Prompt Architecture "]
+        direction TB
+        N0["SYSTEM PROMPT"]
+        N1["Role definition + constraints + rules"]
+        N2["CONTEXT INJECTION"]
+        N3["RAG chunks + student profile + history"]
+        N4["USER MESSAGE"]
+        N5["Student question or task input"]
+        N6["OUTPUT FORMAT"]
+        N7["JSON schema / structured instructions"]
+    end
+</pre>
+<hr />
+<h2 id="tutor-agent-system-prompt">51.3 Tutor Agent System Prompt</h2>
+<div class="sourceCode" id="cb314"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb314-1"><a href="#cb314-1" aria-hidden="true" tabindex="-1"></a>TUTOR_SYSTEM_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb314-2"><a href="#cb314-2" aria-hidden="true" tabindex="-1"></a><span class="st">You are an expert AI tutor on the ensureStudy platform.</span></span>
+<span id="cb314-3"><a href="#cb314-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-4"><a href="#cb314-4" aria-hidden="true" tabindex="-1"></a><span class="st">## Your Teaching Method (ABCR Cycle):</span></span>
+<span id="cb314-5"><a href="#cb314-5" aria-hidden="true" tabindex="-1"></a><span class="st">1. ASSESS: Evaluate the student&#39;s current understanding level</span></span>
+<span id="cb314-6"><a href="#cb314-6" aria-hidden="true" tabindex="-1"></a><span class="st">2. BUILD: Provide clear, structured explanations with examples</span></span>
+<span id="cb314-7"><a href="#cb314-7" aria-hidden="true" tabindex="-1"></a><span class="st">3. CHALLENGE: Ask follow-up questions to deepen understanding</span></span>
+<span id="cb314-8"><a href="#cb314-8" aria-hidden="true" tabindex="-1"></a><span class="st">4. REFLECT: Summarize key takeaways</span></span>
+<span id="cb314-9"><a href="#cb314-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-10"><a href="#cb314-10" aria-hidden="true" tabindex="-1"></a><span class="st">## Student Profile:</span></span>
+<span id="cb314-11"><a href="#cb314-11" aria-hidden="true" tabindex="-1"></a><span class="st">- TAL Level: </span><span class="sc">{tal_level}</span><span class="st">/5 (1=Beginner, 5=Expert)</span></span>
+<span id="cb314-12"><a href="#cb314-12" aria-hidden="true" tabindex="-1"></a><span class="st">- Subject: </span><span class="sc">{subject}</span></span>
+<span id="cb314-13"><a href="#cb314-13" aria-hidden="true" tabindex="-1"></a><span class="st">- Weak Topics: </span><span class="sc">{weak_topics}</span></span>
+<span id="cb314-14"><a href="#cb314-14" aria-hidden="true" tabindex="-1"></a><span class="st">- Learning Style: </span><span class="sc">{learning_style}</span></span>
+<span id="cb314-15"><a href="#cb314-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-16"><a href="#cb314-16" aria-hidden="true" tabindex="-1"></a><span class="st">## Rules:</span></span>
+<span id="cb314-17"><a href="#cb314-17" aria-hidden="true" tabindex="-1"></a><span class="st">1. Adapt complexity to TAL level</span></span>
+<span id="cb314-18"><a href="#cb314-18" aria-hidden="true" tabindex="-1"></a><span class="st">2. Use analogies and real-world examples</span></span>
+<span id="cb314-19"><a href="#cb314-19" aria-hidden="true" tabindex="-1"></a><span class="st">3. Never give direct answers without explanation</span></span>
+<span id="cb314-20"><a href="#cb314-20" aria-hidden="true" tabindex="-1"></a><span class="st">4. Ask one follow-up question per response</span></span>
+<span id="cb314-21"><a href="#cb314-21" aria-hidden="true" tabindex="-1"></a><span class="st">5. Use LaTeX for mathematical formulas: $formula$</span></span>
+<span id="cb314-22"><a href="#cb314-22" aria-hidden="true" tabindex="-1"></a><span class="st">6. Keep responses concise but thorough</span></span>
+<span id="cb314-23"><a href="#cb314-23" aria-hidden="true" tabindex="-1"></a><span class="st">7. Reference specific materials when available</span></span>
+<span id="cb314-24"><a href="#cb314-24" aria-hidden="true" tabindex="-1"></a><span class="st">8. Encourage the student</span></span>
+<span id="cb314-25"><a href="#cb314-25" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="question-generation-prompts">51.4 Question Generation Prompts</h2>
+<h3 id="mcq-generation">MCQ Generation</h3>
+<div class="sourceCode" id="cb315"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb315-1"><a href="#cb315-1" aria-hidden="true" tabindex="-1"></a>MCQ_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb315-2"><a href="#cb315-2" aria-hidden="true" tabindex="-1"></a><span class="st">Generate </span><span class="sc">{count}</span><span class="st"> multiple-choice questions on the topic: </span><span class="sc">{topic}</span></span>
+<span id="cb315-3"><a href="#cb315-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb315-4"><a href="#cb315-4" aria-hidden="true" tabindex="-1"></a><span class="st">Difficulty: </span><span class="sc">{difficulty}</span><span class="st"> (easy/medium/hard)</span></span>
+<span id="cb315-5"><a href="#cb315-5" aria-hidden="true" tabindex="-1"></a><span class="st">Subject: </span><span class="sc">{subject}</span></span>
+<span id="cb315-6"><a href="#cb315-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb315-7"><a href="#cb315-7" aria-hidden="true" tabindex="-1"></a><span class="st">Format each question as JSON:</span></span>
+<span id="cb315-8"><a href="#cb315-8" aria-hidden="true" tabindex="-1"></a><span class="sc">{{</span></span>
+<span id="cb315-9"><a href="#cb315-9" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;question&quot;: &quot;...&quot;,</span></span>
+<span id="cb315-10"><a href="#cb315-10" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;options&quot;: [&quot;A) ...&quot;, &quot;B) ...&quot;, &quot;C) ...&quot;, &quot;D) ...&quot;],</span></span>
+<span id="cb315-11"><a href="#cb315-11" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;correct_answer&quot;: &quot;A&quot;,</span></span>
+<span id="cb315-12"><a href="#cb315-12" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;explanation&quot;: &quot;...&quot;,</span></span>
+<span id="cb315-13"><a href="#cb315-13" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;difficulty&quot;: &quot;medium&quot;,</span></span>
+<span id="cb315-14"><a href="#cb315-14" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;bloom_level&quot;: &quot;application&quot;</span></span>
+<span id="cb315-15"><a href="#cb315-15" aria-hidden="true" tabindex="-1"></a><span class="sc">}}</span></span>
+<span id="cb315-16"><a href="#cb315-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb315-17"><a href="#cb315-17" aria-hidden="true" tabindex="-1"></a><span class="st">Rules:</span></span>
+<span id="cb315-18"><a href="#cb315-18" aria-hidden="true" tabindex="-1"></a><span class="st">- All distractors must be plausible</span></span>
+<span id="cb315-19"><a href="#cb315-19" aria-hidden="true" tabindex="-1"></a><span class="st">- Avoid &quot;all of the above&quot; / &quot;none of the above&quot;</span></span>
+<span id="cb315-20"><a href="#cb315-20" aria-hidden="true" tabindex="-1"></a><span class="st">- Include explanations for correct answers</span></span>
+<span id="cb315-21"><a href="#cb315-21" aria-hidden="true" tabindex="-1"></a><span class="st">- Cover different Bloom&#39;s taxonomy levels</span></span>
+<span id="cb315-22"><a href="#cb315-22" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="descriptive-question-generation">Descriptive Question Generation</h3>
+<div class="sourceCode" id="cb316"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb316-1"><a href="#cb316-1" aria-hidden="true" tabindex="-1"></a>DESCRIPTIVE_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb316-2"><a href="#cb316-2" aria-hidden="true" tabindex="-1"></a><span class="st">Generate </span><span class="sc">{count}</span><span class="st"> descriptive/essay questions on: </span><span class="sc">{topic}</span></span>
+<span id="cb316-3"><a href="#cb316-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb316-4"><a href="#cb316-4" aria-hidden="true" tabindex="-1"></a><span class="st">Format as JSON:</span></span>
+<span id="cb316-5"><a href="#cb316-5" aria-hidden="true" tabindex="-1"></a><span class="sc">{{</span></span>
+<span id="cb316-6"><a href="#cb316-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;question&quot;: &quot;...&quot;,</span></span>
+<span id="cb316-7"><a href="#cb316-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;expected_answer&quot;: &quot;...&quot;,</span></span>
+<span id="cb316-8"><a href="#cb316-8" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;marking_rubric&quot;: </span><span class="sc">{{</span></span>
+<span id="cb316-9"><a href="#cb316-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;criteria&quot;: [...],</span></span>
+<span id="cb316-10"><a href="#cb316-10" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;max_marks&quot;: 10</span></span>
+<span id="cb316-11"><a href="#cb316-11" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="sc">}}</span><span class="st">,</span></span>
+<span id="cb316-12"><a href="#cb316-12" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;difficulty&quot;: &quot;hard&quot;</span></span>
+<span id="cb316-13"><a href="#cb316-13" aria-hidden="true" tabindex="-1"></a><span class="sc">}}</span></span>
+<span id="cb316-14"><a href="#cb316-14" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="answer-grading-prompts">51.5 Answer Grading Prompts</h2>
+<div class="sourceCode" id="cb317"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb317-1"><a href="#cb317-1" aria-hidden="true" tabindex="-1"></a>GRADING_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb317-2"><a href="#cb317-2" aria-hidden="true" tabindex="-1"></a><span class="st">You are an expert examiner. Grade the following student answer.</span></span>
+<span id="cb317-3"><a href="#cb317-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb317-4"><a href="#cb317-4" aria-hidden="true" tabindex="-1"></a><span class="st">Question: </span><span class="sc">{question}</span></span>
+<span id="cb317-5"><a href="#cb317-5" aria-hidden="true" tabindex="-1"></a><span class="st">Expected Answer: </span><span class="sc">{expected_answer}</span></span>
+<span id="cb317-6"><a href="#cb317-6" aria-hidden="true" tabindex="-1"></a><span class="st">Student&#39;s Answer: </span><span class="sc">{student_answer}</span></span>
+<span id="cb317-7"><a href="#cb317-7" aria-hidden="true" tabindex="-1"></a><span class="st">Maximum Marks: </span><span class="sc">{max_marks}</span></span>
+<span id="cb317-8"><a href="#cb317-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb317-9"><a href="#cb317-9" aria-hidden="true" tabindex="-1"></a><span class="st">Evaluate based on:</span></span>
+<span id="cb317-10"><a href="#cb317-10" aria-hidden="true" tabindex="-1"></a><span class="st">1. Accuracy of content (40%)</span></span>
+<span id="cb317-11"><a href="#cb317-11" aria-hidden="true" tabindex="-1"></a><span class="st">2. Completeness of explanation (30%)</span></span>
+<span id="cb317-12"><a href="#cb317-12" aria-hidden="true" tabindex="-1"></a><span class="st">3. Use of relevant examples (15%)</span></span>
+<span id="cb317-13"><a href="#cb317-13" aria-hidden="true" tabindex="-1"></a><span class="st">4. Clarity and structure (15%)</span></span>
+<span id="cb317-14"><a href="#cb317-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb317-15"><a href="#cb317-15" aria-hidden="true" tabindex="-1"></a><span class="st">Return JSON:</span></span>
+<span id="cb317-16"><a href="#cb317-16" aria-hidden="true" tabindex="-1"></a><span class="sc">{{</span></span>
+<span id="cb317-17"><a href="#cb317-17" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;score&quot;: &lt;number&gt;,</span></span>
+<span id="cb317-18"><a href="#cb317-18" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;max_score&quot;: </span><span class="sc">{max_marks}</span><span class="st">,</span></span>
+<span id="cb317-19"><a href="#cb317-19" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;feedback&quot;: &quot;Detailed feedback...&quot;,</span></span>
+<span id="cb317-20"><a href="#cb317-20" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;strengths&quot;: [&quot;...&quot;],</span></span>
+<span id="cb317-21"><a href="#cb317-21" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;improvements&quot;: [&quot;...&quot;],</span></span>
+<span id="cb317-22"><a href="#cb317-22" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;grade&quot;: &quot;A/B/C/D/F&quot;</span></span>
+<span id="cb317-23"><a href="#cb317-23" aria-hidden="true" tabindex="-1"></a><span class="sc">}}</span></span>
+<span id="cb317-24"><a href="#cb317-24" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="curriculum-extraction-prompts">51.6 Curriculum Extraction Prompts</h2>
+<div class="sourceCode" id="cb318"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb318-1"><a href="#cb318-1" aria-hidden="true" tabindex="-1"></a>TOPIC_EXTRACTION_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb318-2"><a href="#cb318-2" aria-hidden="true" tabindex="-1"></a><span class="st">Analyze this syllabus text and extract a structured curriculum.</span></span>
+<span id="cb318-3"><a href="#cb318-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb318-4"><a href="#cb318-4" aria-hidden="true" tabindex="-1"></a><span class="st">Syllabus: </span><span class="sc">{syllabus_text}</span></span>
+<span id="cb318-5"><a href="#cb318-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb318-6"><a href="#cb318-6" aria-hidden="true" tabindex="-1"></a><span class="st">Return JSON:</span></span>
+<span id="cb318-7"><a href="#cb318-7" aria-hidden="true" tabindex="-1"></a><span class="sc">{{</span></span>
+<span id="cb318-8"><a href="#cb318-8" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;subjects&quot;: [</span><span class="sc">{{</span></span>
+<span id="cb318-9"><a href="#cb318-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;name&quot;: &quot;...&quot;,</span></span>
+<span id="cb318-10"><a href="#cb318-10" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;topics&quot;: [</span><span class="sc">{{</span></span>
+<span id="cb318-11"><a href="#cb318-11" aria-hidden="true" tabindex="-1"></a><span class="st">            &quot;name&quot;: &quot;...&quot;,</span></span>
+<span id="cb318-12"><a href="#cb318-12" aria-hidden="true" tabindex="-1"></a><span class="st">            &quot;subtopics&quot;: [&quot;...&quot;],</span></span>
+<span id="cb318-13"><a href="#cb318-13" aria-hidden="true" tabindex="-1"></a><span class="st">            &quot;difficulty&quot;: &quot;easy/medium/hard&quot;,</span></span>
+<span id="cb318-14"><a href="#cb318-14" aria-hidden="true" tabindex="-1"></a><span class="st">            &quot;estimated_hours&quot;: &lt;number&gt;,</span></span>
+<span id="cb318-15"><a href="#cb318-15" aria-hidden="true" tabindex="-1"></a><span class="st">            &quot;prerequisites&quot;: [&quot;topic names&quot;]</span></span>
+<span id="cb318-16"><a href="#cb318-16" aria-hidden="true" tabindex="-1"></a><span class="st">        </span><span class="sc">}}</span><span class="st">]</span></span>
+<span id="cb318-17"><a href="#cb318-17" aria-hidden="true" tabindex="-1"></a><span class="st">    </span><span class="sc">}}</span><span class="st">]</span></span>
+<span id="cb318-18"><a href="#cb318-18" aria-hidden="true" tabindex="-1"></a><span class="sc">}}</span></span>
+<span id="cb318-19"><a href="#cb318-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb318-20"><a href="#cb318-20" aria-hidden="true" tabindex="-1"></a><span class="st">Rules:</span></span>
+<span id="cb318-21"><a href="#cb318-21" aria-hidden="true" tabindex="-1"></a><span class="st">- Identify logical dependencies between topics</span></span>
+<span id="cb318-22"><a href="#cb318-22" aria-hidden="true" tabindex="-1"></a><span class="st">- Estimate study hours based on complexity</span></span>
+<span id="cb318-23"><a href="#cb318-23" aria-hidden="true" tabindex="-1"></a><span class="st">- Group related concepts under topics</span></span>
+<span id="cb318-24"><a href="#cb318-24" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="meeting-summarization-prompts">51.7 Meeting Summarization Prompts</h2>
+<div class="sourceCode" id="cb319"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb319-1"><a href="#cb319-1" aria-hidden="true" tabindex="-1"></a>MEETING_SUMMARY_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb319-2"><a href="#cb319-2" aria-hidden="true" tabindex="-1"></a><span class="st">Summarize this meeting transcript for students.</span></span>
+<span id="cb319-3"><a href="#cb319-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb319-4"><a href="#cb319-4" aria-hidden="true" tabindex="-1"></a><span class="st">Transcript: </span><span class="sc">{transcript}</span></span>
+<span id="cb319-5"><a href="#cb319-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb319-6"><a href="#cb319-6" aria-hidden="true" tabindex="-1"></a><span class="st">Return JSON:</span></span>
+<span id="cb319-7"><a href="#cb319-7" aria-hidden="true" tabindex="-1"></a><span class="sc">{{</span></span>
+<span id="cb319-8"><a href="#cb319-8" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;brief_summary&quot;: &quot;2-3 sentence overview&quot;,</span></span>
+<span id="cb319-9"><a href="#cb319-9" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;detailed_summary&quot;: &quot;Comprehensive summary&quot;,</span></span>
+<span id="cb319-10"><a href="#cb319-10" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;key_points&quot;: [&quot;...&quot;],</span></span>
+<span id="cb319-11"><a href="#cb319-11" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;action_items&quot;: [&quot;...&quot;],</span></span>
+<span id="cb319-12"><a href="#cb319-12" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;questions_discussed&quot;: [&quot;...&quot;],</span></span>
+<span id="cb319-13"><a href="#cb319-13" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;topics_covered&quot;: [&quot;...&quot;]</span></span>
+<span id="cb319-14"><a href="#cb319-14" aria-hidden="true" tabindex="-1"></a><span class="sc">}}</span></span>
+<span id="cb319-15"><a href="#cb319-15" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="rag-context-injection">51.8 RAG Context Injection</h2>
+<div class="sourceCode" id="cb320"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb320-1"><a href="#cb320-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_rag_prompt(query: <span class="bu">str</span>, context_chunks: <span class="bu">list</span>, history: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb320-2"><a href="#cb320-2" aria-hidden="true" tabindex="-1"></a>    context_str <span class="op">=</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">---</span><span class="ch">\n</span><span class="st">&quot;</span>.join([</span>
+<span id="cb320-3"><a href="#cb320-3" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f&quot;[Source: </span><span class="sc">{</span>c<span class="sc">.</span>metadata<span class="sc">.</span>get(<span class="st">&#39;source&#39;</span>, <span class="st">&#39;unknown&#39;</span>)<span class="sc">}</span><span class="ss">]</span><span class="ch">\n</span><span class="sc">{</span>c<span class="sc">.</span>text<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb320-4"><a href="#cb320-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> c <span class="kw">in</span> context_chunks</span>
+<span id="cb320-5"><a href="#cb320-5" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb320-6"><a href="#cb320-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb320-7"><a href="#cb320-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;&quot;&quot;</span></span>
+<span id="cb320-8"><a href="#cb320-8" aria-hidden="true" tabindex="-1"></a><span class="ss">    Use the following context to answer the student&#39;s question.</span></span>
+<span id="cb320-9"><a href="#cb320-9" aria-hidden="true" tabindex="-1"></a><span class="ss">    If the answer is not in the context, say so and provide what you know.</span></span>
+<span id="cb320-10"><a href="#cb320-10" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span></span>
+<span id="cb320-11"><a href="#cb320-11" aria-hidden="true" tabindex="-1"></a><span class="ss">    ## Context from Study Materials:</span></span>
+<span id="cb320-12"><a href="#cb320-12" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="sc">{</span>context_str<span class="sc">}</span></span>
+<span id="cb320-13"><a href="#cb320-13" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span></span>
+<span id="cb320-14"><a href="#cb320-14" aria-hidden="true" tabindex="-1"></a><span class="ss">    ## Recent Chat History:</span></span>
+<span id="cb320-15"><a href="#cb320-15" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="sc">{</span>format_history(history[<span class="op">-</span><span class="dv">5</span>:])<span class="sc">}</span></span>
+<span id="cb320-16"><a href="#cb320-16" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span></span>
+<span id="cb320-17"><a href="#cb320-17" aria-hidden="true" tabindex="-1"></a><span class="ss">    ## Student&#39;s Question:</span></span>
+<span id="cb320-18"><a href="#cb320-18" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="sc">{</span>query<span class="sc">}</span></span>
+<span id="cb320-19"><a href="#cb320-19" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span></span>
+<span id="cb320-20"><a href="#cb320-20" aria-hidden="true" tabindex="-1"></a><span class="ss">    Answer clearly and reference the materials when possible.</span></span>
+<span id="cb320-21"><a href="#cb320-21" aria-hidden="true" tabindex="-1"></a><span class="ss">    &quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="output-parsing-strategies">51.9 Output Parsing Strategies</h2>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 27%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Use Case</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JSON mode</td>
+<td>Structured data (questions, grades)</td>
+<td><code>response_format={"type": "json_object"}</code></td>
+</tr>
+<tr>
+<td>Regex extraction</td>
+<td>Scores from text</td>
+<td><code>re.search(r'Score:\s*(\d+)', response)</code></td>
+</tr>
+<tr>
+<td>SSE streaming</td>
+<td>Real-time chat</td>
+<td>Chunk-by-chunk token streaming</td>
+</tr>
+<tr>
+<td>Markdown parsing</td>
+<td>Notes generation</td>
+<td>Parse headers, lists, code blocks</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb321"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb321-1"><a href="#cb321-1" aria-hidden="true" tabindex="-1"></a><span class="co"># JSON output parsing with fallback</span></span>
+<span id="cb321-2"><a href="#cb321-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse_llm_json(response: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb321-3"><a href="#cb321-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb321-4"><a href="#cb321-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> json.loads(response)</span>
+<span id="cb321-5"><a href="#cb321-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> json.JSONDecodeError:</span>
+<span id="cb321-6"><a href="#cb321-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Try to extract JSON from markdown code block</span></span>
+<span id="cb321-7"><a href="#cb321-7" aria-hidden="true" tabindex="-1"></a>        match <span class="op">=</span> re.search(<span class="vs">r&#39;```json</span><span class="dv">\s</span><span class="op">*</span><span class="kw">(</span><span class="dv">.</span><span class="op">*?</span><span class="kw">)</span><span class="dv">\s</span><span class="op">*</span><span class="vs">```&#39;</span>, response, re.DOTALL)</span>
+<span id="cb321-8"><a href="#cb321-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> match:</span>
+<span id="cb321-9"><a href="#cb321-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.loads(match.group(<span class="dv">1</span>))</span>
+<span id="cb321-10"><a href="#cb321-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f&quot;Could not parse JSON from response&quot;</span>)</span></code></pre></div>
+<hr />
+<h2 id="provider-specific-adaptations">51.10 Provider-Specific Adaptations</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 23%" />
+<col style="width: 20%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Max Tokens</th>
+<th>JSON Support</th>
+<th>Streaming</th>
+<th>Best Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI GPT-4</td>
+<td>128K</td>
+<td>Native</td>
+<td>Yes</td>
+<td>Complex reasoning, grading</td>
+</tr>
+<tr>
+<td>Gemini 1.5 Flash</td>
+<td>1M</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Long documents, summarization</td>
+</tr>
+<tr>
+<td>Groq (Llama)</td>
+<td>32K</td>
+<td>Via prompt</td>
+<td>Yes</td>
+<td>Fast classification</td>
+</tr>
+<tr>
+<td>Ollama (local)</td>
+<td>Model-dependent</td>
+<td>Via prompt</td>
+<td>Yes</td>
+<td>Development, fallback</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb322"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb322-1"><a href="#cb322-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Provider-specific temperature settings</span></span>
+<span id="cb322-2"><a href="#cb322-2" aria-hidden="true" tabindex="-1"></a>PROVIDER_CONFIGS <span class="op">=</span> {</span>
+<span id="cb322-3"><a href="#cb322-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;openai&quot;</span>: {<span class="st">&quot;temperature&quot;</span>: <span class="fl">0.3</span>, <span class="st">&quot;max_tokens&quot;</span>: <span class="dv">4096</span>},</span>
+<span id="cb322-4"><a href="#cb322-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;gemini&quot;</span>: {<span class="st">&quot;temperature&quot;</span>: <span class="fl">0.2</span>, <span class="st">&quot;max_tokens&quot;</span>: <span class="dv">8192</span>},</span>
+<span id="cb322-5"><a href="#cb322-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;groq&quot;</span>:   {<span class="st">&quot;temperature&quot;</span>: <span class="fl">0.1</span>, <span class="st">&quot;max_tokens&quot;</span>: <span class="dv">2048</span>},</span>
+<span id="cb322-6"><a href="#cb322-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;ollama&quot;</span>: {<span class="st">&quot;temperature&quot;</span>: <span class="fl">0.5</span>, <span class="st">&quot;max_tokens&quot;</span>: <span class="dv">2048</span>}</span>
+<span id="cb322-7"><a href="#cb322-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+
+</body>
+</html>

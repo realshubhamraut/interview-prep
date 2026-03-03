@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 12: Core Service Routes &amp;amp; Authentication</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-11.html">&larr; Previous</a> <a href="page-13.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-12-core-service-routes-authentication">Page 12: Core Service Routes &amp; Authentication</h1>
+<hr />
+<h2 id="route-architecture">12.1 Route Architecture</h2>
+<p>The Core Service registers <strong>29 Flask Blueprints</strong>, each handling a specific domain. All routes are prefixed with <code>/api/</code> and use JWT authentication for protected endpoints.</p>
+<hr />
+<h2 id="complete-route-inventory">12.2 Complete Route Inventory</h2>
+<h3 id="authentication-users">Authentication &amp; Users</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auth_bp</code></td>
+<td><code>/api/auth</code></td>
+<td><code>routes/auth.py</code></td>
+<td><code>POST /register</code>, <code>POST /login</code>, <code>POST /refresh</code>, <code>GET /me</code></td>
+</tr>
+<tr>
+<td><code>users_bp</code></td>
+<td><code>/api/users</code></td>
+<td><code>routes/users.py</code></td>
+<td><code>GET /</code>, <code>GET /:id</code>, <code>PUT /:id</code>, <code>DELETE /:id</code></td>
+</tr>
+<tr>
+<td><code>admin_bp</code></td>
+<td><code>/api/admin</code></td>
+<td><code>routes/admin.py</code></td>
+<td><code>GET /users</code>, <code>PUT /role/:id</code>, <code>GET /stats</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="classroom-management">Classroom Management</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>classroom_bp</code></td>
+<td><code>/api/classrooms</code></td>
+<td><code>routes/classroom.py</code></td>
+<td><code>POST /</code>, <code>POST /join</code>, <code>GET /:id</code>, <code>POST /:id/syllabus</code>, <code>GET /:id/students</code></td>
+</tr>
+<tr>
+<td><code>teacher_bp</code></td>
+<td><code>/api/teacher</code></td>
+<td><code>routes/teacher.py</code></td>
+<td><code>GET /classrooms</code>, <code>POST /classrooms</code>, <code>GET /dashboard</code></td>
+</tr>
+<tr>
+<td><code>students_bp</code></td>
+<td><code>/api/students</code></td>
+<td><code>routes/students.py</code></td>
+<td><code>GET /classrooms</code>, <code>GET /progress</code>, <code>GET /dashboard</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="learning-curriculum">Learning &amp; Curriculum</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_bp</code></td>
+<td><code>/api/curriculum</code></td>
+<td><code>routes/curriculum.py</code></td>
+<td><code>POST /generate</code>, <code>GET /:id</code>, <code>PUT /progress</code>, <code>GET /schedule</code></td>
+</tr>
+<tr>
+<td><code>topics_bp</code></td>
+<td><code>/api/topics</code></td>
+<td><code>routes/topics.py</code></td>
+<td><code>GET /classroom/:id</code>, <code>POST /</code>, <code>PUT /:id</code>, <code>DELETE /:id</code></td>
+</tr>
+<tr>
+<td><code>progress_bp</code></td>
+<td><code>/api/progress</code></td>
+<td><code>routes/progress.py</code></td>
+<td><code>GET /</code>, <code>POST /update</code>, <code>GET /summary</code></td>
+</tr>
+<tr>
+<td><code>revision_bp</code></td>
+<td><code>/api/revision</code></td>
+<td><code>routes/revision.py</code></td>
+<td><code>GET /calendar</code>, <code>GET /today</code>, <code>POST /complete</code></td>
+</tr>
+<tr>
+<td><code>question_progress_bp</code></td>
+<td><code>/api/question-progress</code></td>
+<td><code>routes/question_progress.py</code></td>
+<td><code>GET /:topic_id</code>, <code>POST /submit</code>, <code>GET /analytics</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="assessments-evaluation">Assessments &amp; Evaluation</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assessments_bp</code></td>
+<td><code>/api/assessments</code></td>
+<td><code>routes/assessments.py</code></td>
+<td><code>POST /generate</code>, <code>POST /submit</code>, <code>GET /</code>, <code>GET /:id/results</code></td>
+</tr>
+<tr>
+<td><code>evaluation_bp</code></td>
+<td><code>/api/evaluation</code></td>
+<td><code>routes/evaluation.py</code></td>
+<td><code>POST /exam</code>, <code>GET /sessions</code>, <code>GET /results/:id</code></td>
+</tr>
+<tr>
+<td><code>interview_questions_bp</code></td>
+<td><code>/api/interview</code></td>
+<td><code>routes/interview_questions.py</code></td>
+<td><code>POST /generate</code>, <code>POST /evaluate</code>, <code>GET /sessions</code></td>
+</tr>
+<tr>
+<td><code>leaderboard_bp</code></td>
+<td><code>/api/leaderboard</code></td>
+<td><code>routes/leaderboard.py</code></td>
+<td><code>GET /</code>, <code>GET /classroom/:id</code>, <code>GET /me</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="content-materials">Content &amp; Materials</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>files_bp</code></td>
+<td><code>/api/files</code></td>
+<td><code>routes/files.py</code></td>
+<td><code>POST /upload</code>, <code>GET /:id</code>, <code>DELETE /:id</code></td>
+</tr>
+<tr>
+<td><code>notes_bp</code></td>
+<td><code>/api/notes</code></td>
+<td><code>routes/notes.py</code></td>
+<td><code>POST /digitize</code>, <code>GET /</code>, <code>GET /:id</code>, <code>DELETE /:id</code></td>
+</tr>
+<tr>
+<td><code>web_resources_bp</code></td>
+<td><code>/api/web-resources</code></td>
+<td><code>routes/web_resources.py</code></td>
+<td><code>GET /</code>, <code>POST /save</code>, <code>DELETE /:id</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="communication">Communication</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chat_bp</code></td>
+<td><code>/api/chat</code></td>
+<td><code>routes/chat.py</code></td>
+<td><code>POST /</code>, <code>GET /history</code>, <code>GET /conversations</code></td>
+</tr>
+<tr>
+<td><code>notifications_bp</code></td>
+<td><code>/api/notifications</code></td>
+<td><code>routes/notifications.py</code></td>
+<td><code>GET /</code>, <code>PUT /read/:id</code>, <code>GET /unread-count</code></td>
+</tr>
+<tr>
+<td><code>feedback_bp</code></td>
+<td><code>/api/feedback</code></td>
+<td><code>routes/feedback.py</code></td>
+<td><code>POST /</code>, <code>GET /agent/:id</code>, <code>GET /metrics</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="assignments-grading">Assignments &amp; Grading</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assignment_bp</code></td>
+<td><code>/api/assignments</code></td>
+<td><code>routes/assignment.py</code></td>
+<td><code>POST /</code>, <code>GET /:id</code>, <code>POST /:id/submit</code>, <code>POST /:id/grade</code></td>
+</tr>
+<tr>
+<td><code>grading_bp</code></td>
+<td><code>/api/grading</code></td>
+<td><code>routes/grading_callback.py</code></td>
+<td><code>POST /callback</code> (webhook from AI service)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="meetings-recordings">Meetings &amp; Recordings</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>meetings_bp</code></td>
+<td><code>/api/meetings</code></td>
+<td><code>routes/meetings.py</code></td>
+<td><code>POST /</code>, <code>POST /start/:id</code>, <code>POST /end/:id</code>, <code>GET /</code></td>
+</tr>
+<tr>
+<td><code>recordings_bp</code></td>
+<td><code>/api/recordings</code></td>
+<td><code>routes/recordings.py</code></td>
+<td><code>POST /upload</code>, <code>GET /</code>, <code>GET /:id</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="teacher-assistant-interact">Teacher Assistant &amp; Interact</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Blueprint</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>teacher_assistant_bp</code></td>
+<td><code>/api/teacher-assistant</code></td>
+<td><code>routes/teacher_assistant.py</code></td>
+<td><code>POST /ask</code>, <code>GET /insights</code>, <code>POST /generate-quiz</code></td>
+</tr>
+<tr>
+<td><code>interact_bp</code></td>
+<td><code>/api/interact</code></td>
+<td><code>routes/interact.py</code></td>
+<td><code>POST /start</code>, <code>POST /respond</code>, <code>GET /sessions</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="authentication-system">12.3 Authentication System</h2>
+<h3 id="jwt-token-flow">JWT Token Flow</h3>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Overview"]
+        direction TB
+        N0["Client                    Core Service                  Database"]
+        N1["POST /api/auth/login"]
+        N2["{email, password}        verify password"]
+        N3["user record"]
+        N4["generate JWT"]
+        N5["(HS256, 24h expiry)"]
+        N6["{token, user}"]
+        N7["GET /api/progress"]
+        N8["Authorization: Bearer JWT decode + verify"]
+        N9["query with user_id"]
+        N10["{progress data}results"]
+    end
+</pre>
+<h3 id="jwt-payload">JWT Payload</h3>
+<div class="sourceCode" id="cb101"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> {</span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;user_id&quot;</span>: user.<span class="bu">id</span>,        <span class="co"># UUID string</span></span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;username&quot;</span>: user.username,</span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;role&quot;</span>: user.role,         <span class="co"># &quot;student&quot;, &quot;teacher&quot;, &quot;parent&quot;, &quot;admin&quot;</span></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;exp&quot;</span>: datetime.utcnow() <span class="op">+</span> timedelta(hours<span class="op">=</span><span class="dv">24</span>)</span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> jwt.encode(payload, app.config[<span class="st">&#39;SECRET_KEY&#39;</span>], algorithm<span class="op">=</span><span class="st">&#39;HS256&#39;</span>)</span></code></pre></div>
+<h3 id="token_required-decorator"><code>token_required</code> Decorator</h3>
+<div class="sourceCode" id="cb102"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> token_required(f):</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@wraps</span>(f)</span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decorated(<span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a>        token <span class="op">=</span> request.headers.get(<span class="st">&#39;Authorization&#39;</span>, <span class="st">&#39;&#39;</span>).replace(<span class="st">&#39;Bearer &#39;</span>, <span class="st">&#39;&#39;</span>)</span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> token:</span>
+<span id="cb102-6"><a href="#cb102-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Token missing&quot;</span>}), <span class="dv">401</span></span>
+<span id="cb102-7"><a href="#cb102-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb102-8"><a href="#cb102-8" aria-hidden="true" tabindex="-1"></a>            data <span class="op">=</span> jwt.decode(token, current_app.config[<span class="st">&#39;SECRET_KEY&#39;</span>], algorithms<span class="op">=</span>[<span class="st">&#39;HS256&#39;</span>])</span>
+<span id="cb102-9"><a href="#cb102-9" aria-hidden="true" tabindex="-1"></a>            current_user <span class="op">=</span> User.query.get(data[<span class="st">&#39;user_id&#39;</span>])</span>
+<span id="cb102-10"><a href="#cb102-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> current_user:</span>
+<span id="cb102-11"><a href="#cb102-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;User not found&quot;</span>}), <span class="dv">401</span></span>
+<span id="cb102-12"><a href="#cb102-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> jwt.ExpiredSignatureError:</span>
+<span id="cb102-13"><a href="#cb102-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Token expired&quot;</span>}), <span class="dv">401</span></span>
+<span id="cb102-14"><a href="#cb102-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> jwt.InvalidTokenError:</span>
+<span id="cb102-15"><a href="#cb102-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Invalid token&quot;</span>}), <span class="dv">401</span></span>
+<span id="cb102-16"><a href="#cb102-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> f(current_user, <span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb102-17"><a href="#cb102-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> decorated</span></code></pre></div>
+<h3 id="role-based-access">Role-Based Access</h3>
+<div class="sourceCode" id="cb103"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> role_required(<span class="op">*</span>roles):</span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Restrict access to specific roles&quot;&quot;&quot;</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decorator(f):</span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">@wraps</span>(f)</span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">@token_required</span></span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> decorated(current_user, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> current_user.role <span class="kw">not</span> <span class="kw">in</span> roles:</span>
+<span id="cb103-8"><a href="#cb103-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Insufficient permissions&quot;</span>}), <span class="dv">403</span></span>
+<span id="cb103-9"><a href="#cb103-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> f(current_user, <span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb103-10"><a href="#cb103-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> decorated</span>
+<span id="cb103-11"><a href="#cb103-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> decorator</span>
+<span id="cb103-12"><a href="#cb103-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-13"><a href="#cb103-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage:</span></span>
+<span id="cb103-14"><a href="#cb103-14" aria-hidden="true" tabindex="-1"></a><span class="at">@teacher_bp.route</span>(<span class="st">&#39;/classrooms&#39;</span>, methods<span class="op">=</span>[<span class="st">&#39;POST&#39;</span>])</span>
+<span id="cb103-15"><a href="#cb103-15" aria-hidden="true" tabindex="-1"></a><span class="at">@role_required</span>(<span class="st">&#39;teacher&#39;</span>, <span class="st">&#39;admin&#39;</span>)</span>
+<span id="cb103-16"><a href="#cb103-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_classroom(current_user):</span>
+<span id="cb103-17"><a href="#cb103-17" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
+<hr />
+<h2 id="file-upload-system">12.4 File Upload System</h2>
+<h3 id="upload-flow">Upload Flow</h3>
+<div class="sourceCode" id="cb104"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="at">@files_bp.route</span>(<span class="st">&#39;/upload&#39;</span>, methods<span class="op">=</span>[<span class="st">&#39;POST&#39;</span>])</span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="at">@token_required</span></span>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> upload_file(current_user):</span>
+<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">file</span> <span class="op">=</span> request.files.get(<span class="st">&#39;file&#39;</span>)</span>
+<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a>    classroom_id <span class="op">=</span> request.form.get(<span class="st">&#39;classroom_id&#39;</span>)</span>
+<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb104-7"><a href="#cb104-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate unique filename</span></span>
+<span id="cb104-8"><a href="#cb104-8" aria-hidden="true" tabindex="-1"></a>    filename <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>uuid4()<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>secure_filename(<span class="bu">file</span>.filename)<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb104-9"><a href="#cb104-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb104-10"><a href="#cb104-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save to local storage (MinIO in production)</span></span>
+<span id="cb104-11"><a href="#cb104-11" aria-hidden="true" tabindex="-1"></a>    upload_dir <span class="op">=</span> os.path.join(app.config[<span class="st">&#39;UPLOAD_FOLDER&#39;</span>], classroom_id)</span>
+<span id="cb104-12"><a href="#cb104-12" aria-hidden="true" tabindex="-1"></a>    os.makedirs(upload_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb104-13"><a href="#cb104-13" aria-hidden="true" tabindex="-1"></a>    filepath <span class="op">=</span> os.path.join(upload_dir, filename)</span>
+<span id="cb104-14"><a href="#cb104-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">file</span>.save(filepath)</span>
+<span id="cb104-15"><a href="#cb104-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create ClassroomMaterial record</span></span>
+<span id="cb104-17"><a href="#cb104-17" aria-hidden="true" tabindex="-1"></a>    material <span class="op">=</span> ClassroomMaterial(</span>
+<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a>        classroom_id<span class="op">=</span>classroom_id,</span>
+<span id="cb104-19"><a href="#cb104-19" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span><span class="bu">file</span>.filename,</span>
+<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a>        file_url<span class="op">=</span><span class="ss">f&quot;/uploads/</span><span class="sc">{</span>classroom_id<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb104-21"><a href="#cb104-21" aria-hidden="true" tabindex="-1"></a>        file_type<span class="op">=</span><span class="bu">file</span>.content_type,</span>
+<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a>        file_size<span class="op">=</span>os.path.getsize(filepath),</span>
+<span id="cb104-23"><a href="#cb104-23" aria-hidden="true" tabindex="-1"></a>        uploaded_by<span class="op">=</span>current_user.<span class="bu">id</span>,</span>
+<span id="cb104-24"><a href="#cb104-24" aria-hidden="true" tabindex="-1"></a>        indexing_status<span class="op">=</span><span class="st">&#39;pending&#39;</span>  <span class="co"># Triggers async RAG indexing</span></span>
+<span id="cb104-25"><a href="#cb104-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb104-26"><a href="#cb104-26" aria-hidden="true" tabindex="-1"></a>    db.session.add(material)</span>
+<span id="cb104-27"><a href="#cb104-27" aria-hidden="true" tabindex="-1"></a>    db.session.commit()</span>
+<span id="cb104-28"><a href="#cb104-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb104-29"><a href="#cb104-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Trigger async document processing via AI service</span></span>
+<span id="cb104-30"><a href="#cb104-30" aria-hidden="true" tabindex="-1"></a>    trigger_document_indexing(material)</span>
+<span id="cb104-31"><a href="#cb104-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb104-32"><a href="#cb104-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify(material.to_dict()), <span class="dv">201</span></span></code></pre></div>
+<h3 id="supported-upload-types">Supported Upload Types</h3>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 27%" />
+<col style="width: 24%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th>Type</th>
+<th>Max Size</th>
+<th>Trigger</th>
+<th>Processing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF</td>
+<td>500 MB</td>
+<td>Auto-index</td>
+<td>Document Agent → Qdrant</td>
+</tr>
+<tr>
+<td>DOCX</td>
+<td>500 MB</td>
+<td>Auto-index</td>
+<td>Text extraction → Qdrant</td>
+</tr>
+<tr>
+<td>PPTX</td>
+<td>500 MB</td>
+<td>Auto-index</td>
+<td>Slide extraction → Qdrant</td>
+</tr>
+<tr>
+<td>PNG/JPG</td>
+<td>100 MB</td>
+<td>Auto-index</td>
+<td>OCR → Qdrant</td>
+</tr>
+<tr>
+<td>Syllabus PDF</td>
+<td>500 MB</td>
+<td>Topic extraction</td>
+<td>Syllabus Extractor → Topics</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="inter-service-communication">12.5 Inter-Service Communication</h2>
+<h3 id="core-ai-service-http">Core → AI Service (HTTP)</h3>
+<div class="sourceCode" id="cb105"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>AI_SERVICE_URL <span class="op">=</span> os.getenv(<span class="st">&#39;AI_SERVICE_URL&#39;</span>, <span class="st">&#39;http://ai-service:8001&#39;</span>)</span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> trigger_document_indexing(material):</span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Trigger async document processing&quot;&quot;&quot;</span></span>
+<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="cf">with</span> httpx.AsyncClient() <span class="im">as</span> client:</span>
+<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">await</span> client.post(<span class="ss">f&quot;</span><span class="sc">{</span>AI_SERVICE_URL<span class="sc">}</span><span class="ss">/api/index/document&quot;</span>, json<span class="op">=</span>{</span>
+<span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;document_id&quot;</span>: material.<span class="bu">id</span>,</span>
+<span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;classroom_id&quot;</span>: material.classroom_id,</span>
+<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;file_url&quot;</span>: material.file_url,</span>
+<span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;file_type&quot;</span>: material.file_type,</span>
+<span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;student_id&quot;</span>: material.uploaded_by</span>
+<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a>        })</span></code></pre></div>
+<h3 id="ai-service-core-service-callbacks">AI Service → Core Service (Callbacks)</h3>
+<div class="sourceCode" id="cb106"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="at">@grading_bp.route</span>(<span class="st">&#39;/callback&#39;</span>, methods<span class="op">=</span>[<span class="st">&#39;POST&#39;</span>])</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> grading_callback():</span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Receive grading results from AI service&quot;&quot;&quot;</span></span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> request.json</span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a>    assignment_id <span class="op">=</span> data[<span class="st">&#39;assignment_id&#39;</span>]</span>
+<span id="cb106-6"><a href="#cb106-6" aria-hidden="true" tabindex="-1"></a>    submission_id <span class="op">=</span> data[<span class="st">&#39;submission_id&#39;</span>]</span>
+<span id="cb106-7"><a href="#cb106-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb106-8"><a href="#cb106-8" aria-hidden="true" tabindex="-1"></a>    submission <span class="op">=</span> Submission.query.get(submission_id)</span>
+<span id="cb106-9"><a href="#cb106-9" aria-hidden="true" tabindex="-1"></a>    submission.grade <span class="op">=</span> data[<span class="st">&#39;grade&#39;</span>]</span>
+<span id="cb106-10"><a href="#cb106-10" aria-hidden="true" tabindex="-1"></a>    submission.feedback <span class="op">=</span> data[<span class="st">&#39;feedback&#39;</span>]</span>
+<span id="cb106-11"><a href="#cb106-11" aria-hidden="true" tabindex="-1"></a>    submission.graded_at <span class="op">=</span> datetime.utcnow()</span>
+<span id="cb106-12"><a href="#cb106-12" aria-hidden="true" tabindex="-1"></a>    db.session.commit()</span>
+<span id="cb106-13"><a href="#cb106-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb106-14"><a href="#cb106-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({<span class="st">&quot;status&quot;</span>: <span class="st">&quot;ok&quot;</span>})</span></code></pre></div>
+<hr />
+
+</body>
+</html>

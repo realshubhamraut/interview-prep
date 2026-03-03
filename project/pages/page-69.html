@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 69: Mock Interview System</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-68.html">&larr; Previous</a> <a href="page-70.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-69-mock-interview-system">Page 69: Mock Interview System</h1>
+<hr />
+<h2 id="overview-57">69.1 Overview</h2>
+<p>ensureStudy’s <strong>mock interview system</strong> provides AI-driven practice interviews with real-time soft skills analysis, question generation based on the student’s subject, and detailed performance feedback.</p>
+<hr />
+<h2 id="interview-flow">69.2 Interview Flow</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Interview Flow "]
+        direction TB
+        N0["Student starts mock interview"]
+        N1["1. Select topic/subject"]
+        N2["2. AI generates interview questions"]
+        N3["3. Webcam activates (soft skills analysis)"]
+        N4["4. Student answers each question"]
+        N5["5. AI evaluates answer (content + delivery)"]
+        N6["6. Next question (adaptive difficulty)"]
+        N7["7. Final report with scores and feedback"]
+    end
+</pre>
+<hr />
+<h2 id="question-generation-1">69.3 Question Generation</h2>
+<h3 id="source-agentsinterview_question_agent.py">Source: <code>agents/interview_question_agent.py</code></h3>
+<div class="sourceCode" id="cb444"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb444-1"><a href="#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InterviewQuestionAgent:</span>
+<span id="cb444-2"><a href="#cb444-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Generate interview questions using LangGraph StateGraph&quot;&quot;&quot;</span></span>
+<span id="cb444-3"><a href="#cb444-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb444-4"><a href="#cb444-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> generate(<span class="va">self</span>, topic: <span class="bu">str</span>, difficulty: <span class="bu">str</span>, count: <span class="bu">int</span>):</span>
+<span id="cb444-5"><a href="#cb444-5" aria-hidden="true" tabindex="-1"></a>        prompt <span class="op">=</span> <span class="ss">f&quot;&quot;&quot;</span></span>
+<span id="cb444-6"><a href="#cb444-6" aria-hidden="true" tabindex="-1"></a><span class="ss">        Generate </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> interview questions for: </span><span class="sc">{</span>topic<span class="sc">}</span></span>
+<span id="cb444-7"><a href="#cb444-7" aria-hidden="true" tabindex="-1"></a><span class="ss">        Difficulty: </span><span class="sc">{</span>difficulty<span class="sc">}</span></span>
+<span id="cb444-8"><a href="#cb444-8" aria-hidden="true" tabindex="-1"></a><span class="ss">        </span></span>
+<span id="cb444-9"><a href="#cb444-9" aria-hidden="true" tabindex="-1"></a><span class="ss">        Mix of:</span></span>
+<span id="cb444-10"><a href="#cb444-10" aria-hidden="true" tabindex="-1"></a><span class="ss">        - Technical knowledge questions (60%)</span></span>
+<span id="cb444-11"><a href="#cb444-11" aria-hidden="true" tabindex="-1"></a><span class="ss">        - Scenario-based questions (25%)</span></span>
+<span id="cb444-12"><a href="#cb444-12" aria-hidden="true" tabindex="-1"></a><span class="ss">        - Behavioral questions (15%)</span></span>
+<span id="cb444-13"><a href="#cb444-13" aria-hidden="true" tabindex="-1"></a><span class="ss">        </span></span>
+<span id="cb444-14"><a href="#cb444-14" aria-hidden="true" tabindex="-1"></a><span class="ss">        For each, provide:</span></span>
+<span id="cb444-15"><a href="#cb444-15" aria-hidden="true" tabindex="-1"></a><span class="ss">        - question: The interview question</span></span>
+<span id="cb444-16"><a href="#cb444-16" aria-hidden="true" tabindex="-1"></a><span class="ss">        - expected_points: Key points to cover</span></span>
+<span id="cb444-17"><a href="#cb444-17" aria-hidden="true" tabindex="-1"></a><span class="ss">        - follow_up: A follow-up question</span></span>
+<span id="cb444-18"><a href="#cb444-18" aria-hidden="true" tabindex="-1"></a><span class="ss">        - difficulty: easy/medium/hard</span></span>
+<span id="cb444-19"><a href="#cb444-19" aria-hidden="true" tabindex="-1"></a><span class="ss">        - time_limit: seconds</span></span>
+<span id="cb444-20"><a href="#cb444-20" aria-hidden="true" tabindex="-1"></a><span class="ss">        &quot;&quot;&quot;</span></span>
+<span id="cb444-21"><a href="#cb444-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="cf">await</span> <span class="va">self</span>.llm.generate(prompt)</span></code></pre></div>
+<hr />
+<h2 id="soft-skills-analysis-during-interview">69.4 Soft Skills Analysis During Interview</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Soft Skills Analysis During Interview "]
+        direction TB
+        N0["Webcam feed"]
+        N1["Eye Contact: gaze tracking (looking at camera?)"]
+        N2["Posture: body alignment detection"]
+        N3["Facial Expression: confidence/nervousness"]
+        N4["Hand Gestures: appropriate gesturing"]
+        N5["Filler Words: 'um', 'uh', 'like' detection"]
+        N6["Speaking Pace: words per minute"]
+    end
+</pre>
+<h3 id="scoring">Scoring</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Weight</th>
+<th>Measurement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eye contact</td>
+<td>20%</td>
+<td>% time looking at camera</td>
+</tr>
+<tr>
+<td>Posture</td>
+<td>15%</td>
+<td>Upright vs slouched</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>20%</td>
+<td>Facial expression analysis</td>
+</tr>
+<tr>
+<td>Content quality</td>
+<td>30%</td>
+<td>LLM evaluation of answer</td>
+</tr>
+<tr>
+<td>Communication</td>
+<td>15%</td>
+<td>Clarity, pace, filler words</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="answer-evaluation">69.5 Answer Evaluation</h2>
+<div class="sourceCode" id="cb446"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb446-1"><a href="#cb446-1" aria-hidden="true" tabindex="-1"></a>INTERVIEW_GRADING_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb446-2"><a href="#cb446-2" aria-hidden="true" tabindex="-1"></a><span class="st">You are an expert interviewer evaluating a candidate&#39;s answer.</span></span>
+<span id="cb446-3"><a href="#cb446-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-4"><a href="#cb446-4" aria-hidden="true" tabindex="-1"></a><span class="st">Question: </span><span class="sc">{question}</span></span>
+<span id="cb446-5"><a href="#cb446-5" aria-hidden="true" tabindex="-1"></a><span class="st">Expected Points: </span><span class="sc">{expected_points}</span></span>
+<span id="cb446-6"><a href="#cb446-6" aria-hidden="true" tabindex="-1"></a><span class="st">Student&#39;s Answer: </span><span class="sc">{student_answer}</span></span>
+<span id="cb446-7"><a href="#cb446-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-8"><a href="#cb446-8" aria-hidden="true" tabindex="-1"></a><span class="st">Evaluate:</span></span>
+<span id="cb446-9"><a href="#cb446-9" aria-hidden="true" tabindex="-1"></a><span class="st">1. Content accuracy (0-10): Did they cover key points?</span></span>
+<span id="cb446-10"><a href="#cb446-10" aria-hidden="true" tabindex="-1"></a><span class="st">2. Depth (0-10): How thorough was the explanation?</span></span>
+<span id="cb446-11"><a href="#cb446-11" aria-hidden="true" tabindex="-1"></a><span class="st">3. Examples (0-10): Did they use relevant examples?</span></span>
+<span id="cb446-12"><a href="#cb446-12" aria-hidden="true" tabindex="-1"></a><span class="st">4. Clarity (0-10): Was the answer well-structured?</span></span>
+<span id="cb446-13"><a href="#cb446-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-14"><a href="#cb446-14" aria-hidden="true" tabindex="-1"></a><span class="st">Return JSON:</span></span>
+<span id="cb446-15"><a href="#cb446-15" aria-hidden="true" tabindex="-1"></a><span class="sc">{{</span></span>
+<span id="cb446-16"><a href="#cb446-16" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;content_score&quot;: &lt;0-10&gt;,</span></span>
+<span id="cb446-17"><a href="#cb446-17" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;depth_score&quot;: &lt;0-10&gt;,</span></span>
+<span id="cb446-18"><a href="#cb446-18" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;examples_score&quot;: &lt;0-10&gt;,</span></span>
+<span id="cb446-19"><a href="#cb446-19" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;clarity_score&quot;: &lt;0-10&gt;,</span></span>
+<span id="cb446-20"><a href="#cb446-20" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;overall_score&quot;: &lt;0-10&gt;,</span></span>
+<span id="cb446-21"><a href="#cb446-21" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;feedback&quot;: &quot;Specific improvement suggestions&quot;,</span></span>
+<span id="cb446-22"><a href="#cb446-22" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;missed_points&quot;: [&quot;points they didn&#39;t cover&quot;],</span></span>
+<span id="cb446-23"><a href="#cb446-23" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;strengths&quot;: [&quot;what they did well&quot;]</span></span>
+<span id="cb446-24"><a href="#cb446-24" aria-hidden="true" tabindex="-1"></a><span class="sc">}}</span></span>
+<span id="cb446-25"><a href="#cb446-25" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="api-endpoints">69.6 API Endpoints</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/mock-interview/start</code></td>
+<td>Start interview session</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/mock-interview/question</code></td>
+<td>Get next question</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/mock-interview/answer</code></td>
+<td>Submit answer for grading</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/mock-interview/end</code></td>
+<td>End session, get report</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/mock-interview/history</code></td>
+<td>Past interview results</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="final-report">69.7 Final Report</h2>
+<div class="sourceCode" id="cb447"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb447-1"><a href="#cb447-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb447-2"><a href="#cb447-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;session_id&quot;</span><span class="fu">:</span> <span class="st">&quot;interview_123&quot;</span><span class="fu">,</span></span>
+<span id="cb447-3"><a href="#cb447-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;topic&quot;</span><span class="fu">:</span> <span class="st">&quot;Data Structures&quot;</span><span class="fu">,</span></span>
+<span id="cb447-4"><a href="#cb447-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;duration_minutes&quot;</span><span class="fu">:</span> <span class="dv">25</span><span class="fu">,</span></span>
+<span id="cb447-5"><a href="#cb447-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;questions_asked&quot;</span><span class="fu">:</span> <span class="dv">8</span><span class="fu">,</span></span>
+<span id="cb447-6"><a href="#cb447-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;scores&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb447-7"><a href="#cb447-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;content_knowledge&quot;</span><span class="fu">:</span> <span class="dv">78</span><span class="fu">,</span></span>
+<span id="cb447-8"><a href="#cb447-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;communication&quot;</span><span class="fu">:</span> <span class="dv">72</span><span class="fu">,</span></span>
+<span id="cb447-9"><a href="#cb447-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;eye_contact&quot;</span><span class="fu">:</span> <span class="dv">85</span><span class="fu">,</span></span>
+<span id="cb447-10"><a href="#cb447-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;posture&quot;</span><span class="fu">:</span> <span class="dv">90</span><span class="fu">,</span></span>
+<span id="cb447-11"><a href="#cb447-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;confidence&quot;</span><span class="fu">:</span> <span class="dv">68</span><span class="fu">,</span></span>
+<span id="cb447-12"><a href="#cb447-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;overall&quot;</span><span class="fu">:</span> <span class="dv">77</span></span>
+<span id="cb447-13"><a href="#cb447-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb447-14"><a href="#cb447-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;recommendations&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb447-15"><a href="#cb447-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Practice explaining tree traversal algorithms&quot;</span><span class="ot">,</span></span>
+<span id="cb447-16"><a href="#cb447-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Reduce filler words (counted 12 &#39;um&#39;s)&quot;</span><span class="ot">,</span></span>
+<span id="cb447-17"><a href="#cb447-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Good eye contact — maintain this&quot;</span><span class="ot">,</span></span>
+<span id="cb447-18"><a href="#cb447-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Try using more concrete examples&quot;</span></span>
+<span id="cb447-19"><a href="#cb447-19" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb447-20"><a href="#cb447-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;question_breakdown&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb447-21"><a href="#cb447-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb447-22"><a href="#cb447-22" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;question&quot;</span><span class="fu">:</span> <span class="st">&quot;Explain the difference between a stack and queue&quot;</span><span class="fu">,</span></span>
+<span id="cb447-23"><a href="#cb447-23" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;score&quot;</span><span class="fu">:</span> <span class="dv">9</span><span class="fu">,</span></span>
+<span id="cb447-24"><a href="#cb447-24" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;feedback&quot;</span><span class="fu">:</span> <span class="st">&quot;Excellent explanation with real-world examples&quot;</span></span>
+<span id="cb447-25"><a href="#cb447-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb447-26"><a href="#cb447-26" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb447-27"><a href="#cb447-27" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

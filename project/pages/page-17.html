@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 17: Soft Skills Evaluation Pipeline</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-16.html">&larr; Previous</a> <a href="page-18.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-17-soft-skills-evaluation-pipeline">Page 17: Soft Skills Evaluation Pipeline</h1>
+<hr />
+<h2 id="overview-9">17.1 Overview</h2>
+<p>The soft skills evaluation system assesses students on <strong>non-academic competencies</strong> during mock interviews and presentations. It uses computer vision for posture and gaze analysis, audio processing for speech fluency, and ML models for gesture recognition.</p>
+<h3 id="source-locations">Source Locations</h3>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API Routes</td>
+<td><code>backend/ai-service/app/api/routes/softskills.py</code></td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td><code>frontend/components/softskills/</code> (GazeIndicator, PostureSkeleton)</td>
+</tr>
+<tr>
+<td>ML Training</td>
+<td><code>ml/softskills/</code> (86 files)</td>
+</tr>
+<tr>
+<td>Datasets</td>
+<td><code>ml/softskills/datasets/gestures/hagrid/</code> (HaGRID gesture dataset)</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td><code>ml/inference_wrappers/speech_fluency_service.py</code></td>
+</tr>
+<tr>
+<td>Models</td>
+<td><code>ml/models/filler_detection/</code> (XGBoost filler classifier)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="evaluation-categories">17.2 Evaluation Categories</h2>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Weight</th>
+<th>Metrics</th>
+<th>Detection Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Eye Contact</strong></td>
+<td>25%</td>
+<td>Gaze direction, off-screen ratio</td>
+<td>Pupil tracking (same as proctor gaze)</td>
+</tr>
+<tr>
+<td><strong>Posture</strong></td>
+<td>20%</td>
+<td>Spine angle, shoulder alignment</td>
+<td>MediaPipe Pose (33 landmarks)</td>
+</tr>
+<tr>
+<td><strong>Gestures</strong></td>
+<td>15%</td>
+<td>Hand movement quality, nervous habits</td>
+<td>HaGRID-based gesture classifier</td>
+</tr>
+<tr>
+<td><strong>Speech Fluency</strong></td>
+<td>25%</td>
+<td>Filler words, pace, pauses</td>
+<td>Audio analysis + XGBoost classifier</td>
+</tr>
+<tr>
+<td><strong>Confidence</strong></td>
+<td>15%</td>
+<td>Composite of above + voice stability</td>
+<td>Multi-signal fusion</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="eye-contact-gaze-analysis">17.3 Eye Contact &amp; Gaze Analysis</h2>
+<p>Reuses the proctoring <code>GazeTracker</code> but with <strong>different thresholds</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Proctoring Threshold</th>
+<th>Soft Skills Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Center gaze</td>
+<td>&gt; 70% required</td>
+<td>&gt; 50% good, &gt; 70% excellent</td>
+</tr>
+<tr>
+<td>Off-screen</td>
+<td>&lt; 30% warning</td>
+<td>&lt; 50% acceptable</td>
+</tr>
+<tr>
+<td>Scoring</td>
+<td>Binary (suspicious/ok)</td>
+<td>Gradient (1-10 scale)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="frontend-component-gazeindicator.tsx">Frontend Component: <code>GazeIndicator.tsx</code></h3>
+<p>Displays a real-time visual indicator showing where the student is looking, with color-coded feedback (green = camera, yellow = slightly off, red = looking away).</p>
+<hr />
+<h2 id="posture-analysis">17.4 Posture Analysis</h2>
+<h3 id="mediapipe-pose-integration">MediaPipe Pose Integration</h3>
+<p>Uses 33 body landmarks to calculate:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 40%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Calculation</th>
+<th>Good Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spine angle</td>
+<td>Angle between shoulders and hips</td>
+<td>80°-100° (upright)</td>
+</tr>
+<tr>
+<td>Shoulder alignment</td>
+<td>Left-right shoulder Y difference</td>
+<td>&lt; 5° tilt</td>
+</tr>
+<tr>
+<td>Head tilt</td>
+<td>Head center vs shoulder midpoint</td>
+<td>&lt; 10° lateral</td>
+</tr>
+<tr>
+<td>Leaning</td>
+<td>Torso center displacement over time</td>
+<td>&lt; 15% frame width</td>
+</tr>
+<tr>
+<td>Fidgeting</td>
+<td>Movement variance over 10-second window</td>
+<td>Low variance = good</td>
+</tr>
+</tbody>
+</table>
+<h3 id="frontend-component-postureskeleton.tsx">Frontend Component: <code>PostureSkeleton.tsx</code></h3>
+<p>Renders a skeleton overlay on the video feed showing detected landmarks with color-coded joints (green for good posture, red for poor).</p>
+<hr />
+<h2 id="gesture-recognition">17.5 Gesture Recognition</h2>
+<h3 id="hagrid-dataset-hand-gesture-recognition-image-dataset">HaGRID Dataset (Hand Gesture Recognition Image Dataset)</h3>
+<p>Source: <code>ml/softskills/datasets/gestures/hagrid/</code></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 29%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Config</th>
+<th>Model</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ConvNeXt_base.yaml</code></td>
+<td>ConvNeXt-B</td>
+<td>Highest accuracy</td>
+</tr>
+<tr>
+<td><code>ResNet152.yaml</code></td>
+<td>ResNet-152</td>
+<td>Good accuracy, moderate speed</td>
+</tr>
+<tr>
+<td><code>ResNet18.yaml</code></td>
+<td>ResNet-18</td>
+<td>Fast, lightweight</td>
+</tr>
+<tr>
+<td><code>MobileNetV3_large.yaml</code></td>
+<td>MobileNetV3-L</td>
+<td>Mobile-optimized</td>
+</tr>
+<tr>
+<td><code>MobileNetV3_small.yaml</code></td>
+<td>MobileNetV3-S</td>
+<td>Ultra-lightweight</td>
+</tr>
+<tr>
+<td><code>VitB16.yaml</code></td>
+<td>Vision Transformer B/16</td>
+<td>Transformer-based</td>
+</tr>
+<tr>
+<td><code>SSDLiteMobileNetV3Large.yaml</code></td>
+<td>SSD + MobileNetV3</td>
+<td>Detection + classification</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gesture-categories">Gesture Categories</h3>
+<p>Classifies hand gestures during presentations: - <strong>Positive</strong>: Open palms, pointing, illustrative gestures - <strong>Neutral</strong>: Hands at sides, folded - <strong>Negative</strong>: Fidgeting, touching face, crossed arms, nervous tapping</p>
+<hr />
+<h2 id="speech-fluency-analysis">17.6 Speech Fluency Analysis</h2>
+<h3 id="filler-word-detection">Filler Word Detection</h3>
+<p>Source: <code>ml/models/filler_detection/</code></p>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 23%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model File</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xgboost_filler_classifier.joblib</code></td>
+<td>XGBoost</td>
+<td>Classify speech segments as filler/non-filler</td>
+</tr>
+<tr>
+<td><code>feature_scaler.joblib</code></td>
+<td>StandardScaler</td>
+<td>Normalize audio features</td>
+</tr>
+<tr>
+<td><code>label_encoder.joblib</code></td>
+<td>LabelEncoder</td>
+<td>Encode filler categories</td>
+</tr>
+</tbody>
+</table>
+<h3 id="training-pipeline">Training Pipeline</h3>
+<p>Source: <code>ml/notebooks/speech_fluency_complete.ipynb</code>, <code>ml/scripts/train_fluency_model.py</code></p>
+<p>Features extracted from audio: - MFCC coefficients (13 features) - Pitch variation - Speech rate (words per minute) - Pause duration and frequency - Energy contour</p>
+<h3 id="inference-service">Inference Service</h3>
+<p>Source: <code>ml/inference_wrappers/speech_fluency_service.py</code></p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 43%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+<th>Scoring</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filler frequency</td>
+<td>“um”, “uh”, “like”, “you know” per minute</td>
+<td>&lt; 3/min = excellent</td>
+</tr>
+<tr>
+<td>Speech pace</td>
+<td>Words per minute</td>
+<td>120-160 WPM = good</td>
+</tr>
+<tr>
+<td>Pause ratio</td>
+<td>Silence as % of total time</td>
+<td>15-25% = natural</td>
+</tr>
+<tr>
+<td>Pitch variation</td>
+<td>Standard deviation of F0</td>
+<td>Moderate = engaging</td>
+</tr>
+<tr>
+<td>Voice stability</td>
+<td>Tremor/jitter in voice</td>
+<td>Low = confident</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="scoring-feedback">17.7 Scoring &amp; Feedback</h2>
+<h3 id="per-session-report">Per-Session Report</h3>
+<div class="sourceCode" id="cb134"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;overall_score&quot;</span><span class="fu">:</span> <span class="fl">7.2</span><span class="fu">,</span></span>
+<span id="cb134-3"><a href="#cb134-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;categories&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb134-4"><a href="#cb134-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;eye_contact&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;score&quot;</span><span class="fu">:</span> <span class="fl">8.0</span><span class="fu">,</span> <span class="dt">&quot;feedback&quot;</span><span class="fu">:</span> <span class="st">&quot;Good eye contact, maintained camera focus 72% of time&quot;</span><span class="fu">},</span></span>
+<span id="cb134-5"><a href="#cb134-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;posture&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;score&quot;</span><span class="fu">:</span> <span class="fl">6.5</span><span class="fu">,</span> <span class="dt">&quot;feedback&quot;</span><span class="fu">:</span> <span class="st">&quot;Slight forward lean detected, try sitting more upright&quot;</span><span class="fu">},</span></span>
+<span id="cb134-6"><a href="#cb134-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;gestures&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;score&quot;</span><span class="fu">:</span> <span class="fl">7.0</span><span class="fu">,</span> <span class="dt">&quot;feedback&quot;</span><span class="fu">:</span> <span class="st">&quot;Natural hand movements, occasional fidgeting noted&quot;</span><span class="fu">},</span></span>
+<span id="cb134-7"><a href="#cb134-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;speech_fluency&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;score&quot;</span><span class="fu">:</span> <span class="fl">7.5</span><span class="fu">,</span> <span class="dt">&quot;feedback&quot;</span><span class="fu">:</span> <span class="st">&quot;Clear speech, 2.1 filler words/min (good)&quot;</span><span class="fu">},</span></span>
+<span id="cb134-8"><a href="#cb134-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;confidence&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;score&quot;</span><span class="fu">:</span> <span class="fl">7.0</span><span class="fu">,</span> <span class="dt">&quot;feedback&quot;</span><span class="fu">:</span> <span class="st">&quot;Steady voice, good pace at 142 WPM&quot;</span><span class="fu">}</span></span>
+<span id="cb134-9"><a href="#cb134-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb134-10"><a href="#cb134-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;improvement_suggestions&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb134-11"><a href="#cb134-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Practice maintaining an upright posture&quot;</span><span class="ot">,</span></span>
+<span id="cb134-12"><a href="#cb134-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Reduce slight fidgeting with hands when pausing&quot;</span></span>
+<span id="cb134-13"><a href="#cb134-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb134-14"><a href="#cb134-14" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+<h2 id="integration-with-mock-interviews">17.8 Integration with Mock Interviews</h2>
+<p>The soft skills evaluation runs <strong>alongside</strong> mock interview sessions:</p>
+<pre><code>Student starts mock interview
+  → Video + Audio captured
+  → Soft skills detectors analyze in real-time
+  → Interview questions scored by AI (content quality)
+  → Soft skills scored by ML pipeline (delivery quality)
+  → Combined report: content score + delivery score</code></pre>
+<hr />
+
+</body>
+</html>

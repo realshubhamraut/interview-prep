@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 72: Subject Classifier &amp;amp; Topic Detection</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-71.html">&larr; Previous</a> <a href="page-73.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-72-subject-classifier-topic-detection">Page 72: Subject Classifier &amp; Topic Detection</h1>
+<hr />
+<h2 id="overview-60">72.1 Overview</h2>
+<p>ensureStudy uses <strong>ML-based subject classification</strong> to automatically categorize uploaded documents, student questions, and content into academic subjects. The system uses both LLM-based and traditional ML classifiers.</p>
+<hr />
+<h2 id="classification-pipeline">72.2 Classification Pipeline</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Classification Pipeline "]
+        direction TB
+        N0["Input (text / question / document)"]
+        N1["Stage 1: Rule-based (keyword matching)"]
+        N2["Stage 2: ML classifier (TF-IDF + SVM/LightGBM)"]
+        N3["Stage 3: LLM classifier (Groq/Gemini fallback)"]
+        N4["Subject: 'Physics' + Confidence: 0.92"]
+        N5["Topic: 'Thermodynamics' + Subtopic: 'Laws of Thermodynamics'"]
+    end
+</pre>
+<hr />
+<h2 id="subject-classifier">72.3 Subject Classifier</h2>
+<h3 id="source-servicesclassroom_matcher.py-test_subject_classifier.py">Source: <code>services/classroom_matcher.py</code>, <code>test_subject_classifier.py</code></h3>
+<div class="sourceCode" id="cb462"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb462-1"><a href="#cb462-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SubjectClassifier:</span>
+<span id="cb462-2"><a href="#cb462-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Multi-stage subject classification&quot;&quot;&quot;</span></span>
+<span id="cb462-3"><a href="#cb462-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb462-4"><a href="#cb462-4" aria-hidden="true" tabindex="-1"></a>    SUBJECTS <span class="op">=</span> [</span>
+<span id="cb462-5"><a href="#cb462-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Mathematics&quot;</span>, <span class="st">&quot;Physics&quot;</span>, <span class="st">&quot;Chemistry&quot;</span>, <span class="st">&quot;Biology&quot;</span>,</span>
+<span id="cb462-6"><a href="#cb462-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Computer Science&quot;</span>, <span class="st">&quot;English&quot;</span>, <span class="st">&quot;History&quot;</span>, <span class="st">&quot;Geography&quot;</span>,</span>
+<span id="cb462-7"><a href="#cb462-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Economics&quot;</span>, <span class="st">&quot;Psychology&quot;</span>, <span class="st">&quot;Political Science&quot;</span></span>
+<span id="cb462-8"><a href="#cb462-8" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb462-9"><a href="#cb462-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb462-10"><a href="#cb462-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> classify(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> ClassificationResult:</span>
+<span id="cb462-11"><a href="#cb462-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 1: Keyword matching (fast)</span></span>
+<span id="cb462-12"><a href="#cb462-12" aria-hidden="true" tabindex="-1"></a>        keyword_result <span class="op">=</span> <span class="va">self</span>._keyword_classify(text)</span>
+<span id="cb462-13"><a href="#cb462-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> keyword_result.confidence <span class="op">&gt;</span> <span class="fl">0.9</span>:</span>
+<span id="cb462-14"><a href="#cb462-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> keyword_result</span>
+<span id="cb462-15"><a href="#cb462-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb462-16"><a href="#cb462-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 2: ML model</span></span>
+<span id="cb462-17"><a href="#cb462-17" aria-hidden="true" tabindex="-1"></a>        ml_result <span class="op">=</span> <span class="va">self</span>._ml_classify(text)</span>
+<span id="cb462-18"><a href="#cb462-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> ml_result.confidence <span class="op">&gt;</span> <span class="fl">0.8</span>:</span>
+<span id="cb462-19"><a href="#cb462-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> ml_result</span>
+<span id="cb462-20"><a href="#cb462-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb462-21"><a href="#cb462-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 3: LLM (most accurate, slowest)</span></span>
+<span id="cb462-22"><a href="#cb462-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._llm_classify(text)</span>
+<span id="cb462-23"><a href="#cb462-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb462-24"><a href="#cb462-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _keyword_classify(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> ClassificationResult:</span>
+<span id="cb462-25"><a href="#cb462-25" aria-hidden="true" tabindex="-1"></a>        keywords <span class="op">=</span> {</span>
+<span id="cb462-26"><a href="#cb462-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Physics&quot;</span>: [<span class="st">&quot;force&quot;</span>, <span class="st">&quot;velocity&quot;</span>, <span class="st">&quot;acceleration&quot;</span>, <span class="st">&quot;momentum&quot;</span>, </span>
+<span id="cb462-27"><a href="#cb462-27" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;energy&quot;</span>, <span class="st">&quot;wave&quot;</span>, <span class="st">&quot;thermodynamics&quot;</span>, <span class="st">&quot;quantum&quot;</span>],</span>
+<span id="cb462-28"><a href="#cb462-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Chemistry&quot;</span>: [<span class="st">&quot;molecule&quot;</span>, <span class="st">&quot;reaction&quot;</span>, <span class="st">&quot;element&quot;</span>, <span class="st">&quot;compound&quot;</span>,</span>
+<span id="cb462-29"><a href="#cb462-29" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;acid&quot;</span>, <span class="st">&quot;base&quot;</span>, <span class="st">&quot;oxidation&quot;</span>, <span class="st">&quot;bond&quot;</span>],</span>
+<span id="cb462-30"><a href="#cb462-30" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Mathematics&quot;</span>: [<span class="st">&quot;equation&quot;</span>, <span class="st">&quot;integral&quot;</span>, <span class="st">&quot;derivative&quot;</span>, <span class="st">&quot;matrix&quot;</span>,</span>
+<span id="cb462-31"><a href="#cb462-31" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;theorem&quot;</span>, <span class="st">&quot;polynomial&quot;</span>, <span class="st">&quot;probability&quot;</span>],</span>
+<span id="cb462-32"><a href="#cb462-32" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Biology&quot;</span>: [<span class="st">&quot;cell&quot;</span>, <span class="st">&quot;DNA&quot;</span>, <span class="st">&quot;evolution&quot;</span>, <span class="st">&quot;photosynthesis&quot;</span>,</span>
+<span id="cb462-33"><a href="#cb462-33" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;enzyme&quot;</span>, <span class="st">&quot;mitosis&quot;</span>, <span class="st">&quot;ecology&quot;</span>],</span>
+<span id="cb462-34"><a href="#cb462-34" aria-hidden="true" tabindex="-1"></a>            <span class="co"># ... more subjects</span></span>
+<span id="cb462-35"><a href="#cb462-35" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb462-36"><a href="#cb462-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb462-37"><a href="#cb462-37" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> {}</span>
+<span id="cb462-38"><a href="#cb462-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> subject, words <span class="kw">in</span> keywords.items():</span>
+<span id="cb462-39"><a href="#cb462-39" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> <span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> w <span class="kw">in</span> words <span class="cf">if</span> w <span class="kw">in</span> text.lower())</span>
+<span id="cb462-40"><a href="#cb462-40" aria-hidden="true" tabindex="-1"></a>            scores[subject] <span class="op">=</span> score <span class="op">/</span> <span class="bu">len</span>(words)</span>
+<span id="cb462-41"><a href="#cb462-41" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb462-42"><a href="#cb462-42" aria-hidden="true" tabindex="-1"></a>        best <span class="op">=</span> <span class="bu">max</span>(scores, key<span class="op">=</span>scores.get)</span>
+<span id="cb462-43"><a href="#cb462-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ClassificationResult(subject<span class="op">=</span>best, confidence<span class="op">=</span>scores[best])</span></code></pre></div>
+<hr />
+<h2 id="groq-llm-classifier">72.4 Groq LLM Classifier</h2>
+<h3 id="source-test_groq_classifier.py">Source: <code>test_groq_classifier.py</code></h3>
+<div class="sourceCode" id="cb463"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb463-1"><a href="#cb463-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GroqClassifier:</span>
+<span id="cb463-2"><a href="#cb463-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Fast LLM classification using Groq (Llama)&quot;&quot;&quot;</span></span>
+<span id="cb463-3"><a href="#cb463-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb463-4"><a href="#cb463-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> classify(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> ClassificationResult:</span>
+<span id="cb463-5"><a href="#cb463-5" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> groq_client.chat.completions.create(</span>
+<span id="cb463-6"><a href="#cb463-6" aria-hidden="true" tabindex="-1"></a>            model<span class="op">=</span><span class="st">&quot;llama3-8b-8192&quot;</span>,</span>
+<span id="cb463-7"><a href="#cb463-7" aria-hidden="true" tabindex="-1"></a>            messages<span class="op">=</span>[{</span>
+<span id="cb463-8"><a href="#cb463-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;role&quot;</span>: <span class="st">&quot;system&quot;</span>,</span>
+<span id="cb463-9"><a href="#cb463-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;content&quot;</span>: <span class="ss">f&quot;&quot;&quot;Classify the following text into one of these </span></span>
+<span id="cb463-10"><a href="#cb463-10" aria-hidden="true" tabindex="-1"></a><span class="ss">                subjects: </span><span class="sc">{</span><span class="st">&#39;, &#39;</span><span class="sc">.</span>join(SUBJECTS)<span class="sc">}</span><span class="ss">.</span></span>
+<span id="cb463-11"><a href="#cb463-11" aria-hidden="true" tabindex="-1"></a><span class="ss">                Also identify the specific topic and subtopic.</span></span>
+<span id="cb463-12"><a href="#cb463-12" aria-hidden="true" tabindex="-1"></a><span class="ss">                Return JSON: </span><span class="ch">{{</span><span class="ss">&quot;subject&quot;: &quot;...&quot;, &quot;topic&quot;: &quot;...&quot;, </span></span>
+<span id="cb463-13"><a href="#cb463-13" aria-hidden="true" tabindex="-1"></a><span class="ss">                &quot;subtopic&quot;: &quot;...&quot;, &quot;confidence&quot;: 0.0-1.0</span><span class="ch">}}</span><span class="ss">&quot;&quot;&quot;</span></span>
+<span id="cb463-14"><a href="#cb463-14" aria-hidden="true" tabindex="-1"></a>            }, {</span>
+<span id="cb463-15"><a href="#cb463-15" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;role&quot;</span>: <span class="st">&quot;user&quot;</span>,</span>
+<span id="cb463-16"><a href="#cb463-16" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;content&quot;</span>: text[:<span class="dv">1000</span>]</span>
+<span id="cb463-17"><a href="#cb463-17" aria-hidden="true" tabindex="-1"></a>            }],</span>
+<span id="cb463-18"><a href="#cb463-18" aria-hidden="true" tabindex="-1"></a>            temperature<span class="op">=</span><span class="fl">0.1</span></span>
+<span id="cb463-19"><a href="#cb463-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb463-20"><a href="#cb463-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb463-21"><a href="#cb463-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> parse_classification(response.choices[<span class="dv">0</span>].message.content)</span></code></pre></div>
+<hr />
+<h2 id="topic-chaining">72.5 Topic Chaining</h2>
+<h3 id="source-test_topic_chaining.py">Source: <code>test_topic_chaining.py</code></h3>
+<div class="sourceCode" id="cb464"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb464-1"><a href="#cb464-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TopicChainer:</span>
+<span id="cb464-2"><a href="#cb464-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb464-3"><a href="#cb464-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Detect topic transitions in student conversations.</span></span>
+<span id="cb464-4"><a href="#cb464-4" aria-hidden="true" tabindex="-1"></a><span class="co">    When a student shifts topics, update the context accordingly.</span></span>
+<span id="cb464-5"><a href="#cb464-5" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb464-6"><a href="#cb464-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb464-7"><a href="#cb464-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> detect_shift(<span class="va">self</span>, current_topic: <span class="bu">str</span>, new_message: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb464-8"><a href="#cb464-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Returns True if the student has changed topics&quot;&quot;&quot;</span></span>
+<span id="cb464-9"><a href="#cb464-9" aria-hidden="true" tabindex="-1"></a>        new_topic <span class="op">=</span> <span class="va">self</span>.classifier.classify(new_message)</span>
+<span id="cb464-10"><a href="#cb464-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb464-11"><a href="#cb464-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> new_topic.topic <span class="op">!=</span> current_topic:</span>
+<span id="cb464-12"><a href="#cb464-12" aria-hidden="true" tabindex="-1"></a>            similarity <span class="op">=</span> <span class="va">self</span>.embedding_similarity(current_topic, new_topic.topic)</span>
+<span id="cb464-13"><a href="#cb464-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> similarity <span class="op">&lt;</span> <span class="fl">0.5</span>  <span class="co"># Significant shift</span></span>
+<span id="cb464-14"><a href="#cb464-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb464-15"><a href="#cb464-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb464-16"><a href="#cb464-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb464-17"><a href="#cb464-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> chain_topics(<span class="va">self</span>, history: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb464-18"><a href="#cb464-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Build a chain of topics discussed in order&quot;&quot;&quot;</span></span>
+<span id="cb464-19"><a href="#cb464-19" aria-hidden="true" tabindex="-1"></a>        chain <span class="op">=</span> []</span>
+<span id="cb464-20"><a href="#cb464-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> msg <span class="kw">in</span> history:</span>
+<span id="cb464-21"><a href="#cb464-21" aria-hidden="true" tabindex="-1"></a>            topic <span class="op">=</span> <span class="va">self</span>.classifier.classify(msg.content)</span>
+<span id="cb464-22"><a href="#cb464-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> chain <span class="kw">or</span> chain[<span class="op">-</span><span class="dv">1</span>].topic <span class="op">!=</span> topic.topic:</span>
+<span id="cb464-23"><a href="#cb464-23" aria-hidden="true" tabindex="-1"></a>                chain.append(topic)</span>
+<span id="cb464-24"><a href="#cb464-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> chain</span></code></pre></div>
+<hr />
+<h2 id="document-auto-tagging">72.6 Document Auto-Tagging</h2>
+<p>When a document is uploaded, the classifier automatically tags it:</p>
+<div class="sourceCode" id="cb465"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb465-1"><a href="#cb465-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> auto_tag_document(document_text: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb465-2"><a href="#cb465-2" aria-hidden="true" tabindex="-1"></a>    classification <span class="op">=</span> classifier.classify(document_text[:<span class="dv">2000</span>])</span>
+<span id="cb465-3"><a href="#cb465-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb465-4"><a href="#cb465-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb465-5"><a href="#cb465-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;subject&quot;</span>: classification.subject,</span>
+<span id="cb465-6"><a href="#cb465-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;topics&quot;</span>: extract_topics(document_text),</span>
+<span id="cb465-7"><a href="#cb465-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;difficulty&quot;</span>: estimate_difficulty(document_text),</span>
+<span id="cb465-8"><a href="#cb465-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;grade_level&quot;</span>: estimate_grade_level(document_text),</span>
+<span id="cb465-9"><a href="#cb465-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;language&quot;</span>: detect_language(document_text)</span>
+<span id="cb465-10"><a href="#cb465-10" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
+<hr />
+<h2 id="classroom-matcher">72.7 Classroom Matcher</h2>
+<h3 id="source-servicesclassroom_matcher.py">Source: <code>services/classroom_matcher.py</code></h3>
+<div class="sourceCode" id="cb466"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb466-1"><a href="#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClassroomMatcher:</span>
+<span id="cb466-2"><a href="#cb466-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Match content to the appropriate classroom based on subject&quot;&quot;&quot;</span></span>
+<span id="cb466-3"><a href="#cb466-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb466-4"><a href="#cb466-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> match(<span class="va">self</span>, content: <span class="bu">str</span>, user_classrooms: <span class="bu">list</span>) <span class="op">-&gt;</span> Optional[<span class="bu">str</span>]:</span>
+<span id="cb466-5"><a href="#cb466-5" aria-hidden="true" tabindex="-1"></a>        classification <span class="op">=</span> <span class="va">self</span>.classifier.classify(content)</span>
+<span id="cb466-6"><a href="#cb466-6" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb466-7"><a href="#cb466-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> classroom <span class="kw">in</span> user_classrooms:</span>
+<span id="cb466-8"><a href="#cb466-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> classroom.subject.lower() <span class="op">==</span> classification.subject.lower():</span>
+<span id="cb466-9"><a href="#cb466-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> classroom.<span class="bu">id</span></span>
+<span id="cb466-10"><a href="#cb466-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb466-11"><a href="#cb466-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Fuzzy match if exact match fails</span></span>
+<span id="cb466-12"><a href="#cb466-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> classroom <span class="kw">in</span> user_classrooms:</span>
+<span id="cb466-13"><a href="#cb466-13" aria-hidden="true" tabindex="-1"></a>            similarity <span class="op">=</span> <span class="va">self</span>.subject_similarity(</span>
+<span id="cb466-14"><a href="#cb466-14" aria-hidden="true" tabindex="-1"></a>                classroom.subject, classification.subject</span>
+<span id="cb466-15"><a href="#cb466-15" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb466-16"><a href="#cb466-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> similarity <span class="op">&gt;</span> <span class="fl">0.7</span>:</span>
+<span id="cb466-17"><a href="#cb466-17" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> classroom.<span class="bu">id</span></span>
+<span id="cb466-18"><a href="#cb466-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb466-19"><a href="#cb466-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span>  <span class="co"># No matching classroom</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 79: Proctoring System — Implementation Deep Dive</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-78.html">&larr; Previous</a> <a href="page-80.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-79-proctoring-system-implementation-deep-dive">Page 79: Proctoring System — Implementation Deep Dive</h1>
+<blockquote>
+<p>Supplements Page 14 (Proctoring Engine) with full <code>StaticProctor</code> class, gaze estimation math, head pose PnP, <code>IntegrityScorer</code>, browser event monitoring, and TypeScript client integration from <code>proctoring.md</code>.</p>
+</blockquote>
+<hr />
+<h2 id="staticproctor-class">79.1 StaticProctor Class</h2>
+<h3 id="source-backendai-serviceappproctor">Source: <code>backend/ai-service/app/proctor/</code></h3>
+<div class="sourceCode" id="cb505"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb505-1"><a href="#cb505-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StaticProctor:</span>
+<span id="cb505-2"><a href="#cb505-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb505-3"><a href="#cb505-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.yolo <span class="op">=</span> YOLO(<span class="st">&#39;yolov8n.pt&#39;</span>)</span>
+<span id="cb505-4"><a href="#cb505-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.yolo_classes <span class="op">=</span> <span class="va">self</span>.yolo.names</span>
+<span id="cb505-5"><a href="#cb505-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-6"><a href="#cb505-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.face_landmarker <span class="op">=</span> mp.solutions.face_mesh.FaceMesh(</span>
+<span id="cb505-7"><a href="#cb505-7" aria-hidden="true" tabindex="-1"></a>            static_image_mode<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb505-8"><a href="#cb505-8" aria-hidden="true" tabindex="-1"></a>            max_num_faces<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb505-9"><a href="#cb505-9" aria-hidden="true" tabindex="-1"></a>            refine_landmarks<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb505-10"><a href="#cb505-10" aria-hidden="true" tabindex="-1"></a>            min_detection_confidence<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb505-11"><a href="#cb505-11" aria-hidden="true" tabindex="-1"></a>            min_tracking_confidence<span class="op">=</span><span class="fl">0.5</span></span>
+<span id="cb505-12"><a href="#cb505-12" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb505-13"><a href="#cb505-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-14"><a href="#cb505-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.violations <span class="op">=</span> []</span>
+<span id="cb505-15"><a href="#cb505-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.frame_count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb505-16"><a href="#cb505-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.face_absent_frames <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb505-17"><a href="#cb505-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb505-18"><a href="#cb505-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process_frame(<span class="va">self</span>, frame: np.ndarray) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb505-19"><a href="#cb505-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.frame_count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb505-20"><a href="#cb505-20" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> {</span>
+<span id="cb505-21"><a href="#cb505-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;frame_number&#39;</span>: <span class="va">self</span>.frame_count,</span>
+<span id="cb505-22"><a href="#cb505-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;timestamp&#39;</span>: time.time(),</span>
+<span id="cb505-23"><a href="#cb505-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;detections&#39;</span>: [],</span>
+<span id="cb505-24"><a href="#cb505-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;violations&#39;</span>: []</span>
+<span id="cb505-25"><a href="#cb505-25" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb505-26"><a href="#cb505-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-27"><a href="#cb505-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># YOLO: multiple people + mobile phone</span></span>
+<span id="cb505-28"><a href="#cb505-28" aria-hidden="true" tabindex="-1"></a>        yolo_results <span class="op">=</span> <span class="va">self</span>.yolo(frame, verbose<span class="op">=</span><span class="va">False</span>)[<span class="dv">0</span>]</span>
+<span id="cb505-29"><a href="#cb505-29" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-30"><a href="#cb505-30" aria-hidden="true" tabindex="-1"></a>        people_count <span class="op">=</span> <span class="bu">sum</span>(</span>
+<span id="cb505-31"><a href="#cb505-31" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span> <span class="cf">for</span> box <span class="kw">in</span> yolo_results.boxes</span>
+<span id="cb505-32"><a href="#cb505-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.yolo_classes[<span class="bu">int</span>(box.cls)] <span class="op">==</span> <span class="st">&#39;person&#39;</span></span>
+<span id="cb505-33"><a href="#cb505-33" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb505-34"><a href="#cb505-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> people_count <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb505-35"><a href="#cb505-35" aria-hidden="true" tabindex="-1"></a>            results[<span class="st">&#39;violations&#39;</span>].append({</span>
+<span id="cb505-36"><a href="#cb505-36" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;type&#39;</span>: <span class="st">&#39;multiple_faces&#39;</span>, <span class="st">&#39;count&#39;</span>: people_count</span>
+<span id="cb505-37"><a href="#cb505-37" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb505-38"><a href="#cb505-38" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-39"><a href="#cb505-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> box <span class="kw">in</span> yolo_results.boxes:</span>
+<span id="cb505-40"><a href="#cb505-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.yolo_classes[<span class="bu">int</span>(box.cls)] <span class="op">==</span> <span class="st">&#39;cell phone&#39;</span> <span class="kw">and</span> box.conf <span class="op">&gt;</span> <span class="fl">0.5</span>:</span>
+<span id="cb505-41"><a href="#cb505-41" aria-hidden="true" tabindex="-1"></a>                results[<span class="st">&#39;violations&#39;</span>].append({</span>
+<span id="cb505-42"><a href="#cb505-42" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;type&#39;</span>: <span class="st">&#39;mobile_phone&#39;</span>,</span>
+<span id="cb505-43"><a href="#cb505-43" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;confidence&#39;</span>: <span class="bu">float</span>(box.conf),</span>
+<span id="cb505-44"><a href="#cb505-44" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;bbox&#39;</span>: box.xyxy[<span class="dv">0</span>].tolist()</span>
+<span id="cb505-45"><a href="#cb505-45" aria-hidden="true" tabindex="-1"></a>                })</span>
+<span id="cb505-46"><a href="#cb505-46" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-47"><a href="#cb505-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># MediaPipe: face presence + gaze</span></span>
+<span id="cb505-48"><a href="#cb505-48" aria-hidden="true" tabindex="-1"></a>        rgb_frame <span class="op">=</span> cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)</span>
+<span id="cb505-49"><a href="#cb505-49" aria-hidden="true" tabindex="-1"></a>        face_results <span class="op">=</span> <span class="va">self</span>.face_landmarker.process(rgb_frame)</span>
+<span id="cb505-50"><a href="#cb505-50" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-51"><a href="#cb505-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> face_results.multi_face_landmarks:</span>
+<span id="cb505-52"><a href="#cb505-52" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.face_absent_frames <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb505-53"><a href="#cb505-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.face_absent_frames <span class="op">&gt;</span> <span class="dv">90</span>:  <span class="co"># ~3s at 30fps</span></span>
+<span id="cb505-54"><a href="#cb505-54" aria-hidden="true" tabindex="-1"></a>                results[<span class="st">&#39;violations&#39;</span>].append({</span>
+<span id="cb505-55"><a href="#cb505-55" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;type&#39;</span>: <span class="st">&#39;face_absent&#39;</span>,</span>
+<span id="cb505-56"><a href="#cb505-56" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;duration_frames&#39;</span>: <span class="va">self</span>.face_absent_frames</span>
+<span id="cb505-57"><a href="#cb505-57" aria-hidden="true" tabindex="-1"></a>                })</span>
+<span id="cb505-58"><a href="#cb505-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb505-59"><a href="#cb505-59" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.face_absent_frames <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb505-60"><a href="#cb505-60" aria-hidden="true" tabindex="-1"></a>            gaze <span class="op">=</span> <span class="va">self</span>._calculate_gaze(face_results.multi_face_landmarks[<span class="dv">0</span>])</span>
+<span id="cb505-61"><a href="#cb505-61" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">abs</span>(gaze[<span class="st">&#39;horizontal&#39;</span>]) <span class="op">&gt;</span> <span class="dv">30</span> <span class="kw">or</span> <span class="bu">abs</span>(gaze[<span class="st">&#39;vertical&#39;</span>]) <span class="op">&gt;</span> <span class="dv">20</span>:</span>
+<span id="cb505-62"><a href="#cb505-62" aria-hidden="true" tabindex="-1"></a>                results[<span class="st">&#39;violations&#39;</span>].append({</span>
+<span id="cb505-63"><a href="#cb505-63" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;type&#39;</span>: <span class="st">&#39;gaze_deviation&#39;</span>,</span>
+<span id="cb505-64"><a href="#cb505-64" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;horizontal&#39;</span>: gaze[<span class="st">&#39;horizontal&#39;</span>],</span>
+<span id="cb505-65"><a href="#cb505-65" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;vertical&#39;</span>: gaze[<span class="st">&#39;vertical&#39;</span>]</span>
+<span id="cb505-66"><a href="#cb505-66" aria-hidden="true" tabindex="-1"></a>                })</span>
+<span id="cb505-67"><a href="#cb505-67" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb505-68"><a href="#cb505-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> results</span></code></pre></div>
+<hr />
+<h2 id="gaze-estimation-algorithm">79.2 Gaze Estimation Algorithm</h2>
+<p>Uses iris landmarks (468/473) relative to eye corner landmarks to compute angular deviation:</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb506-1"><a href="#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _calculate_gaze(<span class="va">self</span>, landmarks) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb506-2"><a href="#cb506-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Eye corner landmark indices</span></span>
+<span id="cb506-3"><a href="#cb506-3" aria-hidden="true" tabindex="-1"></a>    left_eye <span class="op">=</span> [landmarks.landmark[i] <span class="cf">for</span> i <span class="kw">in</span> [<span class="dv">33</span>, <span class="dv">133</span>, <span class="dv">160</span>, <span class="dv">144</span>, <span class="dv">145</span>, <span class="dv">153</span>]]</span>
+<span id="cb506-4"><a href="#cb506-4" aria-hidden="true" tabindex="-1"></a>    right_eye <span class="op">=</span> [landmarks.landmark[i] <span class="cf">for</span> i <span class="kw">in</span> [<span class="dv">362</span>, <span class="dv">263</span>, <span class="dv">387</span>, <span class="dv">373</span>, <span class="dv">380</span>, <span class="dv">374</span>]]</span>
+<span id="cb506-5"><a href="#cb506-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb506-6"><a href="#cb506-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Iris landmarks (refined)</span></span>
+<span id="cb506-7"><a href="#cb506-7" aria-hidden="true" tabindex="-1"></a>    left_iris <span class="op">=</span> landmarks.landmark[<span class="dv">468</span>]</span>
+<span id="cb506-8"><a href="#cb506-8" aria-hidden="true" tabindex="-1"></a>    right_iris <span class="op">=</span> landmarks.landmark[<span class="dv">473</span>]</span>
+<span id="cb506-9"><a href="#cb506-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb506-10"><a href="#cb506-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute center of each eye</span></span>
+<span id="cb506-11"><a href="#cb506-11" aria-hidden="true" tabindex="-1"></a>    left_center <span class="op">=</span> np.mean([[p.x, p.y] <span class="cf">for</span> p <span class="kw">in</span> left_eye], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb506-12"><a href="#cb506-12" aria-hidden="true" tabindex="-1"></a>    right_center <span class="op">=</span> np.mean([[p.x, p.y] <span class="cf">for</span> p <span class="kw">in</span> right_eye], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb506-13"><a href="#cb506-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb506-14"><a href="#cb506-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Deviation from center, normalized</span></span>
+<span id="cb506-15"><a href="#cb506-15" aria-hidden="true" tabindex="-1"></a>    left_deviation <span class="op">=</span> (left_iris.x <span class="op">-</span> left_center[<span class="dv">0</span>]) <span class="op">/</span> <span class="fl">0.02</span></span>
+<span id="cb506-16"><a href="#cb506-16" aria-hidden="true" tabindex="-1"></a>    right_deviation <span class="op">=</span> (right_iris.x <span class="op">-</span> right_center[<span class="dv">0</span>]) <span class="op">/</span> <span class="fl">0.02</span></span>
+<span id="cb506-17"><a href="#cb506-17" aria-hidden="true" tabindex="-1"></a>    horizontal <span class="op">=</span> (left_deviation <span class="op">+</span> right_deviation) <span class="op">/</span> <span class="dv">2</span> <span class="op">*</span> <span class="dv">45</span>  <span class="co"># degrees</span></span>
+<span id="cb506-18"><a href="#cb506-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb506-19"><a href="#cb506-19" aria-hidden="true" tabindex="-1"></a>    left_vert <span class="op">=</span> (left_iris.y <span class="op">-</span> left_center[<span class="dv">1</span>]) <span class="op">/</span> <span class="fl">0.015</span></span>
+<span id="cb506-20"><a href="#cb506-20" aria-hidden="true" tabindex="-1"></a>    right_vert <span class="op">=</span> (right_iris.y <span class="op">-</span> right_center[<span class="dv">1</span>]) <span class="op">/</span> <span class="fl">0.015</span></span>
+<span id="cb506-21"><a href="#cb506-21" aria-hidden="true" tabindex="-1"></a>    vertical <span class="op">=</span> (left_vert <span class="op">+</span> right_vert) <span class="op">/</span> <span class="dv">2</span> <span class="op">*</span> <span class="dv">30</span>  <span class="co"># degrees</span></span>
+<span id="cb506-22"><a href="#cb506-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb506-23"><a href="#cb506-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&#39;horizontal&#39;</span>: horizontal, <span class="st">&#39;vertical&#39;</span>: vertical}</span></code></pre></div>
+<h3 id="thresholds">Thresholds</h3>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Normal Range</th>
+<th>Violation Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Horizontal</td>
+<td>±30°</td>
+<td>&gt;30° off-center</td>
+</tr>
+<tr>
+<td>Vertical</td>
+<td>±20°</td>
+<td>&gt;20° up/down</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="head-pose-via-pnp">79.3 Head Pose via PnP</h2>
+<p>Uses <code>cv2.solvePnP</code> with 6 canonical 3D face model points:</p>
+<div class="sourceCode" id="cb507"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb507-1"><a href="#cb507-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _calculate_head_pose(<span class="va">self</span>, landmarks, frame_shape) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb507-2"><a href="#cb507-2" aria-hidden="true" tabindex="-1"></a>    model_points <span class="op">=</span> np.array([</span>
+<span id="cb507-3"><a href="#cb507-3" aria-hidden="true" tabindex="-1"></a>        (<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>),          <span class="co"># Nose tip</span></span>
+<span id="cb507-4"><a href="#cb507-4" aria-hidden="true" tabindex="-1"></a>        (<span class="fl">0.0</span>, <span class="op">-</span><span class="fl">330.0</span>, <span class="op">-</span><span class="fl">65.0</span>),     <span class="co"># Chin</span></span>
+<span id="cb507-5"><a href="#cb507-5" aria-hidden="true" tabindex="-1"></a>        (<span class="op">-</span><span class="fl">225.0</span>, <span class="fl">170.0</span>, <span class="op">-</span><span class="fl">135.0</span>),  <span class="co"># Left eye corner</span></span>
+<span id="cb507-6"><a href="#cb507-6" aria-hidden="true" tabindex="-1"></a>        (<span class="fl">225.0</span>, <span class="fl">170.0</span>, <span class="op">-</span><span class="fl">135.0</span>),   <span class="co"># Right eye corner</span></span>
+<span id="cb507-7"><a href="#cb507-7" aria-hidden="true" tabindex="-1"></a>        (<span class="op">-</span><span class="fl">150.0</span>, <span class="op">-</span><span class="fl">150.0</span>, <span class="op">-</span><span class="fl">125.0</span>), <span class="co"># Left mouth corner</span></span>
+<span id="cb507-8"><a href="#cb507-8" aria-hidden="true" tabindex="-1"></a>        (<span class="fl">150.0</span>, <span class="op">-</span><span class="fl">150.0</span>, <span class="op">-</span><span class="fl">125.0</span>)   <span class="co"># Right mouth corner</span></span>
+<span id="cb507-9"><a href="#cb507-9" aria-hidden="true" tabindex="-1"></a>    ], dtype<span class="op">=</span>np.float64)</span>
+<span id="cb507-10"><a href="#cb507-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb507-11"><a href="#cb507-11" aria-hidden="true" tabindex="-1"></a>    h, w <span class="op">=</span> frame_shape[:<span class="dv">2</span>]</span>
+<span id="cb507-12"><a href="#cb507-12" aria-hidden="true" tabindex="-1"></a>    indices <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">152</span>, <span class="dv">33</span>, <span class="dv">263</span>, <span class="dv">61</span>, <span class="dv">291</span>]</span>
+<span id="cb507-13"><a href="#cb507-13" aria-hidden="true" tabindex="-1"></a>    image_points <span class="op">=</span> np.array([</span>
+<span id="cb507-14"><a href="#cb507-14" aria-hidden="true" tabindex="-1"></a>        [landmarks.landmark[i].x <span class="op">*</span> w, landmarks.landmark[i].y <span class="op">*</span> h]</span>
+<span id="cb507-15"><a href="#cb507-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> indices</span>
+<span id="cb507-16"><a href="#cb507-16" aria-hidden="true" tabindex="-1"></a>    ], dtype<span class="op">=</span>np.float64)</span>
+<span id="cb507-17"><a href="#cb507-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb507-18"><a href="#cb507-18" aria-hidden="true" tabindex="-1"></a>    focal_length <span class="op">=</span> w</span>
+<span id="cb507-19"><a href="#cb507-19" aria-hidden="true" tabindex="-1"></a>    camera_matrix <span class="op">=</span> np.array([</span>
+<span id="cb507-20"><a href="#cb507-20" aria-hidden="true" tabindex="-1"></a>        [focal_length, <span class="dv">0</span>, w <span class="op">/</span> <span class="dv">2</span>],</span>
+<span id="cb507-21"><a href="#cb507-21" aria-hidden="true" tabindex="-1"></a>        [<span class="dv">0</span>, focal_length, h <span class="op">/</span> <span class="dv">2</span>],</span>
+<span id="cb507-22"><a href="#cb507-22" aria-hidden="true" tabindex="-1"></a>        [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb507-23"><a href="#cb507-23" aria-hidden="true" tabindex="-1"></a>    ], dtype<span class="op">=</span>np.float64)</span>
+<span id="cb507-24"><a href="#cb507-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb507-25"><a href="#cb507-25" aria-hidden="true" tabindex="-1"></a>    _, rotation_vec, translation_vec <span class="op">=</span> cv2.solvePnP(</span>
+<span id="cb507-26"><a href="#cb507-26" aria-hidden="true" tabindex="-1"></a>        model_points, image_points, camera_matrix, <span class="va">None</span></span>
+<span id="cb507-27"><a href="#cb507-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb507-28"><a href="#cb507-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb507-29"><a href="#cb507-29" aria-hidden="true" tabindex="-1"></a>    rotation_mat, _ <span class="op">=</span> cv2.Rodrigues(rotation_vec)</span>
+<span id="cb507-30"><a href="#cb507-30" aria-hidden="true" tabindex="-1"></a>    angles <span class="op">=</span> cv2.decomposeProjectionMatrix(</span>
+<span id="cb507-31"><a href="#cb507-31" aria-hidden="true" tabindex="-1"></a>        np.hstack((rotation_mat, translation_vec.reshape(<span class="dv">3</span>, <span class="dv">1</span>)))</span>
+<span id="cb507-32"><a href="#cb507-32" aria-hidden="true" tabindex="-1"></a>    )[<span class="dv">6</span>]</span>
+<span id="cb507-33"><a href="#cb507-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb507-34"><a href="#cb507-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb507-35"><a href="#cb507-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;yaw&#39;</span>: angles[<span class="dv">1</span>][<span class="dv">0</span>],    <span class="co"># Left-right</span></span>
+<span id="cb507-36"><a href="#cb507-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;pitch&#39;</span>: angles[<span class="dv">0</span>][<span class="dv">0</span>],  <span class="co"># Up-down</span></span>
+<span id="cb507-37"><a href="#cb507-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;roll&#39;</span>: angles[<span class="dv">2</span>][<span class="dv">0</span>]    <span class="co"># Tilt</span></span>
+<span id="cb507-38"><a href="#cb507-38" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
+<hr />
+<h2 id="integrityscorer-1">79.4 IntegrityScorer</h2>
+<div class="sourceCode" id="cb508"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb508-1"><a href="#cb508-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> IntegrityScorer:</span>
+<span id="cb508-2"><a href="#cb508-2" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> {</span>
+<span id="cb508-3"><a href="#cb508-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;face_absent&#39;</span>: <span class="fl">0.3</span>,</span>
+<span id="cb508-4"><a href="#cb508-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;multiple_faces&#39;</span>: <span class="fl">0.4</span>,</span>
+<span id="cb508-5"><a href="#cb508-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;gaze_deviation&#39;</span>: <span class="fl">0.1</span>,</span>
+<span id="cb508-6"><a href="#cb508-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;mobile_phone&#39;</span>: <span class="fl">0.5</span>,</span>
+<span id="cb508-7"><a href="#cb508-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;head_rotation&#39;</span>: <span class="fl">0.15</span>,</span>
+<span id="cb508-8"><a href="#cb508-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;tab_switch&#39;</span>: <span class="fl">0.2</span></span>
+<span id="cb508-9"><a href="#cb508-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb508-10"><a href="#cb508-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb508-11"><a href="#cb508-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_score(<span class="va">self</span>, session_violations: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb508-12"><a href="#cb508-12" aria-hidden="true" tabindex="-1"></a>        violation_counts <span class="op">=</span> {}</span>
+<span id="cb508-13"><a href="#cb508-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> v <span class="kw">in</span> session_violations:</span>
+<span id="cb508-14"><a href="#cb508-14" aria-hidden="true" tabindex="-1"></a>            v_type <span class="op">=</span> v[<span class="st">&#39;type&#39;</span>]</span>
+<span id="cb508-15"><a href="#cb508-15" aria-hidden="true" tabindex="-1"></a>            violation_counts[v_type] <span class="op">=</span> violation_counts.get(v_type, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb508-16"><a href="#cb508-16" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb508-17"><a href="#cb508-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Logarithmic diminishing returns for repeated violations</span></span>
+<span id="cb508-18"><a href="#cb508-18" aria-hidden="true" tabindex="-1"></a>        penalty <span class="op">=</span> <span class="bu">sum</span>(</span>
+<span id="cb508-19"><a href="#cb508-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.weights.get(v_type, <span class="fl">0.1</span>) <span class="op">*</span> np.log1p(count)</span>
+<span id="cb508-20"><a href="#cb508-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> v_type, count <span class="kw">in</span> violation_counts.items()</span>
+<span id="cb508-21"><a href="#cb508-21" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb508-22"><a href="#cb508-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb508-23"><a href="#cb508-23" aria-hidden="true" tabindex="-1"></a>        raw_score <span class="op">=</span> <span class="bu">max</span>(<span class="dv">0</span>, <span class="dv">100</span> <span class="op">-</span> penalty <span class="op">*</span> <span class="dv">10</span>)</span>
+<span id="cb508-24"><a href="#cb508-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb508-25"><a href="#cb508-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb508-26"><a href="#cb508-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;score&#39;</span>: <span class="bu">round</span>(raw_score, <span class="dv">1</span>),</span>
+<span id="cb508-27"><a href="#cb508-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;violation_summary&#39;</span>: violation_counts,</span>
+<span id="cb508-28"><a href="#cb508-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;risk_level&#39;</span>: (</span>
+<span id="cb508-29"><a href="#cb508-29" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;low&#39;</span> <span class="cf">if</span> raw_score <span class="op">&gt;=</span> <span class="dv">90</span> <span class="cf">else</span></span>
+<span id="cb508-30"><a href="#cb508-30" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;medium&#39;</span> <span class="cf">if</span> raw_score <span class="op">&gt;=</span> <span class="dv">70</span> <span class="cf">else</span></span>
+<span id="cb508-31"><a href="#cb508-31" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;high&#39;</span> <span class="cf">if</span> raw_score <span class="op">&gt;=</span> <span class="dv">50</span> <span class="cf">else</span></span>
+<span id="cb508-32"><a href="#cb508-32" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;critical&#39;</span></span>
+<span id="cb508-33"><a href="#cb508-33" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb508-34"><a href="#cb508-34" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="browser-event-monitoring">79.5 Browser Event Monitoring</h2>
+<p>Client-side JavaScript monitors tab switching, clipboard, and context menu:</p>
+<div class="sourceCode" id="cb509"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb509-1"><a href="#cb509-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Tab visibility</span></span>
+<span id="cb509-2"><a href="#cb509-2" aria-hidden="true" tabindex="-1"></a><span class="bu">document</span><span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;visibilitychange&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb509-3"><a href="#cb509-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">document</span><span class="op">.</span><span class="at">hidden</span>) <span class="fu">sendViolation</span>({ type<span class="op">:</span> <span class="st">&#39;tab_switch&#39;</span> })<span class="op">;</span></span>
+<span id="cb509-4"><a href="#cb509-4" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb509-5"><a href="#cb509-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-6"><a href="#cb509-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Window blur</span></span>
+<span id="cb509-7"><a href="#cb509-7" aria-hidden="true" tabindex="-1"></a><span class="bu">window</span><span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;blur&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb509-8"><a href="#cb509-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sendViolation</span>({ type<span class="op">:</span> <span class="st">&#39;window_blur&#39;</span> })<span class="op">;</span></span>
+<span id="cb509-9"><a href="#cb509-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb509-10"><a href="#cb509-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-11"><a href="#cb509-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Clipboard block</span></span>
+<span id="cb509-12"><a href="#cb509-12" aria-hidden="true" tabindex="-1"></a><span class="bu">document</span><span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;copy&#39;</span><span class="op">,</span> (e) <span class="kw">=&gt;</span> {</span>
+<span id="cb509-13"><a href="#cb509-13" aria-hidden="true" tabindex="-1"></a>    e<span class="op">.</span><span class="fu">preventDefault</span>()<span class="op">;</span></span>
+<span id="cb509-14"><a href="#cb509-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sendViolation</span>({ type<span class="op">:</span> <span class="st">&#39;copy_attempt&#39;</span> })<span class="op">;</span></span>
+<span id="cb509-15"><a href="#cb509-15" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb509-16"><a href="#cb509-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-17"><a href="#cb509-17" aria-hidden="true" tabindex="-1"></a><span class="co">// Right-click block</span></span>
+<span id="cb509-18"><a href="#cb509-18" aria-hidden="true" tabindex="-1"></a><span class="bu">document</span><span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;contextmenu&#39;</span><span class="op">,</span> (e) <span class="kw">=&gt;</span> {</span>
+<span id="cb509-19"><a href="#cb509-19" aria-hidden="true" tabindex="-1"></a>    e<span class="op">.</span><span class="fu">preventDefault</span>()<span class="op">;</span></span>
+<span id="cb509-20"><a href="#cb509-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sendViolation</span>({ type<span class="op">:</span> <span class="st">&#39;context_menu&#39;</span> })<span class="op">;</span></span>
+<span id="cb509-21"><a href="#cb509-21" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr />
+<h2 id="proctoringclient-typescript">79.6 ProctoringClient (TypeScript)</h2>
+<div class="sourceCode" id="cb510"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb510-1"><a href="#cb510-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ProctoringClient {</span>
+<span id="cb510-2"><a href="#cb510-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> websocket<span class="op">:</span> <span class="bu">WebSocket</span> <span class="op">|</span> <span class="dt">null</span> <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb510-3"><a href="#cb510-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> video<span class="op">:</span> <span class="bu">HTMLVideoElement</span><span class="op">;</span></span>
+<span id="cb510-4"><a href="#cb510-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> canvas<span class="op">:</span> <span class="bu">HTMLCanvasElement</span><span class="op">;</span></span>
+<span id="cb510-5"><a href="#cb510-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb510-6"><a href="#cb510-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">async</span> <span class="fu">start</span>(sessionId<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb510-7"><a href="#cb510-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> stream <span class="op">=</span> <span class="cf">await</span> <span class="bu">navigator</span><span class="op">.</span><span class="at">mediaDevices</span><span class="op">.</span><span class="fu">getUserMedia</span>({</span>
+<span id="cb510-8"><a href="#cb510-8" aria-hidden="true" tabindex="-1"></a>            video<span class="op">:</span> { width<span class="op">:</span> <span class="dv">640</span><span class="op">,</span> height<span class="op">:</span> <span class="dv">480</span> }</span>
+<span id="cb510-9"><a href="#cb510-9" aria-hidden="true" tabindex="-1"></a>        })<span class="op">;</span></span>
+<span id="cb510-10"><a href="#cb510-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">video</span><span class="op">.</span><span class="at">srcObject</span> <span class="op">=</span> stream<span class="op">;</span></span>
+<span id="cb510-11"><a href="#cb510-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb510-12"><a href="#cb510-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">websocket</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">WebSocket</span>(</span>
+<span id="cb510-13"><a href="#cb510-13" aria-hidden="true" tabindex="-1"></a>            <span class="vs">`wss://api.example.com/api/proctor/sessions/</span><span class="sc">${</span>sessionId<span class="sc">}</span><span class="vs">/stream`</span></span>
+<span id="cb510-14"><a href="#cb510-14" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span>
+<span id="cb510-15"><a href="#cb510-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb510-16"><a href="#cb510-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">websocket</span><span class="op">.</span><span class="at">onmessage</span> <span class="op">=</span> (<span class="bu">event</span>) <span class="kw">=&gt;</span> {</span>
+<span id="cb510-17"><a href="#cb510-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> results <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(<span class="bu">event</span><span class="op">.</span><span class="at">data</span>)<span class="op">;</span></span>
+<span id="cb510-18"><a href="#cb510-18" aria-hidden="true" tabindex="-1"></a>            <span class="kw">this</span><span class="op">.</span><span class="fu">handleResults</span>(results)<span class="op">;</span></span>
+<span id="cb510-19"><a href="#cb510-19" aria-hidden="true" tabindex="-1"></a>        }<span class="op">;</span></span>
+<span id="cb510-20"><a href="#cb510-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb510-21"><a href="#cb510-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 10 FPS capture</span></span>
+<span id="cb510-22"><a href="#cb510-22" aria-hidden="true" tabindex="-1"></a>        <span class="pp">setInterval</span>(() <span class="kw">=&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">captureAndSend</span>()<span class="op">,</span> <span class="dv">100</span>)<span class="op">;</span></span>
+<span id="cb510-23"><a href="#cb510-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb510-24"><a href="#cb510-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb510-25"><a href="#cb510-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="fu">captureAndSend</span>() {</span>
+<span id="cb510-26"><a href="#cb510-26" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> ctx <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">canvas</span><span class="op">.</span><span class="fu">getContext</span>(<span class="st">&#39;2d&#39;</span>)<span class="op">!;</span></span>
+<span id="cb510-27"><a href="#cb510-27" aria-hidden="true" tabindex="-1"></a>        ctx<span class="op">.</span><span class="fu">drawImage</span>(<span class="kw">this</span><span class="op">.</span><span class="at">video</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">640</span><span class="op">,</span> <span class="dv">480</span>)<span class="op">;</span></span>
+<span id="cb510-28"><a href="#cb510-28" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb510-29"><a href="#cb510-29" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">canvas</span><span class="op">.</span><span class="fu">toBlob</span>((blob) <span class="kw">=&gt;</span> {</span>
+<span id="cb510-30"><a href="#cb510-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (blob <span class="op">&amp;&amp;</span> <span class="kw">this</span><span class="op">.</span><span class="at">websocket</span><span class="op">?.</span><span class="at">readyState</span> <span class="op">===</span> <span class="bu">WebSocket</span><span class="op">.</span><span class="at">OPEN</span>) {</span>
+<span id="cb510-31"><a href="#cb510-31" aria-hidden="true" tabindex="-1"></a>                <span class="kw">this</span><span class="op">.</span><span class="at">websocket</span><span class="op">.</span><span class="fu">send</span>(blob)<span class="op">;</span>  <span class="co">// Binary JPEG</span></span>
+<span id="cb510-32"><a href="#cb510-32" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb510-33"><a href="#cb510-33" aria-hidden="true" tabindex="-1"></a>        }<span class="op">,</span> <span class="st">&#39;image/jpeg&#39;</span><span class="op">,</span> <span class="fl">0.8</span>)<span class="op">;</span></span>
+<span id="cb510-34"><a href="#cb510-34" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb510-35"><a href="#cb510-35" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="websocket-protocol">WebSocket Protocol</h3>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 28%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Format</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Client → Server</td>
+<td>Binary (JPEG blob)</td>
+<td>Compressed frame at 0.8 quality</td>
+</tr>
+<tr>
+<td>Server → Client</td>
+<td>JSON</td>
+<td><code>{ frame_number, violations[], timestamp }</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="session-lifecycle-1">79.7 Session Lifecycle</h2>
+<pre><code>POST /proctor/sessions/start
+    → Redis: proctor:session:{id} (TTL 2h)
+    → Return session_id + WebSocket URL
+
+WS /proctor/sessions/{id}/stream
+    → Frame loop: capture → decode → process → respond
+    → Violations appended to Redis session
+
+POST /proctor/sessions/{id}/end
+    → IntegrityScorer.calculate_score()
+    → Store report to PostgreSQL/MongoDB
+    → Delete Redis session
+    → Return full report</code></pre>
+<h3 id="report-schema">Report Schema</h3>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td>UUID</td>
+<td>Session identifier</td>
+</tr>
+<tr>
+<td><code>integrity_score</code></td>
+<td>float</td>
+<td>0-100 score</td>
+</tr>
+<tr>
+<td><code>risk_level</code></td>
+<td>string</td>
+<td>low/medium/high/critical</td>
+</tr>
+<tr>
+<td><code>violation_summary</code></td>
+<td>object</td>
+<td>Count per violation type</td>
+</tr>
+<tr>
+<td><code>detailed_violations</code></td>
+<td>array</td>
+<td>Full violation records with timestamps</td>
+</tr>
+<tr>
+<td><code>frame_snapshots</code></td>
+<td>array</td>
+<td>Saved evidence frames</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

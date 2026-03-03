@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 47: Real-Time Communication — SSE, WebSocket &amp;amp; LiveKit</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-46.html">&larr; Previous</a> <a href="page-48.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-47-real-time-communication-sse-websocket-livekit">Page 47: Real-Time Communication — SSE, WebSocket &amp; LiveKit</h1>
+<hr />
+<h2 id="overview-36">47.1 Overview</h2>
+<p>ensureStudy uses <strong>three real-time communication protocols</strong> for different use cases: Server-Sent Events (SSE) for streaming LLM responses, WebSocket for soft skills video analysis, and LiveKit (WebRTC) for video conferencing.</p>
+<hr />
+<h2 id="protocol-comparison">47.2 Protocol Comparison</h2>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 26%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>SSE</th>
+<th>WebSocket</th>
+<th>LiveKit (WebRTC)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direction</td>
+<td>Server → Client (one-way)</td>
+<td>Bidirectional</td>
+<td>Bidirectional</td>
+</tr>
+<tr>
+<td>Use Case</td>
+<td>LLM streaming</td>
+<td>Soft skills frames</td>
+<td>Video conferencing</td>
+</tr>
+<tr>
+<td>Protocol</td>
+<td>HTTP/1.1</td>
+<td>WS/WSS</td>
+<td>WebRTC + SFU</td>
+</tr>
+<tr>
+<td>Reconnection</td>
+<td>Auto (browser native)</td>
+<td>Manual</td>
+<td>Managed by SDK</td>
+</tr>
+<tr>
+<td>Data Format</td>
+<td><code>text/event-stream</code></td>
+<td>Binary/JSON</td>
+<td>Media tracks</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sse-llm-response-streaming">47.3 SSE — LLM Response Streaming</h2>
+<h3 id="ai-service-implementation">AI Service Implementation</h3>
+<div class="sourceCode" id="cb295"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb295-1"><a href="#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sse_starlette.sse <span class="im">import</span> EventSourceResponse</span>
+<span id="cb295-2"><a href="#cb295-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb295-3"><a href="#cb295-3" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/tutor/chat&quot;</span>)</span>
+<span id="cb295-4"><a href="#cb295-4" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> tutor_chat(request: ChatRequest):</span>
+<span id="cb295-5"><a href="#cb295-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> event_generator():</span>
+<span id="cb295-6"><a href="#cb295-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb295-7"><a href="#cb295-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">async</span> <span class="cf">for</span> chunk <span class="kw">in</span> llm.astream(messages):</span>
+<span id="cb295-8"><a href="#cb295-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">yield</span> {</span>
+<span id="cb295-9"><a href="#cb295-9" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;event&quot;</span>: <span class="st">&quot;message&quot;</span>,</span>
+<span id="cb295-10"><a href="#cb295-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;data&quot;</span>: json.dumps({</span>
+<span id="cb295-11"><a href="#cb295-11" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;content&quot;</span>: chunk.content,</span>
+<span id="cb295-12"><a href="#cb295-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;type&quot;</span>: <span class="st">&quot;text&quot;</span></span>
+<span id="cb295-13"><a href="#cb295-13" aria-hidden="true" tabindex="-1"></a>                    })</span>
+<span id="cb295-14"><a href="#cb295-14" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb295-15"><a href="#cb295-15" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Send completion signal</span></span>
+<span id="cb295-16"><a href="#cb295-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> {</span>
+<span id="cb295-17"><a href="#cb295-17" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;event&quot;</span>: <span class="st">&quot;message&quot;</span>, </span>
+<span id="cb295-18"><a href="#cb295-18" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;data&quot;</span>: json.dumps({<span class="st">&quot;type&quot;</span>: <span class="st">&quot;done&quot;</span>})</span>
+<span id="cb295-19"><a href="#cb295-19" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb295-20"><a href="#cb295-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb295-21"><a href="#cb295-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> {</span>
+<span id="cb295-22"><a href="#cb295-22" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;event&quot;</span>: <span class="st">&quot;error&quot;</span>,</span>
+<span id="cb295-23"><a href="#cb295-23" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;data&quot;</span>: json.dumps({<span class="st">&quot;error&quot;</span>: <span class="bu">str</span>(e)})</span>
+<span id="cb295-24"><a href="#cb295-24" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb295-25"><a href="#cb295-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb295-26"><a href="#cb295-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> EventSourceResponse(event_generator())</span></code></pre></div>
+<h3 id="frontend-consumer">Frontend Consumer</h3>
+<div class="sourceCode" id="cb296"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb296-1"><a href="#cb296-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> eventSource <span class="op">=</span> <span class="kw">new</span> <span class="bu">EventSource</span>(<span class="st">&#39;/api/tutor/chat&#39;</span><span class="op">,</span> {</span>
+<span id="cb296-2"><a href="#cb296-2" aria-hidden="true" tabindex="-1"></a>    method<span class="op">:</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span></span>
+<span id="cb296-3"><a href="#cb296-3" aria-hidden="true" tabindex="-1"></a>    headers<span class="op">:</span> { <span class="st">&#39;Content-Type&#39;</span><span class="op">:</span> <span class="st">&#39;application/json&#39;</span> }<span class="op">,</span></span>
+<span id="cb296-4"><a href="#cb296-4" aria-hidden="true" tabindex="-1"></a>    body<span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ message<span class="op">,</span> session_id })</span>
+<span id="cb296-5"><a href="#cb296-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb296-6"><a href="#cb296-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb296-7"><a href="#cb296-7" aria-hidden="true" tabindex="-1"></a>eventSource<span class="op">.</span><span class="at">onmessage</span> <span class="op">=</span> (<span class="bu">event</span>) <span class="kw">=&gt;</span> {</span>
+<span id="cb296-8"><a href="#cb296-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> data <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(<span class="bu">event</span><span class="op">.</span><span class="at">data</span>)<span class="op">;</span></span>
+<span id="cb296-9"><a href="#cb296-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb296-10"><a href="#cb296-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (data<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&#39;done&#39;</span>) {</span>
+<span id="cb296-11"><a href="#cb296-11" aria-hidden="true" tabindex="-1"></a>        eventSource<span class="op">.</span><span class="fu">close</span>()<span class="op">;</span></span>
+<span id="cb296-12"><a href="#cb296-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb296-13"><a href="#cb296-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb296-14"><a href="#cb296-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb296-15"><a href="#cb296-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Append chunk to message</span></span>
+<span id="cb296-16"><a href="#cb296-16" aria-hidden="true" tabindex="-1"></a>    useChatStore<span class="op">.</span><span class="fu">getState</span>()<span class="op">.</span><span class="fu">appendToLastMessage</span>(data<span class="op">.</span><span class="at">content</span>)<span class="op">;</span></span>
+<span id="cb296-17"><a href="#cb296-17" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb296-18"><a href="#cb296-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb296-19"><a href="#cb296-19" aria-hidden="true" tabindex="-1"></a>eventSource<span class="op">.</span><span class="at">onerror</span> <span class="op">=</span> (error) <span class="kw">=&gt;</span> {</span>
+<span id="cb296-20"><a href="#cb296-20" aria-hidden="true" tabindex="-1"></a>    eventSource<span class="op">.</span><span class="fu">close</span>()<span class="op">;</span></span>
+<span id="cb296-21"><a href="#cb296-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setError</span>(<span class="st">&#39;Connection lost&#39;</span>)<span class="op">;</span></span>
+<span id="cb296-22"><a href="#cb296-22" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<h3 id="sse-endpoints">SSE Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Data</th>
+<th>Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/tutor/chat</code></td>
+<td>LLM response tokens</td>
+<td>~50 tokens/sec</td>
+</tr>
+<tr>
+<td><code>/api/sse/events</code></td>
+<td>General event stream</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td><code>/api/chat/stream</code></td>
+<td>Chat events</td>
+<td>Variable</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="websocket-soft-skills-analysis">47.4 WebSocket — Soft Skills Analysis</h2>
+<h3 id="ai-service-websocket-endpoint">AI Service WebSocket Endpoint</h3>
+<div class="sourceCode" id="cb297"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb297-1"><a href="#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastapi <span class="im">import</span> WebSocket, WebSocketDisconnect</span>
+<span id="cb297-2"><a href="#cb297-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb297-3"><a href="#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="at">@router.websocket</span>(<span class="st">&quot;/ws/softskills&quot;</span>)</span>
+<span id="cb297-4"><a href="#cb297-4" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> softskills_ws(websocket: WebSocket):</span>
+<span id="cb297-5"><a href="#cb297-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> websocket.accept()</span>
+<span id="cb297-6"><a href="#cb297-6" aria-hidden="true" tabindex="-1"></a>    session <span class="op">=</span> SoftSkillsSession()</span>
+<span id="cb297-7"><a href="#cb297-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb297-8"><a href="#cb297-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb297-9"><a href="#cb297-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb297-10"><a href="#cb297-10" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Receive video frame as binary</span></span>
+<span id="cb297-11"><a href="#cb297-11" aria-hidden="true" tabindex="-1"></a>            data <span class="op">=</span> <span class="cf">await</span> websocket.receive_bytes()</span>
+<span id="cb297-12"><a href="#cb297-12" aria-hidden="true" tabindex="-1"></a>            frame <span class="op">=</span> decode_frame(data)</span>
+<span id="cb297-13"><a href="#cb297-13" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb297-14"><a href="#cb297-14" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Analyze frame (gaze, posture, gestures)</span></span>
+<span id="cb297-15"><a href="#cb297-15" aria-hidden="true" tabindex="-1"></a>            analysis <span class="op">=</span> session.analyze_frame(frame)</span>
+<span id="cb297-16"><a href="#cb297-16" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb297-17"><a href="#cb297-17" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Send results back</span></span>
+<span id="cb297-18"><a href="#cb297-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">await</span> websocket.send_json({</span>
+<span id="cb297-19"><a href="#cb297-19" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;gaze_score&quot;</span>: analysis.gaze_score,</span>
+<span id="cb297-20"><a href="#cb297-20" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;posture_score&quot;</span>: analysis.posture_score,</span>
+<span id="cb297-21"><a href="#cb297-21" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;gesture_count&quot;</span>: analysis.gesture_count,</span>
+<span id="cb297-22"><a href="#cb297-22" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;filler_detected&quot;</span>: analysis.filler_detected,</span>
+<span id="cb297-23"><a href="#cb297-23" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;overall_score&quot;</span>: analysis.overall_score</span>
+<span id="cb297-24"><a href="#cb297-24" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb297-25"><a href="#cb297-25" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb297-26"><a href="#cb297-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> WebSocketDisconnect:</span>
+<span id="cb297-27"><a href="#cb297-27" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> session.finalize()</span>
+<span id="cb297-28"><a href="#cb297-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store results for later retrieval</span></span></code></pre></div>
+<h3 id="frontend-websocket-client">Frontend WebSocket Client</h3>
+<div class="sourceCode" id="cb298"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb298-1"><a href="#cb298-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ws <span class="op">=</span> <span class="kw">new</span> <span class="bu">WebSocket</span>(<span class="st">&#39;ws://localhost:8001/ws/softskills&#39;</span>)<span class="op">;</span></span>
+<span id="cb298-2"><a href="#cb298-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb298-3"><a href="#cb298-3" aria-hidden="true" tabindex="-1"></a>ws<span class="op">.</span><span class="at">onopen</span> <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb298-4"><a href="#cb298-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Start sending video frames</span></span>
+<span id="cb298-5"><a href="#cb298-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> interval <span class="op">=</span> <span class="pp">setInterval</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb298-6"><a href="#cb298-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> frame <span class="op">=</span> <span class="fu">captureWebcamFrame</span>()<span class="op">;</span></span>
+<span id="cb298-7"><a href="#cb298-7" aria-hidden="true" tabindex="-1"></a>        ws<span class="op">.</span><span class="fu">send</span>(frame)<span class="op">;</span>  <span class="co">// Binary data</span></span>
+<span id="cb298-8"><a href="#cb298-8" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span> <span class="dv">1000</span>)<span class="op">;</span>  <span class="co">// 1 FPS</span></span>
+<span id="cb298-9"><a href="#cb298-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb298-10"><a href="#cb298-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb298-11"><a href="#cb298-11" aria-hidden="true" tabindex="-1"></a>ws<span class="op">.</span><span class="at">onmessage</span> <span class="op">=</span> (<span class="bu">event</span>) <span class="kw">=&gt;</span> {</span>
+<span id="cb298-12"><a href="#cb298-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> analysis <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(<span class="bu">event</span><span class="op">.</span><span class="at">data</span>)<span class="op">;</span></span>
+<span id="cb298-13"><a href="#cb298-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">updateGazeIndicator</span>(analysis<span class="op">.</span><span class="at">gaze_score</span>)<span class="op">;</span></span>
+<span id="cb298-14"><a href="#cb298-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">updatePostureFeedback</span>(analysis<span class="op">.</span><span class="at">posture_score</span>)<span class="op">;</span></span>
+<span id="cb298-15"><a href="#cb298-15" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<hr />
+<h2 id="livekit-video-conferencing-1">47.5 LiveKit — Video Conferencing</h2>
+<h3 id="room-management-core-service">Room Management (Core Service)</h3>
+<div class="sourceCode" id="cb299"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb299-1"><a href="#cb299-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> livekit <span class="im">import</span> api</span>
+<span id="cb299-2"><a href="#cb299-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb299-3"><a href="#cb299-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LiveKitService:</span>
+<span id="cb299-4"><a href="#cb299-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb299-5"><a href="#cb299-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lk_api <span class="op">=</span> api.LiveKitAPI(</span>
+<span id="cb299-6"><a href="#cb299-6" aria-hidden="true" tabindex="-1"></a>            os.getenv(<span class="st">&#39;LIVEKIT_URL&#39;</span>),</span>
+<span id="cb299-7"><a href="#cb299-7" aria-hidden="true" tabindex="-1"></a>            os.getenv(<span class="st">&#39;LIVEKIT_API_KEY&#39;</span>),</span>
+<span id="cb299-8"><a href="#cb299-8" aria-hidden="true" tabindex="-1"></a>            os.getenv(<span class="st">&#39;LIVEKIT_API_SECRET&#39;</span>)</span>
+<span id="cb299-9"><a href="#cb299-9" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb299-10"><a href="#cb299-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb299-11"><a href="#cb299-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> create_room(<span class="va">self</span>, meeting_id: <span class="bu">str</span>, max_participants: <span class="bu">int</span> <span class="op">=</span> <span class="dv">50</span>):</span>
+<span id="cb299-12"><a href="#cb299-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.lk_api.room.create_room(</span>
+<span id="cb299-13"><a href="#cb299-13" aria-hidden="true" tabindex="-1"></a>            api.CreateRoomRequest(</span>
+<span id="cb299-14"><a href="#cb299-14" aria-hidden="true" tabindex="-1"></a>                name<span class="op">=</span><span class="ss">f&quot;meeting_</span><span class="sc">{</span>meeting_id<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb299-15"><a href="#cb299-15" aria-hidden="true" tabindex="-1"></a>                max_participants<span class="op">=</span>max_participants,</span>
+<span id="cb299-16"><a href="#cb299-16" aria-hidden="true" tabindex="-1"></a>                empty_timeout<span class="op">=</span><span class="dv">300</span></span>
+<span id="cb299-17"><a href="#cb299-17" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb299-18"><a href="#cb299-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb299-19"><a href="#cb299-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb299-20"><a href="#cb299-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> generate_token(<span class="va">self</span>, user_id: <span class="bu">str</span>, room_name: <span class="bu">str</span>, is_host: <span class="bu">bool</span>):</span>
+<span id="cb299-21"><a href="#cb299-21" aria-hidden="true" tabindex="-1"></a>        token <span class="op">=</span> api.AccessToken(</span>
+<span id="cb299-22"><a href="#cb299-22" aria-hidden="true" tabindex="-1"></a>            os.getenv(<span class="st">&#39;LIVEKIT_API_KEY&#39;</span>),</span>
+<span id="cb299-23"><a href="#cb299-23" aria-hidden="true" tabindex="-1"></a>            os.getenv(<span class="st">&#39;LIVEKIT_API_SECRET&#39;</span>)</span>
+<span id="cb299-24"><a href="#cb299-24" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb299-25"><a href="#cb299-25" aria-hidden="true" tabindex="-1"></a>        token.with_identity(user_id)</span>
+<span id="cb299-26"><a href="#cb299-26" aria-hidden="true" tabindex="-1"></a>        token.with_grants(api.VideoGrants(</span>
+<span id="cb299-27"><a href="#cb299-27" aria-hidden="true" tabindex="-1"></a>            room<span class="op">=</span>room_name,</span>
+<span id="cb299-28"><a href="#cb299-28" aria-hidden="true" tabindex="-1"></a>            room_join<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb299-29"><a href="#cb299-29" aria-hidden="true" tabindex="-1"></a>            can_publish<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb299-30"><a href="#cb299-30" aria-hidden="true" tabindex="-1"></a>            can_subscribe<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb299-31"><a href="#cb299-31" aria-hidden="true" tabindex="-1"></a>            can_publish_data<span class="op">=</span>is_host</span>
+<span id="cb299-32"><a href="#cb299-32" aria-hidden="true" tabindex="-1"></a>        ))</span>
+<span id="cb299-33"><a href="#cb299-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> token.to_jwt()</span></code></pre></div>
+<h3 id="frontend-livekit-integration">Frontend LiveKit Integration</h3>
+<div class="sourceCode" id="cb300"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb300-1"><a href="#cb300-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { LiveKitRoom<span class="op">,</span> VideoConference } <span class="im">from</span> <span class="st">&#39;@livekit/components-react&#39;</span><span class="op">;</span></span>
+<span id="cb300-2"><a href="#cb300-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb300-3"><a href="#cb300-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">MeetingRoom</span>({ meetingId }<span class="op">:</span> { meetingId<span class="op">:</span> <span class="dt">string</span> }) {</span>
+<span id="cb300-4"><a href="#cb300-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> { token<span class="op">,</span> url } <span class="op">=</span> <span class="fu">useMeetingToken</span>(meetingId)<span class="op">;</span></span>
+<span id="cb300-5"><a href="#cb300-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb300-6"><a href="#cb300-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="cb300-7"><a href="#cb300-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>LiveKitRoom</span>
+<span id="cb300-8"><a href="#cb300-8" aria-hidden="true" tabindex="-1"></a>            token<span class="op">=</span>{token}</span>
+<span id="cb300-9"><a href="#cb300-9" aria-hidden="true" tabindex="-1"></a>            serverUrl<span class="op">=</span>{url}</span>
+<span id="cb300-10"><a href="#cb300-10" aria-hidden="true" tabindex="-1"></a>            connect<span class="op">=</span>{<span class="kw">true</span>}</span>
+<span id="cb300-11"><a href="#cb300-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">&gt;</span></span>
+<span id="cb300-12"><a href="#cb300-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">&lt;</span>VideoConference <span class="op">/&gt;</span></span>
+<span id="cb300-13"><a href="#cb300-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">&lt;</span>ChatSidebar <span class="op">/&gt;</span></span>
+<span id="cb300-14"><a href="#cb300-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;/</span>LiveKitRoom<span class="op">&gt;</span></span>
+<span id="cb300-15"><a href="#cb300-15" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb300-16"><a href="#cb300-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="real-time-architecture-diagram">47.6 Real-Time Architecture Diagram</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Real-Time Architecture Diagram "]
+        direction TB
+        N0["Student Browser"]
+        N1["SSE  AI Service :8001"]
+        N2["(tutor chat)      LLM streaming"]
+        N3["WebSocket  AI Service :8001"]
+        N4["(soft skills)     Frame analysis pipeline"]
+        N5["WebRTC  LiveKit SFU Server"]
+        N6["(video call)      Media routing"]
+        N7["HTTP  Core Service :8000"]
+        N8["(REST API)        CRUD + Auth"]
+    end
+</pre>
+<hr />
+
+</body>
+</html>

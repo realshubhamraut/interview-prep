@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 37: Caching Architecture — Redis, In-Memory &amp;amp; Embedding Caches</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-36.html">&larr; Previous</a> <a href="page-38.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-37-caching-architecture-redis-in-memory-embedding-caches">Page 37: Caching Architecture — Redis, In-Memory &amp; Embedding Caches</h1>
+<hr />
+<h2 id="overview-28">37.1 Overview</h2>
+<p>ensureStudy uses a <strong>multi-tier caching strategy</strong> combining Redis for distributed caching, in-memory caches for ML model instances, and specialized caches for embeddings, ABCR state, and web resources. This reduces LLM API calls, speeds up vector search, and avoids redundant ML inference.</p>
+<hr />
+<h2 id="cache-tiers">37.2 Cache Tiers</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Cache Tiers "]
+        direction TB
+        N0["Tier 1: In-Memory (per-process)"]
+        N1["ML model instances (lazy loading)"]
+        N2["Embedding model (sentence-transformers)"]
+        N3["Proctoring detector instances"]
+        N4["Tier 2: Redis (distributed, persistent)"]
+        N5["Response cache (LLM answers)"]
+        N6["Session cache (ABCR state)"]
+        N7["Embedding cache (vector results)"]
+        N8["Web resource cache (crawled pages)"]
+        N9["Curriculum cache (extracted topics)"]
+        N10["Tier 3: Qdrant (persistent vectors)"]
+        N11["Document chunk embeddings"]
+    end
+</pre>
+<hr />
+<h2 id="redis-cache-services">37.3 Redis Cache Services</h2>
+<h3 id="response-cache-servicesresponse_cache.py">Response Cache (<code>services/response_cache.py</code>)</h3>
+<p>Caches LLM-generated responses to avoid redundant API calls:</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb234-1"><a href="#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ResponseCache:</span>
+<span id="cb234-2"><a href="#cb234-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, redis_url: <span class="bu">str</span>):</span>
+<span id="cb234-3"><a href="#cb234-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.redis <span class="op">=</span> Redis.from_url(redis_url)</span>
+<span id="cb234-4"><a href="#cb234-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.default_ttl <span class="op">=</span> <span class="dv">3600</span>  <span class="co"># 1 hour</span></span>
+<span id="cb234-5"><a href="#cb234-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb234-6"><a href="#cb234-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_cached_response(<span class="va">self</span>, query_hash: <span class="bu">str</span>) <span class="op">-&gt;</span> Optional[<span class="bu">str</span>]:</span>
+<span id="cb234-7"><a href="#cb234-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.redis.get(<span class="ss">f&quot;response:</span><span class="sc">{</span>query_hash<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb234-8"><a href="#cb234-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb234-9"><a href="#cb234-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> cache_response(<span class="va">self</span>, query_hash: <span class="bu">str</span>, response: <span class="bu">str</span>, ttl: <span class="bu">int</span> <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb234-10"><a href="#cb234-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.redis.setex(</span>
+<span id="cb234-11"><a href="#cb234-11" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;response:</span><span class="sc">{</span>query_hash<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb234-12"><a href="#cb234-12" aria-hidden="true" tabindex="-1"></a>            ttl <span class="kw">or</span> <span class="va">self</span>.default_ttl,</span>
+<span id="cb234-13"><a href="#cb234-13" aria-hidden="true" tabindex="-1"></a>            response</span>
+<span id="cb234-14"><a href="#cb234-14" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb234-15"><a href="#cb234-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb234-16"><a href="#cb234-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">@staticmethod</span></span>
+<span id="cb234-17"><a href="#cb234-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> hash_query(query: <span class="bu">str</span>, context: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;&quot;</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb234-18"><a href="#cb234-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> hashlib.sha256(<span class="ss">f&quot;</span><span class="sc">{</span>query<span class="sc">}</span><span class="ss">:</span><span class="sc">{</span>context<span class="sc">}</span><span class="ss">&quot;</span>.encode()).hexdigest()</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key Pattern</th>
+<th>TTL</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>response:{hash}</code></td>
+<td>1 hour</td>
+<td>Cached LLM response text</td>
+</tr>
+</tbody>
+</table>
+<h3 id="session-cache-servicessession_cache.py">Session Cache (<code>services/session_cache.py</code>)</h3>
+<p>Caches ABCR tutoring session state:</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb235-1"><a href="#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SessionCache:</span>
+<span id="cb235-2"><a href="#cb235-2" aria-hidden="true" tabindex="-1"></a>    KEY_PREFIX <span class="op">=</span> <span class="st">&quot;session:&quot;</span></span>
+<span id="cb235-3"><a href="#cb235-3" aria-hidden="true" tabindex="-1"></a>    TTL <span class="op">=</span> <span class="dv">86400</span>  <span class="co"># 24 hours</span></span>
+<span id="cb235-4"><a href="#cb235-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb235-5"><a href="#cb235-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> save_state(<span class="va">self</span>, session_id: <span class="bu">str</span>, state: <span class="bu">dict</span>):</span>
+<span id="cb235-6"><a href="#cb235-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.redis.setex(</span>
+<span id="cb235-7"><a href="#cb235-7" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>KEY_PREFIX<span class="sc">}{</span>session_id<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb235-8"><a href="#cb235-8" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.TTL,</span>
+<span id="cb235-9"><a href="#cb235-9" aria-hidden="true" tabindex="-1"></a>            json.dumps(state)</span>
+<span id="cb235-10"><a href="#cb235-10" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb235-11"><a href="#cb235-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb235-12"><a href="#cb235-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> load_state(<span class="va">self</span>, session_id: <span class="bu">str</span>) <span class="op">-&gt;</span> Optional[<span class="bu">dict</span>]:</span>
+<span id="cb235-13"><a href="#cb235-13" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> <span class="va">self</span>.redis.get(<span class="ss">f&quot;</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>KEY_PREFIX<span class="sc">}{</span>session_id<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb235-14"><a href="#cb235-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> json.loads(data) <span class="cf">if</span> data <span class="cf">else</span> <span class="va">None</span></span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key Pattern</th>
+<th>TTL</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session:{id}</code></td>
+<td>24 hours</td>
+<td>ABCR phase, TAL level, history summary</td>
+</tr>
+</tbody>
+</table>
+<h3 id="abcr-cache-servicesabcr_cache.py">ABCR Cache (<code>services/abcr_cache.py</code>)</h3>
+<p>Specialized cache for ABCR tutoring cycle:</p>
+<table>
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 18%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Key Pattern</th>
+<th>TTL</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abcr:{user_id}:{topic}</code></td>
+<td>1 hour</td>
+<td>Current ABCR phase (assess/build/challenge/reflect)</td>
+</tr>
+<tr>
+<td><code>abcr:history:{user_id}</code></td>
+<td>24 hours</td>
+<td>Topic history and transitions</td>
+</tr>
+</tbody>
+</table>
+<h3 id="curriculum-storage-cache-servicescurriculum_storage.py">Curriculum Storage Cache (<code>services/curriculum_storage.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Key Pattern</th>
+<th>TTL</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum:{classroom_id}</code></td>
+<td>7 days</td>
+<td>Extracted topic hierarchy</td>
+</tr>
+<tr>
+<td><code>topics:{subject_id}</code></td>
+<td>1 day</td>
+<td>Topic list for subject</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="web-resource-caching">37.4 Web Resource Caching</h2>
+<h3 id="content-fetching-cache">Content Fetching Cache</h3>
+<div class="sourceCode" id="cb236"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb236-1"><a href="#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> FastContentFetcher:</span>
+<span id="cb236-2"><a href="#cb236-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb236-3"><a href="#cb236-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.cache <span class="op">=</span> {}  <span class="co"># In-memory URL → content cache</span></span>
+<span id="cb236-4"><a href="#cb236-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.cache_ttl <span class="op">=</span> <span class="dv">3600</span>  <span class="co"># 1 hour</span></span>
+<span id="cb236-5"><a href="#cb236-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb236-6"><a href="#cb236-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> fetch_with_cache(<span class="va">self</span>, url: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb236-7"><a href="#cb236-7" aria-hidden="true" tabindex="-1"></a>        cache_key <span class="op">=</span> hashlib.md5(url.encode()).hexdigest()</span>
+<span id="cb236-8"><a href="#cb236-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb236-9"><a href="#cb236-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check Redis first</span></span>
+<span id="cb236-10"><a href="#cb236-10" aria-hidden="true" tabindex="-1"></a>        cached <span class="op">=</span> <span class="va">self</span>.redis.get(<span class="ss">f&quot;web:</span><span class="sc">{</span>cache_key<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb236-11"><a href="#cb236-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cached:</span>
+<span id="cb236-12"><a href="#cb236-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.loads(cached)</span>
+<span id="cb236-13"><a href="#cb236-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb236-14"><a href="#cb236-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Fetch and cache</span></span>
+<span id="cb236-15"><a href="#cb236-15" aria-hidden="true" tabindex="-1"></a>        content <span class="op">=</span> <span class="cf">await</span> <span class="va">self</span>._fetch(url)</span>
+<span id="cb236-16"><a href="#cb236-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.redis.setex(<span class="ss">f&quot;web:</span><span class="sc">{</span>cache_key<span class="sc">}</span><span class="ss">&quot;</span>, <span class="va">self</span>.cache_ttl, json.dumps(content))</span>
+<span id="cb236-17"><a href="#cb236-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> content</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key Pattern</th>
+<th>TTL</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web:{url_hash}</code></td>
+<td>1 hour</td>
+<td>Extracted web page text</td>
+</tr>
+<tr>
+<td><code>web:search:{query_hash}</code></td>
+<td>30 min</td>
+<td>Search results</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="in-memory-model-caching">37.5 In-Memory Model Caching</h2>
+<h3 id="lazy-loaded-singleton-pattern">Lazy-Loaded Singleton Pattern</h3>
+<div class="sourceCode" id="cb237"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb237-1"><a href="#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EmbeddingService:</span>
+<span id="cb237-2"><a href="#cb237-2" aria-hidden="true" tabindex="-1"></a>    _model <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb237-3"><a href="#cb237-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb237-4"><a href="#cb237-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb237-5"><a href="#cb237-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> model(<span class="va">self</span>):</span>
+<span id="cb237-6"><a href="#cb237-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>._model <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb237-7"><a href="#cb237-7" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._model <span class="op">=</span> SentenceTransformer(<span class="st">&#39;all-mpnet-base-v2&#39;</span>)</span>
+<span id="cb237-8"><a href="#cb237-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._model</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Memory</th>
+<th>Load Time</th>
+<th>Lazy-Loaded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sentence-Transformers</td>
+<td>~400 MB</td>
+<td>3-5s</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Whisper (medium)</td>
+<td>~1.5 GB</td>
+<td>5-10s</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>YOLOv11n</td>
+<td>~6 MB</td>
+<td>1s</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>dlib face detector</td>
+<td>~50 MB</td>
+<td>1s</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>MediaPipe Pose</td>
+<td>~30 MB</td>
+<td>1s</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LightGBM classifier</td>
+<td>~1 MB</td>
+<td>&lt;1s</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LSTM temporal</td>
+<td>~5 MB</td>
+<td>&lt;1s</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="proctoring-detector-caching">Proctoring Detector Caching</h3>
+<div class="sourceCode" id="cb238"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb238-1"><a href="#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ProctorSession:</span>
+<span id="cb238-2"><a href="#cb238-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _initialize_detectors(<span class="va">self</span>, frame):</span>
+<span id="cb238-3"><a href="#cb238-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Lazy-load only needed detectors on first frame&quot;&quot;&quot;</span></span>
+<span id="cb238-4"><a href="#cb238-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.detectors <span class="op">=</span> {</span>
+<span id="cb238-5"><a href="#cb238-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;face&#39;</span>: FaceDetector(),      <span class="co"># Always loaded</span></span>
+<span id="cb238-6"><a href="#cb238-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;gaze&#39;</span>: GazeDetector(),      <span class="co"># Always loaded</span></span>
+<span id="cb238-7"><a href="#cb238-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;object&#39;</span>: ObjectDetector(),  <span class="co"># Loaded if webcam detected</span></span>
+<span id="cb238-8"><a href="#cb238-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># ... remaining detectors loaded conditionally</span></span>
+<span id="cb238-9"><a href="#cb238-9" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="embedding-cache">37.6 Embedding Cache</h2>
+<h3 id="redis-based-vector-cache">Redis-based Vector Cache</h3>
+<div class="sourceCode" id="cb239"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb239-1"><a href="#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EmbeddingCache:</span>
+<span id="cb239-2"><a href="#cb239-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_embedding(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> Optional[List[<span class="bu">float</span>]]:</span>
+<span id="cb239-3"><a href="#cb239-3" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="ss">f&quot;emb:</span><span class="sc">{</span>hashlib<span class="sc">.</span>sha256(text.encode())<span class="sc">.</span>hexdigest()<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb239-4"><a href="#cb239-4" aria-hidden="true" tabindex="-1"></a>        cached <span class="op">=</span> <span class="va">self</span>.redis.get(key)</span>
+<span id="cb239-5"><a href="#cb239-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cached:</span>
+<span id="cb239-6"><a href="#cb239-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.loads(cached)</span>
+<span id="cb239-7"><a href="#cb239-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb239-8"><a href="#cb239-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb239-9"><a href="#cb239-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> cache_embedding(<span class="va">self</span>, text: <span class="bu">str</span>, embedding: List[<span class="bu">float</span>]):</span>
+<span id="cb239-10"><a href="#cb239-10" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="ss">f&quot;emb:</span><span class="sc">{</span>hashlib<span class="sc">.</span>sha256(text.encode())<span class="sc">.</span>hexdigest()<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb239-11"><a href="#cb239-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.redis.setex(key, <span class="dv">604800</span>, json.dumps(embedding))  <span class="co"># 7 days</span></span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key Pattern</th>
+<th>TTL</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>emb:{text_hash}</code></td>
+<td>7 days</td>
+<td>768-dim float vector</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="cache-eviction-sizing">37.7 Cache Eviction &amp; Sizing</h2>
+<table>
+<thead>
+<tr>
+<th>Cache</th>
+<th>Max Memory</th>
+<th>Eviction Policy</th>
+<th>Persistence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Redis (global)</td>
+<td>256 MB</td>
+<td><code>allkeys-lru</code></td>
+<td>AOF + RDB</td>
+</tr>
+<tr>
+<td>Response cache</td>
+<td>~50 MB</td>
+<td>TTL-based (1h)</td>
+<td>Redis</td>
+</tr>
+<tr>
+<td>Embedding cache</td>
+<td>~100 MB</td>
+<td>TTL-based (7d)</td>
+<td>Redis</td>
+</tr>
+<tr>
+<td>Session cache</td>
+<td>~10 MB</td>
+<td>TTL-based (24h)</td>
+<td>Redis</td>
+</tr>
+<tr>
+<td>Model instances</td>
+<td>~2.5 GB</td>
+<td>Never evicted</td>
+<td>In-memory</td>
+</tr>
+<tr>
+<td>Web cache</td>
+<td>~50 MB</td>
+<td>TTL-based (1h)</td>
+<td>Redis</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

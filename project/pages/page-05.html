@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 5: RAG Pipeline &amp;amp; Vector Search Engine</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-04.html">&larr; Previous</a> <a href="page-06.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-5-rag-pipeline-vector-search-engine">Page 5: RAG Pipeline &amp; Vector Search Engine</h1>
+<hr />
+<h2 id="architecture-overview-1">5.1 Architecture Overview</h2>
+<p>The Retrieval-Augmented Generation (RAG) pipeline is the core knowledge system of ensureStudy. It enables the AI tutor to answer questions grounded in specific classroom materials rather than relying solely on the LLM’s pre-trained knowledge.</p>
+<pre class="mermaid">flowchart TB
+    subgraph INGEST["📥 INGESTION PIPELINE"]
+        direction LR
+        DU["Document Upload"] --> V["Validate<br/>Format, Size"] --> PP["Preprocess<br/>Clean, Normalize"]
+        PP --> OCR["OCR<br/>Extract Text"] --> CH["Chunk<br/>Semantic Split"]
+        CH --> EMB["Generate<br/>Embeddings"] --> IDX["Index in<br/>Qdrant"] --> DONE["Complete<br/>Status"]
+    end
+
+    subgraph RETRIEVE["🔍 RETRIEVAL PIPELINE"]
+        direction LR
+        UQ["User Query"] --> QR["Query<br/>Rewrite"] --> EQ["Embed<br/>Query"]
+        EQ --> VS["Vector<br/>Search"] --> MCP["MCP<br/>Filter"]
+        MCP --> CTX["Context<br/>Assembly<br/>for LLM"]
+    end
+</pre>
+<hr />
+<h2 id="core-components">5.2 Core Components</h2>
+<h3 id="file-inventory">File Inventory</h3>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>File</th>
+<th>Size</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Document Loader</strong></td>
+<td><code>rag/document_loader.py</code></td>
+<td>6,707 bytes</td>
+<td>Multi-format document loading</td>
+</tr>
+<tr>
+<td><strong>Qdrant Setup</strong></td>
+<td><code>rag/qdrant_setup.py</code></td>
+<td>5,108 bytes</td>
+<td>Collection creation and configuration</td>
+</tr>
+<tr>
+<td><strong>Retriever</strong></td>
+<td><code>rag/retriever.py</code></td>
+<td>10,527 bytes</td>
+<td>Semantic search with scoring</td>
+</tr>
+<tr>
+<td><strong>Qdrant Service</strong></td>
+<td><code>services/qdrant_service.py</code></td>
+<td>25,432 bytes</td>
+<td>Full Qdrant client wrapper</td>
+</tr>
+<tr>
+<td><strong>Chunking Service</strong></td>
+<td><code>services/chunking_service.py</code></td>
+<td>8,818 bytes</td>
+<td>Semantic text chunking</td>
+</tr>
+<tr>
+<td><strong>Text Chunker</strong></td>
+<td><code>services/text_chunker.py</code></td>
+<td>8,986 bytes</td>
+<td>Low-level chunking algorithms</td>
+</tr>
+<tr>
+<td><strong>Document Processor</strong></td>
+<td><code>services/document_processor.py</code></td>
+<td>16,114 bytes</td>
+<td>Orchestrates 7-stage pipeline</td>
+</tr>
+<tr>
+<td><strong>Document Preprocessor</strong></td>
+<td><code>services/document_preprocessor.py</code></td>
+<td>13,536 bytes</td>
+<td>Text cleaning and normalization</td>
+</tr>
+<tr>
+<td><strong>PDF Extractor</strong></td>
+<td><code>services/pdf_extractor.py</code></td>
+<td>9,145 bytes</td>
+<td>PyMuPDF-based PDF text extraction</td>
+</tr>
+<tr>
+<td><strong>PDF Processor</strong></td>
+<td><code>services/pdf_processor.py</code></td>
+<td>9,115 bytes</td>
+<td>PDF-specific processing logic</td>
+</tr>
+<tr>
+<td><strong>PPTX Extractor</strong></td>
+<td><code>services/pptx_extractor.py</code></td>
+<td>7,233 bytes</td>
+<td>PowerPoint slide extraction</td>
+</tr>
+<tr>
+<td><strong>OCR Service</strong></td>
+<td><code>services/ocr_service.py</code></td>
+<td>15,901 bytes</td>
+<td>Optical character recognition</td>
+</tr>
+<tr>
+<td><strong>Hybrid OCR</strong></td>
+<td><code>services/hybrid_ocr.py</code></td>
+<td>12,361 bytes</td>
+<td>Multi-backend OCR with fallback</td>
+</tr>
+<tr>
+<td><strong>OCR Adapter</strong></td>
+<td><code>services/ocr_adapter.py</code></td>
+<td>16,689 bytes</td>
+<td>Unified OCR interface</td>
+</tr>
+<tr>
+<td><strong>Image Enhancer</strong></td>
+<td><code>services/image_enhancer.py</code></td>
+<td>19,344 bytes</td>
+<td>Pre-OCR image preprocessing</td>
+</tr>
+<tr>
+<td><strong>Material Indexer</strong></td>
+<td><code>services/material_indexer.py</code></td>
+<td>13,122 bytes</td>
+<td>Batch material indexing</td>
+</tr>
+<tr>
+<td><strong>Retrieval Service</strong></td>
+<td><code>services/retrieval.py</code></td>
+<td>8,363 bytes</td>
+<td>High-level retrieval interface</td>
+</tr>
+<tr>
+<td><strong>Query Rewriter</strong></td>
+<td><code>services/query_rewriter.py</code></td>
+<td>14,915 bytes</td>
+<td>Query expansion and refinement</td>
+</tr>
+<tr>
+<td><strong>Content Normalizer</strong></td>
+<td><code>services/content_normalizer.py</code></td>
+<td>7,393 bytes</td>
+<td>Text normalization post-extraction</td>
+</tr>
+<tr>
+<td><strong>LaTeX Converter</strong></td>
+<td><code>services/latex_converter.py</code></td>
+<td>11,905 bytes</td>
+<td>LaTeX formula handling</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="embedding-strategy">5.3 Embedding Strategy</h2>
+<h3 id="primary-model-all-mpnet-base-v2">Primary Model: all-mpnet-base-v2</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td><code>sentence-transformers/all-mpnet-base-v2</code></td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td>768</td>
+</tr>
+<tr>
+<td>Max sequence length</td>
+<td>384 tokens</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>~14,000 sentences/second (GPU)</td>
+</tr>
+<tr>
+<td>Quality</td>
+<td>SOTA on semantic similarity benchmarks (2022)</td>
+</tr>
+<tr>
+<td>Hosting</td>
+<td>Local via sentence-transformers library</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-selection-rationale">Model Selection Rationale</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 18%" />
+<col style="width: 15%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th>Considered Model</th>
+<th>Dimension</th>
+<th>Quality</th>
+<th>Reason for Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>all-mpnet-base-v2</td>
+<td>768</td>
+<td>Highest</td>
+<td><strong>Selected</strong> — best quality for educational text</td>
+</tr>
+<tr>
+<td>all-MiniLM-L6-v2</td>
+<td>384</td>
+<td>Good</td>
+<td>Available as fallback (referenced in <code>.env</code>)</td>
+</tr>
+<tr>
+<td>text-embedding-3-small</td>
+<td>1536</td>
+<td>High</td>
+<td>OpenAI API — cost concerns for high-volume</td>
+</tr>
+<tr>
+<td>all-MiniLM-L12-v2</td>
+<td>384</td>
+<td>Better than L6</td>
+<td>Still lower quality than mpnet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="embedding-process">Embedding Process</h3>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SentenceTransformer(<span class="st">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Single query embedding</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>query_vector <span class="op">=</span> model.encode(<span class="st">&quot;What is backpropagation?&quot;</span>)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Shape: (768,)</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Batch document embedding</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>doc_vectors <span class="op">=</span> model.encode([chunk1, chunk2, chunk3, ...])</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Shape: (n, 768)</span></span></code></pre></div>
+<h3 id="embedding-consistency-issue">Embedding Consistency Issue</h3>
+<blockquote>
+<p><strong>Important</strong>: The <code>.env</code> file contains conflicting embedding configurations:</p>
+<pre><code>EMBEDDING_MODEL=text-embedding-3-small     # Line 4
+EMBEDDING_DIMENSIONS=1536                   # Line 5
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2  # Line 59
+EMBEDDING_DIMENSIONS=1536                   # Line 61</code></pre>
+<p>While <code>config.py</code> defaults to <code>all-mpnet-base-v2</code> (768 dimensions). The <code>.env</code> values may override the config depending on load order. <strong>Production fix recommended</strong>: Resolve to a single, canonical embedding model.</p>
+</blockquote>
+<hr />
+<h2 id="qdrant-vector-database">5.4 Qdrant Vector Database</h2>
+<h3 id="collection-architecture">Collection Architecture</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/rag/qdrant_setup.py</code></p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Primary collection for classroom materials</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>collection_name <span class="op">=</span> <span class="st">&quot;classroom_materials&quot;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Collection configuration</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>qdrant_client.create_collection(</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    collection_name<span class="op">=</span>collection_name,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    vectors_config<span class="op">=</span>VectorParams(</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>        size<span class="op">=</span><span class="dv">768</span>,  <span class="co"># all-mpnet-base-v2 dimension</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>        distance<span class="op">=</span>Distance.COSINE</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="collection-schema">Collection Schema</h3>
+<p>Each vector point in Qdrant stores:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;id&quot;</span>: <span class="st">&quot;uuid-v4&quot;</span>,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;vector&quot;</span>: [<span class="fl">0.012</span>, <span class="op">-</span><span class="fl">0.045</span>, ...],  <span class="co"># 768-dim float32 array</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;payload&quot;</span>: {</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Document metadata</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;document_id&quot;</span>: <span class="st">&quot;doc_abc123&quot;</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;document_name&quot;</span>: <span class="st">&quot;Introduction to ML.pdf&quot;</span>,</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;classroom_id&quot;</span>: <span class="st">&quot;class_xyz789&quot;</span>,</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;uploaded_by&quot;</span>: <span class="st">&quot;teacher_001&quot;</span>,</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;upload_date&quot;</span>: <span class="st">&quot;2026-02-15T10:30:00Z&quot;</span>,</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Chunk metadata</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;chunk_index&quot;</span>: <span class="dv">5</span>,</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;total_chunks&quot;</span>: <span class="dv">42</span>,</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;page_number&quot;</span>: <span class="dv">12</span>,</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;section_title&quot;</span>: <span class="st">&quot;Chapter 3: Neural Networks&quot;</span>,</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Content</span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;text&quot;</span>: <span class="st">&quot;A neural network consists of layers of interconnected nodes...&quot;</span>,</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;text_length&quot;</span>: <span class="dv">512</span>,</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Source tracking</span></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;source_type&quot;</span>: <span class="st">&quot;classroom_material&quot;</span>,  <span class="co"># or &quot;web_content&quot;, &quot;meeting_transcript&quot;</span></span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;format&quot;</span>: <span class="st">&quot;pdf&quot;</span>,</span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Processing metadata</span></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;processed_at&quot;</span>: <span class="st">&quot;2026-02-15T10:35:00Z&quot;</span>,</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;embedding_model&quot;</span>: <span class="st">&quot;all-mpnet-base-v2&quot;</span>,</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;ocr_used&quot;</span>: false</span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="qdrant-service-api">Qdrant Service API</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/qdrant_service.py</code> (25,432 bytes — the largest service file)</p>
+<p>The Qdrant service provides a comprehensive API:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create_collection()</code></td>
+<td>Initialize collection with vector config</td>
+</tr>
+<tr>
+<td><code>upsert_points()</code></td>
+<td>Insert or update vectors with payloads</td>
+</tr>
+<tr>
+<td><code>search()</code></td>
+<td>Semantic search with filtering</td>
+</tr>
+<tr>
+<td><code>search_with_filter()</code></td>
+<td>Search with Qdrant filter conditions</td>
+</tr>
+<tr>
+<td><code>delete_by_document()</code></td>
+<td>Remove all chunks for a document</td>
+</tr>
+<tr>
+<td><code>delete_by_classroom()</code></td>
+<td>Remove all chunks for a classroom</td>
+</tr>
+<tr>
+<td><code>get_collection_info()</code></td>
+<td>Collection statistics</td>
+</tr>
+<tr>
+<td><code>scroll()</code></td>
+<td>Paginated retrieval of all points</td>
+</tr>
+<tr>
+<td><code>update_payload()</code></td>
+<td>Update metadata without re-embedding</td>
+</tr>
+</tbody>
+</table>
+<h3 id="filtering-capabilities">Filtering Capabilities</h3>
+<p>Qdrant payload filters enable scoped retrieval:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Search within a specific classroom</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> <span class="cf">await</span> qdrant_service.search(</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    query_vector<span class="op">=</span>query_embedding,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    collection<span class="op">=</span><span class="st">&quot;classroom_materials&quot;</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    limit<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    score_threshold<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">filter</span><span class="op">=</span>{</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;must&quot;</span>: [</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>            {<span class="st">&quot;key&quot;</span>: <span class="st">&quot;classroom_id&quot;</span>, <span class="st">&quot;match&quot;</span>: {<span class="st">&quot;value&quot;</span>: <span class="st">&quot;class_xyz789&quot;</span>}},</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>            {<span class="st">&quot;key&quot;</span>: <span class="st">&quot;source_type&quot;</span>, <span class="st">&quot;match&quot;</span>: {<span class="st">&quot;value&quot;</span>: <span class="st">&quot;classroom_material&quot;</span>}}</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="document-ingestion-pipeline">5.5 Document Ingestion Pipeline</h2>
+<h3 id="stage-1-validation">Stage 1: Validation</h3>
+<ul>
+<li>File format check (PDF, PNG, JPG, DOCX, PPTX)</li>
+<li>File size validation (max 500MB)</li>
+<li>MIME type verification</li>
+<li>Duplicate detection via hash</li>
+</ul>
+<h3 id="stage-2-preprocessing">Stage 2: Preprocessing</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/document_preprocessor.py</code></p>
+<ul>
+<li>Encoding detection and normalization (UTF-8)</li>
+<li>Whitespace normalization</li>
+<li>Control character removal</li>
+<li>Character set validation</li>
+<li>Language detection (optional)</li>
+</ul>
+<h3 id="stage-3-text-extraction-ocr">Stage 3: Text Extraction / OCR</h3>
+<p>The system employs a <strong>multi-strategy extraction</strong> approach:</p>
+<pre class="mermaid">flowchart TB
+    DT{"Document Type<br/>Detection"}
+    DT -->|"PDF with text"| PYMUPDF["PyMuPDF (fitz)<br/>Direct extraction"]
+    DT -->|"PDF scanned"| HYBRID
+    DT -->|"Image PNG/JPG"| IMGOCR["Image Enhancer → OCR Pipeline"]
+    DT -->|"DOCX"| DOCX["python-docx extraction"]
+    DT -->|"PPTX"| PPTX["python-pptx slide extraction"]
+
+    subgraph HYBRID["Hybrid OCR Pipeline"]
+        direction TB
+        ENH["Image enhancement<br/>contrast, deskew, denoise"]
+        TES["Tesseract OCR (primary)"]
+        NAN["Nanonets API (backup)"]
+        SAG["SageMaker OCR (enterprise)"]
+        ENH --> TES --> NAN --> SAG
+    end
+</pre>
+<h4 id="ocr-backends">OCR Backends</h4>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 17%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Backend</th>
+<th>File</th>
+<th>Priority</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tesseract</td>
+<td><code>ocr_service.py</code></td>
+<td>Primary</td>
+<td>Local, no API cost</td>
+</tr>
+<tr>
+<td>Nanonets</td>
+<td><code>nanonets_ocr.py</code></td>
+<td>Secondary</td>
+<td>Better accuracy for complex layouts</td>
+</tr>
+<tr>
+<td>SageMaker</td>
+<td><code>sagemaker_ocr.py</code></td>
+<td>Tertiary</td>
+<td>Enterprise-grade, AWS-hosted</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td><code>hybrid_ocr.py</code></td>
+<td>Orchestrator</td>
+<td>Tries backends in order with fallback</td>
+</tr>
+</tbody>
+</table>
+<h4 id="image-enhancement">Image Enhancement</h4>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/image_enhancer.py</code> (19,344 bytes)</p>
+<p>Before OCR, images are preprocessed:</p>
+<ol type="1">
+<li><strong>Contrast enhancement</strong> — CLAHE (Contrast Limited Adaptive Histogram Equalization)</li>
+<li><strong>Deskewing</strong> — Hough line detection for rotation correction</li>
+<li><strong>Denoising</strong> — Non-local means denoising</li>
+<li><strong>Binarization</strong> — Otsu’s method for clean text extraction</li>
+<li><strong>Border removal</strong> — Crop non-content areas</li>
+<li><strong>Resolution scaling</strong> — Upscale low-DPI images</li>
+</ol>
+<h3 id="stage-4-semantic-chunking">Stage 4: Semantic Chunking</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/chunking_service.py</code> (8,818 bytes)</p>
+<p>The chunking strategy uses <strong>semantic boundaries</strong> rather than fixed character counts:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ChunkingService:</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Semantic chunking that respects document structure:</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Split on section headers (##, </span><span class="al">###</span><span class="co">)</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Split on paragraph boundaries</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Split on sentence boundaries (if paragraph too large)</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co">    4. Maintain overlap between adjacent chunks</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    DEFAULT_CHUNK_SIZE <span class="op">=</span> <span class="dv">512</span>      <span class="co"># tokens</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>    DEFAULT_OVERLAP <span class="op">=</span> <span class="dv">50</span>          <span class="co"># tokens</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    MIN_CHUNK_SIZE <span class="op">=</span> <span class="dv">100</span>          <span class="co"># tokens</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    MAX_CHUNK_SIZE <span class="op">=</span> <span class="dv">1000</span>         <span class="co"># tokens</span></span></code></pre></div>
+<h4 id="chunking-hierarchy">Chunking Hierarchy</h4>
+<pre class="mermaid">flowchart TB
+    DOC["Document"] --> H["Split by section headers<br/>H1, H2, H3"]
+    H --> P["Split by paragraphs<br/>double newline"]
+    P --> S["Split by sentences<br/>if paragraph > MAX_CHUNK_SIZE"]
+    S --> O["Overlap: 50 tokens<br/>from previous chunk prepended"]
+
+    H -.->|"Each section"| C1["1+ chunks"]
+    P -.->|"Grouped to"| C2["~512 tokens"]
+    S -.->|"Grouped to"| C3["~512 tokens"]</pre>
+<h4 id="chunk-metadata-enrichment">Chunk Metadata Enrichment</h4>
+<p>Each chunk is enriched with:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;text&quot;</span>: <span class="st">&quot;The gradient descent algorithm...&quot;</span>,</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;chunk_index&quot;</span>: <span class="dv">5</span>,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;page_number&quot;</span>: <span class="dv">12</span>,</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;section_title&quot;</span>: <span class="st">&quot;3.2 Optimization Methods&quot;</span>,</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;token_count&quot;</span>: <span class="dv">487</span>,</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;has_equations&quot;</span>: <span class="va">True</span>,</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;has_code&quot;</span>: <span class="va">False</span>,</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;language&quot;</span>: <span class="st">&quot;en&quot;</span>,</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;parent_document_id&quot;</span>: <span class="st">&quot;doc_abc123&quot;</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="stage-5-embedding-generation">Stage 5: Embedding Generation</h3>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SentenceTransformer(<span class="st">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Batch encode all chunks</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>chunk_texts <span class="op">=</span> [chunk[<span class="st">&quot;text&quot;</span>] <span class="cf">for</span> chunk <span class="kw">in</span> chunks]</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>embeddings <span class="op">=</span> model.encode(chunk_texts, batch_size<span class="op">=</span><span class="dv">32</span>, show_progress_bar<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Shape: (num_chunks, 768)</span></span></code></pre></div>
+<h3 id="stage-6-qdrant-indexing">Stage 6: Qdrant Indexing</h3>
+<div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Upsert points into Qdrant</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> [</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    PointStruct(</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">id</span><span class="op">=</span><span class="bu">str</span>(uuid4()),</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>        vector<span class="op">=</span>embedding.tolist(),</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>        payload<span class="op">=</span>{</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;text&quot;</span>: chunk[<span class="st">&quot;text&quot;</span>],</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;document_id&quot;</span>: document_id,</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;classroom_id&quot;</span>: classroom_id,</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;page_number&quot;</span>: chunk[<span class="st">&quot;page_number&quot;</span>],</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;chunk_index&quot;</span>: i,</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;source_type&quot;</span>: <span class="st">&quot;classroom_material&quot;</span>,</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>            ...</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, (chunk, embedding) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(chunks, embeddings))</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>qdrant_client.upsert(</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>    collection_name<span class="op">=</span><span class="st">&quot;classroom_materials&quot;</span>,</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>    points<span class="op">=</span>points</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="stage-7-completion-notification">Stage 7: Completion &amp; Notification</h3>
+<ul>
+<li>Document status updated in PostgreSQL (<code>processing_complete</code>)</li>
+<li>SSE event sent to frontend for real-time UI update</li>
+<li>Processing metrics logged (time, chunk count, OCR status)</li>
+</ul>
+<hr />
+<h2 id="retrieval-pipeline">5.6 Retrieval Pipeline</h2>
+<h3 id="query-processing">Query Processing</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/query_rewriter.py</code> (14,915 bytes)</p>
+<p>Before vector search, queries are processed through a rewriting pipeline:</p>
+<ol type="1">
+<li><strong>Spelling correction</strong> — Fix common typos</li>
+<li><strong>Expansion</strong> — Add synonyms and related terms</li>
+<li><strong>Decomposition</strong> — Split complex queries into sub-queries</li>
+<li><strong>Anchor injection</strong> — Append TAL anchor keywords (if active)</li>
+</ol>
+<p>Example:</p>
+<pre><code>Original: &quot;How does backprop work?&quot;
+Expanded: &quot;How does backpropagation work? gradient descent chain rule neural network&quot;
+With anchor: &quot;How does backpropagation work? gradient descent chain rule neural network backpropagation neural networks&quot;</code></pre>
+<h3 id="vector-search">Vector Search</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/rag/retriever.py</code> (10,527 bytes)</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RAGRetriever:</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Semantic retrieval from Qdrant with scoring and filtering.</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> retrieve(</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>        query: <span class="bu">str</span>,</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>        classroom_id: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>        top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span>,</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>        score_threshold: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>        source_filter: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> List[Dict]:</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a><span class="co">        Retrieve relevant chunks for a query.</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns:</span></span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="co">            List of chunks with similarity scores and metadata</span></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Embed the query</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>        query_vector <span class="op">=</span> <span class="va">self</span>.embedding_model.encode(query)</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Build filter</span></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>        filter_conditions <span class="op">=</span> []</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> classroom_id:</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>            filter_conditions.append(</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>                {<span class="st">&quot;key&quot;</span>: <span class="st">&quot;classroom_id&quot;</span>, <span class="st">&quot;match&quot;</span>: {<span class="st">&quot;value&quot;</span>: classroom_id}}</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> source_filter:</span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>            filter_conditions.append(</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>                {<span class="st">&quot;key&quot;</span>: <span class="st">&quot;source_type&quot;</span>, <span class="st">&quot;match&quot;</span>: {<span class="st">&quot;value&quot;</span>: source_filter}}</span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Search Qdrant</span></span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> <span class="va">self</span>.qdrant_client.search(</span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>            collection_name<span class="op">=</span><span class="st">&quot;classroom_materials&quot;</span>,</span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>            query_vector<span class="op">=</span>query_vector.tolist(),</span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>            limit<span class="op">=</span>top_k,</span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>            score_threshold<span class="op">=</span>score_threshold,</span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>            query_filter<span class="op">=</span>Filter(must<span class="op">=</span>filter_conditions) <span class="cf">if</span> filter_conditions <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 4. Format results</span></span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [</span>
+<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;text&quot;</span>: hit.payload[<span class="st">&quot;text&quot;</span>],</span>
+<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;score&quot;</span>: hit.score,</span>
+<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;document_name&quot;</span>: hit.payload.get(<span class="st">&quot;document_name&quot;</span>),</span>
+<span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;page_number&quot;</span>: hit.payload.get(<span class="st">&quot;page_number&quot;</span>),</span>
+<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;source_type&quot;</span>: hit.payload.get(<span class="st">&quot;source_type&quot;</span>),</span>
+<span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;chunk_index&quot;</span>: hit.payload.get(<span class="st">&quot;chunk_index&quot;</span>),</span>
+<span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> hit <span class="kw">in</span> results</span>
+<span id="cb51-54"><a href="#cb51-54" aria-hidden="true" tabindex="-1"></a>        ]</span></code></pre></div>
+<h3 id="scoring-ranking">Scoring &amp; Ranking</h3>
+<p>Retrieved chunks are scored on multiple dimensions:</p>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Weight</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cosine similarity</td>
+<td>Primary</td>
+<td>Qdrant vector distance</td>
+</tr>
+<tr>
+<td>Anchor keyword match</td>
+<td>Boost</td>
+<td>TAL anchor keywords in chunk text</td>
+</tr>
+<tr>
+<td>Source type priority</td>
+<td>Modifier</td>
+<td>Classroom &gt; Notes &gt; Web</td>
+</tr>
+<tr>
+<td>Recency</td>
+<td>Tiebreaker</td>
+<td>More recently uploaded documents preferred</td>
+</tr>
+</tbody>
+</table>
+<h3 id="response-cache">Response Cache</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/response_cache.py</code> (8,799 bytes)</p>
+<p>To reduce redundant LLM calls, a Redis-backed response cache stores recent query-response pairs:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ResponseCache:</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Cache for RAG responses to avoid redundant LLM calls.</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Cache key: hash(query + classroom_id + anchor_topic)</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co">    TTL: 1 hour (configurable)</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> get_cached_response(<span class="va">self</span>, query, classroom_id, anchor):</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>        cache_key <span class="op">=</span> <span class="va">self</span>._build_key(query, classroom_id, anchor)</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>        cached <span class="op">=</span> <span class="cf">await</span> <span class="va">self</span>.redis.get(cache_key)</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cached:</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.loads(cached)</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> cache_response(<span class="va">self</span>, query, classroom_id, anchor, response):</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>        cache_key <span class="op">=</span> <span class="va">self</span>._build_key(query, classroom_id, anchor)</span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">await</span> <span class="va">self</span>.redis.setex(cache_key, <span class="dv">3600</span>, json.dumps(response))</span></code></pre></div>
+<hr />
+<h2 id="specialized-rag-variants">5.7 Specialized RAG Variants</h2>
+<h3 id="notes-embedding-service">Notes Embedding Service</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/notes_embedding.py</code> (13,778 bytes)</p>
+<p>Student-uploaded handwritten notes are processed through a specialized pipeline: 1. Image enhancement (deskew, contrast) 2. OCR (optimized for handwriting) 3. Chunking (smaller chunks for notes) 4. Embedding into a notes-specific Qdrant collection</p>
+<h3 id="meeting-rag">Meeting RAG</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/meeting_rag.py</code> (8,371 bytes)</p>
+<p>Meeting transcripts are indexed for Q&amp;A over classroom discussions: 1. Whisper transcription produces timestamped text 2. Speaker diarization labels segments 3. Chunks include speaker attribution and timestamps 4. Retrieval enables questions like “What did the teacher say about X?”</p>
+<h3 id="meeting-embedding-service">Meeting Embedding Service</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/meeting_embedding_service.py</code> (12,590 bytes)</p>
+<p>Dedicated service for embedding meeting content with metadata: - Speaker labels - Timestamp ranges - Topic segments - Action items</p>
+<h3 id="web-content-embedding">Web Content Embedding</h3>
+<p><strong>Source</strong>: <code>backend/ai-service/app/services/web_ingest_service.py</code> (59,963 bytes — the largest service file in the codebase)</p>
+<p>The web ingest service handles: 1. Web page crawling and content extraction 2. Article summarization 3. Content quality scoring (trust score) 4. Chunking and embedding with <code>source_type: "web_content"</code> 5. MCP tagging for isolation from classroom materials</p>
+<hr />
+<h2 id="performance-characteristics">5.8 Performance Characteristics</h2>
+<h3 id="ingestion-performance">Ingestion Performance</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Estimated Time</th>
+<th>Bottleneck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF text extraction (100 pages)</td>
+<td>2-5 seconds</td>
+<td>PyMuPDF I/O</td>
+</tr>
+<tr>
+<td>OCR (100 scanned pages)</td>
+<td>30-120 seconds</td>
+<td>Tesseract processing</td>
+</tr>
+<tr>
+<td>Chunking (100 pages)</td>
+<td>&lt; 1 second</td>
+<td>Text processing</td>
+</tr>
+<tr>
+<td>Embedding (50 chunks)</td>
+<td>2-5 seconds</td>
+<td>Model inference</td>
+</tr>
+<tr>
+<td>Qdrant indexing (50 points)</td>
+<td>&lt; 1 second</td>
+<td>Network I/O</td>
+</tr>
+<tr>
+<td><strong>Total (text PDF)</strong></td>
+<td><strong>5-10 seconds</strong></td>
+<td>Embedding</td>
+</tr>
+<tr>
+<td><strong>Total (scanned PDF)</strong></td>
+<td><strong>35-130 seconds</strong></td>
+<td>OCR</td>
+</tr>
+</tbody>
+</table>
+<h3 id="retrieval-performance">Retrieval Performance</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Estimated Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Query embedding</td>
+<td>20-50ms</td>
+</tr>
+<tr>
+<td>Qdrant vector search (top-8)</td>
+<td>5-20ms</td>
+</tr>
+<tr>
+<td>MCP filtering</td>
+<td>&lt; 5ms</td>
+</tr>
+<tr>
+<td><strong>Total retrieval</strong></td>
+<td><strong>30-75ms</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="llm-generation-not-part-of-rag-but-follows-retrieval">LLM Generation (not part of RAG but follows retrieval)</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Estimated Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt construction</td>
+<td>&lt; 10ms</td>
+</tr>
+<tr>
+<td>HuggingFace API inference</td>
+<td>2-8 seconds</td>
+</tr>
+<tr>
+<td>Response parsing</td>
+<td>&lt; 10ms</td>
+</tr>
+<tr>
+<td><strong>Total generation</strong></td>
+<td><strong>2-8 seconds</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="scalability-considerations">5.9 Scalability Considerations</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 28%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Current State</th>
+<th>Production Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Embedding model</strong></td>
+<td>Loaded per-process, single instance</td>
+<td>Shared model server (Triton/TorchServe)</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>Single node, Docker volume</td>
+<td>Qdrant Cloud or clustered deployment</td>
+</tr>
+<tr>
+<td><strong>Chunk storage</strong></td>
+<td>~50 chunks per document</td>
+<td>Monitor collection size, add HNSW tuning</td>
+</tr>
+<tr>
+<td><strong>Query latency</strong></td>
+<td>30-75ms retrieval</td>
+<td>Acceptable for interactive use</td>
+</tr>
+<tr>
+<td><strong>Concurrent ingestion</strong></td>
+<td>Sequential processing</td>
+<td>Add Celery/worker queue for parallel ingestion</td>
+</tr>
+<tr>
+<td><strong>Embedding cache</strong></td>
+<td>None</td>
+<td>Cache embeddings for frequently queried documents</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-flow-summary">5.10 Data Flow Summary</h2>
+<pre class="mermaid">sequenceDiagram
+    participant T as Teacher
+    participant CS as Core Service
+    participant AI as AI Service
+    participant QD as Qdrant
+    participant FE as Frontend
+    participant S as Student
+    participant HF as HuggingFace API
+
+    rect rgb(59, 130, 246, 0.1)
+        Note over T,QD: Ingestion Flow
+        T->>CS: Upload PDF
+        CS->>CS: File storage
+        CS->>AI: HTTP POST
+        AI->>AI: Validate → Preprocess → OCR
+        AI->>AI: Chunk → Embed (mpnet)
+        AI->>QD: Index (classroom_materials)
+        AI-->>FE: SSE "Document ready"
+    end
+
+    rect rgb(16, 185, 129, 0.1)
+        Note over S,HF: Retrieval Flow
+        S->>AI: Ask query
+        AI->>AI: Rewrite query
+        AI->>AI: Embed (mpnet)
+        AI->>QD: Cosine similarity search
+        QD->>AI: Top-k chunks
+        AI->>AI: MCP Filter
+        AI->>AI: Build prompt
+        AI->>HF: LLM Generate (Mistral-7B)
+        HF->>AI: Response
+        AI->>FE: Answer + sources
+    end</pre>
+<hr />
+
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 83: Session Intelligence &amp;amp; Telemetry</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-82.html">&larr; Previous</a> <a href="page-84.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-83-session-intelligence-telemetry">Page 83: Session Intelligence &amp; Telemetry</h1>
+<blockquote>
+<p>Context routing algorithm, session lifecycle management, resource deduplication, and structured telemetry for tutoring sessions.</p>
+</blockquote>
+<hr />
+<h2 id="architecture-overview-3">83.1 Architecture Overview</h2>
+<pre class="mermaid">flowchart LR
+    UQ["🔍 User Query"] --> SS["SessionService<br/>Turn tracking"]
+    SS --> SC["SessionCache<br/>Redis"]
+    SC --> SR["SessionRepo<br/>PostgreSQL"]
+    SS --> SI["SessionIntelligence<br/>Context routing"]
+    SI --> DEC{"related / new_topic"}
+    DEC --> RPE["Retrieval Priority Engine<br/>Session → Classroom → Global → Web"]</pre>
+<h3 id="source-files-1">Source Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Session Intelligence</td>
+<td><code>services/session_intelligence.py</code></td>
+<td>352</td>
+</tr>
+<tr>
+<td>Session Telemetry</td>
+<td><code>services/session_telemetry.py</code></td>
+<td>249</td>
+</tr>
+<tr>
+<td>Session Service</td>
+<td><code>services/session_service.py</code></td>
+<td>697</td>
+</tr>
+<tr>
+<td>Session Repository</td>
+<td><code>services/session_repository.py</code></td>
+<td>15KB</td>
+</tr>
+<tr>
+<td>Session Cache</td>
+<td><code>services/session_cache.py</code></td>
+<td>8.7KB</td>
+</tr>
+<tr>
+<td>Session API Routes</td>
+<td><code>api/routes/session.py</code></td>
+<td>21.7KB</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sessionintelligence-context-routing">83.2 SessionIntelligence — Context Routing</h2>
+<h3 id="algorithm">Algorithm</h3>
+<div class="sourceCode" id="cb534"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb534-1"><a href="#cb534-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SessionIntelligence:</span>
+<span id="cb534-2"><a href="#cb534-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compute_decision(</span>
+<span id="cb534-3"><a href="#cb534-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb534-4"><a href="#cb534-4" aria-hidden="true" tabindex="-1"></a>        query_embedding: List[<span class="bu">float</span>],</span>
+<span id="cb534-5"><a href="#cb534-5" aria-hidden="true" tabindex="-1"></a>        turn_embeddings: List[List[<span class="bu">float</span>]],  <span class="co"># Last N turns</span></span>
+<span id="cb534-6"><a href="#cb534-6" aria-hidden="true" tabindex="-1"></a>        last_topic_vector: Optional[List[<span class="bu">float</span>]],</span>
+<span id="cb534-7"><a href="#cb534-7" aria-hidden="true" tabindex="-1"></a>        last_decision: <span class="bu">str</span>,</span>
+<span id="cb534-8"><a href="#cb534-8" aria-hidden="true" tabindex="-1"></a>        consecutive_borderline: <span class="bu">int</span>,</span>
+<span id="cb534-9"><a href="#cb534-9" aria-hidden="true" tabindex="-1"></a>        session_id: <span class="bu">str</span>,</span>
+<span id="cb534-10"><a href="#cb534-10" aria-hidden="true" tabindex="-1"></a>        turn_index: <span class="bu">int</span>,</span>
+<span id="cb534-11"><a href="#cb534-11" aria-hidden="true" tabindex="-1"></a>        query_text: <span class="bu">str</span></span>
+<span id="cb534-12"><a href="#cb534-12" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> SessionDecision</span></code></pre></div>
+<h3 id="decision-flow">Decision Flow</h3>
+<pre class="mermaid">graph TD
+    A[Compute cosine similarity<br>with last N turn embeddings] --> B{max_similarity ≥<br>RELATED_THRESHOLD?}
+    B -->|Yes| C["related"]
+    B -->|No| D{max_similarity ≤<br>FORGET_THRESHOLD?}
+    D -->|Yes| E["new_topic"]
+    D -->|No| F[Borderline zone]
+    F --> G{Hysteresis:<br>consecutive_borderline<br>≥ HYSTERESIS_TURNS?}
+    G -->|Yes| E
+    G -->|No| H[Compute centroid<br>similarity]
+    H --> I{centroid_sim ≥<br>RELATED_THRESHOLD?}
+    I -->|Yes| C
+    I -->|No| E</pre>
+<h3 id="configuration-environment-variables">Configuration (Environment Variables)</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RELATED_THRESHOLD</code></td>
+<td>0.45</td>
+<td>Above = related to session</td>
+</tr>
+<tr>
+<td><code>FORGET_THRESHOLD</code></td>
+<td>0.25</td>
+<td>Below = definitely new topic</td>
+</tr>
+<tr>
+<td><code>RELATED_WINDOW</code></td>
+<td>5</td>
+<td>Number of recent turns to compare</td>
+</tr>
+<tr>
+<td><code>HYSTERESIS_TURNS</code></td>
+<td>2</td>
+<td>Borderline turns before switching</td>
+</tr>
+</tbody>
+</table>
+<h3 id="retrieval-priority-order">Retrieval Priority Order</h3>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Priority 1</th>
+<th>Priority 2</th>
+<th>Priority 3</th>
+<th>Priority 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>Session resources</td>
+<td>Classroom materials</td>
+<td>Global RAG</td>
+<td>Web search</td>
+</tr>
+<tr>
+<td><code>new_topic</code></td>
+<td>Classroom materials</td>
+<td>Global RAG</td>
+<td>Web search</td>
+<td>Session resources</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sessionservice-core-lifecycle">83.3 SessionService — Core Lifecycle</h2>
+<h3 id="data-models-6">Data Models</h3>
+<div class="sourceCode" id="cb536"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb536-1"><a href="#cb536-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb536-2"><a href="#cb536-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SessionData:</span>
+<span id="cb536-3"><a href="#cb536-3" aria-hidden="true" tabindex="-1"></a>    session_id: <span class="bu">str</span></span>
+<span id="cb536-4"><a href="#cb536-4" aria-hidden="true" tabindex="-1"></a>    user_id: <span class="bu">str</span></span>
+<span id="cb536-5"><a href="#cb536-5" aria-hidden="true" tabindex="-1"></a>    classroom_id: Optional[<span class="bu">str</span>]</span>
+<span id="cb536-6"><a href="#cb536-6" aria-hidden="true" tabindex="-1"></a>    created_at: <span class="bu">str</span></span>
+<span id="cb536-7"><a href="#cb536-7" aria-hidden="true" tabindex="-1"></a>    last_active_at: <span class="bu">str</span></span>
+<span id="cb536-8"><a href="#cb536-8" aria-hidden="true" tabindex="-1"></a>    turn_count: <span class="bu">int</span></span>
+<span id="cb536-9"><a href="#cb536-9" aria-hidden="true" tabindex="-1"></a>    resource_count: <span class="bu">int</span></span>
+<span id="cb536-10"><a href="#cb536-10" aria-hidden="true" tabindex="-1"></a>    config: <span class="bu">dict</span>          <span class="co"># ttl_hours, max_turns, max_resources</span></span>
+<span id="cb536-11"><a href="#cb536-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb536-12"><a href="#cb536-12" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb536-13"><a href="#cb536-13" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TurnData:</span>
+<span id="cb536-14"><a href="#cb536-14" aria-hidden="true" tabindex="-1"></a>    turn_number: <span class="bu">int</span></span>
+<span id="cb536-15"><a href="#cb536-15" aria-hidden="true" tabindex="-1"></a>    question: <span class="bu">str</span></span>
+<span id="cb536-16"><a href="#cb536-16" aria-hidden="true" tabindex="-1"></a>    related: <span class="bu">bool</span></span>
+<span id="cb536-17"><a href="#cb536-17" aria-hidden="true" tabindex="-1"></a>    relatedness_score: Optional[<span class="bu">float</span>]</span>
+<span id="cb536-18"><a href="#cb536-18" aria-hidden="true" tabindex="-1"></a>    timestamp: <span class="bu">str</span></span>
+<span id="cb536-19"><a href="#cb536-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb536-20"><a href="#cb536-20" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb536-21"><a href="#cb536-21" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ResourceData:</span>
+<span id="cb536-22"><a href="#cb536-22" aria-hidden="true" tabindex="-1"></a>    resource_id: <span class="bu">str</span></span>
+<span id="cb536-23"><a href="#cb536-23" aria-hidden="true" tabindex="-1"></a>    resource_type: <span class="bu">str</span>      <span class="co"># &quot;web&quot;, &quot;pdf&quot;, &quot;qdrant&quot;, &quot;youtube&quot;</span></span>
+<span id="cb536-24"><a href="#cb536-24" aria-hidden="true" tabindex="-1"></a>    source: <span class="bu">str</span></span>
+<span id="cb536-25"><a href="#cb536-25" aria-hidden="true" tabindex="-1"></a>    url: Optional[<span class="bu">str</span>]</span>
+<span id="cb536-26"><a href="#cb536-26" aria-hidden="true" tabindex="-1"></a>    title: <span class="bu">str</span></span>
+<span id="cb536-27"><a href="#cb536-27" aria-hidden="true" tabindex="-1"></a>    preview_summary: Optional[<span class="bu">str</span>]</span>
+<span id="cb536-28"><a href="#cb536-28" aria-hidden="true" tabindex="-1"></a>    inline_render: <span class="bu">bool</span></span>
+<span id="cb536-29"><a href="#cb536-29" aria-hidden="true" tabindex="-1"></a>    inserted_at: <span class="bu">str</span></span>
+<span id="cb536-30"><a href="#cb536-30" aria-hidden="true" tabindex="-1"></a>    last_referenced_at: <span class="bu">str</span></span>
+<span id="cb536-31"><a href="#cb536-31" aria-hidden="true" tabindex="-1"></a>    content_hash: Optional[<span class="bu">str</span>]</span></code></pre></div>
+<h3 id="key-operations">Key Operations</h3>
+<div class="sourceCode" id="cb537"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb537-1"><a href="#cb537-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SessionService:</span>
+<span id="cb537-2"><a href="#cb537-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Lifecycle</span></span>
+<span id="cb537-3"><a href="#cb537-3" aria-hidden="true" tabindex="-1"></a>    create_session(user_id, classroom_id, config) <span class="op">-&gt;</span> SessionData</span>
+<span id="cb537-4"><a href="#cb537-4" aria-hidden="true" tabindex="-1"></a>    get_session(session_id) <span class="op">-&gt;</span> SessionData     <span class="co"># memory → cache → DB</span></span>
+<span id="cb537-5"><a href="#cb537-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb537-6"><a href="#cb537-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Turns</span></span>
+<span id="cb537-7"><a href="#cb537-7" aria-hidden="true" tabindex="-1"></a>    add_turn(session_id, question, embedding) <span class="op">-&gt;</span> TurnData</span>
+<span id="cb537-8"><a href="#cb537-8" aria-hidden="true" tabindex="-1"></a>    compute_relatedness(embedding, session_id) <span class="op">-&gt;</span> (<span class="bu">bool</span>, <span class="bu">float</span>)</span>
+<span id="cb537-9"><a href="#cb537-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb537-10"><a href="#cb537-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Resources (with deduplication)</span></span>
+<span id="cb537-11"><a href="#cb537-11" aria-hidden="true" tabindex="-1"></a>    append_resource(session_id, resource_type, source, url,</span>
+<span id="cb537-12"><a href="#cb537-12" aria-hidden="true" tabindex="-1"></a>                    title, summary, content_hash, inline_render,</span>
+<span id="cb537-13"><a href="#cb537-13" aria-hidden="true" tabindex="-1"></a>                    content_embedding) <span class="op">-&gt;</span> AppendResult</span>
+<span id="cb537-14"><a href="#cb537-14" aria-hidden="true" tabindex="-1"></a>    get_resource_list(session_id) <span class="op">-&gt;</span> List[ResourceData]</span></code></pre></div>
+<h3 id="resource-deduplication-3-layer">Resource Deduplication (3-layer)</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Method</th>
+<th>Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. URL match</td>
+<td>Canonical URL comparison</td>
+<td>Exact match</td>
+</tr>
+<tr>
+<td>2. Content hash</td>
+<td>SHA-256 of content</td>
+<td>Exact match</td>
+</tr>
+<tr>
+<td>3. Vector similarity</td>
+<td>Cosine similarity of embeddings</td>
+<td>&gt; 0.95</td>
+</tr>
+</tbody>
+</table>
+<h3 id="session-lookup-chain">Session Lookup Chain</h3>
+<pre class="mermaid">flowchart LR
+    GS["get_session(id)"] --> M{"In-memory dict?"}
+    M -- Hit --> R1["✅ Return"]
+    M -- Miss --> RD{"Redis cache?"}
+    RD -- Hit --> H["Hydrate to memory"] --> R2["✅ Return"]
+    RD -- Miss --> PG{"PostgreSQL?"}
+    PG -- Hit --> P["Populate cache + memory"] --> R3["✅ Return"]
+    PG -- Miss --> R4["❌ None<br/>(expired/invalid)"]</pre>
+<h3 id="default-configuration">Default Configuration</h3>
+<div class="sourceCode" id="cb539"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb539-1"><a href="#cb539-1" aria-hidden="true" tabindex="-1"></a>DEFAULT_CONFIG <span class="op">=</span> {</span>
+<span id="cb539-2"><a href="#cb539-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;ttl_hours&quot;</span>: <span class="dv">24</span>,          <span class="co"># Session expiry</span></span>
+<span id="cb539-3"><a href="#cb539-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;max_turns&quot;</span>: <span class="dv">100</span>,         <span class="co"># Max turns before auto-close</span></span>
+<span id="cb539-4"><a href="#cb539-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;max_resources&quot;</span>: <span class="dv">50</span>,      <span class="co"># LRU eviction when exceeded</span></span>
+<span id="cb539-5"><a href="#cb539-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;dedup_threshold&quot;</span>: <span class="fl">0.95</span>,  <span class="co"># Vector similarity threshold</span></span>
+<span id="cb539-6"><a href="#cb539-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="sessiontelemetry-structured-logging">83.4 SessionTelemetry — Structured Logging</h2>
+<h3 id="source-servicessession_telemetry.py">Source: <code>services/session_telemetry.py</code></h3>
+<p>All events logged with <code>[TELEMETRY]</code> prefix for easy filtering.</p>
+<h3 id="event-types">Event Types</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 24%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Method</th>
+<th>What It Tracks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Session</td>
+<td><code>log_session_created()</code></td>
+<td>user_id, classroom_id, timestamp</td>
+</tr>
+<tr>
+<td>Session</td>
+<td><code>log_session_loaded()</code></td>
+<td>Source (memory/cache/db)</td>
+</tr>
+<tr>
+<td>Session</td>
+<td><code>log_session_expired()</code></td>
+<td>Duration in hours</td>
+</tr>
+<tr>
+<td>Turn</td>
+<td><code>log_turn_added()</code></td>
+<td>turn_number, related (bool), similarity score</td>
+</tr>
+<tr>
+<td>Resource</td>
+<td><code>log_resource_appended()</code></td>
+<td>resource_type, source, inserted/rejected, reason</td>
+</tr>
+<tr>
+<td>Resource</td>
+<td><code>log_resource_evicted()</code></td>
+<td>LRU eviction of oldest resource</td>
+</tr>
+<tr>
+<td>Cache</td>
+<td><code>log_cache_hit()</code> / <code>log_cache_miss()</code></td>
+<td>Redis cache performance</td>
+</tr>
+<tr>
+<td>Cache</td>
+<td><code>log_db_fallback()</code></td>
+<td>PostgreSQL fallback after cache miss</td>
+</tr>
+<tr>
+<td>Retrieval</td>
+<td><code>log_retrieval_priority()</code></td>
+<td>session/classroom/global/web hit counts</td>
+</tr>
+</tbody>
+</table>
+<h3 id="aggregated-metrics">Aggregated Metrics</h3>
+<div class="sourceCode" id="cb540"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb540-1"><a href="#cb540-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_metrics(<span class="va">self</span>) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb540-2"><a href="#cb540-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb540-3"><a href="#cb540-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;sessions_created&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-4"><a href="#cb540-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;sessions_loaded&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-5"><a href="#cb540-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;sessions_expired&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-6"><a href="#cb540-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;turns_added&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-7"><a href="#cb540-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;related_turns&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-8"><a href="#cb540-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;new_topic_turns&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-9"><a href="#cb540-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;relatedness_ratio&quot;</span>: <span class="bu">float</span>,     <span class="co"># related / total</span></span>
+<span id="cb540-10"><a href="#cb540-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;resources_inserted&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-11"><a href="#cb540-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;resources_rejected&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-12"><a href="#cb540-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;resources_evicted&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-13"><a href="#cb540-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;cache_hits&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-14"><a href="#cb540-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;cache_misses&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-15"><a href="#cb540-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;cache_hit_ratio&quot;</span>: <span class="bu">float</span>,</span>
+<span id="cb540-16"><a href="#cb540-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;db_fallbacks&quot;</span>: <span class="bu">int</span>,</span>
+<span id="cb540-17"><a href="#cb540-17" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
+<hr />
+<h2 id="session-api-routes">83.5 Session API Routes</h2>
+<h3 id="source-apiroutessession.py-21.7kb">Source: <code>api/routes/session.py</code> (21.7KB)</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/sessions</code></td>
+<td>POST</td>
+<td>Create new session</td>
+</tr>
+<tr>
+<td><code>GET /api/sessions/{id}</code></td>
+<td>GET</td>
+<td>Get session details</td>
+</tr>
+<tr>
+<td><code>POST /api/sessions/{id}/turns</code></td>
+<td>POST</td>
+<td>Add a turn</td>
+</tr>
+<tr>
+<td><code>GET /api/sessions/{id}/resources</code></td>
+<td>GET</td>
+<td>List session resources</td>
+</tr>
+<tr>
+<td><code>POST /api/sessions/{id}/resources</code></td>
+<td>POST</td>
+<td>Append resource</td>
+</tr>
+<tr>
+<td><code>DELETE /api/sessions/{id}</code></td>
+<td>DELETE</td>
+<td>End session</td>
+</tr>
+<tr>
+<td><code>GET /api/sessions/metrics</code></td>
+<td>GET</td>
+<td>Get telemetry metrics</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

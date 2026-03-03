@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 77: Feedback System &amp;amp; Learning Data Models</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-76.html">&larr; Previous</a> <a href="page-78.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-77-feedback-system-learning-data-models">Page 77: Feedback System &amp; Learning Data Models</h1>
+<blockquote>
+<p>Supplements Page 8 (Learning Agent) with detailed data models, API endpoints, and ER relationships from <code>learning-agents.md</code>.</p>
+</blockquote>
+<hr />
+<h2 id="overview-63">77.1 Overview</h2>
+<p>The feedback system is the backbone of ensureStudy’s <strong>Type 5 Learning Agent</strong>. It transforms user feedback into concrete learning examples that improve future responses — a lightweight alternative to full RLHF.</p>
+<hr />
+<h2 id="data-model-er-diagram">77.2 Data Model ER Diagram</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Data Model ER Diagram "]
+        direction TB
+        N0["AgentInteraction < InteractionFeedback"]
+        N1["(promoted after 2+ 👍)"]
+        N2["LearningExample"]
+        N3["AgentPerformanceMetrics (aggregated periodically)"]
+    end
+</pre>
+<hr />
+<h2 id="core-models">77.3 Core Models</h2>
+<h3 id="agentinteraction">AgentInteraction</h3>
+<div class="sourceCode" id="cb488"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb488-1"><a href="#cb488-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgentInteraction(db.Model):</span>
+<span id="cb488-2"><a href="#cb488-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>              <span class="op">=</span> Column(UUID, primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb488-3"><a href="#cb488-3" aria-hidden="true" tabindex="-1"></a>    agent_type      <span class="op">=</span> Column(String(<span class="dv">50</span>))           <span class="co"># &quot;tutor&quot;, &quot;research&quot;, etc.</span></span>
+<span id="cb488-4"><a href="#cb488-4" aria-hidden="true" tabindex="-1"></a>    session_id      <span class="op">=</span> Column(UUID)</span>
+<span id="cb488-5"><a href="#cb488-5" aria-hidden="true" tabindex="-1"></a>    user_id         <span class="op">=</span> Column(UUID, ForeignKey(<span class="st">&quot;users.id&quot;</span>))</span>
+<span id="cb488-6"><a href="#cb488-6" aria-hidden="true" tabindex="-1"></a>    query           <span class="op">=</span> Column(Text)                  <span class="co"># Student&#39;s question</span></span>
+<span id="cb488-7"><a href="#cb488-7" aria-hidden="true" tabindex="-1"></a>    response        <span class="op">=</span> Column(Text)                  <span class="co"># Agent&#39;s answer</span></span>
+<span id="cb488-8"><a href="#cb488-8" aria-hidden="true" tabindex="-1"></a>    response_metadata <span class="op">=</span> Column(JSONB)               <span class="co"># Tokens, latency, model</span></span>
+<span id="cb488-9"><a href="#cb488-9" aria-hidden="true" tabindex="-1"></a>    topic           <span class="op">=</span> Column(String(<span class="dv">200</span>))            <span class="co"># Extracted topic</span></span>
+<span id="cb488-10"><a href="#cb488-10" aria-hidden="true" tabindex="-1"></a>    response_time_ms <span class="op">=</span> Column(Integer)               <span class="co"># Latency</span></span>
+<span id="cb488-11"><a href="#cb488-11" aria-hidden="true" tabindex="-1"></a>    created_at      <span class="op">=</span> Column(DateTime)</span></code></pre></div>
+<h3 id="interactionfeedback">InteractionFeedback</h3>
+<div class="sourceCode" id="cb489"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb489-1"><a href="#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InteractionFeedback(db.Model):</span>
+<span id="cb489-2"><a href="#cb489-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>              <span class="op">=</span> Column(UUID, primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb489-3"><a href="#cb489-3" aria-hidden="true" tabindex="-1"></a>    interaction_id  <span class="op">=</span> Column(UUID, ForeignKey(<span class="st">&quot;agent_interactions.id&quot;</span>))</span>
+<span id="cb489-4"><a href="#cb489-4" aria-hidden="true" tabindex="-1"></a>    user_id         <span class="op">=</span> Column(UUID, ForeignKey(<span class="st">&quot;users.id&quot;</span>))</span>
+<span id="cb489-5"><a href="#cb489-5" aria-hidden="true" tabindex="-1"></a>    feedback_type   <span class="op">=</span> Column(Enum(<span class="st">&quot;thumbs&quot;</span>, <span class="st">&quot;rating&quot;</span>, <span class="st">&quot;text&quot;</span>))</span>
+<span id="cb489-6"><a href="#cb489-6" aria-hidden="true" tabindex="-1"></a>    feedback_value  <span class="op">=</span> Column(Integer)               <span class="co"># +1 () or -1 ()</span></span>
+<span id="cb489-7"><a href="#cb489-7" aria-hidden="true" tabindex="-1"></a>    feedback_text   <span class="op">=</span> Column(Text)                  <span class="co"># Optional comment</span></span>
+<span id="cb489-8"><a href="#cb489-8" aria-hidden="true" tabindex="-1"></a>    created_at      <span class="op">=</span> Column(DateTime)</span></code></pre></div>
+<h3 id="learningexample">LearningExample</h3>
+<div class="sourceCode" id="cb490"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb490-1"><a href="#cb490-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LearningExample(db.Model):</span>
+<span id="cb490-2"><a href="#cb490-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>              <span class="op">=</span> Column(UUID, primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb490-3"><a href="#cb490-3" aria-hidden="true" tabindex="-1"></a>    agent_type      <span class="op">=</span> Column(String(<span class="dv">50</span>))</span>
+<span id="cb490-4"><a href="#cb490-4" aria-hidden="true" tabindex="-1"></a>    topic           <span class="op">=</span> Column(String(<span class="dv">200</span>))</span>
+<span id="cb490-5"><a href="#cb490-5" aria-hidden="true" tabindex="-1"></a>    query           <span class="op">=</span> Column(Text)                  <span class="co"># The question</span></span>
+<span id="cb490-6"><a href="#cb490-6" aria-hidden="true" tabindex="-1"></a>    good_response   <span class="op">=</span> Column(Text)                  <span class="co"># Promoted good answer</span></span>
+<span id="cb490-7"><a href="#cb490-7" aria-hidden="true" tabindex="-1"></a>    bad_response    <span class="op">=</span> Column(Text)                  <span class="co"># Optional bad example</span></span>
+<span id="cb490-8"><a href="#cb490-8" aria-hidden="true" tabindex="-1"></a>    source          <span class="op">=</span> Column(String(<span class="dv">50</span>))            <span class="co"># &quot;user_feedback&quot; | &quot;manual&quot;</span></span>
+<span id="cb490-9"><a href="#cb490-9" aria-hidden="true" tabindex="-1"></a>    weight          <span class="op">=</span> Column(Float, default<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb490-10"><a href="#cb490-10" aria-hidden="true" tabindex="-1"></a>    feedback_score  <span class="op">=</span> Column(Float)                 <span class="co"># Cumulative positive votes</span></span>
+<span id="cb490-11"><a href="#cb490-11" aria-hidden="true" tabindex="-1"></a>    use_count       <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">0</span>)    <span class="co"># Times injected in prompts</span></span>
+<span id="cb490-12"><a href="#cb490-12" aria-hidden="true" tabindex="-1"></a>    created_at      <span class="op">=</span> Column(DateTime)</span></code></pre></div>
+<h3 id="agentperformancemetrics">AgentPerformanceMetrics</h3>
+<div class="sourceCode" id="cb491"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb491-1"><a href="#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgentPerformanceMetrics(db.Model):</span>
+<span id="cb491-2"><a href="#cb491-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>                      <span class="op">=</span> Column(UUID, primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb491-3"><a href="#cb491-3" aria-hidden="true" tabindex="-1"></a>    agent_type              <span class="op">=</span> Column(String(<span class="dv">50</span>))</span>
+<span id="cb491-4"><a href="#cb491-4" aria-hidden="true" tabindex="-1"></a>    period_start            <span class="op">=</span> Column(DateTime)</span>
+<span id="cb491-5"><a href="#cb491-5" aria-hidden="true" tabindex="-1"></a>    period_end              <span class="op">=</span> Column(DateTime)</span>
+<span id="cb491-6"><a href="#cb491-6" aria-hidden="true" tabindex="-1"></a>    total_interactions      <span class="op">=</span> Column(Integer)</span>
+<span id="cb491-7"><a href="#cb491-7" aria-hidden="true" tabindex="-1"></a>    positive_feedback_count <span class="op">=</span> Column(Integer)</span>
+<span id="cb491-8"><a href="#cb491-8" aria-hidden="true" tabindex="-1"></a>    negative_feedback_count <span class="op">=</span> Column(Integer)</span>
+<span id="cb491-9"><a href="#cb491-9" aria-hidden="true" tabindex="-1"></a>    satisfaction_rate       <span class="op">=</span> Column(Float)         <span class="co"># positive / total</span></span>
+<span id="cb491-10"><a href="#cb491-10" aria-hidden="true" tabindex="-1"></a>    topic_metrics           <span class="op">=</span> Column(JSONB)         <span class="co"># Per-topic breakdown</span></span></code></pre></div>
+<hr />
+<h2 id="feedback-api">77.4 Feedback API</h2>
+<h3 id="source-backendcore-serviceapproutesfeedback.py">Source: <code>backend/core-service/app/routes/feedback.py</code></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/feedback/submit</code></td>
+<td>Submit / for an interaction</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/feedback/examples</code></td>
+<td>Fetch learning examples by topic</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/feedback/stats/&lt;agent_type&gt;</code></td>
+<td>Performance metrics</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/feedback/interactions</code></td>
+<td>Log an agent interaction</td>
+</tr>
+</tbody>
+</table>
+<h3 id="submit-feedback">Submit Feedback</h3>
+<div class="sourceCode" id="cb492"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb492-1"><a href="#cb492-1" aria-hidden="true" tabindex="-1"></a><span class="at">@feedback_bp.route</span>(<span class="st">&quot;/submit&quot;</span>, methods<span class="op">=</span>[<span class="st">&quot;POST&quot;</span>])</span>
+<span id="cb492-2"><a href="#cb492-2" aria-hidden="true" tabindex="-1"></a><span class="at">@jwt_required</span></span>
+<span id="cb492-3"><a href="#cb492-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> submit_feedback():</span>
+<span id="cb492-4"><a href="#cb492-4" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> request.json</span>
+<span id="cb492-5"><a href="#cb492-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb492-6"><a href="#cb492-6" aria-hidden="true" tabindex="-1"></a>    feedback <span class="op">=</span> InteractionFeedback(</span>
+<span id="cb492-7"><a href="#cb492-7" aria-hidden="true" tabindex="-1"></a>        interaction_id<span class="op">=</span>data[<span class="st">&quot;interaction_id&quot;</span>],</span>
+<span id="cb492-8"><a href="#cb492-8" aria-hidden="true" tabindex="-1"></a>        user_id<span class="op">=</span>g.current_user_id,</span>
+<span id="cb492-9"><a href="#cb492-9" aria-hidden="true" tabindex="-1"></a>        feedback_type<span class="op">=</span><span class="st">&quot;thumbs&quot;</span>,</span>
+<span id="cb492-10"><a href="#cb492-10" aria-hidden="true" tabindex="-1"></a>        feedback_value<span class="op">=</span>data[<span class="st">&quot;value&quot;</span>]   <span class="co"># +1 or -1</span></span>
+<span id="cb492-11"><a href="#cb492-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb492-12"><a href="#cb492-12" aria-hidden="true" tabindex="-1"></a>    db.session.add(feedback)</span>
+<span id="cb492-13"><a href="#cb492-13" aria-hidden="true" tabindex="-1"></a>    db.session.commit()</span>
+<span id="cb492-14"><a href="#cb492-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb492-15"><a href="#cb492-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Auto-promote to LearningExample after 2+ positive</span></span>
+<span id="cb492-16"><a href="#cb492-16" aria-hidden="true" tabindex="-1"></a>    _maybe_create_learning_example(</span>
+<span id="cb492-17"><a href="#cb492-17" aria-hidden="true" tabindex="-1"></a>        AgentInteraction.query.get(data[<span class="st">&quot;interaction_id&quot;</span>])</span>
+<span id="cb492-18"><a href="#cb492-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb492-19"><a href="#cb492-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb492-20"><a href="#cb492-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({<span class="st">&quot;status&quot;</span>: <span class="st">&quot;recorded&quot;</span>})</span></code></pre></div>
+<h3 id="auto-promotion-logic">Auto-Promotion Logic</h3>
+<div class="sourceCode" id="cb493"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb493-1"><a href="#cb493-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _maybe_create_learning_example(interaction: AgentInteraction):</span>
+<span id="cb493-2"><a href="#cb493-2" aria-hidden="true" tabindex="-1"></a>    positive_count <span class="op">=</span> InteractionFeedback.query.<span class="bu">filter</span>(</span>
+<span id="cb493-3"><a href="#cb493-3" aria-hidden="true" tabindex="-1"></a>        InteractionFeedback.interaction_id <span class="op">==</span> interaction.<span class="bu">id</span>,</span>
+<span id="cb493-4"><a href="#cb493-4" aria-hidden="true" tabindex="-1"></a>        InteractionFeedback.feedback_value <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb493-5"><a href="#cb493-5" aria-hidden="true" tabindex="-1"></a>    ).count()</span>
+<span id="cb493-6"><a href="#cb493-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb493-7"><a href="#cb493-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> positive_count <span class="op">&gt;=</span> <span class="dv">2</span>:  <span class="co"># MIN_POSITIVE_FOR_EXAMPLE = 2</span></span>
+<span id="cb493-8"><a href="#cb493-8" aria-hidden="true" tabindex="-1"></a>        existing <span class="op">=</span> LearningExample.query.filter_by(</span>
+<span id="cb493-9"><a href="#cb493-9" aria-hidden="true" tabindex="-1"></a>            query<span class="op">=</span>interaction.query,</span>
+<span id="cb493-10"><a href="#cb493-10" aria-hidden="true" tabindex="-1"></a>            agent_type<span class="op">=</span>interaction.agent_type</span>
+<span id="cb493-11"><a href="#cb493-11" aria-hidden="true" tabindex="-1"></a>        ).first()</span>
+<span id="cb493-12"><a href="#cb493-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb493-13"><a href="#cb493-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> existing:</span>
+<span id="cb493-14"><a href="#cb493-14" aria-hidden="true" tabindex="-1"></a>            example <span class="op">=</span> LearningExample(</span>
+<span id="cb493-15"><a href="#cb493-15" aria-hidden="true" tabindex="-1"></a>                agent_type<span class="op">=</span>interaction.agent_type,</span>
+<span id="cb493-16"><a href="#cb493-16" aria-hidden="true" tabindex="-1"></a>                topic<span class="op">=</span>interaction.topic,</span>
+<span id="cb493-17"><a href="#cb493-17" aria-hidden="true" tabindex="-1"></a>                query<span class="op">=</span>interaction.query,</span>
+<span id="cb493-18"><a href="#cb493-18" aria-hidden="true" tabindex="-1"></a>                good_response<span class="op">=</span>interaction.response,</span>
+<span id="cb493-19"><a href="#cb493-19" aria-hidden="true" tabindex="-1"></a>                source<span class="op">=</span><span class="st">&#39;user_feedback&#39;</span>,</span>
+<span id="cb493-20"><a href="#cb493-20" aria-hidden="true" tabindex="-1"></a>                feedback_score<span class="op">=</span>positive_count</span>
+<span id="cb493-21"><a href="#cb493-21" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb493-22"><a href="#cb493-22" aria-hidden="true" tabindex="-1"></a>            db.session.add(example)</span>
+<span id="cb493-23"><a href="#cb493-23" aria-hidden="true" tabindex="-1"></a>            db.session.commit()</span></code></pre></div>
+<hr />
+<h2 id="few-shot-injection-in-tutor-agent">77.5 Few-Shot Injection in Tutor Agent</h2>
+<h3 id="source-backendai-serviceapplearninglearning_element.py">Source: <code>backend/ai-service/app/learning/learning_element.py</code></h3>
+<div class="sourceCode" id="cb494"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb494-1"><a href="#cb494-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TutorLearningElement:</span>
+<span id="cb494-2"><a href="#cb494-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Fetches and injects high-rated examples into prompts&quot;&quot;&quot;</span></span>
+<span id="cb494-3"><a href="#cb494-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb494-4"><a href="#cb494-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> get_examples(<span class="va">self</span>, topic: <span class="bu">str</span>, limit: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb494-5"><a href="#cb494-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Fetch top-rated learning examples for this topic&quot;&quot;&quot;</span></span>
+<span id="cb494-6"><a href="#cb494-6" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> <span class="cf">await</span> httpx.get(</span>
+<span id="cb494-7"><a href="#cb494-7" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>CORE_SERVICE_URL<span class="sc">}</span><span class="ss">/api/feedback/examples&quot;</span>,</span>
+<span id="cb494-8"><a href="#cb494-8" aria-hidden="true" tabindex="-1"></a>            params<span class="op">=</span>{<span class="st">&quot;topic&quot;</span>: topic, <span class="st">&quot;limit&quot;</span>: limit, <span class="st">&quot;agent_type&quot;</span>: <span class="st">&quot;tutor&quot;</span>}</span>
+<span id="cb494-9"><a href="#cb494-9" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb494-10"><a href="#cb494-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> response.json().get(<span class="st">&quot;examples&quot;</span>, [])</span>
+<span id="cb494-11"><a href="#cb494-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb494-12"><a href="#cb494-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> build_few_shot_prompt(<span class="va">self</span>, examples: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb494-13"><a href="#cb494-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> examples:</span>
+<span id="cb494-14"><a href="#cb494-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb494-15"><a href="#cb494-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb494-16"><a href="#cb494-16" aria-hidden="true" tabindex="-1"></a>        sections <span class="op">=</span> [<span class="st">&quot;Here are examples of good responses:&quot;</span>]</span>
+<span id="cb494-17"><a href="#cb494-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, ex <span class="kw">in</span> <span class="bu">enumerate</span>(examples, <span class="dv">1</span>):</span>
+<span id="cb494-18"><a href="#cb494-18" aria-hidden="true" tabindex="-1"></a>            sections.append(<span class="ss">f&quot;&quot;&quot;</span></span>
+<span id="cb494-19"><a href="#cb494-19" aria-hidden="true" tabindex="-1"></a><span class="ss">---</span></span>
+<span id="cb494-20"><a href="#cb494-20" aria-hidden="true" tabindex="-1"></a><span class="ss">Example </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:</span></span>
+<span id="cb494-21"><a href="#cb494-21" aria-hidden="true" tabindex="-1"></a><span class="ss">Student Question: </span><span class="sc">{</span>ex[<span class="st">&#39;query&#39;</span>]<span class="sc">}</span></span>
+<span id="cb494-22"><a href="#cb494-22" aria-hidden="true" tabindex="-1"></a><span class="ss">Good Response: </span><span class="sc">{</span>ex[<span class="st">&#39;good_response&#39;</span>]<span class="sc">}</span></span>
+<span id="cb494-23"><a href="#cb494-23" aria-hidden="true" tabindex="-1"></a><span class="ss">---&quot;&quot;&quot;</span>)</span>
+<span id="cb494-24"><a href="#cb494-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>.join(sections)</span>
+<span id="cb494-25"><a href="#cb494-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb494-26"><a href="#cb494-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> enhance_prompt(<span class="va">self</span>, base_prompt: <span class="bu">str</span>, topic: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb494-27"><a href="#cb494-27" aria-hidden="true" tabindex="-1"></a>        examples <span class="op">=</span> <span class="cf">await</span> <span class="va">self</span>.get_examples(topic)</span>
+<span id="cb494-28"><a href="#cb494-28" aria-hidden="true" tabindex="-1"></a>        few_shot <span class="op">=</span> <span class="va">self</span>.build_few_shot_prompt(examples)</span>
+<span id="cb494-29"><a href="#cb494-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span>base_prompt<span class="sc">}</span><span class="ch">\n\n</span><span class="sc">{</span>few_shot<span class="sc">}</span><span class="ss">&quot;</span> <span class="cf">if</span> few_shot <span class="cf">else</span> base_prompt</span></code></pre></div>
+<h3 id="before-vs-after-learning">Before vs After Learning</h3>
+<table>
+<thead>
+<tr>
+<th>Without Learning</th>
+<th>With Learning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generic system prompt</td>
+<td>System prompt + few-shot examples</td>
+</tr>
+<tr>
+<td>No topic-specific guidance</td>
+<td>Topic-matched exemplar responses</td>
+</tr>
+<tr>
+<td>Static quality</td>
+<td>Improves with each</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="performance-monitoring">77.6 Performance Monitoring</h2>
+<div class="sourceCode" id="cb495"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb495-1"><a href="#cb495-1" aria-hidden="true" tabindex="-1"></a><span class="ex">GET</span> /api/feedback/stats/tutor<span class="pp">?</span>days=7</span></code></pre></div>
+<div class="sourceCode" id="cb496"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb496-1"><a href="#cb496-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb496-2"><a href="#cb496-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;agent_type&quot;</span><span class="fu">:</span> <span class="st">&quot;tutor&quot;</span><span class="fu">,</span></span>
+<span id="cb496-3"><a href="#cb496-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;period_days&quot;</span><span class="fu">:</span> <span class="dv">7</span><span class="fu">,</span></span>
+<span id="cb496-4"><a href="#cb496-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;total_interactions&quot;</span><span class="fu">:</span> <span class="dv">1250</span><span class="fu">,</span></span>
+<span id="cb496-5"><a href="#cb496-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;feedback&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb496-6"><a href="#cb496-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;positive&quot;</span><span class="fu">:</span> <span class="dv">980</span><span class="fu">,</span></span>
+<span id="cb496-7"><a href="#cb496-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;negative&quot;</span><span class="fu">:</span> <span class="dv">45</span><span class="fu">,</span></span>
+<span id="cb496-8"><a href="#cb496-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;satisfaction_rate&quot;</span><span class="fu">:</span> <span class="fl">0.956</span></span>
+<span id="cb496-9"><a href="#cb496-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb496-10"><a href="#cb496-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;top_topics&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb496-11"><a href="#cb496-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">&quot;topic&quot;</span><span class="fu">:</span> <span class="st">&quot;Photosynthesis&quot;</span><span class="fu">,</span> <span class="dt">&quot;count&quot;</span><span class="fu">:</span> <span class="dv">120</span><span class="fu">,</span> <span class="dt">&quot;avg_feedback&quot;</span><span class="fu">:</span> <span class="fl">0.92</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb496-12"><a href="#cb496-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">&quot;topic&quot;</span><span class="fu">:</span> <span class="st">&quot;French Revolution&quot;</span><span class="fu">,</span> <span class="dt">&quot;count&quot;</span><span class="fu">:</span> <span class="dv">85</span><span class="fu">,</span> <span class="dt">&quot;avg_feedback&quot;</span><span class="fu">:</span> <span class="fl">0.88</span><span class="fu">}</span></span>
+<span id="cb496-13"><a href="#cb496-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb496-14"><a href="#cb496-14" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+<h2 id="experience-replay-buffer">77.7 Experience Replay Buffer</h2>
+<div class="sourceCode" id="cb497"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb497-1"><a href="#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExperienceReplay:</span>
+<span id="cb497-2"><a href="#cb497-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Stores interactions for batch analysis&quot;&quot;&quot;</span></span>
+<span id="cb497-3"><a href="#cb497-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb497-4"><a href="#cb497-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> add_experience(<span class="va">self</span>, interaction_id, query, response, </span>
+<span id="cb497-5"><a href="#cb497-5" aria-hidden="true" tabindex="-1"></a>                             reward, topic):</span>
+<span id="cb497-6"><a href="#cb497-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store in replay buffer (Redis list)</span></span>
+<span id="cb497-7"><a href="#cb497-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">await</span> redis.lpush(<span class="st">&quot;replay_buffer:tutor&quot;</span>, json.dumps({</span>
+<span id="cb497-8"><a href="#cb497-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;interaction_id&quot;</span>: interaction_id,</span>
+<span id="cb497-9"><a href="#cb497-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;query&quot;</span>: query,</span>
+<span id="cb497-10"><a href="#cb497-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;response&quot;</span>: response,</span>
+<span id="cb497-11"><a href="#cb497-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;reward&quot;</span>: reward,</span>
+<span id="cb497-12"><a href="#cb497-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;topic&quot;</span>: topic,</span>
+<span id="cb497-13"><a href="#cb497-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;timestamp&quot;</span>: datetime.utcnow().isoformat()</span>
+<span id="cb497-14"><a href="#cb497-14" aria-hidden="true" tabindex="-1"></a>        }))</span>
+<span id="cb497-15"><a href="#cb497-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb497-16"><a href="#cb497-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_positive_examples(<span class="va">self</span>, min_reward: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.5</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb497-17"><a href="#cb497-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Get high-reward interactions for prompt enhancement&quot;&quot;&quot;</span></span>
+<span id="cb497-18"><a href="#cb497-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">buffer</span> <span class="op">=</span> redis.lrange(<span class="st">&quot;replay_buffer:tutor&quot;</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb497-19"><a href="#cb497-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [</span>
+<span id="cb497-20"><a href="#cb497-20" aria-hidden="true" tabindex="-1"></a>            json.loads(item) <span class="cf">for</span> item <span class="kw">in</span> <span class="bu">buffer</span></span>
+<span id="cb497-21"><a href="#cb497-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> json.loads(item)[<span class="st">&quot;reward&quot;</span>] <span class="op">&gt;=</span> min_reward</span>
+<span id="cb497-22"><a href="#cb497-22" aria-hidden="true" tabindex="-1"></a>        ]</span></code></pre></div>
+<hr />
+<h2 id="configuration-7">77.8 Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CORE_SERVICE_URL</code></td>
+<td><code>http://localhost:8000</code></td>
+<td>Core API for feedback</td>
+</tr>
+<tr>
+<td><code>FEEDBACK_CACHE_TTL</code></td>
+<td><code>300</code></td>
+<td>Cache TTL for examples (seconds)</td>
+</tr>
+<tr>
+<td><code>MIN_POSITIVE_FOR_EXAMPLE</code></td>
+<td><code>2</code></td>
+<td>Votes needed to promote</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

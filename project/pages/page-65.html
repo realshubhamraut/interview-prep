@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 65: Admin Panel &amp;amp; System Management</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-64.html">&larr; Previous</a> <a href="page-66.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-65-admin-panel-system-management">Page 65: Admin Panel &amp; System Management</h1>
+<hr />
+<h2 id="overview-53">65.1 Overview</h2>
+<p>The admin panel provides <strong>platform-wide management</strong> capabilities: user administration, classroom oversight, system health monitoring, content moderation review, and configuration management.</p>
+<hr />
+<h2 id="admin-routes">65.2 Admin Routes</h2>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/admin/dashboard</code></td>
+<td>System overview and health</td>
+</tr>
+<tr>
+<td><code>/admin/users</code></td>
+<td>User management (CRUD)</td>
+</tr>
+<tr>
+<td><code>/admin/classrooms</code></td>
+<td>All classrooms overview</td>
+</tr>
+<tr>
+<td><code>/admin/moderation</code></td>
+<td>Content moderation queue</td>
+</tr>
+<tr>
+<td><code>/admin/analytics</code></td>
+<td>Platform-wide analytics</td>
+</tr>
+<tr>
+<td><code>/admin/settings</code></td>
+<td>System configuration</td>
+</tr>
+<tr>
+<td><code>/admin/billing</code></td>
+<td>Billing and subscription management</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="admin-dashboard">65.3 Admin Dashboard</h2>
+<pre class="mermaid">flowchart TB
+    subgraph ADMIN["ADMIN DASHBOARD"]
+        direction TB
+        subgraph KPI["Key Metrics"]
+            direction LR
+            U["Users<br/>156 (+8 wk)"]
+            C["Classes<br/>12 (+2 wk)"]
+            A["Active<br/>87 online"]
+            AL["Alerts<br/>3 pending"]
+        end
+
+        subgraph HEALTH["System Health"]
+            H1["Core Service: Healthy (8ms)"]
+            H2["AI Service: Healthy (15ms)"]
+            H3["PostgreSQL: Connected (pool 8/20)"]
+            H4["Redis: Connected (45MB)"]
+            H5["Qdrant: Healthy (15,420 vectors)"]
+            H6["Kafka: Healthy (lag: 0)"]
+        end
+
+        subgraph ACTIVITY["Recent Activity"]
+            E1["14:30 Alice uploaded PDF"]
+            E2["14:25 3 assessments graded"]
+            E3["14:20 New user registered"]
+            E4["14:15 Moderation flag"]
+        end
+    end
+</pre>
+<hr />
+<h2 id="user-management">65.4 User Management</h2>
+<h3 id="api">API</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/admin/users</code></td>
+<td>List all users (paginated, filterable)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/admin/users/&lt;id&gt;</code></td>
+<td>User details</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/admin/users/&lt;id&gt;</code></td>
+<td>Update user (role, status)</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/admin/users/&lt;id&gt;</code></td>
+<td>Deactivate user</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/admin/users/&lt;id&gt;/reset-password</code></td>
+<td>Force password reset</td>
+</tr>
+</tbody>
+</table>
+<h3 id="user-list">User List</h3>
+<div class="sourceCode" id="cb422"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb422-1"><a href="#cb422-1" aria-hidden="true" tabindex="-1"></a><span class="er">GET</span> <span class="er">/api/admin/users?role=student&amp;page=</span><span class="dv">1</span><span class="er">&amp;per_page=</span><span class="dv">20</span></span>
+<span id="cb422-2"><a href="#cb422-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb422-3"><a href="#cb422-3" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb422-4"><a href="#cb422-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;users&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb422-5"><a href="#cb422-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb422-6"><a href="#cb422-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;usr_123&quot;</span><span class="fu">,</span></span>
+<span id="cb422-7"><a href="#cb422-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;username&quot;</span><span class="fu">:</span> <span class="st">&quot;alice&quot;</span><span class="fu">,</span></span>
+<span id="cb422-8"><a href="#cb422-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;email&quot;</span><span class="fu">:</span> <span class="st">&quot;alice@example.com&quot;</span><span class="fu">,</span></span>
+<span id="cb422-9"><a href="#cb422-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;role&quot;</span><span class="fu">:</span> <span class="st">&quot;student&quot;</span><span class="fu">,</span></span>
+<span id="cb422-10"><a href="#cb422-10" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;is_active&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb422-11"><a href="#cb422-11" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;classrooms&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Class 10-A&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb422-12"><a href="#cb422-12" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;last_login&quot;</span><span class="fu">:</span> <span class="st">&quot;2025-02-27T10:30:00Z&quot;</span><span class="fu">,</span></span>
+<span id="cb422-13"><a href="#cb422-13" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;created_at&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-09-01T08:00:00Z&quot;</span></span>
+<span id="cb422-14"><a href="#cb422-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb422-15"><a href="#cb422-15" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb422-16"><a href="#cb422-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;total&quot;</span><span class="fu">:</span> <span class="dv">156</span><span class="fu">,</span></span>
+<span id="cb422-17"><a href="#cb422-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;page&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb422-18"><a href="#cb422-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;per_page&quot;</span><span class="fu">:</span> <span class="dv">20</span></span>
+<span id="cb422-19"><a href="#cb422-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="role-distribution">Role Distribution</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Count (typical)</th>
+<th>Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Student</td>
+<td>~120</td>
+<td>Study, chat, assessments</td>
+</tr>
+<tr>
+<td>Teacher</td>
+<td>~10</td>
+<td>Classrooms, materials, assessments</td>
+</tr>
+<tr>
+<td>Parent</td>
+<td>~20</td>
+<td>View child progress</td>
+</tr>
+<tr>
+<td>Admin</td>
+<td>~2</td>
+<td>Full platform access</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="content-moderation-queue">65.5 Content Moderation Queue</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MOD["MODERATION QUEUE (3 pending)"]
+        direction TB
+        F1["Flag #1<br/>User: student_42<br/>Category: off_topic<br/>Content: Tell me a joke...<br/>Dismiss / Warn / Ban"]
+        F2["Flag #2<br/>User: student_18<br/>Category: jailbreak<br/>Content: Ignore instructions...<br/>Dismiss / Warn / Ban"]
+    end
+</pre>
+<hr />
+<h2 id="platform-analytics">65.6 Platform Analytics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Source</th>
+<th>Widget</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Daily Active Users</td>
+<td>Login events</td>
+<td>Line chart</td>
+</tr>
+<tr>
+<td>Monthly registrations</td>
+<td>User table</td>
+<td>Bar chart</td>
+</tr>
+<tr>
+<td>Assessment completion rate</td>
+<td>Results table</td>
+<td>Percentage</td>
+</tr>
+<tr>
+<td>Average AI response time</td>
+<td>API logs</td>
+<td>Gauge</td>
+</tr>
+<tr>
+<td>Storage usage</td>
+<td>S3/MinIO</td>
+<td>Progress bar</td>
+</tr>
+<tr>
+<td>Moderation flags/day</td>
+<td>Moderation logs</td>
+<td>Counter</td>
+</tr>
+<tr>
+<td>Popular subjects</td>
+<td>Classroom data</td>
+<td>Pie chart</td>
+</tr>
+<tr>
+<td>LLM API costs (est.)</td>
+<td>Token usage</td>
+<td>Dollar amount</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="system-configuration">65.7 System Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Admin Override</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Max file upload size</td>
+<td>50 MB</td>
+<td></td>
+</tr>
+<tr>
+<td>Max students per classroom</td>
+<td>100</td>
+<td></td>
+</tr>
+<tr>
+<td>Assessment time limit</td>
+<td>60 min</td>
+<td>Teacher-set</td>
+</tr>
+<tr>
+<td>Proctoring enabled</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr>
+<td>LLM provider priority</td>
+<td>OpenAI</td>
+<td></td>
+</tr>
+<tr>
+<td>Moderation sensitivity</td>
+<td>Medium</td>
+<td></td>
+</tr>
+<tr>
+<td>Streak reset time</td>
+<td>Midnight UTC</td>
+<td></td>
+</tr>
+<tr>
+<td>Token rate limit</td>
+<td>100K/hour</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="health-check-endpoints">65.8 Health Check Endpoints</h2>
+<div class="sourceCode" id="cb424"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb424-1"><a href="#cb424-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.route</span>(<span class="st">&quot;/health&quot;</span>)</span>
+<span id="cb424-2"><a href="#cb424-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> health_check():</span>
+<span id="cb424-3"><a href="#cb424-3" aria-hidden="true" tabindex="-1"></a>    checks <span class="op">=</span> {</span>
+<span id="cb424-4"><a href="#cb424-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;database&quot;</span>: check_postgres(),</span>
+<span id="cb424-5"><a href="#cb424-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;redis&quot;</span>: check_redis(),</span>
+<span id="cb424-6"><a href="#cb424-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;qdrant&quot;</span>: check_qdrant(),</span>
+<span id="cb424-7"><a href="#cb424-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;kafka&quot;</span>: check_kafka(),</span>
+<span id="cb424-8"><a href="#cb424-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;disk_space&quot;</span>: check_disk(),</span>
+<span id="cb424-9"><a href="#cb424-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;memory&quot;</span>: check_memory()</span>
+<span id="cb424-10"><a href="#cb424-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb424-11"><a href="#cb424-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb424-12"><a href="#cb424-12" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> <span class="st">&quot;healthy&quot;</span> <span class="cf">if</span> <span class="bu">all</span>(checks.values()) <span class="cf">else</span> <span class="st">&quot;degraded&quot;</span></span>
+<span id="cb424-13"><a href="#cb424-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb424-14"><a href="#cb424-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({</span>
+<span id="cb424-15"><a href="#cb424-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;status&quot;</span>: status,</span>
+<span id="cb424-16"><a href="#cb424-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;checks&quot;</span>: checks,</span>
+<span id="cb424-17"><a href="#cb424-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;uptime&quot;</span>: get_uptime(),</span>
+<span id="cb424-18"><a href="#cb424-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;version&quot;</span>: app.config.get(<span class="st">&quot;VERSION&quot;</span>, <span class="st">&quot;1.0.0&quot;</span>)</span>
+<span id="cb424-19"><a href="#cb424-19" aria-hidden="true" tabindex="-1"></a>    }), <span class="dv">200</span> <span class="cf">if</span> status <span class="op">==</span> <span class="st">&quot;healthy&quot;</span> <span class="cf">else</span> <span class="dv">503</span></span></code></pre></div>
+<hr />
+<h2 id="complete-65-page-documentation-index">65.9 Complete 65-Page Documentation Index</h2>
+<table>
+<thead>
+<tr>
+<th>Batch</th>
+<th>Pages</th>
+<th>Focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1-5</td>
+<td>Architecture &amp; Agent Core</td>
+</tr>
+<tr>
+<td>2</td>
+<td>6-10</td>
+<td>Specialized Agents</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11-15</td>
+<td>Backend &amp; Frontend</td>
+</tr>
+<tr>
+<td>4</td>
+<td>16-20</td>
+<td>ML &amp; Streaming</td>
+</tr>
+<tr>
+<td>5</td>
+<td>21-25</td>
+<td>Operations</td>
+</tr>
+<tr>
+<td>6</td>
+<td>26-30</td>
+<td>ETL, CI/CD &amp; Config</td>
+</tr>
+<tr>
+<td>7</td>
+<td>31-35</td>
+<td>API &amp; Flow Reference</td>
+</tr>
+<tr>
+<td>8</td>
+<td>36-40</td>
+<td>Patterns &amp; Glossary</td>
+</tr>
+<tr>
+<td>9</td>
+<td>41-45</td>
+<td>Models, Docker &amp; DevGuide</td>
+</tr>
+<tr>
+<td>10</td>
+<td>46-50</td>
+<td>LangGraph, Moderation &amp; Stats</td>
+</tr>
+<tr>
+<td>11</td>
+<td>51-55</td>
+<td>Prompts, Qdrant, Kafka, Auth</td>
+</tr>
+<tr>
+<td>12</td>
+<td>56-60</td>
+<td>Migrations, OCR, Network</td>
+</tr>
+<tr>
+<td>13</td>
+<td>61-65</td>
+<td>Classrooms, Assessments, Roles</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>ensureStudy — 65 pages of production-grade documentation covering 600+ source files, 200+ endpoints, 11 AI agents, 16 pre-trained models, 5 databases, and 4 user roles.</em></p>
+<hr />
+
+</body>
+</html>

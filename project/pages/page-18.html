@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 18: Meeting &amp;amp; Virtual Classroom System</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-17.html">&larr; Previous</a> <a href="page-19.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-18-meeting-virtual-classroom-system">Page 18: Meeting &amp; Virtual Classroom System</h1>
+<hr />
+<h2 id="overview-10">18.1 Overview</h2>
+<p>The meeting system provides <strong>live video conferencing</strong> for virtual classrooms using LiveKit, with post-session capabilities including transcription (OpenAI Whisper), summarization (Google Gemini), and Q&amp;A via RAG (Qdrant + Gemini).</p>
+<hr />
+<h2 id="architecture-1">18.2 Architecture</h2>
+<pre class="mermaid">flowchart LR
+    SCH["SCHEDULE"] --> LIVE["LIVE"] --> REC["RECORD"] --> TRANS["TRANSCRIBE"] --> SUM["SUMMARIZE"]
+    SCH --> PG["PostgreSQL<br/>(Meeting model)"]
+    LIVE --> LK["LiveKit<br/>(SFU server)"]
+    REC --> ST["Storage<br/>(file upload)"]
+    TRANS --> WH["Whisper API<br/>(speech-to-text)"]
+    SUM --> GM["Gemini 1.5-flash"]
+    WH --> EMB["Embed + Index<br/>(Qdrant RAG)"]
+    EMB --> QA["Meeting Q&A<br/>(query meeting content)"]
+</pre>
+<hr />
+<h2 id="data-models">18.3 Data Models</h2>
+<h3 id="source-backendcore-serviceappmodelsmeeting.py-241-lines">Source: <code>backend/core-service/app/models/meeting.py</code> (241 lines)</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 42%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th>Key Fields</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Meeting</strong></td>
+<td>classroom_id, host_id, title, status (scheduled/live/ended), start_time, end_time, jitsi_room_name, livekit_room</td>
+<td>Meeting metadata</td>
+</tr>
+<tr>
+<td><strong>MeetingParticipant</strong></td>
+<td>meeting_id, user_id, role (host/participant), joined_at, left_at, duration_seconds</td>
+<td>Attendance tracking</td>
+</tr>
+<tr>
+<td><strong>MeetingRecording</strong></td>
+<td>meeting_id, recording_url, duration_seconds, file_size, transcript_text, summary_brief</td>
+<td>Recording + AI outputs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="helper-functions">Helper Functions</h3>
+<div class="sourceCode" id="cb137"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_meeting(classroom_id, host_id, title, <span class="op">**</span>kwargs):</span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Create a new meeting and return it&quot;&quot;&quot;</span></span>
+<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> start_meeting(meeting_id):</span>
+<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Transition meeting status to &#39;live&#39;&quot;&quot;&quot;</span></span>
+<span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb137-7"><a href="#cb137-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> end_meeting(meeting_id):</span>
+<span id="cb137-8"><a href="#cb137-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Transition meeting status to &#39;ended&#39;, calculate duration&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="livekit-integration">18.4 LiveKit Integration</h2>
+<h3 id="frontend-frontendcomponentsmeetingmeetingcanvas.tsx">Frontend: <code>frontend/components/meeting/MeetingCanvas.tsx</code></h3>
+<p>The video conferencing uses <strong>LiveKit</strong> (open-source WebRTC SFU):</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Video rooms</td>
+<td>LiveKit Cloud/self-hosted</td>
+</tr>
+<tr>
+<td>Audio/video</td>
+<td>WebRTC via <code>livekit-client</code></td>
+</tr>
+<tr>
+<td>UI components</td>
+<td><code>@livekit/components-react</code></td>
+</tr>
+<tr>
+<td>Screen sharing</td>
+<td>Built-in LiveKit support</td>
+</tr>
+<tr>
+<td>Recording</td>
+<td>Server-side recording via LiveKit Egress</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dependencies">Dependencies</h3>
+<div class="sourceCode" id="cb138"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;livekit-client&quot;</span><span class="er">:</span> <span class="st">&quot;^2.17.0&quot;</span><span class="er">,</span></span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;@livekit/components-react&quot;</span><span class="er">:</span> <span class="st">&quot;^2.9.19&quot;</span><span class="er">,</span></span>
+<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;@livekit/components-styles&quot;</span><span class="er">:</span> <span class="st">&quot;^1.2.0&quot;</span></span></code></pre></div>
+<h3 id="meeting-components">Meeting Components</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MeetingCanvas.tsx</code></td>
+<td>Main video conference layout</td>
+</tr>
+<tr>
+<td><code>MeetingPlayer.tsx</code></td>
+<td>Recording playback</td>
+</tr>
+<tr>
+<td><code>EnhancedSessionPlayer.tsx</code></td>
+<td>Advanced replay with timeline</td>
+</tr>
+<tr>
+<td><code>MeetingQA.tsx</code></td>
+<td>Q&amp;A during/after meetings</td>
+</tr>
+<tr>
+<td><code>RecordingControls.tsx</code></td>
+<td>Record/pause/stop buttons</td>
+</tr>
+<tr>
+<td><code>RecordingsList.tsx</code></td>
+<td>List all recordings</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="transcription-pipeline">18.5 Transcription Pipeline</h2>
+<h3 id="source-backendai-serviceappapimeetings.py-397-lines">Source: <code>backend/ai-service/app/api/meetings.py</code> (397 lines)</h3>
+<div class="sourceCode" id="cb139"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/transcribe&quot;</span>)</span>
+<span id="cb139-2"><a href="#cb139-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> transcribe_recording(request: TranscribeRequest):</span>
+<span id="cb139-3"><a href="#cb139-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Download recording from storage</span></span>
+<span id="cb139-4"><a href="#cb139-4" aria-hidden="true" tabindex="-1"></a>    audio_path <span class="op">=</span> <span class="cf">await</span> download_recording(request.recording_url)</span>
+<span id="cb139-5"><a href="#cb139-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb139-6"><a href="#cb139-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Transcribe with OpenAI Whisper API</span></span>
+<span id="cb139-7"><a href="#cb139-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(audio_path, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> audio_file:</span>
+<span id="cb139-8"><a href="#cb139-8" aria-hidden="true" tabindex="-1"></a>        transcript <span class="op">=</span> openai.audio.transcriptions.create(</span>
+<span id="cb139-9"><a href="#cb139-9" aria-hidden="true" tabindex="-1"></a>            model<span class="op">=</span><span class="st">&quot;whisper-1&quot;</span>,</span>
+<span id="cb139-10"><a href="#cb139-10" aria-hidden="true" tabindex="-1"></a>            <span class="bu">file</span><span class="op">=</span>audio_file,</span>
+<span id="cb139-11"><a href="#cb139-11" aria-hidden="true" tabindex="-1"></a>            response_format<span class="op">=</span><span class="st">&quot;verbose_json&quot;</span>,</span>
+<span id="cb139-12"><a href="#cb139-12" aria-hidden="true" tabindex="-1"></a>            timestamp_granularities<span class="op">=</span>[<span class="st">&quot;segment&quot;</span>]</span>
+<span id="cb139-13"><a href="#cb139-13" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb139-14"><a href="#cb139-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb139-15"><a href="#cb139-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Store transcript in MongoDB</span></span>
+<span id="cb139-16"><a href="#cb139-16" aria-hidden="true" tabindex="-1"></a>    mongo_db.transcripts.insert_one({</span>
+<span id="cb139-17"><a href="#cb139-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;meeting_id&quot;</span>: request.meeting_id,</span>
+<span id="cb139-18"><a href="#cb139-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;transcript&quot;</span>: transcript.text,</span>
+<span id="cb139-19"><a href="#cb139-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;segments&quot;</span>: transcript.segments,</span>
+<span id="cb139-20"><a href="#cb139-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;language&quot;</span>: transcript.language,</span>
+<span id="cb139-21"><a href="#cb139-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;word_count&quot;</span>: <span class="bu">len</span>(transcript.text.split())</span>
+<span id="cb139-22"><a href="#cb139-22" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb139-23"><a href="#cb139-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb139-24"><a href="#cb139-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Update MeetingRecording in PostgreSQL</span></span>
+<span id="cb139-25"><a href="#cb139-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (via callback to core service)</span></span>
+<span id="cb139-26"><a href="#cb139-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb139-27"><a href="#cb139-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> TranscribeResponse(</span>
+<span id="cb139-28"><a href="#cb139-28" aria-hidden="true" tabindex="-1"></a>        meeting_id<span class="op">=</span>request.meeting_id,</span>
+<span id="cb139-29"><a href="#cb139-29" aria-hidden="true" tabindex="-1"></a>        transcript<span class="op">=</span>transcript.text,</span>
+<span id="cb139-30"><a href="#cb139-30" aria-hidden="true" tabindex="-1"></a>        segments<span class="op">=</span>transcript.segments,</span>
+<span id="cb139-31"><a href="#cb139-31" aria-hidden="true" tabindex="-1"></a>        language<span class="op">=</span>transcript.language,</span>
+<span id="cb139-32"><a href="#cb139-32" aria-hidden="true" tabindex="-1"></a>        word_count<span class="op">=</span><span class="bu">len</span>(transcript.text.split())</span>
+<span id="cb139-33"><a href="#cb139-33" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<hr />
+<h2 id="summarization-gemini">18.6 Summarization (Gemini)</h2>
+<div class="sourceCode" id="cb140"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/summarize&quot;</span>)</span>
+<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> summarize_transcript(request: SummarizeRequest):</span>
+<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a>    prompt <span class="op">=</span> <span class="ss">f&quot;&quot;&quot;Summarize this meeting transcript:</span></span>
+<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a><span class="sc">{</span>request<span class="sc">.</span>transcript<span class="sc">}</span></span>
+<span id="cb140-6"><a href="#cb140-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-7"><a href="#cb140-7" aria-hidden="true" tabindex="-1"></a><span class="ss">Provide:</span></span>
+<span id="cb140-8"><a href="#cb140-8" aria-hidden="true" tabindex="-1"></a><span class="ss">1. Brief summary (2-3 sentences)</span></span>
+<span id="cb140-9"><a href="#cb140-9" aria-hidden="true" tabindex="-1"></a><span class="ss">2. Detailed summary (paragraph)</span></span>
+<span id="cb140-10"><a href="#cb140-10" aria-hidden="true" tabindex="-1"></a><span class="ss">3. Key points (bullet list)</span></span>
+<span id="cb140-11"><a href="#cb140-11" aria-hidden="true" tabindex="-1"></a><span class="ss">4. Topics discussed (list)</span></span>
+<span id="cb140-12"><a href="#cb140-12" aria-hidden="true" tabindex="-1"></a><span class="ss">5. Action items (if any)</span></span>
+<span id="cb140-13"><a href="#cb140-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-14"><a href="#cb140-14" aria-hidden="true" tabindex="-1"></a><span class="ss">Return as JSON.&quot;&quot;&quot;</span></span>
+<span id="cb140-15"><a href="#cb140-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb140-16"><a href="#cb140-16" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> gemini_model.generate_content(prompt)</span>
+<span id="cb140-17"><a href="#cb140-17" aria-hidden="true" tabindex="-1"></a>    parsed <span class="op">=</span> json.loads(response.text)</span>
+<span id="cb140-18"><a href="#cb140-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb140-19"><a href="#cb140-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> SummarizeResponse(</span>
+<span id="cb140-20"><a href="#cb140-20" aria-hidden="true" tabindex="-1"></a>        meeting_id<span class="op">=</span>request.meeting_id,</span>
+<span id="cb140-21"><a href="#cb140-21" aria-hidden="true" tabindex="-1"></a>        brief<span class="op">=</span>parsed[<span class="st">&quot;brief&quot;</span>],</span>
+<span id="cb140-22"><a href="#cb140-22" aria-hidden="true" tabindex="-1"></a>        detailed<span class="op">=</span>parsed[<span class="st">&quot;detailed&quot;</span>],</span>
+<span id="cb140-23"><a href="#cb140-23" aria-hidden="true" tabindex="-1"></a>        key_points<span class="op">=</span>parsed[<span class="st">&quot;key_points&quot;</span>],</span>
+<span id="cb140-24"><a href="#cb140-24" aria-hidden="true" tabindex="-1"></a>        topics_discussed<span class="op">=</span>parsed[<span class="st">&quot;topics_discussed&quot;</span>],</span>
+<span id="cb140-25"><a href="#cb140-25" aria-hidden="true" tabindex="-1"></a>        action_items<span class="op">=</span>parsed.get(<span class="st">&quot;action_items&quot;</span>, [])</span>
+<span id="cb140-26"><a href="#cb140-26" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<hr />
+<h2 id="meeting-rag-qa">18.7 Meeting RAG (Q&amp;A)</h2>
+<h3 id="embedding-service">Embedding Service</h3>
+<p>Source: <code>backend/ai-service/app/services/meeting_embedding_service.py</code></p>
+<p>Indexes meeting transcripts into Qdrant for later retrieval: - Chunks transcript by segments (from Whisper timestamps) - Embeds with <code>all-mpnet-base-v2</code> - Stores with metadata: meeting_id, classroom_id, timestamp, speaker</p>
+<h3 id="rag-query">RAG Query</h3>
+<p>Source: <code>backend/ai-service/app/services/meeting_rag.py</code></p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/query&quot;</span>)</span>
+<span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> query_meeting_content(request: QueryRequest):</span>
+<span id="cb141-3"><a href="#cb141-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Embed query</span></span>
+<span id="cb141-4"><a href="#cb141-4" aria-hidden="true" tabindex="-1"></a>    query_embedding <span class="op">=</span> embed(request.query)</span>
+<span id="cb141-5"><a href="#cb141-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb141-6"><a href="#cb141-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Search Qdrant (filtered by meeting_id or classroom_id)</span></span>
+<span id="cb141-7"><a href="#cb141-7" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> qdrant.search(</span>
+<span id="cb141-8"><a href="#cb141-8" aria-hidden="true" tabindex="-1"></a>        collection<span class="op">=</span><span class="st">&quot;meeting_transcripts&quot;</span>,</span>
+<span id="cb141-9"><a href="#cb141-9" aria-hidden="true" tabindex="-1"></a>        query_vector<span class="op">=</span>query_embedding,</span>
+<span id="cb141-10"><a href="#cb141-10" aria-hidden="true" tabindex="-1"></a>        query_filter<span class="op">=</span>Filter(must<span class="op">=</span>[</span>
+<span id="cb141-11"><a href="#cb141-11" aria-hidden="true" tabindex="-1"></a>            FieldCondition(key<span class="op">=</span><span class="st">&quot;classroom_id&quot;</span>, match<span class="op">=</span>MatchValue(value<span class="op">=</span>request.classroom_id))</span>
+<span id="cb141-12"><a href="#cb141-12" aria-hidden="true" tabindex="-1"></a>        ]),</span>
+<span id="cb141-13"><a href="#cb141-13" aria-hidden="true" tabindex="-1"></a>        limit<span class="op">=</span>request.max_results</span>
+<span id="cb141-14"><a href="#cb141-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb141-15"><a href="#cb141-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb141-16"><a href="#cb141-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Generate answer with Gemini</span></span>
+<span id="cb141-17"><a href="#cb141-17" aria-hidden="true" tabindex="-1"></a>    context <span class="op">=</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>.join([r.payload[<span class="st">&quot;text&quot;</span>] <span class="cf">for</span> r <span class="kw">in</span> results])</span>
+<span id="cb141-18"><a href="#cb141-18" aria-hidden="true" tabindex="-1"></a>    answer <span class="op">=</span> gemini_model.generate_content(<span class="ss">f&quot;&quot;&quot;</span></span>
+<span id="cb141-19"><a href="#cb141-19" aria-hidden="true" tabindex="-1"></a><span class="ss">        Based on these meeting excerpts:</span></span>
+<span id="cb141-20"><a href="#cb141-20" aria-hidden="true" tabindex="-1"></a><span class="ss">        </span><span class="sc">{</span>context<span class="sc">}</span></span>
+<span id="cb141-21"><a href="#cb141-21" aria-hidden="true" tabindex="-1"></a><span class="ss">        </span></span>
+<span id="cb141-22"><a href="#cb141-22" aria-hidden="true" tabindex="-1"></a><span class="ss">        Answer: </span><span class="sc">{</span>request<span class="sc">.</span>query<span class="sc">}</span></span>
+<span id="cb141-23"><a href="#cb141-23" aria-hidden="true" tabindex="-1"></a><span class="ss">    &quot;&quot;&quot;</span>)</span>
+<span id="cb141-24"><a href="#cb141-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb141-25"><a href="#cb141-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> QueryResponse(</span>
+<span id="cb141-26"><a href="#cb141-26" aria-hidden="true" tabindex="-1"></a>        query<span class="op">=</span>request.query,</span>
+<span id="cb141-27"><a href="#cb141-27" aria-hidden="true" tabindex="-1"></a>        answer<span class="op">=</span>answer.text,</span>
+<span id="cb141-28"><a href="#cb141-28" aria-hidden="true" tabindex="-1"></a>        sources<span class="op">=</span>[{<span class="st">&quot;text&quot;</span>: r.payload[<span class="st">&quot;text&quot;</span>], <span class="st">&quot;timestamp&quot;</span>: r.payload[<span class="st">&quot;timestamp&quot;</span>]} <span class="cf">for</span> r <span class="kw">in</span> results],</span>
+<span id="cb141-29"><a href="#cb141-29" aria-hidden="true" tabindex="-1"></a>        confidence<span class="op">=</span>results[<span class="dv">0</span>].score <span class="cf">if</span> results <span class="cf">else</span> <span class="fl">0.0</span></span>
+<span id="cb141-30"><a href="#cb141-30" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<hr />
+<h2 id="meeting-flow-summary">18.8 Meeting Flow Summary</h2>
+<pre class="mermaid">sequenceDiagram
+    participant T as Teacher
+    participant PG as PostgreSQL
+    participant LK as LiveKit
+    participant ST as Storage
+    participant W as Whisper
+    participant GM as Gemini
+    participant QD as Qdrant
+    participant S as Student
+
+    T->>PG: Create meeting
+    T->>LK: Students join room
+    T->>LK: End meeting
+    LK->>ST: Recording uploaded
+    ST->>W: Transcribe audio
+    W->>PG: Store transcript (MongoDB)
+    W->>GM: Summarize transcript
+    W->>QD: Embed transcript chunks
+    S->>QD: POST /api/meetings/query
+    QD->>GM: Synthesis
+    GM->>S: Answer with sources</pre>
+<hr />
+
+</body>
+</html>

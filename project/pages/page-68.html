@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 68: Web Crawling &amp;amp; Resource Enrichment</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-67.html">&larr; Previous</a> <a href="page-69.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-68-web-crawling-resource-enrichment">Page 68: Web Crawling &amp; Resource Enrichment</h1>
+<hr />
+<h2 id="overview-56">68.1 Overview</h2>
+<p>ensureStudy’s <strong>Web Enrichment Agent</strong> and <strong>Web Ingest Service</strong> automatically discover, crawl, and index educational resources from the web to supplement classroom materials. The system uses multi-provider search, intelligent extraction, and caching.</p>
+<hr />
+<h2 id="architecture-2">68.2 Architecture</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Architecture "]
+        direction TB
+        N0["Student asks question"]
+        N1["Tutor detects 'needs more context'"]
+        N2["Web Enrichment Agent"]
+        N3["Generate search queries from topic"]
+        N4["Search: Google/DuckDuckGo/SerpAPI"]
+        N5["Fetch top-N URLs"]
+        N6["Extract clean text (trafilatura)"]
+        N7["Chunk and embed"]
+        N8["Cache in Redis + Qdrant"]
+        N9["Return enriched context to Tutor"]
+    end
+</pre>
+<hr />
+<h2 id="search-providers">68.3 Search Providers</h2>
+<div class="sourceCode" id="cb438"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb438-1"><a href="#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WebSearchService:</span>
+<span id="cb438-2"><a href="#cb438-2" aria-hidden="true" tabindex="-1"></a>    PROVIDERS <span class="op">=</span> {</span>
+<span id="cb438-3"><a href="#cb438-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;serpapi&quot;</span>: SerpAPISearch,        <span class="co"># Google via SerpAPI</span></span>
+<span id="cb438-4"><a href="#cb438-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;duckduckgo&quot;</span>: DuckDuckGoSearch,  <span class="co"># Free, no API key</span></span>
+<span id="cb438-5"><a href="#cb438-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;tavily&quot;</span>: TavilySearch,          <span class="co"># AI-optimized search</span></span>
+<span id="cb438-6"><a href="#cb438-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb438-7"><a href="#cb438-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb438-8"><a href="#cb438-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> search(<span class="va">self</span>, query: <span class="bu">str</span>, num_results: <span class="bu">int</span> <span class="op">=</span> <span class="dv">5</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb438-9"><a href="#cb438-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> provider <span class="kw">in</span> <span class="va">self</span>.priority_order:</span>
+<span id="cb438-10"><a href="#cb438-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb438-11"><a href="#cb438-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">self</span>.PROVIDERS[provider].search(query, num_results)</span>
+<span id="cb438-12"><a href="#cb438-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb438-13"><a href="#cb438-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span>  <span class="co"># Fallback to next provider</span></span>
+<span id="cb438-14"><a href="#cb438-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> []</span></code></pre></div>
+<hr />
+<h2 id="content-extraction">68.4 Content Extraction</h2>
+<h3 id="source-servicesweb_ingest_service.py">Source: <code>services/web_ingest_service.py</code></h3>
+<div class="sourceCode" id="cb439"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb439-1"><a href="#cb439-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> trafilatura</span>
+<span id="cb439-2"><a href="#cb439-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb439-3"><a href="#cb439-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WebIngestService:</span>
+<span id="cb439-4"><a href="#cb439-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fetch_and_extract(<span class="va">self</span>, url: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb439-5"><a href="#cb439-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Fetch HTML</span></span>
+<span id="cb439-6"><a href="#cb439-6" aria-hidden="true" tabindex="-1"></a>        html <span class="op">=</span> trafilatura.fetch_url(url)</span>
+<span id="cb439-7"><a href="#cb439-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb439-8"><a href="#cb439-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Extract main content (removes nav, ads, headers)</span></span>
+<span id="cb439-9"><a href="#cb439-9" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> trafilatura.extract(</span>
+<span id="cb439-10"><a href="#cb439-10" aria-hidden="true" tabindex="-1"></a>            html,</span>
+<span id="cb439-11"><a href="#cb439-11" aria-hidden="true" tabindex="-1"></a>            include_comments<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb439-12"><a href="#cb439-12" aria-hidden="true" tabindex="-1"></a>            include_tables<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb439-13"><a href="#cb439-13" aria-hidden="true" tabindex="-1"></a>            output_format<span class="op">=</span><span class="st">&#39;text&#39;</span></span>
+<span id="cb439-14"><a href="#cb439-14" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb439-15"><a href="#cb439-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb439-16"><a href="#cb439-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Extract metadata</span></span>
+<span id="cb439-17"><a href="#cb439-17" aria-hidden="true" tabindex="-1"></a>        metadata <span class="op">=</span> trafilatura.extract_metadata(html)</span>
+<span id="cb439-18"><a href="#cb439-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb439-19"><a href="#cb439-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb439-20"><a href="#cb439-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;text&quot;</span>: text,</span>
+<span id="cb439-21"><a href="#cb439-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;title&quot;</span>: metadata.title <span class="cf">if</span> metadata <span class="cf">else</span> url,</span>
+<span id="cb439-22"><a href="#cb439-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;author&quot;</span>: metadata.author <span class="cf">if</span> metadata <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb439-23"><a href="#cb439-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;date&quot;</span>: metadata.date <span class="cf">if</span> metadata <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb439-24"><a href="#cb439-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;url&quot;</span>: url,</span>
+<span id="cb439-25"><a href="#cb439-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;word_count&quot;</span>: <span class="bu">len</span>(text.split()) <span class="cf">if</span> text <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb439-26"><a href="#cb439-26" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="agentic-crawling">68.5 Agentic Crawling</h2>
+<h3 id="source-test_agentic_crawl.py-agentsweb_enrichment_agent.py">Source: <code>test_agentic_crawl.py</code>, <code>agents/web_enrichment_agent.py</code></h3>
+<div class="sourceCode" id="cb440"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb440-1"><a href="#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgenticCrawler:</span>
+<span id="cb440-2"><a href="#cb440-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb440-3"><a href="#cb440-3" aria-hidden="true" tabindex="-1"></a><span class="co">    LLM-guided web crawling:</span></span>
+<span id="cb440-4"><a href="#cb440-4" aria-hidden="true" tabindex="-1"></a><span class="co">    1. LLM generates targeted search queries</span></span>
+<span id="cb440-5"><a href="#cb440-5" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Fetch and extract top results</span></span>
+<span id="cb440-6"><a href="#cb440-6" aria-hidden="true" tabindex="-1"></a><span class="co">    3. LLM evaluates relevance of each result</span></span>
+<span id="cb440-7"><a href="#cb440-7" aria-hidden="true" tabindex="-1"></a><span class="co">    4. If insufficient, LLM generates follow-up queries</span></span>
+<span id="cb440-8"><a href="#cb440-8" aria-hidden="true" tabindex="-1"></a><span class="co">    5. Repeat until quality threshold met</span></span>
+<span id="cb440-9"><a href="#cb440-9" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb440-10"><a href="#cb440-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb440-11"><a href="#cb440-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> crawl(<span class="va">self</span>, topic: <span class="bu">str</span>, depth: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb440-12"><a href="#cb440-12" aria-hidden="true" tabindex="-1"></a>        queries <span class="op">=</span> <span class="cf">await</span> <span class="va">self</span>.llm.generate_queries(topic)</span>
+<span id="cb440-13"><a href="#cb440-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb440-14"><a href="#cb440-14" aria-hidden="true" tabindex="-1"></a>        all_results <span class="op">=</span> []</span>
+<span id="cb440-15"><a href="#cb440-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> query <span class="kw">in</span> queries:</span>
+<span id="cb440-16"><a href="#cb440-16" aria-hidden="true" tabindex="-1"></a>            results <span class="op">=</span> <span class="va">self</span>.search.search(query)</span>
+<span id="cb440-17"><a href="#cb440-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> url <span class="kw">in</span> results:</span>
+<span id="cb440-18"><a href="#cb440-18" aria-hidden="true" tabindex="-1"></a>                content <span class="op">=</span> <span class="va">self</span>.ingest.fetch_and_extract(url)</span>
+<span id="cb440-19"><a href="#cb440-19" aria-hidden="true" tabindex="-1"></a>                relevance <span class="op">=</span> <span class="cf">await</span> <span class="va">self</span>.llm.score_relevance(topic, content)</span>
+<span id="cb440-20"><a href="#cb440-20" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb440-21"><a href="#cb440-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> relevance <span class="op">&gt;</span> <span class="fl">0.7</span>:</span>
+<span id="cb440-22"><a href="#cb440-22" aria-hidden="true" tabindex="-1"></a>                    all_results.append(content)</span>
+<span id="cb440-23"><a href="#cb440-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb440-24"><a href="#cb440-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> all_results</span></code></pre></div>
+<hr />
+<h2 id="web-cache-service">68.6 Web Cache Service</h2>
+<h3 id="source-servicesweb_cache_service.py">Source: <code>services/web_cache_service.py</code></h3>
+<div class="sourceCode" id="cb441"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb441-1"><a href="#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WebCacheService:</span>
+<span id="cb441-2"><a href="#cb441-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Cache crawled web content to avoid re-fetching&quot;&quot;&quot;</span></span>
+<span id="cb441-3"><a href="#cb441-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb441-4"><a href="#cb441-4" aria-hidden="true" tabindex="-1"></a>    CACHE_TTL <span class="op">=</span> <span class="dv">86400</span> <span class="op">*</span> <span class="dv">7</span>  <span class="co"># 7 days</span></span>
+<span id="cb441-5"><a href="#cb441-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb441-6"><a href="#cb441-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_or_fetch(<span class="va">self</span>, url: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb441-7"><a href="#cb441-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check Redis cache</span></span>
+<span id="cb441-8"><a href="#cb441-8" aria-hidden="true" tabindex="-1"></a>        cached <span class="op">=</span> redis.get(<span class="ss">f&quot;web:</span><span class="sc">{</span>url_hash(url)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb441-9"><a href="#cb441-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cached:</span>
+<span id="cb441-10"><a href="#cb441-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.loads(cached)</span>
+<span id="cb441-11"><a href="#cb441-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb441-12"><a href="#cb441-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Fetch fresh</span></span>
+<span id="cb441-13"><a href="#cb441-13" aria-hidden="true" tabindex="-1"></a>        content <span class="op">=</span> <span class="va">self</span>.ingest.fetch_and_extract(url)</span>
+<span id="cb441-14"><a href="#cb441-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb441-15"><a href="#cb441-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Cache in Redis</span></span>
+<span id="cb441-16"><a href="#cb441-16" aria-hidden="true" tabindex="-1"></a>        redis.setex(</span>
+<span id="cb441-17"><a href="#cb441-17" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;web:</span><span class="sc">{</span>url_hash(url)<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb441-18"><a href="#cb441-18" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.CACHE_TTL,</span>
+<span id="cb441-19"><a href="#cb441-19" aria-hidden="true" tabindex="-1"></a>            json.dumps(content)</span>
+<span id="cb441-20"><a href="#cb441-20" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb441-21"><a href="#cb441-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb441-22"><a href="#cb441-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Index in Qdrant for semantic search</span></span>
+<span id="cb441-23"><a href="#cb441-23" aria-hidden="true" tabindex="-1"></a>        chunks <span class="op">=</span> <span class="va">self</span>.chunker.chunk(content[<span class="st">&quot;text&quot;</span>])</span>
+<span id="cb441-24"><a href="#cb441-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.qdrant.index(</span>
+<span id="cb441-25"><a href="#cb441-25" aria-hidden="true" tabindex="-1"></a>            collection<span class="op">=</span><span class="st">&quot;web_resources&quot;</span>,</span>
+<span id="cb441-26"><a href="#cb441-26" aria-hidden="true" tabindex="-1"></a>            chunks<span class="op">=</span>chunks,</span>
+<span id="cb441-27"><a href="#cb441-27" aria-hidden="true" tabindex="-1"></a>            metadata<span class="op">=</span>{<span class="st">&quot;url&quot;</span>: url, <span class="st">&quot;title&quot;</span>: content[<span class="st">&quot;title&quot;</span>]}</span>
+<span id="cb441-28"><a href="#cb441-28" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb441-29"><a href="#cb441-29" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb441-30"><a href="#cb441-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> content</span></code></pre></div>
+<hr />
+<h2 id="resource-suggestion">68.7 Resource Suggestion</h2>
+<p>The curriculum agent uses crawled content to suggest resources:</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb442-1"><a href="#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ResourceSuggestionEngine:</span>
+<span id="cb442-2"><a href="#cb442-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> suggest(<span class="va">self</span>, topic: <span class="bu">str</span>, learning_style: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb442-3"><a href="#cb442-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Search existing web resources</span></span>
+<span id="cb442-4"><a href="#cb442-4" aria-hidden="true" tabindex="-1"></a>        web_results <span class="op">=</span> <span class="va">self</span>.qdrant.search(</span>
+<span id="cb442-5"><a href="#cb442-5" aria-hidden="true" tabindex="-1"></a>            collection<span class="op">=</span><span class="st">&quot;web_resources&quot;</span>,</span>
+<span id="cb442-6"><a href="#cb442-6" aria-hidden="true" tabindex="-1"></a>            query<span class="op">=</span>topic,</span>
+<span id="cb442-7"><a href="#cb442-7" aria-hidden="true" tabindex="-1"></a>            limit<span class="op">=</span><span class="dv">10</span></span>
+<span id="cb442-8"><a href="#cb442-8" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb442-9"><a href="#cb442-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb442-10"><a href="#cb442-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Filter by relevance and learning style</span></span>
+<span id="cb442-11"><a href="#cb442-11" aria-hidden="true" tabindex="-1"></a>        suggestions <span class="op">=</span> []</span>
+<span id="cb442-12"><a href="#cb442-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> result <span class="kw">in</span> web_results:</span>
+<span id="cb442-13"><a href="#cb442-13" aria-hidden="true" tabindex="-1"></a>            resource_type <span class="op">=</span> <span class="va">self</span>.classify_resource(result)</span>
+<span id="cb442-14"><a href="#cb442-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.matches_style(resource_type, learning_style):</span>
+<span id="cb442-15"><a href="#cb442-15" aria-hidden="true" tabindex="-1"></a>                suggestions.append(ResourceSuggestion(</span>
+<span id="cb442-16"><a href="#cb442-16" aria-hidden="true" tabindex="-1"></a>                    topic<span class="op">=</span>topic,</span>
+<span id="cb442-17"><a href="#cb442-17" aria-hidden="true" tabindex="-1"></a>                    resource_type<span class="op">=</span>resource_type,</span>
+<span id="cb442-18"><a href="#cb442-18" aria-hidden="true" tabindex="-1"></a>                    title<span class="op">=</span>result.payload.get(<span class="st">&quot;title&quot;</span>),</span>
+<span id="cb442-19"><a href="#cb442-19" aria-hidden="true" tabindex="-1"></a>                    url<span class="op">=</span>result.payload.get(<span class="st">&quot;url&quot;</span>),</span>
+<span id="cb442-20"><a href="#cb442-20" aria-hidden="true" tabindex="-1"></a>                    relevance_score<span class="op">=</span>result.score</span>
+<span id="cb442-21"><a href="#cb442-21" aria-hidden="true" tabindex="-1"></a>                ))</span>
+<span id="cb442-22"><a href="#cb442-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb442-23"><a href="#cb442-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sorted</span>(suggestions, key<span class="op">=</span><span class="kw">lambda</span> s: s.relevance_score, reverse<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<hr />
+
+</body>
+</html>

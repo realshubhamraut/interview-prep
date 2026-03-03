@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 92: Core Infrastructure Services</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-91.html">&larr; Previous</a> <a href="page-93.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-92-core-infrastructure-services">Page 92: Core Infrastructure Services</h1>
+<blockquote>
+<p>Authorization, rate limiting, caching (6-layer unified + response), and storage abstraction (local + S3) that underpin all backend operations.</p>
+</blockquote>
+<hr />
+<h2 id="authorization-service">92.1 Authorization Service</h2>
+<h3 id="source-core-serviceappservicesauthorization_service.py-360-lines">Source: <code>core-service/app/services/authorization_service.py</code> (360 lines)</h3>
+<p>Role-Based Access Control extending JWT authentication:</p>
+<h3 id="permission-constants">Permission Constants</h3>
+<div class="sourceCode" id="cb588"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb588-1"><a href="#cb588-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Permissions:</span>
+<span id="cb588-2"><a href="#cb588-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Documents</span></span>
+<span id="cb588-3"><a href="#cb588-3" aria-hidden="true" tabindex="-1"></a>    DOCUMENT_UPLOAD <span class="op">=</span> <span class="st">&quot;document:upload&quot;</span></span>
+<span id="cb588-4"><a href="#cb588-4" aria-hidden="true" tabindex="-1"></a>    DOCUMENT_VIEW <span class="op">=</span> <span class="st">&quot;document:view&quot;</span></span>
+<span id="cb588-5"><a href="#cb588-5" aria-hidden="true" tabindex="-1"></a>    DOCUMENT_DELETE <span class="op">=</span> <span class="st">&quot;document:delete&quot;</span></span>
+<span id="cb588-6"><a href="#cb588-6" aria-hidden="true" tabindex="-1"></a>    DOCUMENT_VIEW_ALL <span class="op">=</span> <span class="st">&quot;document:view_all&quot;</span></span>
+<span id="cb588-7"><a href="#cb588-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb588-8"><a href="#cb588-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Tutor</span></span>
+<span id="cb588-9"><a href="#cb588-9" aria-hidden="true" tabindex="-1"></a>    TUTOR_QUERY <span class="op">=</span> <span class="st">&quot;tutor:query&quot;</span></span>
+<span id="cb588-10"><a href="#cb588-10" aria-hidden="true" tabindex="-1"></a>    TUTOR_VIEW_HISTORY <span class="op">=</span> <span class="st">&quot;tutor:view_history&quot;</span></span>
+<span id="cb588-11"><a href="#cb588-11" aria-hidden="true" tabindex="-1"></a>    TUTOR_VIEW_ALL_HISTORY <span class="op">=</span> <span class="st">&quot;tutor:view_all_history&quot;</span></span>
+<span id="cb588-12"><a href="#cb588-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb588-13"><a href="#cb588-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Admin</span></span>
+<span id="cb588-14"><a href="#cb588-14" aria-hidden="true" tabindex="-1"></a>    ADMIN_VIEW_LOGS <span class="op">=</span> <span class="st">&quot;admin:view_logs&quot;</span></span>
+<span id="cb588-15"><a href="#cb588-15" aria-hidden="true" tabindex="-1"></a>    ADMIN_REINDEX <span class="op">=</span> <span class="st">&quot;admin:reindex&quot;</span></span>
+<span id="cb588-16"><a href="#cb588-16" aria-hidden="true" tabindex="-1"></a>    ADMIN_WEB_FETCH <span class="op">=</span> <span class="st">&quot;admin:web_fetch&quot;</span></span></code></pre></div>
+<h3 id="role-permission-mapping">Role → Permission Mapping</h3>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr>
+<th>Role</th>
+<th>Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>student</code></td>
+<td><code>document:view</code>, <code>tutor:query</code>, <code>tutor:view_history</code></td>
+</tr>
+<tr>
+<td><code>teacher</code></td>
+<td>All student + <code>document:upload</code>, <code>document:delete</code>, <code>document:view_all</code>, <code>tutor:view_all_history</code>, <code>admin:web_fetch</code></td>
+</tr>
+<tr>
+<td><code>admin</code></td>
+<td>All teacher + <code>admin:view_logs</code>, <code>admin:reindex</code></td>
+</tr>
+<tr>
+<td><code>parent</code></td>
+<td><code>tutor:view_history</code> (child’s only)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="authorization-methods">Authorization Methods</h3>
+<div class="sourceCode" id="cb589"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb589-1"><a href="#cb589-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AuthorizationService:</span>
+<span id="cb589-2"><a href="#cb589-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> has_permission(<span class="va">self</span>, user, permission: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span></span>
+<span id="cb589-3"><a href="#cb589-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> check_classroom_access(<span class="va">self</span>, user_id, classroom_id, required_role<span class="op">=</span><span class="va">None</span>) <span class="op">-&gt;</span> <span class="bu">bool</span></span>
+<span id="cb589-4"><a href="#cb589-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> check_document_access(<span class="va">self</span>, user_id, document_id, action<span class="op">=</span><span class="st">&quot;read&quot;</span>) <span class="op">-&gt;</span> <span class="bu">bool</span></span>
+<span id="cb589-5"><a href="#cb589-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> check_resource_ownership(<span class="va">self</span>, user_id, resource_id, resource_type) <span class="op">-&gt;</span> <span class="bu">bool</span></span>
+<span id="cb589-6"><a href="#cb589-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_user_classrooms(<span class="va">self</span>, user_id) <span class="op">-&gt;</span> List[<span class="bu">str</span>]</span></code></pre></div>
+<h3 id="flask-decorators">Flask Decorators</h3>
+<div class="sourceCode" id="cb590"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb590-1"><a href="#cb590-1" aria-hidden="true" tabindex="-1"></a><span class="at">@require_auth</span>            <span class="co"># JWT validation</span></span>
+<span id="cb590-2"><a href="#cb590-2" aria-hidden="true" tabindex="-1"></a><span class="at">@require_role</span>(<span class="st">&quot;teacher&quot;</span>) <span class="co"># Role check</span></span>
+<span id="cb590-3"><a href="#cb590-3" aria-hidden="true" tabindex="-1"></a><span class="at">@require_classroom_access</span>(classroom_id_param<span class="op">=</span><span class="st">&quot;classroom_id&quot;</span>)  <span class="co"># Membership check</span></span>
+<span id="cb590-4"><a href="#cb590-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> some_route():</span>
+<span id="cb590-5"><a href="#cb590-5" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
+<hr />
+<h2 id="rate-limiter">92.2 Rate Limiter</h2>
+<h3 id="source-core-serviceappservicesrate_limiter.py-251-lines">Source: <code>core-service/app/services/rate_limiter.py</code> (251 lines)</h3>
+<p>Redis-based sliding window rate limiting:</p>
+<h3 id="default-rate-limits">Default Rate Limits</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Max Requests</th>
+<th>Window</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ai_tutor_query_minute</code></td>
+<td>30</td>
+<td>60s</td>
+</tr>
+<tr>
+<td><code>ai_tutor_query_hour</code></td>
+<td>200</td>
+<td>3,600s</td>
+</tr>
+<tr>
+<td><code>document_upload</code></td>
+<td>10</td>
+<td>3,600s</td>
+</tr>
+<tr>
+<td><code>video_search</code></td>
+<td>20</td>
+<td>60s</td>
+</tr>
+<tr>
+<td><code>web_crawl</code></td>
+<td>5</td>
+<td>60s</td>
+</tr>
+<tr>
+<td><code>assessment_generate</code></td>
+<td>10</td>
+<td>3,600s</td>
+</tr>
+<tr>
+<td><code>login_attempt</code></td>
+<td>5</td>
+<td>300s</td>
+</tr>
+<tr>
+<td><code>password_reset</code></td>
+<td>3</td>
+<td>3,600s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="usage">Usage</h3>
+<div class="sourceCode" id="cb591"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb591-1"><a href="#cb591-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> services.rate_limiter <span class="im">import</span> rate_limit</span>
+<span id="cb591-2"><a href="#cb591-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb591-3"><a href="#cb591-3" aria-hidden="true" tabindex="-1"></a><span class="at">@rate_limit</span>(<span class="st">&quot;ai_tutor_query_minute&quot;</span>)</span>
+<span id="cb591-4"><a href="#cb591-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> query_tutor():</span>
+<span id="cb591-5"><a href="#cb591-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rate-limited: 30 requests/minute per user</span></span>
+<span id="cb591-6"><a href="#cb591-6" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb591-7"><a href="#cb591-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb591-8"><a href="#cb591-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual check</span></span>
+<span id="cb591-9"><a href="#cb591-9" aria-hidden="true" tabindex="-1"></a>limiter <span class="op">=</span> get_rate_limiter()</span>
+<span id="cb591-10"><a href="#cb591-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> limiter.check_rate_limit(user_id, <span class="st">&quot;document_upload&quot;</span>)</span>
+<span id="cb591-11"><a href="#cb591-11" aria-hidden="true" tabindex="-1"></a><span class="co"># → {allowed: True, remaining: 8, reset_at: timestamp, retry_after: 0}</span></span></code></pre></div>
+<hr />
+<h2 id="unified-cache-service-6-layer">92.3 Unified Cache Service (6-Layer)</h2>
+<h3 id="source-core-serviceappservicesunified_cache.py-488-lines">Source: <code>core-service/app/services/unified_cache.py</code> (488 lines)</h3>
+<h3 id="cache-layers">Cache Layers</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>TTL</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OCR Results</td>
+<td>7 days</td>
+<td>Avoid re-processing same images</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>∞ (no expiry)</td>
+<td>Deterministic, never changes</td>
+</tr>
+<tr>
+<td>Vector Search</td>
+<td>1 hour</td>
+<td>Query result caching</td>
+</tr>
+<tr>
+<td>RAG Responses</td>
+<td>24 hours</td>
+<td>LLM answer caching</td>
+</tr>
+<tr>
+<td>Document Metadata</td>
+<td>1 hour</td>
+<td>DB query reduction</td>
+</tr>
+<tr>
+<td>Web Resources</td>
+<td>7 days</td>
+<td>External resource caching</td>
+</tr>
+</tbody>
+</table>
+<h3 id="api-1">API</h3>
+<div class="sourceCode" id="cb592"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb592-1"><a href="#cb592-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> UnifiedCacheService:</span>
+<span id="cb592-2"><a href="#cb592-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OCR Layer</span></span>
+<span id="cb592-3"><a href="#cb592-3" aria-hidden="true" tabindex="-1"></a>    get_ocr(image_bytes) <span class="op">/</span> set_ocr(image_bytes, result)</span>
+<span id="cb592-4"><a href="#cb592-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb592-5"><a href="#cb592-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Embedding Layer (no expiry)</span></span>
+<span id="cb592-6"><a href="#cb592-6" aria-hidden="true" tabindex="-1"></a>    get_embedding(text, model) <span class="op">/</span> set_embedding(text, model, vector)</span>
+<span id="cb592-7"><a href="#cb592-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb592-8"><a href="#cb592-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Search Layer</span></span>
+<span id="cb592-9"><a href="#cb592-9" aria-hidden="true" tabindex="-1"></a>    get_search(query_hash, classroom_id, top_k) <span class="op">/</span> set_search(...)</span>
+<span id="cb592-10"><a href="#cb592-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb592-11"><a href="#cb592-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># RAG Layer</span></span>
+<span id="cb592-12"><a href="#cb592-12" aria-hidden="true" tabindex="-1"></a>    get_rag(question, classroom_id) <span class="op">/</span> set_rag(question, classroom_id, response)</span>
+<span id="cb592-13"><a href="#cb592-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb592-14"><a href="#cb592-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Document Layer</span></span>
+<span id="cb592-15"><a href="#cb592-15" aria-hidden="true" tabindex="-1"></a>    get_document(document_id) <span class="op">/</span> set_document(document_id, meta)</span>
+<span id="cb592-16"><a href="#cb592-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb592-17"><a href="#cb592-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Invalidation</span></span>
+<span id="cb592-18"><a href="#cb592-18" aria-hidden="true" tabindex="-1"></a>    invalidate_document(document_id)  <span class="co"># Cascading: doc + search + RAG</span></span>
+<span id="cb592-19"><a href="#cb592-19" aria-hidden="true" tabindex="-1"></a>    invalidate_pattern(<span class="st">&quot;ensure:rag:*&quot;</span>)</span>
+<span id="cb592-20"><a href="#cb592-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb592-21"><a href="#cb592-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Metrics</span></span>
+<span id="cb592-22"><a href="#cb592-22" aria-hidden="true" tabindex="-1"></a>    get_stats() → {hit_rate, hits, misses, errors, avg_get_time_ms}</span></code></pre></div>
+<h3 id="graceful-degradation">Graceful Degradation</h3>
+<ul>
+<li>Redis unavailable → in-memory dict fallback</li>
+<li>All operations wrapped in try/except</li>
+<li>Metrics tracking even in fallback mode</li>
+</ul>
+<hr />
+<h2 id="response-cache-1">92.4 Response Cache</h2>
+<h3 id="source-ai-serviceappservicesresponse_cache.py-272-lines">Source: <code>ai-service/app/services/response_cache.py</code> (272 lines)</h3>
+<p>Caches expensive AI-service computations:</p>
+<div class="sourceCode" id="cb593"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb593-1"><a href="#cb593-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ResponseCache:</span>
+<span id="cb593-2"><a href="#cb593-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># LLM Responses (1 hour TTL)</span></span>
+<span id="cb593-3"><a href="#cb593-3" aria-hidden="true" tabindex="-1"></a>    get_llm_response(question, context_hash, subject) <span class="op">-&gt;</span> CachedResponse</span>
+<span id="cb593-4"><a href="#cb593-4" aria-hidden="true" tabindex="-1"></a>    set_llm_response(question, context_hash, subject, response, ttl<span class="op">=</span><span class="dv">3600</span>)</span>
+<span id="cb593-5"><a href="#cb593-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb593-6"><a href="#cb593-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Web Resources (7 day TTL)</span></span>
+<span id="cb593-7"><a href="#cb593-7" aria-hidden="true" tabindex="-1"></a>    get_web_resources(query) <span class="op">-&gt;</span> Dict</span>
+<span id="cb593-8"><a href="#cb593-8" aria-hidden="true" tabindex="-1"></a>    set_web_resources(query, resources, ttl<span class="op">=</span><span class="dv">604800</span>)</span>
+<span id="cb593-9"><a href="#cb593-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb593-10"><a href="#cb593-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pattern Invalidation</span></span>
+<span id="cb593-11"><a href="#cb593-11" aria-hidden="true" tabindex="-1"></a>    invalidate_pattern(<span class="st">&quot;ensure:llm:*&quot;</span>) <span class="op">-&gt;</span> <span class="bu">int</span>  <span class="co"># Returns keys deleted</span></span></code></pre></div>
+<hr />
+<h2 id="storage-service">92.5 Storage Service</h2>
+<h3 id="source-core-serviceappservicesstorage_service.py-288-lines">Source: <code>core-service/app/services/storage_service.py</code> (288 lines)</h3>
+<p>Abstract storage supporting local filesystem and AWS S3:</p>
+<div class="sourceCode" id="cb594"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb594-1"><a href="#cb594-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StorageService:</span>
+<span id="cb594-2"><a href="#cb594-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, provider<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb594-3"><a href="#cb594-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Provider: STORAGE_PROVIDER env var (&quot;local&quot; or &quot;s3&quot;)</span></span>
+<span id="cb594-4"><a href="#cb594-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb594-5"><a href="#cb594-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Upload</span></span>
+<span id="cb594-6"><a href="#cb594-6" aria-hidden="true" tabindex="-1"></a>    upload_file(file_data, folder, filename, content_type) <span class="op">-&gt;</span> <span class="bu">str</span>  <span class="co"># Returns key</span></span>
+<span id="cb594-7"><a href="#cb594-7" aria-hidden="true" tabindex="-1"></a>    upload_from_path(local_path, folder, filename) <span class="op">-&gt;</span> <span class="bu">str</span></span>
+<span id="cb594-8"><a href="#cb594-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb594-9"><a href="#cb594-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Access</span></span>
+<span id="cb594-10"><a href="#cb594-10" aria-hidden="true" tabindex="-1"></a>    get_url(key, expires_in<span class="op">=</span><span class="dv">3600</span>) <span class="op">-&gt;</span> <span class="bu">str</span>    <span class="co"># Pre-signed URL for S3</span></span>
+<span id="cb594-11"><a href="#cb594-11" aria-hidden="true" tabindex="-1"></a>    get_local_path(key) <span class="op">-&gt;</span> <span class="bu">str</span>              <span class="co"># Downloads from S3 if needed</span></span>
+<span id="cb594-12"><a href="#cb594-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb594-13"><a href="#cb594-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Management</span></span>
+<span id="cb594-14"><a href="#cb594-14" aria-hidden="true" tabindex="-1"></a>    delete_file(key) <span class="op">-&gt;</span> <span class="bu">bool</span></span>
+<span id="cb594-15"><a href="#cb594-15" aria-hidden="true" tabindex="-1"></a>    file_exists(key) <span class="op">-&gt;</span> <span class="bu">bool</span></span></code></pre></div>
+<h3 id="folders">Folders</h3>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>recordings/</code></td>
+<td>Meeting video/audio recordings</td>
+</tr>
+<tr>
+<td><code>materials/</code></td>
+<td>Uploaded PDFs, documents</td>
+</tr>
+<tr>
+<td><code>syllabus/</code></td>
+<td>Uploaded syllabi</td>
+</tr>
+<tr>
+<td><code>avatars/</code></td>
+<td>User profile photos</td>
+</tr>
+<tr>
+<td><code>exports/</code></td>
+<td>Generated reports/exports</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

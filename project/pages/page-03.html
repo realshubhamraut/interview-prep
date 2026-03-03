@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 3: Multi-Agent System Deep Dive</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-02.html">&larr; Previous</a> <a href="page-04.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-3-multi-agent-system-deep-dive">Page 3: Multi-Agent System Deep Dive</h1>
+<hr />
+<h2 id="architecture-overview">3.1 Architecture Overview</h2>
+<p>The ensureStudy multi-agent system implements a <strong>Supervisor Pattern</strong> using LangGraph’s <code>StateGraph</code> framework. A central <strong>Orchestrator Agent</strong> receives every user query, classifies intent, routes to one or more specialized agents, and synthesizes a unified response.</p>
+<pre class="mermaid">flowchart TB
+    UQ["🎓 User Query"] --> OA
+    subgraph OA["Orchestrator Agent — Supervisor Pattern"]
+        direction TB
+        CI["1. Classify Intent<br/>LEARN | RESEARCH | CREATE | EVALUATE | MIXED"]
+        SA["2. Select Agents<br/>Map intent → agent(s)"]
+        EP["3. Execute Pipeline<br/>Run selected agents sequentially"]
+        SR["4. Synthesize Response<br/>Merge results from all agents"]
+        CI --> SA --> EP --> SR
+    end
+    OA --> TA & RA & CG & AA
+    TA["🤖 Tutor Agent<br/>ABCR + TAL + MCP<br/>Q&A, explanations"]
+    RA["🔍 Research Agent<br/>Web + PDF + YouTube<br/>Content discovery"]
+    CG["📝 Content Generation<br/>Curriculum Agent<br/>Notes, plans"]
+    AA["📊 Assessment Agent<br/>MCQ generation<br/>Eval + grading"]
+    TA & RA & CG & AA --> FR["✅ Final Synthesized Response + Sources"]</pre>
+<hr />
+<h2 id="agent-inventory">3.2 Agent Inventory</h2>
+<p>The system contains <strong>17 agent files</strong> in <code>backend/ai-service/app/agents/</code>:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 15%" />
+<col style="width: 17%" />
+<col style="width: 27%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr>
+<th>Agent</th>
+<th>File</th>
+<th>Lines</th>
+<th>LangGraph</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Orchestrator</strong></td>
+<td><code>orchestrator.py</code></td>
+<td>622</td>
+<td>Yes</td>
+<td>Central supervisor — routes queries to sub-agents</td>
+</tr>
+<tr>
+<td><strong>Tutor</strong></td>
+<td><code>tutor_agent.py</code></td>
+<td>687</td>
+<td>Yes</td>
+<td>Primary learning assistant with ABCR/TAL/MCP</td>
+</tr>
+<tr>
+<td><strong>Research</strong></td>
+<td><code>research_agent.py</code></td>
+<td>510</td>
+<td>Yes</td>
+<td>Web search, PDF discovery, YouTube search</td>
+</tr>
+<tr>
+<td><strong>Curriculum</strong></td>
+<td><code>curriculum_agent.py</code></td>
+<td>~700</td>
+<td>Yes</td>
+<td>Personalized learning path generation</td>
+</tr>
+<tr>
+<td><strong>Document</strong></td>
+<td><code>document_agent.py</code></td>
+<td>~550</td>
+<td>Yes</td>
+<td>7-stage document processing pipeline</td>
+</tr>
+<tr>
+<td><strong>Learning</strong></td>
+<td><code>learning_agent.py</code></td>
+<td>569</td>
+<td>Yes</td>
+<td>Type 5 self-improving question generation</td>
+</tr>
+<tr>
+<td><strong>Notes</strong></td>
+<td><code>notes_agent.py</code></td>
+<td>~500</td>
+<td>Yes</td>
+<td>Study notes generation from materials</td>
+</tr>
+<tr>
+<td><strong>Assessment</strong></td>
+<td><code>assessment_agent.py</code></td>
+<td>~200</td>
+<td>Yes</td>
+<td>Question generation and answer evaluation</td>
+</tr>
+<tr>
+<td><strong>Question Pool</strong></td>
+<td><code>question_pool_agent.py</code></td>
+<td>~250</td>
+<td>Yes</td>
+<td>Question bank management and retrieval</td>
+</tr>
+<tr>
+<td><strong>Revision Assessment</strong></td>
+<td><code>revision_assessment_agent.py</code></td>
+<td>~480</td>
+<td>Yes</td>
+<td>Spaced repetition assessment generation</td>
+</tr>
+<tr>
+<td><strong>Interview Question</strong></td>
+<td><code>interview_question_agent.py</code></td>
+<td>~800</td>
+<td>Yes</td>
+<td>Interview preparation question generation</td>
+</tr>
+<tr>
+<td><strong>Web Enrichment</strong></td>
+<td><code>web_enrichment_agent.py</code></td>
+<td>~400</td>
+<td>Yes</td>
+<td>Web content enrichment with trust scoring</td>
+</tr>
+<tr>
+<td><strong>Study Planner</strong></td>
+<td><code>study_planner.py</code></td>
+<td>~200</td>
+<td>No</td>
+<td>Legacy study plan generation</td>
+</tr>
+<tr>
+<td><strong>Notes Generator</strong></td>
+<td><code>notes_generator.py</code></td>
+<td>~150</td>
+<td>No</td>
+<td>Legacy notes generation</td>
+</tr>
+<tr>
+<td><strong>Moderation</strong></td>
+<td><code>moderation.py</code></td>
+<td>~120</td>
+<td>No</td>
+<td>Content moderation and safety checks</td>
+</tr>
+<tr>
+<td><strong>Base Agent</strong></td>
+<td><code>base_agent.py</code></td>
+<td>98</td>
+<td>No</td>
+<td>Abstract base class with MCP protocol</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td><code>tools/</code> (5 files)</td>
+<td>~500</td>
+<td>No</td>
+<td>Shared tools: RAG, web, content, media</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="baseagent-model-context-protocol-mcp">3.3 BaseAgent &amp; Model Context Protocol (MCP)</h2>
+<p>All agents share a common base class that enforces the Model Context Protocol pattern:</p>
+<h3 id="source-backendai-serviceappagentsbase_agent.py">Source: <code>backend/ai-service/app/agents/base_agent.py</code></h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgentContext(Enum):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Bounded contexts for each agent (MCP)&quot;&quot;&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    TUTOR <span class="op">=</span> <span class="st">&quot;tutor&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    STUDY_PLANNER <span class="op">=</span> <span class="st">&quot;study_planner&quot;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    ASSESSMENT <span class="op">=</span> <span class="st">&quot;assessment&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    NOTES_GENERATOR <span class="op">=</span> <span class="st">&quot;notes_generator&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    MODERATION <span class="op">=</span> <span class="st">&quot;moderation&quot;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    SCRAPER <span class="op">=</span> <span class="st">&quot;scraper&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BaseAgent(ABC):</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, context: AgentContext):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.context <span class="op">=</span> context</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.responsibilities: List[<span class="bu">str</span>] <span class="op">=</span> []</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.communication_channels: List[<span class="bu">str</span>] <span class="op">=</span> []</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> execute(<span class="va">self</span>, input_data: Dict[<span class="bu">str</span>, Any]) <span class="op">-&gt;</span> Dict[<span class="bu">str</span>, Any]:</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Execute the agent&#39;s main task.&quot;&quot;&quot;</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> format_output(<span class="va">self</span>, data, output_type<span class="op">=</span><span class="st">&quot;json&quot;</span>, metadata<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Format agent output in standard MCP format.&quot;&quot;&quot;</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;timestamp&quot;</span>: datetime.utcnow().isoformat(),</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;agent&quot;</span>: <span class="va">self</span>.context.value,</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;output_type&quot;</span>: output_type,</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;data&quot;</span>: data,</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;metadata&quot;</span>: metadata <span class="kw">or</span> {}</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<h3 id="mcp-design-principles">MCP Design Principles</h3>
+<p>The Model Context Protocol serves as a <strong>bounded context isolation mechanism</strong>:</p>
+<ol type="1">
+<li><strong>Agent Identity</strong>: Each agent declares its <code>AgentContext</code>, ensuring outputs are tagged with their source</li>
+<li><strong>Standardized I/O</strong>: <code>format_output()</code> creates a uniform response envelope across all agents</li>
+<li><strong>Input Validation</strong>: <code>validate_input()</code> ensures required keys are present before execution</li>
+<li><strong>Execution Logging</strong>: <code>log_execution()</code> provides consistent monitoring hooks</li>
+<li><strong>Context Boundaries</strong>: Agents only see data relevant to their bounded context</li>
+</ol>
+<h3 id="mcp-in-practice-web-content-isolation">MCP in Practice: Web Content Isolation</h3>
+<p>The MCP protocol is most impactful in the Tutor Agent, where it prevents <strong>web-sourced content</strong> from polluting answers when a classroom context is active:</p>
+<pre class="mermaid">flowchart TB
+    CD["📚 Classroom Docs<br/>(uploaded PDFs)"] --> MF
+    WC["🌐 Web Content<br/>(web_ingest)"] --> MF
+    subgraph MF["MCP Filter — Context Isolation"]
+        direction TB
+        CHK{"Anchor active<br/>from classroom?"}
+        CHK -- Yes --> BLK["🚫 BLOCK web content<br/>Only classroom docs pass"]
+        CHK -- No --> ALLOW["✅ ALLOW all sources<br/>Web + classroom"]
+    end
+    BLK --> FC["Filtered Chunks → LLM Prompt"]
+    ALLOW --> FC</pre>
+<hr />
+<h2 id="orchestrator-agent-supervisor-pattern">3.4 Orchestrator Agent — Supervisor Pattern</h2>
+<h3 id="source-backendai-serviceappagentsorchestrator.py">Source: <code>backend/ai-service/app/agents/orchestrator.py</code></h3>
+<p>The Orchestrator is the entry point for all conversational AI requests. It implements a <strong>4-stage pipeline</strong> using LangGraph:</p>
+<h3 id="stage-1-intent-classification">Stage 1: Intent Classification</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Intent(<span class="bu">str</span>, Enum):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    LEARN <span class="op">=</span> <span class="st">&quot;learn&quot;</span>        <span class="co"># &quot;What is...&quot;, &quot;Explain...&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    RESEARCH <span class="op">=</span> <span class="st">&quot;research&quot;</span>  <span class="co"># &quot;Find...&quot;, &quot;Search...&quot;, &quot;Look up...&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    CREATE <span class="op">=</span> <span class="st">&quot;create&quot;</span>      <span class="co"># &quot;Generate...&quot;, &quot;Make...&quot;, &quot;Create...&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    EVALUATE <span class="op">=</span> <span class="st">&quot;evaluate&quot;</span>  <span class="co"># &quot;Check...&quot;, &quot;Assess...&quot;, &quot;Grade...&quot;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    MIXED <span class="op">=</span> <span class="st">&quot;mixed&quot;</span>        <span class="co"># Multiple intents detected</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>INTENT_KEYWORDS <span class="op">=</span> {</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    Intent.LEARN: [<span class="st">&quot;what is&quot;</span>, <span class="st">&quot;explain&quot;</span>, <span class="st">&quot;how does&quot;</span>, <span class="st">&quot;why&quot;</span>, <span class="st">&quot;define&quot;</span>, ...],</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    Intent.RESEARCH: [<span class="st">&quot;find&quot;</span>, <span class="st">&quot;search&quot;</span>, <span class="st">&quot;look up&quot;</span>, <span class="st">&quot;research&quot;</span>, ...],</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    Intent.CREATE: [<span class="st">&quot;generate&quot;</span>, <span class="st">&quot;create&quot;</span>, <span class="st">&quot;make&quot;</span>, <span class="st">&quot;produce&quot;</span>, ...],</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    Intent.EVALUATE: [<span class="st">&quot;check&quot;</span>, <span class="st">&quot;verify&quot;</span>, <span class="st">&quot;assess&quot;</span>, <span class="st">&quot;grade&quot;</span>, <span class="st">&quot;evaluate&quot;</span>, ...],</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The classification uses <strong>keyword matching with confidence scoring</strong>: - Keywords are checked against the query in lowercase - The intent with the most keyword matches wins - If multiple intents score equally, <code>MIXED</code> is assigned - Confidence is computed as <code>max_score / (total_matches + 1)</code></p>
+<h3 id="stage-2-agent-selection">Stage 2: Agent Selection</h3>
+<p>Based on the classified intent, the Orchestrator selects which agents to invoke:</p>
+<table>
+<thead>
+<tr>
+<th>Intent</th>
+<th>Primary Agent</th>
+<th>Secondary Agents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LEARN</td>
+<td>Tutor Agent</td>
+<td>(optional) Research Agent</td>
+</tr>
+<tr>
+<td>RESEARCH</td>
+<td>Research Agent</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CREATE</td>
+<td>Content Generation</td>
+<td>Curriculum Agent</td>
+</tr>
+<tr>
+<td>EVALUATE</td>
+<td>Assessment Agent</td>
+<td>—</td>
+</tr>
+<tr>
+<td>MIXED</td>
+<td>Tutor Agent</td>
+<td>Research Agent, Content Generation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stage-3-agent-execution">Stage 3: Agent Execution</h3>
+<p>Agents are executed sequentially through the LangGraph state machine. Each agent node: 1. Receives the full <code>OrchestratorState</code> (TypedDict) 2. Executes its specialized logic 3. Writes results back to the state 4. Returns state for the next node</p>
+<h3 id="stage-4-response-synthesis">Stage 4: Response Synthesis</h3>
+<p>The <code>synthesize_response_node</code> combines results from all executed agents: - Merges tutor, research, content, and evaluation results - Aggregates source lists from all agents - Builds a coherent final response - Records all actions taken for traceability</p>
+<h3 id="orchestratorstate-typeddict">OrchestratorState (TypedDict)</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OrchestratorState(TypedDict):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    query: <span class="bu">str</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    user_id: <span class="bu">str</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    session_id: <span class="bu">str</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    request_id: <span class="bu">str</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    classroom_id: Optional[<span class="bu">str</span>]</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Classification</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    primary_intent: <span class="bu">str</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    secondary_intents: List[<span class="bu">str</span>]</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    confidence: <span class="bu">float</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    topic: <span class="bu">str</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    selected_agents: List[<span class="bu">str</span>]</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Agent results</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    tutor_result: Optional[Dict]</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    research_result: Optional[Dict]</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    content_result: Optional[Dict]</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    evaluation_result: Optional[Dict]</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Output</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    final_response: <span class="bu">str</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    sources: List[Dict]</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    actions_taken: List[<span class="bu">str</span>]</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    error: Optional[<span class="bu">str</span>]</span></code></pre></div>
+<h3 id="langgraph-workflow-definition">LangGraph Workflow Definition</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_orchestrator_graph():</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    graph <span class="op">=</span> StateGraph(OrchestratorState)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add nodes</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    graph.add_node(<span class="st">&quot;analyze_intent&quot;</span>, analyze_intent_node)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    graph.add_node(<span class="st">&quot;select_agents&quot;</span>, select_agents_node)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    graph.add_node(<span class="st">&quot;execute_tutor&quot;</span>, execute_tutor_node)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    graph.add_node(<span class="st">&quot;execute_research&quot;</span>, execute_research_node)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    graph.add_node(<span class="st">&quot;execute_content&quot;</span>, execute_content_node)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    graph.add_node(<span class="st">&quot;synthesize&quot;</span>, synthesize_response_node)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define edges</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    graph.add_edge(START, <span class="st">&quot;analyze_intent&quot;</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    graph.add_edge(<span class="st">&quot;analyze_intent&quot;</span>, <span class="st">&quot;select_agents&quot;</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    graph.add_conditional_edges(<span class="st">&quot;select_agents&quot;</span>, route_to_agents,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;tutor&quot;</span>: <span class="st">&quot;execute_tutor&quot;</span>, <span class="st">&quot;research&quot;</span>: <span class="st">&quot;execute_research&quot;</span>,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;content&quot;</span>: <span class="st">&quot;execute_content&quot;</span>, <span class="st">&quot;synthesize&quot;</span>: <span class="st">&quot;synthesize&quot;</span>})</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    graph.add_conditional_edges(<span class="st">&quot;execute_tutor&quot;</span>, route_after_tutor,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;research&quot;</span>: <span class="st">&quot;execute_research&quot;</span>, <span class="st">&quot;content&quot;</span>: <span class="st">&quot;execute_content&quot;</span>,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;synthesize&quot;</span>: <span class="st">&quot;synthesize&quot;</span>})</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    graph.add_conditional_edges(<span class="st">&quot;execute_research&quot;</span>, route_after_research,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;content&quot;</span>: <span class="st">&quot;execute_content&quot;</span>, <span class="st">&quot;synthesize&quot;</span>: <span class="st">&quot;synthesize&quot;</span>})</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    graph.add_edge(<span class="st">&quot;execute_content&quot;</span>, <span class="st">&quot;synthesize&quot;</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    graph.add_edge(<span class="st">&quot;synthesize&quot;</span>, END)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> graph.<span class="bu">compile</span>()</span></code></pre></div>
+<h3 id="visual-flow-langgraph-state-machine">Visual Flow — LangGraph State Machine</h3>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> analyze_intent: START
+    analyze_intent --> select_agents: Intent classified
+
+    state select_agents <(choice)>
+    select_agents --> execute_tutor: LEARN / MIXED
+    select_agents --> execute_research: RESEARCH
+    select_agents --> execute_content: CREATE
+    select_agents --> synthesize: EVALUATE (direct)
+
+    state execute_tutor_routing <(choice)>
+    execute_tutor --> execute_tutor_routing
+    execute_tutor_routing --> execute_research: research also selected
+    execute_tutor_routing --> execute_content: content also selected
+    execute_tutor_routing --> synthesize: tutor only
+
+    state execute_research_routing <(choice)>
+    execute_research --> execute_research_routing
+    execute_research_routing --> execute_content: content also selected
+    execute_research_routing --> synthesize: no more agents
+
+    execute_content --> synthesize: always
+    synthesize --> [*]: Final response
+
+    note right of analyze_intent
+        Keyword matching with confidence:
+        LEARN, RESEARCH, CREATE,
+        EVALUATE, or MIXED
+    end note
+
+    note right of synthesize
+        Merges tutor_result,
+        research_result,
+        content_result, and
+        evaluation_result
+    end note</pre>
+<hr />
+<h2 id="agent-communication-pattern">3.5 Agent Communication Pattern</h2>
+<p>Agents do <strong>not</strong> communicate directly with each other. Instead, they follow a <strong>shared-state pattern</strong>:</p>
+<ol type="1">
+<li>The Orchestrator initializes a <code>OrchestratorState</code> dict</li>
+<li>Each agent node reads from and writes to this shared state</li>
+<li>Routing functions examine the state to determine the next node</li>
+<li>Results accumulate in the state until the synthesis node combines them</li>
+</ol>
+<p>This design has several implications:</p>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No inter-agent coupling</strong></td>
+<td>Agents can be developed and tested independently</td>
+</tr>
+<tr>
+<td><strong>Sequential execution</strong></td>
+<td>No parallel agent execution (LangGraph supports it but not used)</td>
+</tr>
+<tr>
+<td><strong>State accumulation</strong></td>
+<td>Large state objects for complex multi-agent queries</td>
+</tr>
+<tr>
+<td><strong>Single transaction</strong></td>
+<td>Entire agent pipeline is a single request-response cycle</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="agent-tools-system">3.6 Agent Tools System</h2>
+<p>Agents have access to a shared tool library in <code>backend/ai-service/app/agents/tools/</code>:</p>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 33%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tool Module</th>
+<th>Functions</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>base_tool.py</code></td>
+<td>BaseTool class</td>
+<td>Abstract tool interface with execution logging</td>
+</tr>
+<tr>
+<td><code>rag_tools.py</code></td>
+<td><code>search_documents()</code>, <code>index_content()</code></td>
+<td>Qdrant vector search and indexing</td>
+</tr>
+<tr>
+<td><code>web_tools.py</code></td>
+<td><code>web_search()</code>, <code>fetch_url()</code>, <code>download_pdf()</code></td>
+<td>Web research capabilities</td>
+</tr>
+<tr>
+<td><code>content_tools.py</code></td>
+<td><code>generate_notes()</code>, <code>create_flashcards()</code>, <code>summarize()</code></td>
+<td>Content generation</td>
+</tr>
+<tr>
+<td><code>media_tools.py</code></td>
+<td><code>search_youtube()</code>, <code>search_images()</code></td>
+<td>Media discovery</td>
+</tr>
+</tbody>
+</table>
+<p>Each tool follows the LangGraph tool pattern: - Wrapped as <code>@tool</code> decorated functions - Receive typed parameters - Return structured results - Include error handling and logging</p>
+<hr />
+<h2 id="agent-lifecycle-initialization">3.7 Agent Lifecycle &amp; Initialization</h2>
+<p>Most agents follow a <strong>singleton pattern</strong>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pattern used by ResearchAgent, LearningAgent, etc.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>_research_agent <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_research_agent():</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> _research_agent</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> _research_agent <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        _research_agent <span class="op">=</span> ResearchAgent()</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _research_agent</span></code></pre></div>
+<p>The LangGraph workflow is compiled once during agent initialization:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OrchestratorAgent:</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.graph <span class="op">=</span> build_orchestrator_graph()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> chat(<span class="va">self</span>, query, user_id, session_id, classroom_id):</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        state <span class="op">=</span> OrchestratorState(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>            query<span class="op">=</span>query,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>            user_id<span class="op">=</span>user_id,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>            session_id<span class="op">=</span>session_id,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>            ...</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="cf">await</span> <span class="va">self</span>.graph.ainvoke(state)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result</span></code></pre></div>
+<h3 id="design-decision-singletons-vs.-per-request-agents">Design Decision: Singletons vs. Per-Request Agents</h3>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 32%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Benefits</th>
+<th>Drawbacks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Singleton (current)</strong></td>
+<td>Graph compiled once, lower memory, faster response</td>
+<td>Shared state requires careful thread safety</td>
+</tr>
+<tr>
+<td><strong>Per-request</strong></td>
+<td>Clean state isolation, simpler debugging</td>
+<td>Repeated graph compilation overhead</td>
+</tr>
+</tbody>
+</table>
+<p>The singleton pattern is the correct choice here because LangGraph state is passed as a parameter (not stored on the agent instance), so thread safety is maintained despite sharing the compiled graph.</p>
+<hr />
+<h2 id="moderation-safety-layer">3.8 Moderation &amp; Safety Layer</h2>
+<p>Content moderation is integrated as the first node in the Tutor Agent’s pipeline and as a standalone service:</p>
+<h3 id="source-backendai-serviceappagentsmoderation.py">Source: <code>backend/ai-service/app/agents/moderation.py</code></h3>
+<p>The moderation system uses <strong>facebook/bart-large-mnli</strong> for zero-shot classification to determine if a query is academic-related:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classification labels for academic content detection</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [<span class="st">&quot;academic question&quot;</span>, <span class="st">&quot;homework help&quot;</span>, <span class="st">&quot;educational content&quot;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;inappropriate content&quot;</span>, <span class="st">&quot;off-topic question&quot;</span>]</span></code></pre></div>
+<pre class="mermaid">flowchart LR
+    Q["Student Query"] --> SKP{"SKIP_MODERATION<br/>= true?"}
+    SKP -- Yes --> PASS["✅ Pass Through"]
+    SKP -- No --> ZSC["Zero-Shot Classifier<br/>bart-large-mnli"]
+    ZSC --> AC{"Academic<br/>score > 0.2?"}
+    AC -- No --> BLOCK["🚫 Block<br/>non_academic"]
+    AC -- Yes --> IC{"Inappropriate<br/>score > 0.3?"}
+    IC -- Yes --> BLOCK2["🚫 Block<br/>inappropriate_content"]
+    IC -- No --> ALLOW["✅ Allowed<br/>reason: allowed"]</pre>
+<p><strong>Skip mechanism</strong>: Setting <code>SKIP_MODERATION=true</code> bypasses the classifier entirely, which is useful during development to reduce latency and avoid loading the classification model.</p>
+<hr />
+
+</body>
+</html>

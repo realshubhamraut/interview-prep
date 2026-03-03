@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 1: Project Overview &amp;amp; Executive Summary</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <span></span> <a href="page-02.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-1-project-overview-executive-summary">Page 1: Project Overview &amp; Executive Summary</h1>
+<blockquote>
+<p><strong>ensureStudy</strong> — AI-First Learning Platform with Multi-Agent Tutoring &amp; Real-Time Proctoring</p>
+</blockquote>
+<hr />
+<h2 id="what-is-ensurestudy">1.1 What is ensureStudy?</h2>
+<p>ensureStudy is a production-grade, AI-first educational platform that combines <strong>intelligent multi-agent tutoring</strong>, <strong>real-time exam proctoring</strong>, <strong>soft skills evaluation</strong>, and <strong>personalized curriculum generation</strong> into a unified learning experience. The platform is designed for academic institutions, with distinct user roles (students, teachers, parents, administrators) and a sophisticated backend powered by LangGraph-orchestrated AI agents, Retrieval-Augmented Generation (RAG), and computer vision models.</p>
+<p>The system is architecturally decomposed into <strong>three core services</strong> communicating over HTTP:</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 26%" />
+<col style="width: 14%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>Framework</th>
+<th>Port</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core Service</strong></td>
+<td>Flask + SQLAlchemy</td>
+<td>8000</td>
+<td>Authentication, user management, classrooms, assessments, CRUD operations</td>
+</tr>
+<tr>
+<td><strong>AI Service</strong></td>
+<td>FastAPI + LangGraph</td>
+<td>8001</td>
+<td>AI agents, RAG pipeline, proctoring, soft skills, LLM inference</td>
+</tr>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>Next.js 14 + TypeScript</td>
+<td>3000</td>
+<td>Role-based web application with real-time features</td>
+</tr>
+</tbody>
+</table>
+<p>Supporting infrastructure includes <strong>5 databases</strong>, <strong>2 message brokers</strong>, <strong>1 ML tracking server</strong>, and <strong>1 object storage system</strong> — all containerized via Docker Compose.</p>
+<hr />
+<h2 id="technology-stack">1.2 Technology Stack</h2>
+<h3 id="application-layer">Application Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Version/Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core API</td>
+<td>Flask, Flask-SQLAlchemy, Flask-Migrate</td>
+<td>Python 3.11+</td>
+</tr>
+<tr>
+<td>AI API</td>
+<td>FastAPI, Pydantic, Uvicorn</td>
+<td>Python 3.11+</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>Next.js 14, TypeScript, TailwindCSS</td>
+<td>Node.js 20+</td>
+</tr>
+<tr>
+<td>State Management</td>
+<td>Zustand</td>
+<td>v4.4.7</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>NextAuth.js + JWT</td>
+<td>Session + token-based</td>
+</tr>
+<tr>
+<td>Real-time Comms</td>
+<td>LiveKit (WebRTC)</td>
+<td>Cloud-hosted</td>
+</tr>
+<tr>
+<td>3D Avatar</td>
+<td>Three.js + <span class="citation" data-cites="react-three/fiber">@react-three/fiber</span></td>
+<td>Talking head avatar</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ai-ml-layer">AI &amp; ML Layer</h3>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 35%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM</td>
+<td>Mistral-7B-Instruct-v0.2</td>
+<td>Primary text generation via HuggingFace API</td>
+</tr>
+<tr>
+<td>Secondary LLMs</td>
+<td>Gemini, Groq</td>
+<td>Flowchart generation, topic extraction</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>sentence-transformers/all-mpnet-base-v2</td>
+<td>Semantic search (768 dimensions)</td>
+</tr>
+<tr>
+<td>Alt. Embeddings</td>
+<td>sentence-transformers/all-MiniLM-L6-v2</td>
+<td>Lightweight alternative</td>
+</tr>
+<tr>
+<td>Object Detection</td>
+<td>YOLOv11</td>
+<td>Proctoring — phone, person detection</td>
+</tr>
+<tr>
+<td>Face Analysis</td>
+<td>MediaPipe FaceMesh/FaceLandmarker</td>
+<td>Gaze tracking, head pose, blink detection</td>
+</tr>
+<tr>
+<td>Speech-to-Text</td>
+<td>OpenAI Whisper (medium)</td>
+<td>Audio transcription</td>
+</tr>
+<tr>
+<td>Text-to-Speech</td>
+<td>AWS Polly</td>
+<td>Viseme-supported speech synthesis</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>LanguageTool, custom analyzers</td>
+<td>Grammar, fluency, vocabulary analysis</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>facebook/bart-large-mnli</td>
+<td>Zero-shot text classification</td>
+</tr>
+<tr>
+<td>Agent Framework</td>
+<td>LangGraph + LangChain</td>
+<td>Stateful agent workflow orchestration</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-layer">Data Layer</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 16%" />
+<col style="width: 27%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Database</th>
+<th>Type</th>
+<th>Use Case</th>
+<th>Container</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL 15</td>
+<td>Relational</td>
+<td>Users, classrooms, assessments, curriculum, progress</td>
+<td><code>ensure-study-postgres</code></td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>Vector</td>
+<td>Document embeddings, semantic search, RAG retrieval</td>
+<td><code>ensure-study-qdrant</code></td>
+</tr>
+<tr>
+<td>Redis 7</td>
+<td>Key-Value</td>
+<td>Session cache, response cache, rate limiting</td>
+<td><code>ensure-study-redis</code></td>
+</tr>
+<tr>
+<td>MongoDB 7</td>
+<td>Document</td>
+<td>Meeting transcripts, summaries, logs</td>
+<td><code>ensure-study-mongodb</code></td>
+</tr>
+<tr>
+<td>Cassandra 4</td>
+<td>Wide-Column</td>
+<td>Real-time analytics, event time-series</td>
+<td><code>ensure-study-cassandra</code></td>
+</tr>
+<tr>
+<td>Apache Kafka</td>
+<td>Event Streaming</td>
+<td>Student events, chat messages, assessment submissions</td>
+<td><code>ensure-study-kafka</code></td>
+</tr>
+<tr>
+<td>MinIO</td>
+<td>Object Storage</td>
+<td>Large file uploads (S3-compatible)</td>
+<td><code>ensure-study-minio</code></td>
+</tr>
+<tr>
+<td>MLflow</td>
+<td>ML Tracking</td>
+<td>Experiment tracking, model versioning</td>
+<td><code>ensure-study-mlflow</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="key-capabilities">1.3 Key Capabilities</h2>
+<h3 id="multi-agent-ai-tutoring">Multi-Agent AI Tutoring</h3>
+<ul>
+<li><strong>17 specialized AI agents</strong> orchestrated via LangGraph’s supervisor pattern</li>
+<li>Central orchestrator routes queries based on intent classification (learn, research, create, evaluate)</li>
+<li>Tutor agent with ABCR (Attention-Based Context Routing), TAL (Topic Anchor Layer), and MCP (Memory Context Processor)</li>
+<li>RAG-powered answers with source attribution and confidence scoring</li>
+<li>Self-improving Learning Agent (Type 5) that adapts question generation from student performance</li>
+</ul>
+<h3 id="real-time-proctoring">Real-Time Proctoring</h3>
+<ul>
+<li><strong>8 computer vision detectors</strong>: face, gaze, head pose, blink, hand, object (phone), audio, face verification</li>
+<li>YOLO-based object detection for prohibited items</li>
+<li>MediaPipe FaceMesh for gaze and head pose estimation</li>
+<li>Temporal prediction for anticipating violations</li>
+<li>Weighted integrity scoring with configurable thresholds</li>
+</ul>
+<h3 id="soft-skills-evaluation">Soft Skills Evaluation</h3>
+<ul>
+<li>Audio fluency analysis (speech rate, filler words, pauses) via Whisper</li>
+<li>Grammar checking with LanguageTool integration</li>
+<li>Eye contact analysis via iris tracking</li>
+<li>Posture stability analysis via body landmark detection</li>
+<li>Weighted composite scoring across 7 metrics</li>
+</ul>
+<h3 id="virtual-classrooms-meetings">Virtual Classrooms &amp; Meetings</h3>
+<ul>
+<li>LiveKit-powered WebRTC video conferencing</li>
+<li>Recording pipeline with transcription via Whisper</li>
+<li>Meeting Q&amp;A with RAG over transcripts</li>
+<li>Embedding service for meeting content indexing</li>
+</ul>
+<h3 id="curriculum-assessment">Curriculum &amp; Assessment</h3>
+<ul>
+<li>AI-generated personalized learning paths from syllabus documents</li>
+<li>Topological sort-based topic dependency analysis</li>
+<li>Spaced repetition scheduling</li>
+<li>Automated question generation with multi-layer deduplication</li>
+<li>Answer evaluation with rubric-based grading</li>
+</ul>
+<h3 id="document-processing">Document Processing</h3>
+<ul>
+<li>7-stage pipeline: Validate → Preprocess → OCR → Chunk → Embed → Index → Complete</li>
+<li>Multi-format support: PDF (text + scanned), images (OCR), DOCX, PPTX</li>
+<li>Hybrid OCR with multiple backends (Tesseract, Nanonets, SageMaker)</li>
+<li>Semantic chunking with overlap for retrieval quality</li>
+</ul>
+<hr />
+<h2 id="system-metrics-at-a-glance">1.4 System Metrics at a Glance</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI Agent files</td>
+<td>17</td>
+</tr>
+<tr>
+<td>AI Service modules</td>
+<td>89</td>
+</tr>
+<tr>
+<td>Core Service routes</td>
+<td>29 blueprints</td>
+</tr>
+<tr>
+<td>Core Service data models</td>
+<td>20 ORM models</td>
+</tr>
+<tr>
+<td>Frontend components</td>
+<td>53+</td>
+</tr>
+<tr>
+<td>Frontend pages/routes</td>
+<td>15+ route groups</td>
+</tr>
+<tr>
+<td>Proctoring detectors</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Kafka consumers</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Docker services</td>
+<td>13 (dev), 14 (prod)</td>
+</tr>
+<tr>
+<td>API endpoints</td>
+<td>200+ estimated</td>
+</tr>
+<tr>
+<td>Total backend Python files</td>
+<td>~190</td>
+</tr>
+<tr>
+<td>Total frontend TypeScript files</td>
+<td>~130</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="repository-structure">1.5 Repository Structure</h2>
+<pre class="mermaid">graph LR
+    ROOT[ensureStudy/] --> BE[backend/]
+    ROOT --> FE[frontend/]
+    ROOT --> ML[ml/]
+    ROOT --> MODELS[models/]
+    ROOT --> DOCS[docs/]
+    ROOT --> SCRIPTS[scripts/]
+    ROOT --> DC[docker-compose.yml]
+
+    BE --> AIS[ai-service/ — 222 files]
+    AIS --> AGENTS[agents/ — 17 AI agents]
+    AIS --> API[api/ — 33 routes]
+    AIS --> PROCTOR[proctor/ — 34 files]
+    AIS --> RAG[rag/ — retriever, loader]
+    AIS --> SVCS[services/ — 89 modules]
+
+    BE --> CS[core-service/ — 146 files]
+    CS --> MODELS2[models/ — 20 ORM]
+    CS --> ROUTES[routes/ — 29 blueprints]
+    CS --> SVCS2[services/]
+
+    BE --> KAFKA[kafka/ — config, consumers]
+    BE --> DP[data-pipelines/ — PySpark]
+
+    FE --> APP[app/ — route groups]
+    FE --> COMP[components/ — 53 React]
+    FE --> HOOKS[hooks/]
+
+    ML --> TRAIN[training/proctoring/]
+    ML --> NB[notebooks/]
+    ML --> SS[softskills/]
+</pre>
+<hr />
+<h2 id="design-philosophy">1.6 Design Philosophy</h2>
+<p>The ensureStudy platform follows several key design principles:</p>
+<ol type="1">
+<li><p><strong>AI-First Architecture</strong>: Every learning feature is powered by AI — from tutoring to assessment to proctoring. The AI service is not an add-on but the core of the platform.</p></li>
+<li><p><strong>Agent-Oriented Design</strong>: Complex tasks are decomposed into specialized agents using LangGraph’s StateGraph, enabling modular development, independent testing, and flexible orchestration.</p></li>
+<li><p><strong>Context Isolation (MCP)</strong>: The Model Context Protocol ensures agents operate within bounded contexts, preventing cross-contamination of web-sourced vs. classroom content.</p></li>
+<li><p><strong>Polyglot Persistence</strong>: Different data types use purpose-built databases — relational for users, vector for embeddings, document for transcripts, time-series for analytics.</p></li>
+<li><p><strong>Event-Driven Processing</strong>: Kafka enables asynchronous processing of student events, assessment submissions, and learning agent triggers without blocking the request path.</p></li>
+<li><p><strong>Open-Source ML Stack</strong>: The platform uses exclusively open-source models (Mistral, sentence-transformers, YOLO, MediaPipe, Whisper) via HuggingFace, eliminating dependency on proprietary APIs for core functionality.</p></li>
+<li><p><strong>Multi-Provider LLM Strategy</strong>: While defaulting to Mistral-7B via HuggingFace, the system supports Gemini, Groq, and other providers through an API key manager with rotation support.</p></li>
+</ol>
+<hr />
+
+</body>
+</html>

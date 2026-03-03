@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 91: Frontend Curriculum &amp;amp; Assessment Components</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-90.html">&larr; Previous</a> <a href="page-92.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-91-frontend-curriculum-assessment-components">Page 91: Frontend Curriculum &amp; Assessment Components</h1>
+<blockquote>
+<p>Detailed component documentation for curriculum management (StudyCalendar, ProgressDashboard, LearningStyleQuiz, TopicsSidebar) and assessment UI (ChallengeModal, ReceivedChallenges, LearningAgentStatus, Leaderboard).</p>
+</blockquote>
+<hr />
+<h2 id="curriculum-components">91.1 Curriculum Components</h2>
+<h3 id="source-frontendcomponentscurriculum">Source: <code>frontend/components/curriculum/</code></h3>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 20%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StudyCalendar.tsx</code></td>
+<td>22.3KB</td>
+<td>Full interactive study planner</td>
+</tr>
+<tr>
+<td><code>ProgressDashboard.tsx</code></td>
+<td>18.5KB</td>
+<td>Mastery visualization dashboard</td>
+</tr>
+<tr>
+<td><code>RevisionCalendar.tsx</code></td>
+<td>15.6KB</td>
+<td>Revision schedule calendar</td>
+</tr>
+<tr>
+<td><code>SyllabusUploadModal.tsx</code></td>
+<td>15.2KB</td>
+<td>Upload + process syllabus PDFs</td>
+</tr>
+<tr>
+<td><code>TopicsSidebar.tsx</code></td>
+<td>18.4KB</td>
+<td>Hierarchical topic navigation</td>
+</tr>
+<tr>
+<td><code>ClassroomTopicHierarchy.tsx</code></td>
+<td>14KB</td>
+<td>Topic tree with mastery indicators</td>
+</tr>
+<tr>
+<td><code>WeeklyCalendar.tsx</code></td>
+<td>10.3KB</td>
+<td>Week view for study sessions</td>
+</tr>
+<tr>
+<td><code>ExamPrepModal.tsx</code></td>
+<td>10.6KB</td>
+<td>Create exam prep plans</td>
+</tr>
+<tr>
+<td><code>LearningStyleQuiz.tsx</code></td>
+<td>8KB</td>
+<td>Discover learning style</td>
+</tr>
+<tr>
+<td><code>index.ts</code></td>
+<td>0.3KB</td>
+<td>Barrel exports</td>
+</tr>
+</tbody>
+</table>
+<h3 id="studycalendar-22.3kb">StudyCalendar (22.3KB)</h3>
+<p>Interactive monthly calendar with: - <strong>Day cells</strong>: Show scheduled topics with color-coded difficulty - <strong>Drag-and-drop</strong>: Rearrange study sessions - <strong>Study hours</strong>: Track planned vs actual hours - <strong>Integration</strong>: Pulls from curriculum data - <strong>Mobile responsive</strong>: Swipe navigation between months</p>
+<h3 id="progressdashboard-18.5kb">ProgressDashboard (18.5KB)</h3>
+<p>Visualizations: - <strong>Mastery radar chart</strong>: Per-subject mastery levels - <strong>Topic completion bar</strong>: Percentage of curriculum completed - <strong>Study time trends</strong>: Weekly/monthly line charts - <strong>Weak areas</strong>: Highlighted topics below mastery threshold - <strong>Streak tracker</strong>: Consecutive study days</p>
+<h3 id="learningstylequiz-8kb">LearningStyleQuiz (8KB)</h3>
+<p>Interactive quiz to determine student’s learning style: - <strong>Visual</strong> / <strong>Auditory</strong> / <strong>Reading</strong> / <strong>Kinesthetic</strong> (VARK model) - Results stored in student profile - Influences content recommendation priority</p>
+<h3 id="topicssidebar-18.4kb">TopicsSidebar (18.4KB)</h3>
+<p>Hierarchical navigation:</p>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Overview"]
+        direction TB
+        N0["Subject: Physics"]
+        N1["Chapter 1: Mechanics"]
+        N2["Topic: Newton's Laws  ✅ 85%"]
+        N3["Topic: Friction  🔄 45%"]
+        N4["Topic: Circular Motion  ⚪ 0%"]
+        N5["Chapter 2: Thermodynamics"]
+        N6["..."]
+    end
+</pre>
+<ul>
+<li>Mastery percentage badges</li>
+<li>Click → opens topic study page</li>
+<li>Collapsible sections</li>
+<li>Search/filter</li>
+</ul>
+<hr />
+<h2 id="assessment-components">91.2 Assessment Components</h2>
+<h3 id="source-frontendcomponentsassessments">Source: <code>frontend/components/assessments/</code></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CreateAssessmentModal.tsx</code></td>
+<td>46.5KB</td>
+<td>Full assessment builder</td>
+</tr>
+<tr>
+<td><code>ReceivedChallenges.tsx</code></td>
+<td>12.6KB</td>
+<td>P2P challenge inbox</td>
+</tr>
+<tr>
+<td><code>LearningAgentStatus.tsx</code></td>
+<td>11.7KB</td>
+<td>Agent activity monitor</td>
+</tr>
+<tr>
+<td><code>QuestionCard.tsx</code></td>
+<td>10.8KB</td>
+<td>Question display + answer</td>
+</tr>
+<tr>
+<td><code>ChallengeModal.tsx</code></td>
+<td>9.3KB</td>
+<td>Send challenge to peer</td>
+</tr>
+<tr>
+<td><code>DailyRevisionBanner.tsx</code></td>
+<td>8KB</td>
+<td>Revision notification</td>
+</tr>
+<tr>
+<td><code>TopicProgressBar.tsx</code></td>
+<td>3.3KB</td>
+<td>Topic mastery bar</td>
+</tr>
+<tr>
+<td><code>QuestionNavigator.tsx</code></td>
+<td>2.9KB</td>
+<td>Question pagination</td>
+</tr>
+<tr>
+<td><code>AssessmentTimer.tsx</code></td>
+<td>2KB</td>
+<td>Countdown timer</td>
+</tr>
+<tr>
+<td><code>index.ts</code></td>
+<td>0.2KB</td>
+<td>Barrel exports</td>
+</tr>
+</tbody>
+</table>
+<h3 id="createassessmentmodal-46.5kb-largest-component">CreateAssessmentModal (46.5KB — largest component!)</h3>
+<p>Full-featured assessment builder: - <strong>Question types</strong>: MCQ (single/multi), descriptive, true/false - <strong>Source options</strong>: Manual entry, AI generation, from question pool - <strong>Settings</strong>: Time limit, shuffle, show answers, passing score - <strong>Preview mode</strong>: Student-facing preview - <strong>Scheduling</strong>: Set open/close dates</p>
+<h3 id="challengemodal-receivedchallenges">ChallengeModal &amp; ReceivedChallenges</h3>
+<p><strong>Peer-to-Peer Challenge System:</strong> 1. Student A sends challenge → selects topic + difficulty 2. System generates quiz 3. Student B receives in <code>ReceivedChallenges</code> inbox 4. Both attempt → compare scores 5. Leaderboard updates</p>
+<h3 id="learningagentstatus-11.7kb">LearningAgentStatus (11.7KB)</h3>
+<p>Displays real-time status of AI learning agents: - Agent type (question generation, revision, analysis) - Processing status (idle/running/completed) - Last run timestamp - Questions generated count - Learning iterations completed</p>
+<hr />
+<h2 id="additional-interactive-components">91.3 Additional Interactive Components</h2>
+<h3 id="source-frontendcomponents-1">Source: <code>frontend/components/</code></h3>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 20%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SessionDecisionBadge.tsx</code></td>
+<td>6.2KB</td>
+<td>Shows “related” / “new_topic” routing</td>
+</tr>
+<tr>
+<td><code>NotificationBell.tsx</code></td>
+<td>6.5KB</td>
+<td>Header notification bell + dropdown</td>
+</tr>
+<tr>
+<td><code>NotificationProvider.tsx</code></td>
+<td>7.3KB</td>
+<td>Context provider for notifications</td>
+</tr>
+<tr>
+<td><code>LatexRenderer.tsx</code></td>
+<td>5.1KB</td>
+<td>Real-time LaTeX math rendering</td>
+</tr>
+<tr>
+<td><code>PptxToPdfViewer.tsx</code></td>
+<td>5.1KB</td>
+<td>PPTX → PDF conversion viewer</td>
+</tr>
+<tr>
+<td><code>ImageViewer.tsx</code></td>
+<td>8.4KB</td>
+<td>Pan/zoom image viewer</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="react-hooks">91.4 React Hooks</h2>
+<h3 id="source-frontendhooks">Source: <code>frontend/hooks/</code></h3>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 24%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>useRecordingManager.ts</code></td>
+<td>16.9KB</td>
+<td>Audio/video recording with MediaRecorder</td>
+</tr>
+<tr>
+<td><code>useBehaviorAnalysis.ts</code></td>
+<td>10.5KB</td>
+<td>Client-side behavior tracking</td>
+</tr>
+<tr>
+<td><code>useSoftSkillsAnalysis.ts</code></td>
+<td>10KB</td>
+<td>Soft skills WebSocket integration</td>
+</tr>
+<tr>
+<td><code>useProctoring.ts</code></td>
+<td>9.2KB</td>
+<td>Proctoring WebSocket + camera</td>
+</tr>
+</tbody>
+</table>
+<h3 id="userecordingmanager-16.9kb">useRecordingManager (16.9KB)</h3>
+<div class="sourceCode" id="cb586"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb586-1"><a href="#cb586-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { startRecording<span class="op">,</span> stopRecording<span class="op">,</span> isRecording<span class="op">,</span> audioBlob } <span class="op">=</span> </span>
+<span id="cb586-2"><a href="#cb586-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">useRecordingManager</span>({</span>
+<span id="cb586-3"><a href="#cb586-3" aria-hidden="true" tabindex="-1"></a>        onRecordingComplete<span class="op">:</span> (blob) <span class="kw">=&gt;</span> <span class="fu">uploadToServer</span>(blob)<span class="op">,</span></span>
+<span id="cb586-4"><a href="#cb586-4" aria-hidden="true" tabindex="-1"></a>        maxDuration<span class="op">:</span> <span class="dv">300</span><span class="op">,</span>  <span class="co">// 5 minutes</span></span>
+<span id="cb586-5"><a href="#cb586-5" aria-hidden="true" tabindex="-1"></a>        audioOnly<span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb586-6"><a href="#cb586-6" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span></code></pre></div>
+<h3 id="useproctoring-9.2kb">useProctoring (9.2KB)</h3>
+<div class="sourceCode" id="cb587"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb587-1"><a href="#cb587-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { violations<span class="op">,</span> integrityScore<span class="op">,</span> isActive } <span class="op">=</span> <span class="fu">useProctoring</span>({</span>
+<span id="cb587-2"><a href="#cb587-2" aria-hidden="true" tabindex="-1"></a>    sessionId<span class="op">:</span> <span class="st">&quot;exam-123&quot;</span><span class="op">,</span></span>
+<span id="cb587-3"><a href="#cb587-3" aria-hidden="true" tabindex="-1"></a>    onViolation<span class="op">:</span> (v) <span class="kw">=&gt;</span> <span class="fu">showWarning</span>(v<span class="op">.</span><span class="at">type</span>)<span class="op">,</span></span>
+<span id="cb587-4"><a href="#cb587-4" aria-hidden="true" tabindex="-1"></a>    captureInterval<span class="op">:</span> <span class="dv">100</span>  <span class="co">// ms</span></span>
+<span id="cb587-5"><a href="#cb587-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

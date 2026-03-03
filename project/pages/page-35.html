@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 35: Agent Interaction Flows &amp;amp; System Sequences</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-34.html">&larr; Previous</a> <a href="page-36.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-35-agent-interaction-flows-system-sequences">Page 35: Agent Interaction Flows &amp; System Sequences</h1>
+<hr />
+<h2 id="overview-26">35.1 Overview</h2>
+<p>This page documents the <strong>end-to-end interaction sequences</strong> between agents, services, and databases for the most important user flows in ensureStudy.</p>
+<hr />
+<h2 id="flow-1-student-asks-tutor-a-question">35.2 Flow 1: Student Asks Tutor a Question</h2>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant FE as Frontend (ChatInput)
+    participant AI as AI Service
+    participant ABCR as ABCR Service
+    participant RAG as RAG Pipeline
+    participant QD as Qdrant
+    participant LLM as LLM Provider
+    participant CS as Core Service
+    participant PG as PostgreSQL
+
+    S->>FE: Type question in /chat
+    FE->>AI: POST /api/tutor/chat (SSE)
+    AI->>AI: Load student profile (TAL level, classroom)
+    AI->>AI: Get chat history
+    AI->>ABCR: ABCR cycle
+    ABCR->>ABCR: Assess → Build → Challenge → Reflect
+    AI->>RAG: RAG query
+    RAG->>RAG: Rewrite query
+    RAG->>QD: Search top-k chunks
+    QD->>RAG: Context chunks
+    AI->>AI: Build prompt (system + context + history)
+    AI->>LLM: Stream response (GPT-4 / Gemini / Groq)
+    LLM-->>FE: SSE chunks (real-time)
+    FE->>CS: Save chat session
+    CS->>PG: Store in chat_sessions</pre>
+<hr />
+<h2 id="flow-2-teacher-uploads-material-rag-indexing">35.3 Flow 2: Teacher Uploads Material → RAG Indexing</h2>
+<pre class="mermaid">sequenceDiagram
+    participant T as Teacher
+    participant FE as Frontend
+    participant CS as Core Service
+    participant K as Kafka
+    participant AI as AI Service
+    participant QD as Qdrant
+
+    T->>FE: Upload PDF in /teacher/classroom/[id]
+    FE->>CS: POST /api/classrooms/(id)/materials
+    CS->>CS: Save file to storage (S3/MinIO)
+    CS->>CS: Create ClassroomMaterial record
+    CS->>K: Publish to "document-processing" topic
+    K->>AI: Consumer triggers processing
+    AI->>AI: Stage 1: Validate file type/size
+    AI->>AI: Stage 2: Preprocess (image enhancement)
+    AI->>AI: Stage 3: OCR (if scanned)
+    AI->>AI: Stage 4: Text extraction (PyMuPDF)
+    AI->>AI: Stage 5: Chunk text (500-char + overlap)
+    AI->>AI: Stage 6: Embed chunks (sentence-transformers)
+    AI->>QD: Store in classroom_materials collection
+    AI->>AI: Stage 7: Update status to "indexed"
+    AI->>CS: Callback: indexing_status = "complete"
+    Note over T,QD: Material now available for RAG queries</pre>
+<hr />
+<h2 id="flow-3-student-takes-proctored-assessment">35.4 Flow 3: Student Takes Proctored Assessment</h2>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant FE as Frontend
+    participant CS as Core Service
+    participant AI as AI Service
+    participant DET as 8 Detectors
+    participant ML as ML Models
+
+    S->>FE: Navigate to /assessments/take/[id]
+    FE->>CS: Load assessment questions
+    FE->>FE: Request webcam access
+    FE->>AI: POST /api/proctoring/session/start
+    AI->>AI: Create ProctorSession (lazy-load detectors)
+
+    loop Every 1 second
+        FE->>FE: Capture webcam frame
+        FE->>AI: POST /api/proctoring/analyze-frame
+        AI->>DET: Run 8 detectors (face, gaze, head, object, hand, audio, blink, verify)
+        DET->>ML: Format for AutoOEP
+        ML->>ML: Static classifier (LightGBM)
+        ML->>ML: Temporal predictor (LSTM, 30-frame)
+        ML->>AI: {current_score, active_flags, detections}
+        AI->>FE: Live integrity indicator
+    end
+
+    opt Tab Switch
+        FE->>AI: POST /api/proctoring/tab-switch
+    end
+
+    S->>CS: POST /api/assessments/(id)/submit
+    CS->>CS: Save responses, calculate score
+    FE->>AI: POST /api/proctoring/session/end
+    AI->>AI: Finalize → {integrity_score, flags, frame_count}</pre>
+<hr />
+<h2 id="flow-4-curriculum-generation-from-syllabus">35.5 Flow 4: Curriculum Generation from Syllabus</h2>
+<pre class="mermaid">sequenceDiagram
+    participant T as Teacher
+    participant FE as Frontend
+    participant CS as Core Service
+    participant AI as AI Service
+    participant LLM as LLM (Groq/GPT-4)
+    participant PG as PostgreSQL
+
+    T->>FE: Upload syllabus PDF
+    FE->>CS: POST /api/classrooms/(id)/syllabus
+    CS->>CS: Save file, create Syllabus record
+    FE->>AI: POST /api/curriculum/extract-topics
+    AI->>AI: Extract text (pdf_extractor.py)
+    AI->>LLM: Topic extraction → JSON (topics + subtopics)
+    AI->>LLM: Dependency analysis → prerequisites
+    AI->>AI: Build dependency graph (topological sort)
+    AI->>AI: Generate learning path + durations
+    AI->>PG: Create Subject → Topic → Subtopic hierarchy
+    FE->>AI: POST /api/curriculum/generate-dependencies
+    AI->>LLM: Analyze topic pairs → prerequisites
+    Note over T,PG: Result: Structured curriculum with learning path</pre>
+<hr />
+<h2 id="flow-5-learning-agent-type-5-self-improving-cycle">35.6 Flow 5: Learning Agent (Type 5) Self-Improving Cycle</h2>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> Trigger: Student completes assessment
+    Trigger --> Kafka: Publish to assessment-submissions
+    Kafka --> Consumer: Learning Agent Consumer
+
+    state Consumer {
+        [*] --> Critic
+        Critic --> Learner
+        Learner --> Performance
+        Performance --> Iterate
+
+        state Critic {
+            [*] --> AnalyzeResponses
+            AnalyzeResponses --> CompareExpected
+            CompareExpected --> ScoreQuality: Score 0-10
+            ScoreQuality --> IdentifyGaps
+        }
+
+        state Learner {
+            [*] --> ReadStrategy: From LearningAgentMemory
+            ReadStrategy --> UpdateStrategy
+            UpdateStrategy --> AdjustDifficulty
+            AdjustDifficulty --> StoreStrategy
+        }
+
+        state Performance {
+            [*] --> CheckMastery
+            CheckMastery --> Advance: mastery > 80%
+            CheckMastery --> GenerateNew: mastery <= 80%
+            Advance --> UpdateScore
+            GenerateNew --> UpdateScore
+        }
+    }
+
+    Iterate --> [*]: Loop with next assessment</pre>
+<hr />
+<h2 id="flow-6-meeting-transcription-qa">35.7 Flow 6: Meeting → Transcription → Q&amp;A</h2>
+<pre class="mermaid">sequenceDiagram
+    participant T as Teacher
+    participant CS as Core Service
+    participant LK as LiveKit
+    participant K as Kafka
+    participant SP as Spark Streaming
+    participant W as Whisper
+    participant GM as Gemini 1.5 Flash
+    participant QD as Qdrant
+    participant CAS as Cassandra
+    participant S as Student
+
+    T->>CS: POST /api/meetings (create)
+    T->>LK: Start video room
+    T->>LK: End meeting → recording saved
+    LK->>K: Event: meeting-recordings
+    K->>SP: meeting_processor.py
+    SP->>W: POST /api/meetings/transcribe
+    W->>SP: Transcript + segments
+    SP->>GM: POST /api/meetings/summarize
+    GM->>SP: Brief, detailed, key_points, action_items
+    SP->>QD: Embed transcript chunks (500-char + timestamps)
+    SP->>CAS: Store analytics → meeting_analytics
+
+    S->>CS: POST /api/meetings/query
+    CS->>QD: Search meeting_chunks
+    QD->>GM: Synthesis
+    GM->>S: Answer with sources</pre>
+<hr />
+<h2 id="flow-7-soft-skills-mock-interview">35.8 Flow 7: Soft Skills Mock Interview</h2>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant FE as Frontend
+    participant AI as AI Service
+    participant W as Whisper
+    participant LLM as LLM
+    participant SS as Soft Skills Analyzers
+
+    S->>FE: Start mock interview
+    FE->>AI: POST /api/mock-interview/start
+    AI->>LLM: Generate interview questions
+
+    loop Each Question
+        FE->>FE: Display question + start recording
+        FE->>SS: Video frames (every 1s)
+        SS->>SS: Gaze analyzer (eye contact)
+        SS->>SS: Posture analyzer (MediaPipe Pose)
+        SS->>SS: Gesture analyzer (hand movements)
+        SS->>SS: Filler detector (audio analysis)
+        S->>FE: Finish answer → stop recording
+        FE->>W: POST /api/stt/transcribe → text
+        FE->>AI: POST /api/mock-interview/answer
+        AI->>LLM: Evaluate answer content quality
+        AI->>AI: Combine: content score + delivery score
+    end
+
+    FE->>AI: POST /api/mock-interview/evaluate
+    AI->>S: Final report: overall score, per-question,<br/>soft skills metrics, improvements</pre>
+<hr />
+<h2 id="cross-cutting-patterns">35.9 Cross-Cutting Patterns</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 31%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Used By</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SSE Streaming</strong></td>
+<td>Tutor chat, agent responses</td>
+<td><code>StreamingResponse</code> + <code>text/event-stream</code></td>
+</tr>
+<tr>
+<td><strong>Async via Kafka</strong></td>
+<td>Document processing, learning agent, meeting transcription</td>
+<td>Produce → Topic → Consumer</td>
+</tr>
+<tr>
+<td><strong>Redis Caching</strong></td>
+<td>ABCR state, web resources, RAG queries</td>
+<td>Cache with TTL (1h-7d)</td>
+</tr>
+<tr>
+<td><strong>Lazy Loading</strong></td>
+<td>Proctoring detectors, ML models</td>
+<td><code>@property</code> with <code>_instance is None</code> check</td>
+</tr>
+<tr>
+<td><strong>Fallback Chain</strong></td>
+<td>LLM calls</td>
+<td>Try OpenAI → Gemini → Groq → Ollama</td>
+</tr>
+<tr>
+<td><strong>Webhook Callbacks</strong></td>
+<td>Grading, indexing status</td>
+<td>AI Service → Core Service HTTP callback</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

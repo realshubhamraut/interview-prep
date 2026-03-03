@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 50: Codebase Statistics &amp;amp; Final Documentation Index</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-49.html">&larr; Previous</a> <a href="page-51.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-50-codebase-statistics-final-documentation-index">Page 50: Codebase Statistics &amp; Final Documentation Index</h1>
+<hr />
+<h2 id="codebase-metrics">50.1 Codebase Metrics</h2>
+<h3 id="file-counts">File Counts</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Files</th>
+<th>Estimated Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python (<code>.py</code>)</td>
+<td>415</td>
+<td>~55,000+</td>
+</tr>
+<tr>
+<td>TypeScript/TSX (<code>.tsx</code>, <code>.ts</code>)</td>
+<td>119</td>
+<td>~20,000+</td>
+</tr>
+<tr>
+<td>Markdown (<code>.md</code>)</td>
+<td>50+</td>
+<td>~30,000+</td>
+</tr>
+<tr>
+<td>YAML</td>
+<td>10+</td>
+<td>~1,500</td>
+</tr>
+<tr>
+<td>Dockerfile</td>
+<td>5</td>
+<td>~200</td>
+</tr>
+<tr>
+<td>Shell scripts</td>
+<td>4</td>
+<td>~100</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~600+</strong></td>
+<td><strong>~107,000+</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="component-breakdown">Component Breakdown</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 36%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Python Files</th>
+<th>Key Metric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI Service (<code>backend/ai-service/</code>)</td>
+<td>~200</td>
+<td>89 service files, 27 API routers</td>
+</tr>
+<tr>
+<td>Core Service (<code>backend/core-service/</code>)</td>
+<td>~80</td>
+<td>29 route files, 20 model files</td>
+</tr>
+<tr>
+<td>Data Pipelines (<code>backend/data-pipelines/</code>)</td>
+<td>~15</td>
+<td>3 ETL jobs, 1 streaming job</td>
+</tr>
+<tr>
+<td>Kafka (<code>backend/kafka/</code>)</td>
+<td>~15</td>
+<td>6 producers, 8 consumers</td>
+</tr>
+<tr>
+<td>ML Training (<code>backend/ml-training/</code>)</td>
+<td>~20</td>
+<td>5 training scripts, 4 classifiers</td>
+</tr>
+<tr>
+<td>Test Scripts (root)</td>
+<td>~14</td>
+<td>14 standalone test files</td>
+</tr>
+<tr>
+<td>Agents (<code>ai-service/agents/</code>)</td>
+<td>~15</td>
+<td>11 LangGraph agents</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="infrastructure-metrics">50.2 Infrastructure Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker services (dev)</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Docker services (prod)</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Dockerfiles</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Pre-trained model files</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Environment variables</td>
+<td>50+</td>
+</tr>
+<tr>
+<td>Makefile targets</td>
+<td>17</td>
+</tr>
+<tr>
+<td>GitHub Actions jobs</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<h3 id="database-collections">Database Collections</h3>
+<table>
+<thead>
+<tr>
+<th>Database</th>
+<th>Tables/Collections</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td>40+ tables</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>5+ vector collections</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>6 key namespaces</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>3+ collections</td>
+</tr>
+<tr>
+<td>Cassandra</td>
+<td>2+ tables</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="api-metrics">50.3 API Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Endpoints</th>
+<th>Auth Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core Service (Flask)</td>
+<td>120+ REST</td>
+<td>JWT</td>
+</tr>
+<tr>
+<td>AI Service (FastAPI)</td>
+<td>80+ REST/SSE</td>
+<td>Internal</td>
+</tr>
+<tr>
+<td>WebSocket</td>
+<td>1</td>
+<td>Token</td>
+</tr>
+<tr>
+<td>LiveKit</td>
+<td>Managed</td>
+<td>Token</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~200+</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ai-ml-metrics">50.4 AI &amp; ML Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI agents</td>
+<td>11</td>
+</tr>
+<tr>
+<td>LLM providers</td>
+<td>4 (OpenAI, Gemini, Groq, Ollama)</td>
+</tr>
+<tr>
+<td>Embedding models</td>
+<td>1 (all-mpnet-base-v2)</td>
+</tr>
+<tr>
+<td>Pre-trained classifiers</td>
+<td>4 (LightGBM, XGBoost, LSTM, engagement)</td>
+</tr>
+<tr>
+<td>Object detection</td>
+<td>1 (YOLOv11n)</td>
+</tr>
+<tr>
+<td>Proctoring detectors</td>
+<td>8</td>
+</tr>
+<tr>
+<td>AI service files</td>
+<td>89</td>
+</tr>
+<tr>
+<td>Python dependencies</td>
+<td>111</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="frontend-metrics">50.5 Frontend Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pages (routes)</td>
+<td>51</td>
+</tr>
+<tr>
+<td>Shared components</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Feature components</td>
+<td>53+</td>
+</tr>
+<tr>
+<td>Zustand stores</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Route groups</td>
+<td>5 (student, teacher, admin, parent, auth)</td>
+</tr>
+<tr>
+<td>Node.js dependencies</td>
+<td>~80</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="technology-stack-summary">50.6 Technology Stack Summary</h2>
+<pre class="mermaid">flowchart TB
+    subgraph FE["Frontend Layer"]
+        direction LR
+        F1["Next.js 14 · React 18 · TypeScript · TailwindCSS"]
+        F2["NextAuth · JWT · RBAC (4 roles)"]
+        F3["Three.js · Zustand"]
+    end
+
+    subgraph BE["Backend Layer"]
+        direction LR
+        B1["Flask 3.0 · SQLAlchemy 2.0 · PostgreSQL"]
+        B2["FastAPI · Pydantic v2 · Uvicorn"]
+        B3["LangChain · LangGraph (11 agents)"]
+        B4["OpenAI GPT-4 · Gemini · Groq · Ollama"]
+    end
+
+    subgraph ML["ML/AI Layer"]
+        direction LR
+        M1["PyTorch · LightGBM · XGBoost · YOLO · MediaPipe"]
+        M2["spaCy · sentence-transformers · Whisper"]
+        M3["OpenCV · dlib · DeepFace"]
+    end
+
+    subgraph DATA["Data Layer"]
+        direction LR
+        D1["PostgreSQL · Qdrant · Redis · MongoDB · Cassandra"]
+        D2["Apache Kafka · PySpark Streaming"]
+        D3["AWS S3 / MinIO · LiveKit (WebRTC)"]
+    end
+
+    subgraph INFRA["Infrastructure Layer"]
+        direction LR
+        I1["Docker Compose · GitHub Actions · Nginx · mkcert"]
+        I2["AWS (EC2 · RDS · S3)"]
+        I3["MLflow · Streamlit · Healthchecks"]
+    end
+</pre>
+<hr />
+<h2 id="complete-documentation-index-50-pages">50.7 Complete Documentation Index (50 Pages)</h2>
+<h3 id="batch-1-architecture-agent-core">Batch 1 — Architecture &amp; Agent Core</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Project Overview &amp; Executive Summary</td>
+</tr>
+<tr>
+<td>02</td>
+<td>System Architecture &amp; Design Decisions</td>
+</tr>
+<tr>
+<td>03</td>
+<td>Multi-Agent System Deep Dive</td>
+</tr>
+<tr>
+<td>04</td>
+<td>Tutor Agent — ABCR, TAL, MCP</td>
+</tr>
+<tr>
+<td>05</td>
+<td>RAG Pipeline &amp; Vector Search</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-2-specialized-agents">Batch 2 — Specialized Agents</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>06</td>
+<td>Research &amp; Web Enrichment Agents</td>
+</tr>
+<tr>
+<td>07</td>
+<td>Curriculum Agent &amp; Learning Paths</td>
+</tr>
+<tr>
+<td>08</td>
+<td>Learning Agent (Type 5 Self-Improving)</td>
+</tr>
+<tr>
+<td>09</td>
+<td>Document Processing Pipeline (7-Stage)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Notes, Assessment &amp; Question Agents</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-3-backend-frontend">Batch 3 — Backend &amp; Frontend</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>Core Service API — Flask Architecture</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Core Service Routes &amp; Authentication</td>
+</tr>
+<tr>
+<td>13</td>
+<td>AI Service API — FastAPI Architecture</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Database Architecture (Polyglot)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Frontend Architecture (Next.js 14)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-4-ml-streaming">Batch 4 — ML &amp; Streaming</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>Proctoring System — Detectors &amp; Scoring</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Soft Skills Evaluation Pipeline</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Meeting &amp; Virtual Classroom System</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Kafka Event Streaming</td>
+</tr>
+<tr>
+<td>20</td>
+<td>ML Training Pipeline &amp; Model Registry</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-5-operations">Batch 5 — Operations</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21</td>
+<td>Infrastructure &amp; Docker Deployment</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Security Architecture</td>
+</tr>
+<tr>
+<td>23</td>
+<td>LLM Provider Strategy</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Observability &amp; Logging</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Production Readiness &amp; Roadmap</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-6-extended">Batch 6 — Extended</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>26</td>
+<td>Data Pipelines — ETL &amp; Spark</td>
+</tr>
+<tr>
+<td>27</td>
+<td>AI Services Catalog (89 Files)</td>
+</tr>
+<tr>
+<td>28</td>
+<td>CI/CD Pipeline — GitHub Actions</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Environment Configuration</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Scripts &amp; Utilities</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-7-deep-reference">Batch 7 — Deep Reference</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>31</td>
+<td>Frontend Pages Reference (51 Routes)</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Core API Endpoint Reference (120+)</td>
+</tr>
+<tr>
+<td>33</td>
+<td>AI API Endpoint Reference (80+)</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Data Model Schema Reference (40+)</td>
+</tr>
+<tr>
+<td>35</td>
+<td>Agent Interaction Flows (7 Sequences)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-8-patterns-glossary">Batch 8 — Patterns &amp; Glossary</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>36</td>
+<td>Dependency Analysis (152+ Packages)</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Caching Architecture</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Error Handling &amp; Resilience</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Frontend Components (53+)</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Glossary &amp; Terminology (100+ Terms)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-9-advanced-topics">Batch 9 — Advanced Topics</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>41</td>
+<td>Pre-Trained Models &amp; Registry</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Dockerfile Architecture</td>
+</tr>
+<tr>
+<td>43</td>
+<td>Spaced Repetition &amp; Adaptive Learning</td>
+</tr>
+<tr>
+<td>44</td>
+<td>Gamification System</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Developer Quick-Start Guide</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batch-10-final-deep-dives">Batch 10 — Final Deep Dives</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>46</td>
+<td>LangGraph State Machines (11 Agents)</td>
+</tr>
+<tr>
+<td>47</td>
+<td>Real-Time Communication (SSE, WS, WebRTC)</td>
+</tr>
+<tr>
+<td>48</td>
+<td>Content Moderation &amp; Safety</td>
+</tr>
+<tr>
+<td>49</td>
+<td>Test Data &amp; Experimental Files</td>
+</tr>
+<tr>
+<td>50</td>
+<td>Codebase Statistics &amp; Documentation Index</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>ensureStudy — 50 pages of production-grade technical documentation covering 600+ source files, 200+ API endpoints, 11 LangGraph agents, 16 pre-trained models, 5 databases, and 12 Docker services.</em></p>
+<hr />
+
+</body>
+</html>

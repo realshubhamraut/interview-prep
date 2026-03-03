@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 22: Security Architecture &amp;amp; Authentication</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-21.html">&larr; Previous</a> <a href="page-23.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-22-security-architecture-authentication">Page 22: Security Architecture &amp; Authentication</h1>
+<hr />
+<h2 id="overview-14">22.1 Overview</h2>
+<p>ensureStudy implements a <strong>multi-layer security architecture</strong> spanning JWT authentication, role-based access control, content moderation, TLS encryption, file upload validation, and secrets management.</p>
+<hr />
+<h2 id="authentication-flow">22.2 Authentication Flow</h2>
+<pre class="mermaid">sequenceDiagram
+    participant B as Browser
+    participant NA as NextAuth.js
+    participant CS as Core Service
+    participant JWT as JWT Token
+
+    B->>NA: Login (credentials)
+    NA->>CS: POST /api/auth/login
+    CS->>CS: Verify password (bcrypt)
+    CS->>JWT: Generate JWT (HS256, 24h)
+    CS->>NA: Return {token, user}
+    NA->>B: Store JWT in session cookie<br/>(httpOnly, secure, sameSite)
+
+    Note over B,CS: Subsequent API Calls
+    B->>CS: Authorization: Bearer (JWT)
+    CS->>CS: token_required decorator<br/>Decode → Verify → Extract user_id
+    CS->>B: Protected resource</pre>
+<h3 id="password-hashing">Password Hashing</h3>
+<div class="sourceCode" id="cb164"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> werkzeug.security <span class="im">import</span> generate_password_hash, check_password_hash</span>
+<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> User(db.Model):</span>
+<span id="cb164-4"><a href="#cb164-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> set_password(<span class="va">self</span>, password: <span class="bu">str</span>):</span>
+<span id="cb164-5"><a href="#cb164-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.password_hash <span class="op">=</span> generate_password_hash(password)</span>
+<span id="cb164-6"><a href="#cb164-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb164-7"><a href="#cb164-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> check_password(<span class="va">self</span>, password: <span class="bu">str</span>):</span>
+<span id="cb164-8"><a href="#cb164-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> check_password_hash(<span class="va">self</span>.password_hash, password)</span></code></pre></div>
+<ul>
+<li>Algorithm: PBKDF2-SHA256 (Werkzeug default)</li>
+<li>Salt: Auto-generated per-password</li>
+<li>Iterations: 600,000 (Werkzeug default)</li>
+</ul>
+<h3 id="jwt-configuration">JWT Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Algorithm</td>
+<td>HS256</td>
+</tr>
+<tr>
+<td>Expiration</td>
+<td>24 hours</td>
+</tr>
+<tr>
+<td>Secret</td>
+<td><code>JWT_SECRET</code> env variable (min 32 chars)</td>
+</tr>
+<tr>
+<td>Payload</td>
+<td><code>{user_id, username, role, exp}</code></td>
+</tr>
+<tr>
+<td>Library</td>
+<td>PyJWT</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="role-based-access-control-rbac">22.3 Role-Based Access Control (RBAC)</h2>
+<h3 id="user-roles">User Roles</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 72%" />
+</colgroup>
+<thead>
+<tr>
+<th>Role</th>
+<th>Key Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>student</strong></td>
+<td>View classrooms, take assessments, chat with tutor, upload notes, join meetings</td>
+</tr>
+<tr>
+<td><strong>teacher</strong></td>
+<td>Create classrooms, upload materials, generate quizzes, grade, host meetings, view analytics</td>
+</tr>
+<tr>
+<td><strong>parent</strong></td>
+<td>View child progress, receive notifications</td>
+</tr>
+<tr>
+<td><strong>admin</strong></td>
+<td>Full platform management, user management, organization settings</td>
+</tr>
+</tbody>
+</table>
+<h3 id="route-protection">Route Protection</h3>
+<div class="sourceCode" id="cb165"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Level 1: Authentication required</span></span>
+<span id="cb165-2"><a href="#cb165-2" aria-hidden="true" tabindex="-1"></a><span class="at">@auth_bp.route</span>(<span class="st">&#39;/me&#39;</span>)</span>
+<span id="cb165-3"><a href="#cb165-3" aria-hidden="true" tabindex="-1"></a><span class="at">@token_required</span></span>
+<span id="cb165-4"><a href="#cb165-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_me(current_user):</span>
+<span id="cb165-5"><a href="#cb165-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify(current_user.to_dict())</span>
+<span id="cb165-6"><a href="#cb165-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb165-7"><a href="#cb165-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Level 2: Role restriction</span></span>
+<span id="cb165-8"><a href="#cb165-8" aria-hidden="true" tabindex="-1"></a><span class="at">@teacher_bp.route</span>(<span class="st">&#39;/classrooms&#39;</span>, methods<span class="op">=</span>[<span class="st">&#39;POST&#39;</span>])</span>
+<span id="cb165-9"><a href="#cb165-9" aria-hidden="true" tabindex="-1"></a><span class="at">@role_required</span>(<span class="st">&#39;teacher&#39;</span>, <span class="st">&#39;admin&#39;</span>)</span>
+<span id="cb165-10"><a href="#cb165-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_classroom(current_user):</span>
+<span id="cb165-11"><a href="#cb165-11" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb165-12"><a href="#cb165-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb165-13"><a href="#cb165-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Level 3: Resource ownership</span></span>
+<span id="cb165-14"><a href="#cb165-14" aria-hidden="true" tabindex="-1"></a><span class="at">@classroom_bp.route</span>(<span class="st">&#39;/&lt;classroom_id&gt;/syllabus&#39;</span>, methods<span class="op">=</span>[<span class="st">&#39;POST&#39;</span>])</span>
+<span id="cb165-15"><a href="#cb165-15" aria-hidden="true" tabindex="-1"></a><span class="at">@token_required</span></span>
+<span id="cb165-16"><a href="#cb165-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> upload_syllabus(current_user, classroom_id):</span>
+<span id="cb165-17"><a href="#cb165-17" aria-hidden="true" tabindex="-1"></a>    classroom <span class="op">=</span> Classroom.query.get_or_404(classroom_id)</span>
+<span id="cb165-18"><a href="#cb165-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> classroom.teacher_id <span class="op">!=</span> current_user.<span class="bu">id</span>:</span>
+<span id="cb165-19"><a href="#cb165-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Not your classroom&quot;</span>}), <span class="dv">403</span></span></code></pre></div>
+<hr />
+<h2 id="content-moderation">22.4 Content Moderation</h2>
+<h3 id="moderationlog-model">ModerationLog Model</h3>
+<div class="sourceCode" id="cb166"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ModerationLog(db.Model):</span>
+<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a>    __tablename__ <span class="op">=</span> <span class="st">&quot;moderation_logs&quot;</span></span>
+<span id="cb166-3"><a href="#cb166-3" aria-hidden="true" tabindex="-1"></a>    user_id <span class="op">=</span> db.Column(db.String(<span class="dv">36</span>), db.ForeignKey(<span class="st">&quot;users.id&quot;</span>))</span>
+<span id="cb166-4"><a href="#cb166-4" aria-hidden="true" tabindex="-1"></a>    content <span class="op">=</span> db.Column(db.Text)           <span class="co"># Original content</span></span>
+<span id="cb166-5"><a href="#cb166-5" aria-hidden="true" tabindex="-1"></a>    action <span class="op">=</span> db.Column(db.String(<span class="dv">50</span>))      <span class="co"># &quot;allow&quot;, &quot;block&quot;, &quot;flag&quot;</span></span>
+<span id="cb166-6"><a href="#cb166-6" aria-hidden="true" tabindex="-1"></a>    confidence <span class="op">=</span> db.Column(db.Float)       <span class="co"># Model confidence</span></span>
+<span id="cb166-7"><a href="#cb166-7" aria-hidden="true" tabindex="-1"></a>    was_blocked <span class="op">=</span> db.Column(db.Boolean)    <span class="co"># Outcome</span></span>
+<span id="cb166-8"><a href="#cb166-8" aria-hidden="true" tabindex="-1"></a>    reason <span class="op">=</span> db.Column(db.Text)            <span class="co"># Why blocked</span></span></code></pre></div>
+<h3 id="moderation-pipeline">Moderation Pipeline</h3>
+<pre class="mermaid">flowchart LR
+    UI["User Input"] --> CC{"Content Classifier"}
+    CC -->|"Safe<br/>confidence > 0.9"| ALLOW["✅ Allow"]
+    CC -->|"Uncertain<br/>0.5 < conf < 0.9"| FLAG["⚠️ Flag for Review"]
+    CC -->|"Unsafe<br/>confidence > 0.8"| BLOCK["🚫 Block + Log"]
+</pre>
+<hr />
+<h2 id="cors-policy">22.5 CORS Policy</h2>
+<h3 id="core-service-flask">Core Service (Flask)</h3>
+<div class="sourceCode" id="cb168"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a>CORS(app, resources<span class="op">=</span>{<span class="vs">r&quot;/api/</span><span class="op">*</span><span class="vs">&quot;</span>: {<span class="st">&quot;origins&quot;</span>: <span class="st">&quot;*&quot;</span>}})</span></code></pre></div>
+<h3 id="ai-service-fastapi">AI Service (FastAPI)</h3>
+<div class="sourceCode" id="cb169"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a>app.add_middleware(</span>
+<span id="cb169-2"><a href="#cb169-2" aria-hidden="true" tabindex="-1"></a>    CORSMiddleware,</span>
+<span id="cb169-3"><a href="#cb169-3" aria-hidden="true" tabindex="-1"></a>    allow_origins<span class="op">=</span>[<span class="st">&quot;*&quot;</span>],          <span class="co"># All origins (development)</span></span>
+<span id="cb169-4"><a href="#cb169-4" aria-hidden="true" tabindex="-1"></a>    allow_credentials<span class="op">=</span><span class="va">False</span>,      <span class="co"># Required for wildcard</span></span>
+<span id="cb169-5"><a href="#cb169-5" aria-hidden="true" tabindex="-1"></a>    allow_methods<span class="op">=</span>[<span class="st">&quot;*&quot;</span>],</span>
+<span id="cb169-6"><a href="#cb169-6" aria-hidden="true" tabindex="-1"></a>    allow_headers<span class="op">=</span>[<span class="st">&quot;*&quot;</span>],</span>
+<span id="cb169-7"><a href="#cb169-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="production-recommendation">Production Recommendation</h3>
+<div class="sourceCode" id="cb170"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .env.production.example</span></span>
+<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a>FRONTEND_URL<span class="op">=</span>https:<span class="op">//</span>yourdomain.com</span>
+<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-4"><a href="#cb170-4" aria-hidden="true" tabindex="-1"></a><span class="co"># In production, restrict to:</span></span>
+<span id="cb170-5"><a href="#cb170-5" aria-hidden="true" tabindex="-1"></a>allow_origins<span class="op">=</span>[os.getenv(<span class="st">&quot;FRONTEND_URL&quot;</span>)]</span>
+<span id="cb170-6"><a href="#cb170-6" aria-hidden="true" tabindex="-1"></a>allow_credentials<span class="op">=</span><span class="va">True</span></span></code></pre></div>
+<hr />
+<h2 id="tlshttps">22.6 TLS/HTTPS</h2>
+<h3 id="development-mkcert">Development (mkcert)</h3>
+<p>Local TLS certificates generated with <code>mkcert</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localhost+2-key.pem</code></td>
+<td>Private key for localhost</td>
+</tr>
+<tr>
+<td><code>localhost+2.pem</code></td>
+<td>Certificate for localhost</td>
+</tr>
+<tr>
+<td><code>192.168.4.60+2-key.pem</code></td>
+<td>Private key for LAN IP</td>
+</tr>
+<tr>
+<td><code>192.168.4.60+2.pem</code></td>
+<td>Certificate for LAN IP</td>
+</tr>
+<tr>
+<td><code>192.168.4.157+2-key.pem</code></td>
+<td>Private key for alt LAN IP</td>
+</tr>
+<tr>
+<td><code>192.168.4.157+2.pem</code></td>
+<td>Certificate for alt LAN IP</td>
+</tr>
+<tr>
+<td><code>rootCA.pem</code></td>
+<td>Root CA for mkcert</td>
+</tr>
+</tbody>
+</table>
+<h3 id="production">Production</h3>
+<div class="sourceCode" id="cb171"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.prod.yml (commented Nginx config)</span></span>
+<span id="cb171-2"><a href="#cb171-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nginx</span><span class="kw">:</span></span>
+<span id="cb171-3"><a href="#cb171-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> nginx:alpine</span></span>
+<span id="cb171-4"><a href="#cb171-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb171-5"><a href="#cb171-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;80:80&quot;</span></span>
+<span id="cb171-6"><a href="#cb171-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;443:443&quot;</span></span>
+<span id="cb171-7"><a href="#cb171-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb171-8"><a href="#cb171-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro</span></span>
+<span id="cb171-9"><a href="#cb171-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ./nginx/ssl:/etc/nginx/ssl:ro</span></span></code></pre></div>
+<hr />
+<h2 id="file-upload-security">22.7 File Upload Security</h2>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Max file size</td>
+<td>500 MB (<code>MAX_CONTENT_LENGTH</code>)</td>
+</tr>
+<tr>
+<td>Filename sanitization</td>
+<td><code>werkzeug.utils.secure_filename()</code></td>
+</tr>
+<tr>
+<td>Unique naming</td>
+<td>UUID prefix: <code>{uuid4()}_{filename}</code></td>
+</tr>
+<tr>
+<td>Type validation</td>
+<td>MIME type checking</td>
+</tr>
+<tr>
+<td>Storage isolation</td>
+<td>Per-classroom directory structure</td>
+</tr>
+<tr>
+<td>Access control</td>
+<td>Upload requires authentication</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="secrets-management">22.8 Secrets Management</h2>
+<h3 id="environment-variables">Environment Variables</h3>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Location</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JWT_SECRET</code></td>
+<td><code>.env</code></td>
+<td>JWT signing key</td>
+</tr>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td><code>.env</code></td>
+<td>PostgreSQL connection string</td>
+</tr>
+<tr>
+<td><code>OPENAI_API_KEY</code></td>
+<td><code>.env</code></td>
+<td>OpenAI API access</td>
+</tr>
+<tr>
+<td><code>GOOGLE_API_KEY</code></td>
+<td><code>.env</code></td>
+<td>Google Gemini access</td>
+</tr>
+<tr>
+<td><code>GROQ_API_KEY</code></td>
+<td><code>.env</code></td>
+<td>Groq LLM access</td>
+</tr>
+<tr>
+<td><code>AWS_ACCESS_KEY_ID</code></td>
+<td><code>.env.production</code></td>
+<td>AWS S3 access</td>
+</tr>
+<tr>
+<td><code>AWS_SECRET_ACCESS_KEY</code></td>
+<td><code>.env.production</code></td>
+<td>AWS S3 secret</td>
+</tr>
+<tr>
+<td><code>NEXTAUTH_SECRET</code></td>
+<td><code>.env</code></td>
+<td>NextAuth session encryption</td>
+</tr>
+<tr>
+<td><code>MONGO_PASSWORD</code></td>
+<td><code>.env.production</code></td>
+<td>MongoDB auth</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gitignore-protection">.gitignore Protection</h3>
+<pre class="gitignore"><code>.env
+.env.production
+*.pem
+*.key</code></pre>
+<p>All secrets are excluded from version control. <code>.env.production.example</code> provides a template with placeholder values.</p>
+<hr />
+<h2 id="database-security">22.9 Database Security</h2>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 37%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Database</th>
+<th>Auth Method</th>
+<th>Encryption</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td>Username/password</td>
+<td>Connection pooling with <code>pool_pre_ping</code></td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>No auth (dev), password (prod)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>Username/password (SCRAM-SHA-256)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>No auth (dev), API key (prod option)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Cassandra</td>
+<td>No auth (dev), password (prod)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 76: Soft Skills Analyzers — Implementation Deep Dive</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-75.html">&larr; Previous</a> <a href="page-77.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-76-soft-skills-analyzers-implementation-deep-dive">Page 76: Soft Skills Analyzers — Implementation Deep Dive</h1>
+<blockquote>
+<p>Supplements Page 17 (Soft Skills Evaluation) with implementation-level detail from <code>softskills.md</code>.</p>
+</blockquote>
+<hr />
+<h2 id="analyzer-inventory">76.1 Analyzer Inventory</h2>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 26%" />
+<col style="width: 20%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Analyzer</th>
+<th>Library</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FluencyAnalyzer</code></td>
+<td>Custom</td>
+<td>transcript + duration</td>
+<td>WPM, filler rate, score</td>
+</tr>
+<tr>
+<td><code>GrammarAnalyzer</code></td>
+<td><code>language_tool_python</code></td>
+<td>transcript text</td>
+<td>error count, corrections</td>
+</tr>
+<tr>
+<td><code>VocabularyAnalyzer</code></td>
+<td><code>nltk</code> + <code>wordnet</code></td>
+<td>transcript text</td>
+<td>TTR, advanced words</td>
+</tr>
+<tr>
+<td><code>EyeContactAnalyzer</code></td>
+<td><code>MediaPipe FaceMesh</code></td>
+<td>video frames</td>
+<td>contact %, deviation</td>
+</tr>
+<tr>
+<td><code>ExpressionAnalyzer</code></td>
+<td><code>FER</code> (MTCNN)</td>
+<td>video frames</td>
+<td>emotion distribution</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fluencyanalyzer">76.2 FluencyAnalyzer</h2>
+<h3 id="source-softskills_pipeline.py">Source: <code>softskills_pipeline.py</code></h3>
+<div class="sourceCode" id="cb479"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb479-1"><a href="#cb479-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> FluencyAnalyzer:</span>
+<span id="cb479-2"><a href="#cb479-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb479-3"><a href="#cb479-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.filler_words <span class="op">=</span> [</span>
+<span id="cb479-4"><a href="#cb479-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;um&#39;</span>, <span class="st">&#39;uh&#39;</span>, <span class="st">&#39;like&#39;</span>, <span class="st">&#39;you know&#39;</span>, <span class="st">&#39;basically&#39;</span>,</span>
+<span id="cb479-5"><a href="#cb479-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;actually&#39;</span>, <span class="st">&#39;literally&#39;</span>, <span class="st">&#39;so&#39;</span>, <span class="st">&#39;right&#39;</span>, <span class="st">&#39;okay&#39;</span></span>
+<span id="cb479-6"><a href="#cb479-6" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb479-7"><a href="#cb479-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb479-8"><a href="#cb479-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> analyze(<span class="va">self</span>, transcript: <span class="bu">str</span>, audio_duration: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb479-9"><a href="#cb479-9" aria-hidden="true" tabindex="-1"></a>        words <span class="op">=</span> transcript.lower().split()</span>
+<span id="cb479-10"><a href="#cb479-10" aria-hidden="true" tabindex="-1"></a>        word_count <span class="op">=</span> <span class="bu">len</span>(words)</span>
+<span id="cb479-11"><a href="#cb479-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb479-12"><a href="#cb479-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Words per minute</span></span>
+<span id="cb479-13"><a href="#cb479-13" aria-hidden="true" tabindex="-1"></a>        wpm <span class="op">=</span> (word_count <span class="op">/</span> audio_duration) <span class="op">*</span> <span class="dv">60</span> <span class="cf">if</span> audio_duration <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb479-14"><a href="#cb479-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb479-15"><a href="#cb479-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Filler word count</span></span>
+<span id="cb479-16"><a href="#cb479-16" aria-hidden="true" tabindex="-1"></a>        filler_count <span class="op">=</span> <span class="bu">sum</span>(</span>
+<span id="cb479-17"><a href="#cb479-17" aria-hidden="true" tabindex="-1"></a>            transcript.lower().count(f) <span class="cf">for</span> f <span class="kw">in</span> <span class="va">self</span>.filler_words</span>
+<span id="cb479-18"><a href="#cb479-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb479-19"><a href="#cb479-19" aria-hidden="true" tabindex="-1"></a>        filler_rate <span class="op">=</span> filler_count <span class="op">/</span> word_count <span class="cf">if</span> word_count <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb479-20"><a href="#cb479-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb479-21"><a href="#cb479-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Score: optimal WPM is 120-150</span></span>
+<span id="cb479-22"><a href="#cb479-22" aria-hidden="true" tabindex="-1"></a>        wpm_score <span class="op">=</span> <span class="va">self</span>._score_wpm(wpm)</span>
+<span id="cb479-23"><a href="#cb479-23" aria-hidden="true" tabindex="-1"></a>        filler_score <span class="op">=</span> <span class="bu">max</span>(<span class="dv">0</span>, <span class="dv">100</span> <span class="op">-</span> filler_rate <span class="op">*</span> <span class="dv">500</span>)</span>
+<span id="cb479-24"><a href="#cb479-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb479-25"><a href="#cb479-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb479-26"><a href="#cb479-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;words_per_minute&#39;</span>: <span class="bu">round</span>(wpm, <span class="dv">1</span>),</span>
+<span id="cb479-27"><a href="#cb479-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;filler_count&#39;</span>: filler_count,</span>
+<span id="cb479-28"><a href="#cb479-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;filler_rate&#39;</span>: <span class="bu">round</span>(filler_rate, <span class="dv">3</span>),</span>
+<span id="cb479-29"><a href="#cb479-29" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;fluency_score&#39;</span>: <span class="bu">round</span>((wpm_score <span class="op">+</span> filler_score) <span class="op">/</span> <span class="dv">2</span>, <span class="dv">1</span>),</span>
+<span id="cb479-30"><a href="#cb479-30" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;fillers_detected&#39;</span>: <span class="va">self</span>._find_fillers(transcript)</span>
+<span id="cb479-31"><a href="#cb479-31" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb479-32"><a href="#cb479-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb479-33"><a href="#cb479-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _score_wpm(<span class="va">self</span>, wpm: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb479-34"><a href="#cb479-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="dv">120</span> <span class="op">&lt;=</span> wpm <span class="op">&lt;=</span> <span class="dv">150</span>:</span>
+<span id="cb479-35"><a href="#cb479-35" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">100</span></span>
+<span id="cb479-36"><a href="#cb479-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> wpm <span class="op">&lt;</span> <span class="dv">120</span>:</span>
+<span id="cb479-37"><a href="#cb479-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="bu">max</span>(<span class="dv">0</span>, <span class="dv">100</span> <span class="op">-</span> (<span class="dv">120</span> <span class="op">-</span> wpm) <span class="op">*</span> <span class="dv">2</span>)</span>
+<span id="cb479-38"><a href="#cb479-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb479-39"><a href="#cb479-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="bu">max</span>(<span class="dv">0</span>, <span class="dv">100</span> <span class="op">-</span> (wpm <span class="op">-</span> <span class="dv">150</span>) <span class="op">*</span> <span class="fl">1.5</span>)</span></code></pre></div>
+<h3 id="scoring-curve">Scoring Curve</h3>
+<table>
+<thead>
+<tr>
+<th>WPM Range</th>
+<th>Score</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>120-150</td>
+<td>100</td>
+<td>Optimal pace</td>
+</tr>
+<tr>
+<td>100-119</td>
+<td>60-99</td>
+<td>Slightly slow</td>
+</tr>
+<tr>
+<td>151-170</td>
+<td>70-99</td>
+<td>Slightly fast</td>
+</tr>
+<tr>
+<td>&lt;100</td>
+<td>0-59</td>
+<td>Too slow</td>
+</tr>
+<tr>
+<td>&gt;170</td>
+<td>0-69</td>
+<td>Too fast</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="grammaranalyzer">76.3 GrammarAnalyzer</h2>
+<div class="sourceCode" id="cb480"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb480-1"><a href="#cb480-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> language_tool_python</span>
+<span id="cb480-2"><a href="#cb480-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb480-3"><a href="#cb480-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GrammarAnalyzer:</span>
+<span id="cb480-4"><a href="#cb480-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb480-5"><a href="#cb480-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.tool <span class="op">=</span> language_tool_python.LanguageTool(<span class="st">&#39;en-US&#39;</span>)</span>
+<span id="cb480-6"><a href="#cb480-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb480-7"><a href="#cb480-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> analyze(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb480-8"><a href="#cb480-8" aria-hidden="true" tabindex="-1"></a>        matches <span class="op">=</span> <span class="va">self</span>.tool.check(text)</span>
+<span id="cb480-9"><a href="#cb480-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb480-10"><a href="#cb480-10" aria-hidden="true" tabindex="-1"></a>        errors_by_type <span class="op">=</span> {}</span>
+<span id="cb480-11"><a href="#cb480-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> match <span class="kw">in</span> matches:</span>
+<span id="cb480-12"><a href="#cb480-12" aria-hidden="true" tabindex="-1"></a>            category <span class="op">=</span> match.category</span>
+<span id="cb480-13"><a href="#cb480-13" aria-hidden="true" tabindex="-1"></a>            errors_by_type[category] <span class="op">=</span> errors_by_type.get(category, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb480-14"><a href="#cb480-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb480-15"><a href="#cb480-15" aria-hidden="true" tabindex="-1"></a>        word_count <span class="op">=</span> <span class="bu">len</span>(text.split())</span>
+<span id="cb480-16"><a href="#cb480-16" aria-hidden="true" tabindex="-1"></a>        error_rate <span class="op">=</span> <span class="bu">len</span>(matches) <span class="op">/</span> word_count <span class="cf">if</span> word_count <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb480-17"><a href="#cb480-17" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> <span class="bu">max</span>(<span class="dv">0</span>, <span class="dv">100</span> <span class="op">-</span> error_rate <span class="op">*</span> <span class="dv">200</span>)</span>
+<span id="cb480-18"><a href="#cb480-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb480-19"><a href="#cb480-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb480-20"><a href="#cb480-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;error_count&#39;</span>: <span class="bu">len</span>(matches),</span>
+<span id="cb480-21"><a href="#cb480-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;errors_by_type&#39;</span>: errors_by_type,</span>
+<span id="cb480-22"><a href="#cb480-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;grammar_score&#39;</span>: <span class="bu">round</span>(score, <span class="dv">1</span>),</span>
+<span id="cb480-23"><a href="#cb480-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;corrections&#39;</span>: [</span>
+<span id="cb480-24"><a href="#cb480-24" aria-hidden="true" tabindex="-1"></a>                {</span>
+<span id="cb480-25"><a href="#cb480-25" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;original&#39;</span>: text[m.offset:m.offset <span class="op">+</span> m.errorLength],</span>
+<span id="cb480-26"><a href="#cb480-26" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;suggestion&#39;</span>: m.replacements[<span class="dv">0</span>] <span class="cf">if</span> m.replacements <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb480-27"><a href="#cb480-27" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;message&#39;</span>: m.message,</span>
+<span id="cb480-28"><a href="#cb480-28" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;category&#39;</span>: m.category</span>
+<span id="cb480-29"><a href="#cb480-29" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb480-30"><a href="#cb480-30" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> m <span class="kw">in</span> matches[:<span class="dv">10</span>]</span>
+<span id="cb480-31"><a href="#cb480-31" aria-hidden="true" tabindex="-1"></a>            ]</span>
+<span id="cb480-32"><a href="#cb480-32" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="vocabularyanalyzer">76.4 VocabularyAnalyzer</h2>
+<div class="sourceCode" id="cb481"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb481-1"><a href="#cb481-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb481-2"><a href="#cb481-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb481-3"><a href="#cb481-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> wordnet</span>
+<span id="cb481-4"><a href="#cb481-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb481-5"><a href="#cb481-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> VocabularyAnalyzer:</span>
+<span id="cb481-6"><a href="#cb481-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb481-7"><a href="#cb481-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.common_words <span class="op">=</span> <span class="bu">set</span>(nltk.corpus.words.words()[:<span class="dv">3000</span>])</span>
+<span id="cb481-8"><a href="#cb481-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb481-9"><a href="#cb481-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> analyze(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb481-10"><a href="#cb481-10" aria-hidden="true" tabindex="-1"></a>        words <span class="op">=</span> nltk.word_tokenize(text.lower())</span>
+<span id="cb481-11"><a href="#cb481-11" aria-hidden="true" tabindex="-1"></a>        words <span class="op">=</span> [w <span class="cf">for</span> w <span class="kw">in</span> words <span class="cf">if</span> w.isalpha()]</span>
+<span id="cb481-12"><a href="#cb481-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb481-13"><a href="#cb481-13" aria-hidden="true" tabindex="-1"></a>        unique_words <span class="op">=</span> <span class="bu">set</span>(words)</span>
+<span id="cb481-14"><a href="#cb481-14" aria-hidden="true" tabindex="-1"></a>        ttr <span class="op">=</span> <span class="bu">len</span>(unique_words) <span class="op">/</span> <span class="bu">len</span>(words) <span class="cf">if</span> words <span class="cf">else</span> <span class="dv">0</span>  <span class="co"># Type-token ratio</span></span>
+<span id="cb481-15"><a href="#cb481-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb481-16"><a href="#cb481-16" aria-hidden="true" tabindex="-1"></a>        advanced_words <span class="op">=</span> [</span>
+<span id="cb481-17"><a href="#cb481-17" aria-hidden="true" tabindex="-1"></a>            w <span class="cf">for</span> w <span class="kw">in</span> unique_words</span>
+<span id="cb481-18"><a href="#cb481-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> w <span class="kw">not</span> <span class="kw">in</span> <span class="va">self</span>.common_words <span class="kw">and</span> <span class="bu">len</span>(w) <span class="op">&gt;</span> <span class="dv">5</span></span>
+<span id="cb481-19"><a href="#cb481-19" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb481-20"><a href="#cb481-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb481-21"><a href="#cb481-21" aria-hidden="true" tabindex="-1"></a>        diversity_score <span class="op">=</span> <span class="bu">min</span>(<span class="dv">100</span>, ttr <span class="op">*</span> <span class="dv">200</span>)</span>
+<span id="cb481-22"><a href="#cb481-22" aria-hidden="true" tabindex="-1"></a>        advanced_score <span class="op">=</span> <span class="bu">min</span>(<span class="dv">100</span>, <span class="bu">len</span>(advanced_words) <span class="op">*</span> <span class="dv">5</span>)</span>
+<span id="cb481-23"><a href="#cb481-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb481-24"><a href="#cb481-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb481-25"><a href="#cb481-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;total_words&#39;</span>: <span class="bu">len</span>(words),</span>
+<span id="cb481-26"><a href="#cb481-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;unique_words&#39;</span>: <span class="bu">len</span>(unique_words),</span>
+<span id="cb481-27"><a href="#cb481-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;type_token_ratio&#39;</span>: <span class="bu">round</span>(ttr, <span class="dv">3</span>),</span>
+<span id="cb481-28"><a href="#cb481-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;advanced_words&#39;</span>: advanced_words[:<span class="dv">20</span>],</span>
+<span id="cb481-29"><a href="#cb481-29" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;vocabulary_score&#39;</span>: <span class="bu">round</span>((diversity_score <span class="op">+</span> advanced_score) <span class="op">/</span> <span class="dv">2</span>, <span class="dv">1</span>),</span>
+<span id="cb481-30"><a href="#cb481-30" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;top_words&#39;</span>: Counter(words).most_common(<span class="dv">10</span>)</span>
+<span id="cb481-31"><a href="#cb481-31" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="eyecontactanalyzer">76.5 EyeContactAnalyzer</h2>
+<div class="sourceCode" id="cb482"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb482-1"><a href="#cb482-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EyeContactAnalyzer:</span>
+<span id="cb482-2"><a href="#cb482-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb482-3"><a href="#cb482-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.face_mesh <span class="op">=</span> mp.solutions.face_mesh.FaceMesh(</span>
+<span id="cb482-4"><a href="#cb482-4" aria-hidden="true" tabindex="-1"></a>            static_image_mode<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb482-5"><a href="#cb482-5" aria-hidden="true" tabindex="-1"></a>            max_num_faces<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb482-6"><a href="#cb482-6" aria-hidden="true" tabindex="-1"></a>            refine_landmarks<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb482-7"><a href="#cb482-7" aria-hidden="true" tabindex="-1"></a>            min_detection_confidence<span class="op">=</span><span class="fl">0.5</span></span>
+<span id="cb482-8"><a href="#cb482-8" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb482-9"><a href="#cb482-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.total_frames <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb482-10"><a href="#cb482-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.contact_frames <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb482-11"><a href="#cb482-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb482-12"><a href="#cb482-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process_frame(<span class="va">self</span>, frame: np.ndarray) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb482-13"><a href="#cb482-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.total_frames <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb482-14"><a href="#cb482-14" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> <span class="va">self</span>.face_mesh.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))</span>
+<span id="cb482-15"><a href="#cb482-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb482-16"><a href="#cb482-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> results.multi_face_landmarks:</span>
+<span id="cb482-17"><a href="#cb482-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> {<span class="st">&#39;eye_contact&#39;</span>: <span class="va">False</span>, <span class="st">&#39;reason&#39;</span>: <span class="st">&#39;no_face&#39;</span>}</span>
+<span id="cb482-18"><a href="#cb482-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb482-19"><a href="#cb482-19" aria-hidden="true" tabindex="-1"></a>        landmarks <span class="op">=</span> results.multi_face_landmarks[<span class="dv">0</span>]</span>
+<span id="cb482-20"><a href="#cb482-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb482-21"><a href="#cb482-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Iris landmarks (468=left, 473=right)</span></span>
+<span id="cb482-22"><a href="#cb482-22" aria-hidden="true" tabindex="-1"></a>        left_iris <span class="op">=</span> landmarks.landmark[<span class="dv">468</span>]</span>
+<span id="cb482-23"><a href="#cb482-23" aria-hidden="true" tabindex="-1"></a>        right_iris <span class="op">=</span> landmarks.landmark[<span class="dv">473</span>]</span>
+<span id="cb482-24"><a href="#cb482-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb482-25"><a href="#cb482-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Eye corner landmarks for reference</span></span>
+<span id="cb482-26"><a href="#cb482-26" aria-hidden="true" tabindex="-1"></a>        left_center <span class="op">=</span> (landmarks.landmark[<span class="dv">133</span>].x <span class="op">+</span> landmarks.landmark[<span class="dv">33</span>].x) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb482-27"><a href="#cb482-27" aria-hidden="true" tabindex="-1"></a>        right_center <span class="op">=</span> (landmarks.landmark[<span class="dv">362</span>].x <span class="op">+</span> landmarks.landmark[<span class="dv">263</span>].x) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb482-28"><a href="#cb482-28" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb482-29"><a href="#cb482-29" aria-hidden="true" tabindex="-1"></a>        left_deviation <span class="op">=</span> <span class="bu">abs</span>(left_iris.x <span class="op">-</span> left_center)</span>
+<span id="cb482-30"><a href="#cb482-30" aria-hidden="true" tabindex="-1"></a>        right_deviation <span class="op">=</span> <span class="bu">abs</span>(right_iris.x <span class="op">-</span> right_center)</span>
+<span id="cb482-31"><a href="#cb482-31" aria-hidden="true" tabindex="-1"></a>        avg_deviation <span class="op">=</span> (left_deviation <span class="op">+</span> right_deviation) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb482-32"><a href="#cb482-32" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb482-33"><a href="#cb482-33" aria-hidden="true" tabindex="-1"></a>        is_contact <span class="op">=</span> avg_deviation <span class="op">&lt;</span> <span class="fl">0.25</span>  <span class="co"># Threshold</span></span>
+<span id="cb482-34"><a href="#cb482-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> is_contact:</span>
+<span id="cb482-35"><a href="#cb482-35" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.contact_frames <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb482-36"><a href="#cb482-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb482-37"><a href="#cb482-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb482-38"><a href="#cb482-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;eye_contact&#39;</span>: is_contact,</span>
+<span id="cb482-39"><a href="#cb482-39" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;deviation&#39;</span>: <span class="bu">round</span>(avg_deviation, <span class="dv">3</span>),</span>
+<span id="cb482-40"><a href="#cb482-40" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;contact_rate&#39;</span>: <span class="bu">round</span>(<span class="va">self</span>.contact_frames <span class="op">/</span> <span class="va">self</span>.total_frames, <span class="dv">3</span>)</span>
+<span id="cb482-41"><a href="#cb482-41" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="expressionanalyzer">76.6 ExpressionAnalyzer</h2>
+<div class="sourceCode" id="cb483"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb483-1"><a href="#cb483-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fer <span class="im">import</span> FER</span>
+<span id="cb483-2"><a href="#cb483-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb483-3"><a href="#cb483-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExpressionAnalyzer:</span>
+<span id="cb483-4"><a href="#cb483-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb483-5"><a href="#cb483-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.detector <span class="op">=</span> FER(mtcnn<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb483-6"><a href="#cb483-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.expression_counts <span class="op">=</span> {}</span>
+<span id="cb483-7"><a href="#cb483-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.total_frames <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb483-8"><a href="#cb483-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb483-9"><a href="#cb483-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process_frame(<span class="va">self</span>, frame: np.ndarray) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb483-10"><a href="#cb483-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.total_frames <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb483-11"><a href="#cb483-11" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="va">self</span>.detector.detect_emotions(frame)</span>
+<span id="cb483-12"><a href="#cb483-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb483-13"><a href="#cb483-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> result:</span>
+<span id="cb483-14"><a href="#cb483-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> {<span class="st">&#39;expression&#39;</span>: <span class="st">&#39;no_face&#39;</span>, <span class="st">&#39;confidence&#39;</span>: <span class="dv">0</span>}</span>
+<span id="cb483-15"><a href="#cb483-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb483-16"><a href="#cb483-16" aria-hidden="true" tabindex="-1"></a>        emotions <span class="op">=</span> result[<span class="dv">0</span>][<span class="st">&#39;emotions&#39;</span>]</span>
+<span id="cb483-17"><a href="#cb483-17" aria-hidden="true" tabindex="-1"></a>        dominant <span class="op">=</span> <span class="bu">max</span>(emotions, key<span class="op">=</span>emotions.get)</span>
+<span id="cb483-18"><a href="#cb483-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.expression_counts[dominant] <span class="op">=</span> <span class="va">self</span>.expression_counts.get(dominant, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb483-19"><a href="#cb483-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb483-20"><a href="#cb483-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb483-21"><a href="#cb483-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;expression&#39;</span>: dominant,</span>
+<span id="cb483-22"><a href="#cb483-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;confidence&#39;</span>: <span class="bu">round</span>(emotions[dominant], <span class="dv">2</span>),</span>
+<span id="cb483-23"><a href="#cb483-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;all_emotions&#39;</span>: {k: <span class="bu">round</span>(v, <span class="dv">2</span>) <span class="cf">for</span> k, v <span class="kw">in</span> emotions.items()}</span>
+<span id="cb483-24"><a href="#cb483-24" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb483-25"><a href="#cb483-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb483-26"><a href="#cb483-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_summary(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb483-27"><a href="#cb483-27" aria-hidden="true" tabindex="-1"></a>        positive_rate <span class="op">=</span> <span class="bu">sum</span>(</span>
+<span id="cb483-28"><a href="#cb483-28" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.expression_counts.get(e, <span class="dv">0</span>) <span class="cf">for</span> e <span class="kw">in</span> [<span class="st">&#39;happy&#39;</span>, <span class="st">&#39;neutral&#39;</span>]</span>
+<span id="cb483-29"><a href="#cb483-29" aria-hidden="true" tabindex="-1"></a>        ) <span class="op">/</span> <span class="va">self</span>.total_frames <span class="cf">if</span> <span class="va">self</span>.total_frames <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb483-30"><a href="#cb483-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb483-31"><a href="#cb483-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb483-32"><a href="#cb483-32" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;expression_distribution&#39;</span>: {</span>
+<span id="cb483-33"><a href="#cb483-33" aria-hidden="true" tabindex="-1"></a>                k: <span class="bu">round</span>(v <span class="op">/</span> <span class="va">self</span>.total_frames <span class="op">*</span> <span class="dv">100</span>, <span class="dv">1</span>) </span>
+<span id="cb483-34"><a href="#cb483-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> k, v <span class="kw">in</span> <span class="va">self</span>.expression_counts.items()</span>
+<span id="cb483-35"><a href="#cb483-35" aria-hidden="true" tabindex="-1"></a>            },</span>
+<span id="cb483-36"><a href="#cb483-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;expression_score&#39;</span>: <span class="bu">round</span>(positive_rate <span class="op">*</span> <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb483-37"><a href="#cb483-37" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<hr />
+<h2 id="websocket-streaming-protocol">76.7 WebSocket Streaming Protocol</h2>
+<div class="sourceCode" id="cb484"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb484-1"><a href="#cb484-1" aria-hidden="true" tabindex="-1"></a><span class="at">@router.websocket</span>(<span class="st">&quot;/evaluate/</span><span class="sc">{session_id}</span><span class="st">/stream&quot;</span>)</span>
+<span id="cb484-2"><a href="#cb484-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> stream_evaluation(websocket: WebSocket, session_id: <span class="bu">str</span>):</span>
+<span id="cb484-3"><a href="#cb484-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> websocket.accept()</span>
+<span id="cb484-4"><a href="#cb484-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb484-5"><a href="#cb484-5" aria-hidden="true" tabindex="-1"></a>    eye_analyzer <span class="op">=</span> EyeContactAnalyzer()</span>
+<span id="cb484-6"><a href="#cb484-6" aria-hidden="true" tabindex="-1"></a>    expression_analyzer <span class="op">=</span> ExpressionAnalyzer()</span>
+<span id="cb484-7"><a href="#cb484-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb484-8"><a href="#cb484-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb484-9"><a href="#cb484-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb484-10"><a href="#cb484-10" aria-hidden="true" tabindex="-1"></a>            data <span class="op">=</span> <span class="cf">await</span> websocket.receive_json()</span>
+<span id="cb484-11"><a href="#cb484-11" aria-hidden="true" tabindex="-1"></a>            results <span class="op">=</span> {}</span>
+<span id="cb484-12"><a href="#cb484-12" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb484-13"><a href="#cb484-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="st">&#39;video_frame&#39;</span> <span class="kw">in</span> data:</span>
+<span id="cb484-14"><a href="#cb484-14" aria-hidden="true" tabindex="-1"></a>                frame <span class="op">=</span> decode_frame(data[<span class="st">&#39;video_frame&#39;</span>])  <span class="co"># Base64 → numpy</span></span>
+<span id="cb484-15"><a href="#cb484-15" aria-hidden="true" tabindex="-1"></a>                results[<span class="st">&#39;eye_contact&#39;</span>] <span class="op">=</span> eye_analyzer.process_frame(frame)</span>
+<span id="cb484-16"><a href="#cb484-16" aria-hidden="true" tabindex="-1"></a>                results[<span class="st">&#39;expression&#39;</span>] <span class="op">=</span> expression_analyzer.process_frame(frame)</span>
+<span id="cb484-17"><a href="#cb484-17" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb484-18"><a href="#cb484-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">await</span> websocket.send_json(results)</span>
+<span id="cb484-19"><a href="#cb484-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> WebSocketDisconnect:</span>
+<span id="cb484-20"><a href="#cb484-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span></code></pre></div>
+<h3 id="client-integration-typescript">Client Integration (TypeScript)</h3>
+<div class="sourceCode" id="cb485"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb485-1"><a href="#cb485-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SoftSkillsClient {</span>
+<span id="cb485-2"><a href="#cb485-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> ws<span class="op">:</span> <span class="bu">WebSocket</span><span class="op">;</span></span>
+<span id="cb485-3"><a href="#cb485-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> video<span class="op">:</span> <span class="bu">HTMLVideoElement</span><span class="op">;</span></span>
+<span id="cb485-4"><a href="#cb485-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> canvas<span class="op">:</span> <span class="bu">HTMLCanvasElement</span><span class="op">;</span></span>
+<span id="cb485-5"><a href="#cb485-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb485-6"><a href="#cb485-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">async</span> <span class="fu">start</span>(sessionId<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb485-7"><a href="#cb485-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> stream <span class="op">=</span> <span class="cf">await</span> <span class="bu">navigator</span><span class="op">.</span><span class="at">mediaDevices</span><span class="op">.</span><span class="fu">getUserMedia</span>({</span>
+<span id="cb485-8"><a href="#cb485-8" aria-hidden="true" tabindex="-1"></a>            video<span class="op">:</span> <span class="kw">true</span><span class="op">,</span> audio<span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb485-9"><a href="#cb485-9" aria-hidden="true" tabindex="-1"></a>        })<span class="op">;</span></span>
+<span id="cb485-10"><a href="#cb485-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">video</span><span class="op">.</span><span class="at">srcObject</span> <span class="op">=</span> stream<span class="op">;</span></span>
+<span id="cb485-11"><a href="#cb485-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb485-12"><a href="#cb485-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">ws</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">WebSocket</span>(</span>
+<span id="cb485-13"><a href="#cb485-13" aria-hidden="true" tabindex="-1"></a>            <span class="vs">`wss://api.example.com/api/softskills/evaluate/</span><span class="sc">${</span>sessionId<span class="sc">}</span><span class="vs">/stream`</span></span>
+<span id="cb485-14"><a href="#cb485-14" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span>
+<span id="cb485-15"><a href="#cb485-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb485-16"><a href="#cb485-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Send frames at 5 FPS</span></span>
+<span id="cb485-17"><a href="#cb485-17" aria-hidden="true" tabindex="-1"></a>        <span class="pp">setInterval</span>(() <span class="kw">=&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">sendFrame</span>()<span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
+<span id="cb485-18"><a href="#cb485-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb485-19"><a href="#cb485-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb485-20"><a href="#cb485-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="fu">sendFrame</span>() {</span>
+<span id="cb485-21"><a href="#cb485-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> ctx <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">canvas</span><span class="op">.</span><span class="fu">getContext</span>(<span class="st">&#39;2d&#39;</span>)<span class="op">!;</span></span>
+<span id="cb485-22"><a href="#cb485-22" aria-hidden="true" tabindex="-1"></a>        ctx<span class="op">.</span><span class="fu">drawImage</span>(<span class="kw">this</span><span class="op">.</span><span class="at">video</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb485-23"><a href="#cb485-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> frameData <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">canvas</span><span class="op">.</span><span class="fu">toDataURL</span>(<span class="st">&#39;image/jpeg&#39;</span><span class="op">,</span> <span class="fl">0.7</span>)<span class="op">;</span></span>
+<span id="cb485-24"><a href="#cb485-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb485-25"><a href="#cb485-25" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">ws</span><span class="op">.</span><span class="fu">send</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({</span>
+<span id="cb485-26"><a href="#cb485-26" aria-hidden="true" tabindex="-1"></a>            video_frame<span class="op">:</span> frameData<span class="op">.</span><span class="fu">split</span>(<span class="st">&#39;,&#39;</span>)[<span class="dv">1</span>]</span>
+<span id="cb485-27"><a href="#cb485-27" aria-hidden="true" tabindex="-1"></a>        }))<span class="op">;</span></span>
+<span id="cb485-28"><a href="#cb485-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb485-29"><a href="#cb485-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="combined-scoring-formula">76.8 Combined Scoring Formula</h2>
+<div class="sourceCode" id="cb486"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb486-1"><a href="#cb486-1" aria-hidden="true" tabindex="-1"></a>combined_score <span class="op">=</span> (</span>
+<span id="cb486-2"><a href="#cb486-2" aria-hidden="true" tabindex="-1"></a>    fluency[<span class="st">&#39;fluency_score&#39;</span>]        <span class="op">*</span> <span class="fl">0.25</span> <span class="op">+</span>  <span class="co"># Speech rate + fillers</span></span>
+<span id="cb486-3"><a href="#cb486-3" aria-hidden="true" tabindex="-1"></a>    grammar[<span class="st">&#39;grammar_score&#39;</span>]        <span class="op">*</span> <span class="fl">0.20</span> <span class="op">+</span>  <span class="co"># LanguageTool errors</span></span>
+<span id="cb486-4"><a href="#cb486-4" aria-hidden="true" tabindex="-1"></a>    vocabulary[<span class="st">&#39;vocabulary_score&#39;</span>]  <span class="op">*</span> <span class="fl">0.15</span> <span class="op">+</span>  <span class="co"># TTR + advanced words</span></span>
+<span id="cb486-5"><a href="#cb486-5" aria-hidden="true" tabindex="-1"></a>    eye_contact[<span class="st">&#39;eye_contact_score&#39;</span>] <span class="op">*</span> <span class="fl">0.15</span> <span class="op">+</span> <span class="co"># MediaPipe iris tracking</span></span>
+<span id="cb486-6"><a href="#cb486-6" aria-hidden="true" tabindex="-1"></a>    expression[<span class="st">&#39;expression_score&#39;</span>]  <span class="op">*</span> <span class="fl">0.10</span> <span class="op">+</span>  <span class="co"># FER emotion detection</span></span>
+<span id="cb486-7"><a href="#cb486-7" aria-hidden="true" tabindex="-1"></a>    posture_score                   <span class="op">*</span> <span class="fl">0.10</span> <span class="op">+</span>  <span class="co"># Body position</span></span>
+<span id="cb486-8"><a href="#cb486-8" aria-hidden="true" tabindex="-1"></a>    confidence_score                <span class="op">*</span> <span class="fl">0.05</span>    <span class="co"># Composite delivery</span></span>
+<span id="cb486-9"><a href="#cb486-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Level</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>90-100</td>
+<td>Excellent</td>
+<td>Ready for professional settings</td>
+</tr>
+<tr>
+<td>75-89</td>
+<td>Good</td>
+<td>Minor improvements needed</td>
+</tr>
+<tr>
+<td>60-74</td>
+<td>Moderate</td>
+<td>Practice recommended</td>
+</tr>
+<tr>
+<td>40-59</td>
+<td>Developing</td>
+<td>Significant practice needed</td>
+</tr>
+<tr>
+<td>0-39</td>
+<td>Beginning</td>
+<td>Focus on fundamentals</td>
+</tr>
+</tbody>
+</table>
+<h3 id="evaluation-modes">Evaluation Modes</h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Duration</th>
+<th>Focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interview</td>
+<td>10-30 min</td>
+<td>Q&amp;A responses, confidence</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td>5-15 min</td>
+<td>Structured delivery, engagement</td>
+</tr>
+<tr>
+<td>Speech</td>
+<td>3-10 min</td>
+<td>Fluency, expressiveness</td>
+</tr>
+<tr>
+<td>Quick Check</td>
+<td>1-3 min</td>
+<td>Basic metrics snapshot</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

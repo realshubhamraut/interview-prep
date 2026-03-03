@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 26: Data Pipelines — ETL, Spark &amp;amp; Analytics</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-25.html">&larr; Previous</a> <a href="page-27.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-26-data-pipelines-etl-spark-analytics">Page 26: Data Pipelines — ETL, Spark &amp; Analytics</h1>
+<hr />
+<h2 id="overview-17">26.1 Overview</h2>
+<p>ensureStudy uses <strong>Apache PySpark</strong> for batch ETL and real-time streaming, pulling student data from PostgreSQL, processing meeting recordings from Kafka, engineering ML features, and storing analytics in Cassandra.</p>
+<h3 id="source-backenddata-pipelines-4-files">Source: <code>backend/data-pipelines/</code> (4 files)</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 31%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Lines</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>etl/extract/extract_student_data.py</code></td>
+<td>156</td>
+<td>PySpark extractors for student data</td>
+</tr>
+<tr>
+<td><code>etl/transform/feature_engineering.py</code></td>
+<td>140</td>
+<td>Feature engineering for ML models</td>
+</tr>
+<tr>
+<td><code>streaming/kafka_spark_streaming.py</code></td>
+<td>—</td>
+<td>Real-time Kafka consumer</td>
+</tr>
+<tr>
+<td><code>streaming/meeting_processor.py</code></td>
+<td>315</td>
+<td>Meeting recording pipeline</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="batch-etl-pipeline">26.2 Batch ETL Pipeline</h2>
+<h3 id="extract-studentdataextractor">Extract: <code>StudentDataExtractor</code></h3>
+<p>Reads directly from PostgreSQL using JDBC:</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> SparkSession.builder <span class="op">\</span></span>
+<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a>    .appName(<span class="st">&quot;EnsureStudy-ETL&quot;</span>) <span class="op">\</span></span>
+<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">&quot;spark.jars.packages&quot;</span>, <span class="st">&quot;org.postgresql:postgresql:42.5.0&quot;</span>) <span class="op">\</span></span>
+<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">&quot;spark.executor.memory&quot;</span>, <span class="st">&quot;4g&quot;</span>) <span class="op">\</span></span>
+<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">&quot;spark.driver.memory&quot;</span>, <span class="st">&quot;4g&quot;</span>) <span class="op">\</span></span>
+<span id="cb191-6"><a href="#cb191-6" aria-hidden="true" tabindex="-1"></a>    .getOrCreate()</span></code></pre></div>
+<h3 id="data-sources-extracted">Data Sources Extracted</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 37%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Method</th>
+<th>Tables Joined</th>
+<th>Output Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>extract_progress_data()</code></td>
+<td><code>progress</code> + <code>users</code></td>
+<td>user_id, topic, subject, confidence_score, times_studied, is_weak, class_id, school_id</td>
+</tr>
+<tr>
+<td><code>extract_assessment_results()</code></td>
+<td><code>assessment_results</code> + <code>assessments</code></td>
+<td>user_id, assessment_id, score, max_score, time_taken, confidence, topic, difficulty</td>
+</tr>
+<tr>
+<td><code>extract_leaderboard()</code></td>
+<td><code>leaderboard</code> + <code>users</code></td>
+<td>user_id, global_points, class_points, study_streak, level, xp</td>
+</tr>
+<tr>
+<td><code>extract_chat_sessions()</code></td>
+<td><code>chat_sessions</code> + <code>users</code></td>
+<td>user_id, title, message_count, class_id, school_id</td>
+</tr>
+</tbody>
+</table>
+<p>All extractions support <strong>date-range filtering</strong> for incremental processing.</p>
+<hr />
+<h2 id="feature-engineering">26.3 Feature Engineering</h2>
+<h3 id="source-featureengineer-class-140-lines">Source: <code>FeatureEngineer</code> class (140 lines)</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 17%" />
+<col style="width: 40%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr>
+<th>Method</th>
+<th>Input</th>
+<th>Output Features</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engineer_student_features()</code></td>
+<td>progress + assessment DataFrames</td>
+<td>avg_confidence, total_study_sessions, weak_topic_count, topics_covered, avg_score, engagement_score, is_at_risk</td>
+<td>Per-student ML features</td>
+</tr>
+<tr>
+<td><code>identify_weak_topics()</code></td>
+<td>assessment DataFrame</td>
+<td>topic, subject, struggle_count, avg_score, avg_time</td>
+<td>Topics where students score &lt; 60</td>
+</tr>
+<tr>
+<td><code>calculate_student_rankings()</code></td>
+<td>features DataFrame</td>
+<td>global_rank, subject_rank, percentile</td>
+<td>Dense rank, percent rank</td>
+</tr>
+<tr>
+<td><code>create_time_series_features()</code></td>
+<td>progress DataFrame</td>
+<td>prev_confidence, confidence_change, update_sequence</td>
+<td>Confidence trend analysis</td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-derived-features">Key Derived Features</h3>
+<div class="sourceCode" id="cb192"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Engagement score = weighted combination</span></span>
+<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>engagement_score <span class="op">=</span> total_study_sessions <span class="op">*</span> <span class="fl">0.3</span> <span class="op">+</span> total_assessments <span class="op">*</span> <span class="fl">0.7</span></span>
+<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a><span class="co"># At-risk flag</span></span>
+<span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a>is_at_risk <span class="op">=</span> (avg_confidence <span class="op">&lt;</span> <span class="dv">40</span>) AND (avg_score <span class="op">&lt;</span> <span class="dv">50</span>)</span></code></pre></div>
+<h3 id="windowing-functions">Windowing Functions</h3>
+<div class="sourceCode" id="cb193"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Global ranking by engagement</span></span>
+<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a>global_window <span class="op">=</span> Window.orderBy(col(<span class="st">&quot;engagement_score&quot;</span>).desc())</span>
+<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a>dense_rank().over(global_window)</span>
+<span id="cb193-4"><a href="#cb193-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-5"><a href="#cb193-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Subject-specific ranking</span></span>
+<span id="cb193-6"><a href="#cb193-6" aria-hidden="true" tabindex="-1"></a>subject_window <span class="op">=</span> Window.partitionBy(<span class="st">&quot;subject&quot;</span>).orderBy(col(<span class="st">&quot;avg_score&quot;</span>).desc())</span>
+<span id="cb193-7"><a href="#cb193-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-8"><a href="#cb193-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Time-series lag features</span></span>
+<span id="cb193-9"><a href="#cb193-9" aria-hidden="true" tabindex="-1"></a>time_window <span class="op">=</span> Window.partitionBy(<span class="st">&quot;user_id&quot;</span>, <span class="st">&quot;topic&quot;</span>).orderBy(<span class="st">&quot;updated_at&quot;</span>)</span>
+<span id="cb193-10"><a href="#cb193-10" aria-hidden="true" tabindex="-1"></a>lag(<span class="st">&quot;confidence_score&quot;</span>, <span class="dv">1</span>).over(time_window).alias(<span class="st">&quot;prev_confidence&quot;</span>)</span></code></pre></div>
+<hr />
+<h2 id="meeting-processor-spark-streaming">26.4 Meeting Processor (Spark Streaming)</h2>
+<h3 id="source-meeting_processor.py-315-lines">Source: <code>meeting_processor.py</code> (315 lines)</h3>
+<p>A <strong>4-step streaming pipeline</strong> that consumes Kafka recording events:</p>
+<pre class="mermaid">flowchart TB
+    K["📨 Kafka<br/>meeting-recordings"] --> S1
+
+    subgraph PIPELINE["PySpark Streaming — foreachBatch"]
+        direction TB
+        S1["① Transcription<br/>POST /api/meetings/transcribe<br/>OpenAI Whisper API<br/>→ transcript + segments"]
+        S2["② Summarization<br/>POST /api/meetings/summarize<br/>Google Gemini 1.5 Flash<br/>→ brief, detailed, actions"]
+        S3["③ Embedding + Qdrant<br/>Chunk transcript (500-char max)<br/>Embed: text-embedding-3-small<br/>Upsert into meeting_chunks"]
+        S4["④ Cassandra Analytics<br/>meeting_analytics table<br/>Partitioned by classroom_id<br/>Sorted by processed_at"]
+        S1 --> S2 --> S3 --> S4
+    end
+
+    S3 --> QD["🔍 Qdrant<br/>meeting_chunks"]
+    S4 --> CA["📊 Cassandra<br/>ensure_study.meeting_analytics"]
+</pre>
+<h3 id="kafka-event-schema">Kafka Event Schema</h3>
+<div class="sourceCode" id="cb195"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a>recording_schema <span class="op">=</span> StructType([</span>
+<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a>    StructField(<span class="st">&quot;event_type&quot;</span>, StringType()),</span>
+<span id="cb195-3"><a href="#cb195-3" aria-hidden="true" tabindex="-1"></a>    StructField(<span class="st">&quot;meeting_id&quot;</span>, StringType()),</span>
+<span id="cb195-4"><a href="#cb195-4" aria-hidden="true" tabindex="-1"></a>    StructField(<span class="st">&quot;recording_id&quot;</span>, StringType()),</span>
+<span id="cb195-5"><a href="#cb195-5" aria-hidden="true" tabindex="-1"></a>    StructField(<span class="st">&quot;timestamp&quot;</span>, StringType()),</span>
+<span id="cb195-6"><a href="#cb195-6" aria-hidden="true" tabindex="-1"></a>    StructField(<span class="st">&quot;classroom_id&quot;</span>, StringType()),</span>
+<span id="cb195-7"><a href="#cb195-7" aria-hidden="true" tabindex="-1"></a>    StructField(<span class="st">&quot;data&quot;</span>, StructType([</span>
+<span id="cb195-8"><a href="#cb195-8" aria-hidden="true" tabindex="-1"></a>        StructField(<span class="st">&quot;storage_url&quot;</span>, StringType()),</span>
+<span id="cb195-9"><a href="#cb195-9" aria-hidden="true" tabindex="-1"></a>        StructField(<span class="st">&quot;duration_seconds&quot;</span>, IntegerType()),</span>
+<span id="cb195-10"><a href="#cb195-10" aria-hidden="true" tabindex="-1"></a>        StructField(<span class="st">&quot;format&quot;</span>, StringType())</span>
+<span id="cb195-11"><a href="#cb195-11" aria-hidden="true" tabindex="-1"></a>    ]))</span>
+<span id="cb195-12"><a href="#cb195-12" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div>
+<h3 id="streaming-configuration">Streaming Configuration</h3>
+<div class="sourceCode" id="cb196"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a>kafka_df <span class="op">=</span> spark.readStream <span class="op">\</span></span>
+<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">format</span>(<span class="st">&quot;kafka&quot;</span>) <span class="op">\</span></span>
+<span id="cb196-3"><a href="#cb196-3" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;kafka.bootstrap.servers&quot;</span>, <span class="st">&quot;localhost:9092&quot;</span>) <span class="op">\</span></span>
+<span id="cb196-4"><a href="#cb196-4" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;subscribe&quot;</span>, <span class="st">&quot;meeting-recordings&quot;</span>) <span class="op">\</span></span>
+<span id="cb196-5"><a href="#cb196-5" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;startingOffsets&quot;</span>, <span class="st">&quot;earliest&quot;</span>) <span class="op">\</span></span>
+<span id="cb196-6"><a href="#cb196-6" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;failOnDataLoss&quot;</span>, <span class="st">&quot;false&quot;</span>) <span class="op">\</span></span>
+<span id="cb196-7"><a href="#cb196-7" aria-hidden="true" tabindex="-1"></a>    .load()</span>
+<span id="cb196-8"><a href="#cb196-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-9"><a href="#cb196-9" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> parsed_df.writeStream <span class="op">\</span></span>
+<span id="cb196-10"><a href="#cb196-10" aria-hidden="true" tabindex="-1"></a>    .foreachBatch(process_recording_batch) <span class="op">\</span></span>
+<span id="cb196-11"><a href="#cb196-11" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">&quot;checkpointLocation&quot;</span>, <span class="st">&quot;/tmp/meeting_processor_checkpoint&quot;</span>) <span class="op">\</span></span>
+<span id="cb196-12"><a href="#cb196-12" aria-hidden="true" tabindex="-1"></a>    .trigger(processingTime<span class="op">=</span><span class="st">&quot;30 seconds&quot;</span>) <span class="op">\</span></span>
+<span id="cb196-13"><a href="#cb196-13" aria-hidden="true" tabindex="-1"></a>    .start()</span></code></pre></div>
+<h3 id="cassandra-schema">Cassandra Schema</h3>
+<div class="sourceCode" id="cb197"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> meeting_analytics (</span>
+<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>    classroom_id text,</span>
+<span id="cb197-3"><a href="#cb197-3" aria-hidden="true" tabindex="-1"></a>    meeting_id text,</span>
+<span id="cb197-4"><a href="#cb197-4" aria-hidden="true" tabindex="-1"></a>    processed_at <span class="dt">timestamp</span>,</span>
+<span id="cb197-5"><a href="#cb197-5" aria-hidden="true" tabindex="-1"></a>    duration_seconds <span class="dt">int</span>,</span>
+<span id="cb197-6"><a href="#cb197-6" aria-hidden="true" tabindex="-1"></a>    word_count <span class="dt">int</span>,</span>
+<span id="cb197-7"><a href="#cb197-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> ((classroom_id), processed_at, meeting_id)</span>
+<span id="cb197-8"><a href="#cb197-8" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<hr />
+<h2 id="execution">26.5 Execution</h2>
+<div class="sourceCode" id="cb198"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Batch ETL</span></span>
+<span id="cb198-2"><a href="#cb198-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> run-etl</span>
+<span id="cb198-3"><a href="#cb198-3" aria-hidden="true" tabindex="-1"></a><span class="co"># → cd backend/data-pipelines &amp;&amp; python -m pyspark etl/extract/extract_student_data.py</span></span>
+<span id="cb198-4"><a href="#cb198-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-5"><a href="#cb198-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Streaming</span></span>
+<span id="cb198-6"><a href="#cb198-6" aria-hidden="true" tabindex="-1"></a><span class="ex">spark-submit</span> <span class="dt">\</span></span>
+<span id="cb198-7"><a href="#cb198-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--packages</span> org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,<span class="dt">\</span></span>
+<span id="cb198-8"><a href="#cb198-8" aria-hidden="true" tabindex="-1"></a>               org.mongodb.spark:mongo-spark-connector_2.12:10.2.0 <span class="dt">\</span></span>
+<span id="cb198-9"><a href="#cb198-9" aria-hidden="true" tabindex="-1"></a>    meeting_processor.py</span></code></pre></div>
+<hr />
+
+</body>
+</html>

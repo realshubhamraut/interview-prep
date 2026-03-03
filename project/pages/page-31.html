@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 31: Frontend Page Routes — 51 Pages Across 5 Roles</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-30.html">&larr; Previous</a> <a href="page-32.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-31-frontend-page-routes-51-pages-across-5-roles">Page 31: Frontend Page Routes — 51 Pages Across 5 Roles</h1>
+<hr />
+<h2 id="overview-22">31.1 Overview</h2>
+<p>The Next.js 14 App Router serves <strong>51 pages</strong> organized into 5 route groups based on user role: Student Dashboard, Teacher, Admin, Parent, and Auth. Each group has its own layout and middleware protection.</p>
+<hr />
+<h2 id="route-group-architecture">31.2 Route Group Architecture</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Route Group Architecture "]
+        direction TB
+        N0["frontend/app/"]
+        N1["page.tsx                          # Landing page"]
+        N2["auth/                             # Public auth routes"]
+        N3["(dashboard)/                      # Student routes (requires auth)"]
+        N4["(teacher)/teacher/                # Teacher routes (role: teacher)"]
+        N5["(admin)/admin/                    # Admin routes (role: admin)"]
+        N6["(parent)/parent/                  # Parent routes (role: parent)"]
+        N7["meet/(id)/                        # Meeting room (requires auth)"]
+    end
+</pre>
+<hr />
+<h2 id="authentication-pages-4-pages">31.3 Authentication Pages (4 pages)</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 27%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Route</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/auth</code></td>
+<td><code>auth/page.tsx</code></td>
+<td>Auth landing / redirect</td>
+</tr>
+<tr>
+<td><code>/auth/signin</code></td>
+<td><code>auth/signin/page.tsx</code></td>
+<td>Login form (email + password)</td>
+</tr>
+<tr>
+<td><code>/auth/signup</code></td>
+<td><code>auth/signup/page.tsx</code></td>
+<td>Registration form</td>
+</tr>
+<tr>
+<td><code>/auth/error</code></td>
+<td><code>auth/error/page.tsx</code></td>
+<td>Authentication error display</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="student-dashboard-21-pages">31.4 Student Dashboard (21 pages)</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 27%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Route</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/dashboard</code></td>
+<td><code>(dashboard)/dashboard/page.tsx</code></td>
+<td>Student home — progress overview, recent activity</td>
+</tr>
+<tr>
+<td><code>/chat</code></td>
+<td><code>(dashboard)/chat/page.tsx</code></td>
+<td>AI Tutor chat interface</td>
+</tr>
+<tr>
+<td><code>/study</code></td>
+<td><code>(dashboard)/study/page.tsx</code></td>
+<td>Study materials browser</td>
+</tr>
+<tr>
+<td><code>/classrooms</code></td>
+<td><code>(dashboard)/classrooms/page.tsx</code></td>
+<td>List enrolled classrooms</td>
+</tr>
+<tr>
+<td><code>/classrooms/[id]</code></td>
+<td><code>(dashboard)/classrooms/[id]/page.tsx</code></td>
+<td>Classroom detail — materials, topics, members</td>
+</tr>
+<tr>
+<td><code>/classrooms/[id]/notes</code></td>
+<td><code>(dashboard)/classrooms/[id]/notes/page.tsx</code></td>
+<td>Classroom notes viewer/editor</td>
+</tr>
+<tr>
+<td><code>/join-classroom</code></td>
+<td><code>(dashboard)/join-classroom/page.tsx</code></td>
+<td>Join classroom via code</td>
+</tr>
+<tr>
+<td><code>/curriculum</code></td>
+<td><code>(dashboard)/curriculum/page.tsx</code></td>
+<td>Curriculum viewer + learning path</td>
+</tr>
+<tr>
+<td><code>/assessments</code></td>
+<td><code>(dashboard)/assessments/page.tsx</code></td>
+<td>Assessment list</td>
+</tr>
+<tr>
+<td><code>/assessments/take/[id]</code></td>
+<td><code>(dashboard)/assessments/take/[id]/page.tsx</code></td>
+<td>Take assessment (with proctoring)</td>
+</tr>
+<tr>
+<td><code>/assessments/proctored</code></td>
+<td><code>(dashboard)/assessments/proctored/page.tsx</code></td>
+<td>Proctored exam mode</td>
+</tr>
+<tr>
+<td><code>/progress</code></td>
+<td><code>(dashboard)/progress/page.tsx</code></td>
+<td>Detailed progress analytics</td>
+</tr>
+<tr>
+<td><code>/leaderboard</code></td>
+<td><code>(dashboard)/leaderboard/page.tsx</code></td>
+<td>Classroom/global leaderboard</td>
+</tr>
+<tr>
+<td><code>/notifications</code></td>
+<td><code>(dashboard)/notifications/page.tsx</code></td>
+<td>Notification center</td>
+</tr>
+<tr>
+<td><code>/settings</code></td>
+<td><code>(dashboard)/settings/page.tsx</code></td>
+<td>User profile settings</td>
+</tr>
+<tr>
+<td><code>/interact</code></td>
+<td><code>(dashboard)/interact/page.tsx</code></td>
+<td>Interactive learning mode</td>
+</tr>
+<tr>
+<td><code>/softskills</code></td>
+<td><code>(dashboard)/softskills/page.tsx</code></td>
+<td>Soft skills hub</td>
+</tr>
+<tr>
+<td><code>/softskills/communication</code></td>
+<td><code>(dashboard)/softskills/communication/page.tsx</code></td>
+<td>Communication skills practice</td>
+</tr>
+<tr>
+<td><code>/softskills/communication/session</code></td>
+<td><code>(dashboard)/softskills/communication/session/page.tsx</code></td>
+<td>Live communication session</td>
+</tr>
+<tr>
+<td><code>/softskills/mock-interview</code></td>
+<td><code>(dashboard)/softskills/mock-interview/page.tsx</code></td>
+<td>Mock interview setup</td>
+</tr>
+<tr>
+<td><code>/softskills/mock-interview/session</code></td>
+<td><code>(dashboard)/softskills/mock-interview/session/page.tsx</code></td>
+<td>Live mock interview session</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="teacher-portal-8-pages">31.5 Teacher Portal (8 pages)</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 27%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Route</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/teacher/dashboard</code></td>
+<td><code>(teacher)/teacher/dashboard/page.tsx</code></td>
+<td>Teacher home — classroom stats</td>
+</tr>
+<tr>
+<td><code>/teacher/classrooms</code></td>
+<td><code>(teacher)/teacher/classrooms/page.tsx</code></td>
+<td>Manage classrooms</td>
+</tr>
+<tr>
+<td><code>/teacher/classroom/[id]</code></td>
+<td><code>(teacher)/teacher/classroom/[id]/page.tsx</code></td>
+<td>Classroom management — materials, students</td>
+</tr>
+<tr>
+<td><code>/teacher/assessments</code></td>
+<td><code>(teacher)/teacher/assessments/page.tsx</code></td>
+<td>Create/manage assessments</td>
+</tr>
+<tr>
+<td><code>/teacher/students</code></td>
+<td><code>(teacher)/teacher/students/page.tsx</code></td>
+<td>Student progress overview</td>
+</tr>
+<tr>
+<td><code>/teacher/interact</code></td>
+<td><code>(teacher)/teacher/interact/page.tsx</code></td>
+<td>AI teaching assistant</td>
+</tr>
+<tr>
+<td><code>/teacher/scan</code></td>
+<td><code>(teacher)/teacher/scan/page.tsx</code></td>
+<td>Scan/digitize documents</td>
+</tr>
+<tr>
+<td><code>/teacher/settings</code></td>
+<td><code>(teacher)/teacher/settings/page.tsx</code></td>
+<td>Teacher settings</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="admin-panel-7-pages">31.6 Admin Panel (7 pages)</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 27%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Route</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/admin/dashboard</code></td>
+<td><code>(admin)/admin/dashboard/page.tsx</code></td>
+<td>Platform analytics dashboard</td>
+</tr>
+<tr>
+<td><code>/admin/classrooms</code></td>
+<td><code>(admin)/admin/classrooms/page.tsx</code></td>
+<td>All classrooms overview</td>
+</tr>
+<tr>
+<td><code>/admin/classrooms/[id]</code></td>
+<td><code>(admin)/admin/classrooms/[id]/page.tsx</code></td>
+<td>Classroom administration</td>
+</tr>
+<tr>
+<td><code>/admin/teachers</code></td>
+<td><code>(admin)/admin/teachers/page.tsx</code></td>
+<td>Teacher management</td>
+</tr>
+<tr>
+<td><code>/admin/students</code></td>
+<td><code>(admin)/admin/students/page.tsx</code></td>
+<td>Student management</td>
+</tr>
+<tr>
+<td><code>/admin/billing</code></td>
+<td><code>(admin)/admin/billing/page.tsx</code></td>
+<td>Billing/subscription management</td>
+</tr>
+<tr>
+<td><code>/admin/settings</code></td>
+<td><code>(admin)/admin/settings/page.tsx</code></td>
+<td>Platform settings</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="parent-portal-8-pages">31.7 Parent Portal (8 pages)</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 27%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Route</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/parent/dashboard</code></td>
+<td><code>(parent)/parent/dashboard/page.tsx</code></td>
+<td>Parent home — children overview</td>
+</tr>
+<tr>
+<td><code>/parent/children</code></td>
+<td><code>(parent)/parent/children/page.tsx</code></td>
+<td>List linked children</td>
+</tr>
+<tr>
+<td><code>/parent/children/[id]</code></td>
+<td><code>(parent)/parent/children/[id]/page.tsx</code></td>
+<td>Child detail + activity</td>
+</tr>
+<tr>
+<td><code>/parent/progress</code></td>
+<td><code>(parent)/parent/progress/page.tsx</code></td>
+<td>Academic progress reports</td>
+</tr>
+<tr>
+<td><code>/parent/reports</code></td>
+<td><code>(parent)/parent/reports/page.tsx</code></td>
+<td>Downloadable reports</td>
+</tr>
+<tr>
+<td><code>/parent/interact</code></td>
+<td><code>(parent)/parent/interact/page.tsx</code></td>
+<td>Communicate with teachers</td>
+</tr>
+<tr>
+<td><code>/parent/notifications</code></td>
+<td><code>(parent)/parent/notifications/page.tsx</code></td>
+<td>Parent notifications</td>
+</tr>
+<tr>
+<td><code>/parent/settings</code></td>
+<td><code>(parent)/parent/settings/page.tsx</code></td>
+<td>Parent settings</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="meeting-room-1-page">31.8 Meeting Room (1 page)</h2>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/meet/[id]</code></td>
+<td><code>meet/[id]/page.tsx</code></td>
+<td>LiveKit video conference room</td>
+</tr>
+</tbody>
+</table>
+<p>Dynamic route <code>[id]</code> maps to the meeting ID. Uses LiveKit components for video/audio/screen sharing.</p>
+<hr />
+<h2 id="route-protection-1">31.9 Route Protection</h2>
+<div class="sourceCode" id="cb216"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb216-1"><a href="#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="co">// middleware.ts</span></span>
+<span id="cb216-2"><a href="#cb216-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">middleware</span>(request<span class="op">:</span> NextRequest) {</span>
+<span id="cb216-3"><a href="#cb216-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> session <span class="op">=</span> <span class="cf">await</span> <span class="fu">getToken</span>({ req<span class="op">:</span> request })<span class="op">;</span></span>
+<span id="cb216-4"><a href="#cb216-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb216-5"><a href="#cb216-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>session) {</span>
+<span id="cb216-6"><a href="#cb216-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> NextResponse<span class="op">.</span><span class="fu">redirect</span>(<span class="kw">new</span> <span class="fu">URL</span>(<span class="st">&#39;/auth/signin&#39;</span><span class="op">,</span> request<span class="op">.</span><span class="at">url</span>))<span class="op">;</span></span>
+<span id="cb216-7"><a href="#cb216-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb216-8"><a href="#cb216-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb216-9"><a href="#cb216-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Role-based route protection</span></span>
+<span id="cb216-10"><a href="#cb216-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (request<span class="op">.</span><span class="at">nextUrl</span><span class="op">.</span><span class="at">pathname</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">&#39;/admin&#39;</span>) <span class="op">&amp;&amp;</span> session<span class="op">.</span><span class="at">role</span> <span class="op">!==</span> <span class="st">&#39;admin&#39;</span>) {</span>
+<span id="cb216-11"><a href="#cb216-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> NextResponse<span class="op">.</span><span class="fu">redirect</span>(<span class="kw">new</span> <span class="fu">URL</span>(<span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> request<span class="op">.</span><span class="at">url</span>))<span class="op">;</span></span>
+<span id="cb216-12"><a href="#cb216-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb216-13"><a href="#cb216-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (request<span class="op">.</span><span class="at">nextUrl</span><span class="op">.</span><span class="at">pathname</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">&#39;/teacher&#39;</span>) <span class="op">&amp;&amp;</span> session<span class="op">.</span><span class="at">role</span> <span class="op">!==</span> <span class="st">&#39;teacher&#39;</span>) {</span>
+<span id="cb216-14"><a href="#cb216-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> NextResponse<span class="op">.</span><span class="fu">redirect</span>(<span class="kw">new</span> <span class="fu">URL</span>(<span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> request<span class="op">.</span><span class="at">url</span>))<span class="op">;</span></span>
+<span id="cb216-15"><a href="#cb216-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb216-16"><a href="#cb216-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (request<span class="op">.</span><span class="at">nextUrl</span><span class="op">.</span><span class="at">pathname</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">&#39;/parent&#39;</span>) <span class="op">&amp;&amp;</span> session<span class="op">.</span><span class="at">role</span> <span class="op">!==</span> <span class="st">&#39;parent&#39;</span>) {</span>
+<span id="cb216-17"><a href="#cb216-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> NextResponse<span class="op">.</span><span class="fu">redirect</span>(<span class="kw">new</span> <span class="fu">URL</span>(<span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> request<span class="op">.</span><span class="at">url</span>))<span class="op">;</span></span>
+<span id="cb216-18"><a href="#cb216-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb216-19"><a href="#cb216-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+
+</body>
+</html>

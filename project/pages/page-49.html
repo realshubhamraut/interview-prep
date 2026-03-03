@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 49: Test Data &amp;amp; Experimental Files</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-48.html">&larr; Previous</a> <a href="page-50.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-49-test-data-experimental-files">Page 49: Test Data &amp; Experimental Files</h1>
+<hr />
+<h2 id="overview-38">49.1 Overview</h2>
+<p>The <code>try/</code> directory contains <strong>12 test files</strong> used during development and demonstration, covering PDFs, images, videos, and exam materials. These files exercise the document processing, OCR, and meeting transcription pipelines.</p>
+<hr />
+<h2 id="test-file-inventory">49.2 Test File Inventory</h2>
+<h3 id="assignment-submissions">Assignment Submissions</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assignment-2-linux.pdf</code></td>
+<td><code>try/assignment-submissions/</code></td>
+<td>Linux assignment PDF — tests document extraction</td>
+</tr>
+<tr>
+<td><code>trimmed-submission-for-linux.pdf</code></td>
+<td><code>try/assignment-submissions/</code></td>
+<td>Trimmed version — tests partial document handling</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assignment-templates">Assignment Templates</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Linux-Assignment-2.pdf</code></td>
+<td><code>try/assignments/</code></td>
+<td>Assignment template — tests teacher upload flow</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exam-answer-sheets">Exam Answer Sheets</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PG-DBDA Aug 2024 Syllabus and Marks Distribution.pdf</code></td>
+<td><code>try/exam-answers/</code></td>
+<td>Syllabus — tests curriculum extraction</td>
+</tr>
+<tr>
+<td><code>answer-physics.png</code></td>
+<td><code>try/exam-answers/</code></td>
+<td>Handwritten answer — tests OCR pipeline</td>
+</tr>
+<tr>
+<td><code>unnamed.jpg</code></td>
+<td><code>try/exam-answers/</code></td>
+<td>Scanned exam page — tests image → text extraction</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-images">Test Images</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d.jpeg</code></td>
+<td><code>try/images/</code></td>
+<td>Test image — tests image processing pipeline</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-pdfs">Test PDFs</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frenchrevolution.pdf</code></td>
+<td><code>try/pdfs/</code></td>
+<td>History textbook chapter — tests RAG indexing</td>
+</tr>
+<tr>
+<td><code>pythagoras theorem.pdf</code></td>
+<td><code>try/pdfs/</code></td>
+<td>Math content — tests LaTeX rendering in notes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="question-papers">Question Papers</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cbse-sample-paper-class-9-science-set-4-1.pdf</code></td>
+<td><code>try/questionpaper/</code></td>
+<td>CBSE exam — tests question extraction</td>
+</tr>
+</tbody>
+</table>
+<h3 id="syllabi">Syllabi</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>syllabus1.pdf</code></td>
+<td><code>try/syllabus/</code></td>
+<td>Test syllabus — tests curriculum agent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="videos">Videos</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>notes1.mp4</code></td>
+<td><code>try/videos/</code></td>
+<td>Handwritten notes video — tests frame extraction + OCR</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="root-level-test-scripts">49.3 Root-Level Test Scripts</h2>
+<h3 id="test-scripts-in-project-root">14 test scripts in project root:</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 37%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+<th>Tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_full_pipeline.py</code></td>
+<td>End-to-end document → RAG pipeline</td>
+<td>Upload → Process → Chunk → Embed → Query</td>
+</tr>
+<tr>
+<td><code>test_chunking.py</code></td>
+<td>Text chunking algorithms</td>
+<td>Semantic chunking, overlap, size limits</td>
+</tr>
+<tr>
+<td><code>test_chunk_only.py</code></td>
+<td>Isolated chunk function tests</td>
+<td>Edge cases, Unicode, empty input</td>
+</tr>
+<tr>
+<td><code>test_qdrant.py</code></td>
+<td>Qdrant vector operations</td>
+<td>Insert, search, delete, collection management</td>
+</tr>
+<tr>
+<td><code>test_cache.py</code></td>
+<td>Redis cache operations</td>
+<td>Set, get, TTL, eviction</td>
+</tr>
+<tr>
+<td><code>test_cache_api.py</code></td>
+<td>Cache through API endpoints</td>
+<td>Response caching, cache invalidation</td>
+</tr>
+<tr>
+<td><code>test_agentic_crawl.py</code></td>
+<td>Web crawling agent</td>
+<td>URL fetch, content extraction, caching</td>
+</tr>
+<tr>
+<td><code>test_groq_classifier.py</code></td>
+<td>Groq LLM classification</td>
+<td>Subject classification via Groq API</td>
+</tr>
+<tr>
+<td><code>test_subject_classifier.py</code></td>
+<td>Subject detection</td>
+<td>Input → Subject label mapping</td>
+</tr>
+<tr>
+<td><code>test_topic_chaining.py</code></td>
+<td>Topic dependency detection</td>
+<td>Prerequisite chain calculation</td>
+</tr>
+<tr>
+<td><code>test_learning_agent_standalone.py</code></td>
+<td>Learning agent (isolated)</td>
+<td>Critic → Learner → Performance loop</td>
+</tr>
+<tr>
+<td><code>test_ocr_model.py</code></td>
+<td>OCR model accuracy</td>
+<td>Handwritten text recognition</td>
+</tr>
+<tr>
+<td><code>test_worker6.py</code></td>
+<td>Kafka consumer worker</td>
+<td>Message consumption, processing</td>
+</tr>
+<tr>
+<td><code>test_workers.py</code></td>
+<td>Multiple Kafka workers</td>
+<td>Concurrent consumer testing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="pipeline-testing-flow">49.4 Pipeline Testing Flow</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Pipeline Testing Flow "]
+        direction TB
+        N0["test_full_pipeline.py"]
+        N1["1. Upload test PDF (frenchrevolution.pdf)"]
+        N2["2. Process via document pipeline"]
+        N3["Text extraction (PyMuPDF)"]
+        N4["Chunking (500-char, 50 overlap)"]
+        N5["Embedding (sentence-transformers)"]
+        N6["3. Store in Qdrant"]
+        N7["4. Query: 'What caused the French Revolution?'"]
+        N8["5. Verify: response contains relevant chunks"]
+        N9["6. Cleanup: delete test collection"]
+    end
+</pre>
+<hr />
+<h2 id="pytest-configuration-2">49.5 pytest Configuration</h2>
+<h3 id="source-pytest.ini">Source: <code>pytest.ini</code></h3>
+<div class="sourceCode" id="cb311"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb311-1"><a href="#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[pytest]</span></span>
+<span id="cb311-2"><a href="#cb311-2" aria-hidden="true" tabindex="-1"></a><span class="dt">testpaths </span><span class="ot">=</span><span class="st"> tests</span></span>
+<span id="cb311-3"><a href="#cb311-3" aria-hidden="true" tabindex="-1"></a><span class="dt">python_files </span><span class="ot">=</span><span class="st"> test_*.py</span></span>
+<span id="cb311-4"><a href="#cb311-4" aria-hidden="true" tabindex="-1"></a><span class="dt">python_classes </span><span class="ot">=</span><span class="st"> Test*</span></span>
+<span id="cb311-5"><a href="#cb311-5" aria-hidden="true" tabindex="-1"></a><span class="dt">python_functions </span><span class="ot">=</span><span class="st"> test_*</span></span>
+<span id="cb311-6"><a href="#cb311-6" aria-hidden="true" tabindex="-1"></a><span class="dt">markers </span><span class="ot">=</span></span>
+<span id="cb311-7"><a href="#cb311-7" aria-hidden="true" tabindex="-1"></a><span class="dt">    slow: marks tests as slow</span></span>
+<span id="cb311-8"><a href="#cb311-8" aria-hidden="true" tabindex="-1"></a><span class="dt">    integration: marks integration tests</span></span>
+<span id="cb311-9"><a href="#cb311-9" aria-hidden="true" tabindex="-1"></a><span class="dt">    ml: marks ML model tests</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

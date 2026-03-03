@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 27: AI Services Deep-Dive — 89-File Service Layer</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-26.html">&larr; Previous</a> <a href="page-28.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-27-ai-services-deep-dive-89-file-service-layer">Page 27: AI Services Deep-Dive — 89-File Service Layer</h1>
+<hr />
+<h2 id="overview-18">27.1 Overview</h2>
+<p>The AI Service’s <code>services/</code> directory contains <strong>89 Python files</strong> implementing every AI capability in ensureStudy. This page catalogs every service, grouped by functional domain.</p>
+<h3 id="source-backendai-serviceappservices-89-files">Source: <code>backend/ai-service/app/services/</code> (89 files)</h3>
+<hr />
+<h2 id="service-catalog-by-domain">27.2 Service Catalog by Domain</h2>
+<h3 id="tutoring-chat-9-services">Tutoring &amp; Chat (9 services)</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abcr_service.py</code></td>
+<td>ABCR (Assess-Build-Challenge-Reflect) tutoring cycle</td>
+</tr>
+<tr>
+<td><code>abcr_cache.py</code></td>
+<td>Redis caching layer for ABCR state</td>
+</tr>
+<tr>
+<td><code>chat_persistence.py</code></td>
+<td>Persist/retrieve chat sessions from PostgreSQL</td>
+</tr>
+<tr>
+<td><code>followup_generator.py</code></td>
+<td>Generate follow-up questions from responses</td>
+</tr>
+<tr>
+<td><code>context.py</code></td>
+<td>Maintain conversation context across turns</td>
+</tr>
+<tr>
+<td><code>mcp_context.py</code></td>
+<td>MCP (Model Context Protocol) integration</td>
+</tr>
+<tr>
+<td><code>llm_provider.py</code></td>
+<td>Multi-provider LLM abstraction (OpenAI, Gemini, Groq, Ollama)</td>
+</tr>
+<tr>
+<td><code>api_key_manager.py</code></td>
+<td>API key rotation and management</td>
+</tr>
+<tr>
+<td><code>debug_logger.py</code></td>
+<td>Structured debug logging for LLM calls</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rag-search-8-services">RAG &amp; Search (8 services)</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>qdrant_service.py</code></td>
+<td>Qdrant vector database operations</td>
+</tr>
+<tr>
+<td><code>rag_service.py</code></td>
+<td>RAG retrieval pipeline (rewrite → search → synthesize)</td>
+</tr>
+<tr>
+<td><code>search_service.py</code></td>
+<td>Unified search across multiple sources</td>
+</tr>
+<tr>
+<td><code>semantic_search_service.py</code></td>
+<td>Semantic similarity search</td>
+</tr>
+<tr>
+<td><code>web_search_service.py</code></td>
+<td>External web search (Serper, DuckDuckGo)</td>
+</tr>
+<tr>
+<td><code>youtube_search_service.py</code></td>
+<td>YouTube video search + metadata</td>
+</tr>
+<tr>
+<td><code>phrase_extractor.py</code></td>
+<td>Extract key phrases for search queries</td>
+</tr>
+<tr>
+<td><code>query_rewriter.py</code></td>
+<td>LLM-based query rewriting for better retrieval</td>
+</tr>
+</tbody>
+</table>
+<h3 id="document-processing-11-services">Document Processing (11 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>document_processor.py</code></td>
+<td>Orchestrate 7-stage document pipeline</td>
+</tr>
+<tr>
+<td><code>document_preprocessor.py</code></td>
+<td>PDF/image cleaning and normalization</td>
+</tr>
+<tr>
+<td><code>pdf_extractor.py</code></td>
+<td>Extract text from PDFs (PyMuPDF)</td>
+</tr>
+<tr>
+<td><code>pdf_processor.py</code></td>
+<td>Advanced PDF processing with layout</td>
+</tr>
+<tr>
+<td><code>pdf_downloader.py</code></td>
+<td>Download PDFs from URLs</td>
+</tr>
+<tr>
+<td><code>pdf_generator.py</code></td>
+<td>Generate PDF study materials</td>
+</tr>
+<tr>
+<td><code>ocr_service.py</code></td>
+<td>OCR orchestration (Tesseract, EasyOCR, Surya)</td>
+</tr>
+<tr>
+<td><code>ocr_adapter.py</code></td>
+<td>Unified OCR adapter interface</td>
+</tr>
+<tr>
+<td><code>nanonets_ocr.py</code></td>
+<td>Nanonets cloud OCR integration</td>
+</tr>
+<tr>
+<td><code>hybrid_ocr.py</code></td>
+<td>Multi-backend hybrid OCR</td>
+</tr>
+<tr>
+<td><code>latex_converter.py</code></td>
+<td>LaTeX formula extraction and conversion</td>
+</tr>
+</tbody>
+</table>
+<h3 id="image-layout-processing-4-services">Image &amp; Layout Processing (4 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image_service.py</code></td>
+<td>Image generation and manipulation</td>
+</tr>
+<tr>
+<td><code>image_enhancer.py</code></td>
+<td>Image preprocessing for OCR</td>
+</tr>
+<tr>
+<td><code>layout_service.py</code></td>
+<td>Document layout detection</td>
+</tr>
+<tr>
+<td><code>flowchart_generator.py</code></td>
+<td>Generate flowchart diagrams from text</td>
+</tr>
+</tbody>
+</table>
+<h3 id="content-curriculum-7-services">Content &amp; Curriculum (7 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_storage.py</code></td>
+<td>Store/retrieve curriculum data</td>
+</tr>
+<tr>
+<td><code>classroom_matcher.py</code></td>
+<td>Match content to classrooms</td>
+</tr>
+<tr>
+<td><code>content_crawler.py</code></td>
+<td>Crawl web URLs for content</td>
+</tr>
+<tr>
+<td><code>content_normalizer.py</code></td>
+<td>Normalize extracted content</td>
+</tr>
+<tr>
+<td><code>fast_content_fetcher.py</code></td>
+<td>Parallel async content fetching</td>
+</tr>
+<tr>
+<td><code>material_indexer.py</code></td>
+<td>Index classroom materials in Qdrant</td>
+</tr>
+<tr>
+<td><code>chunking_service.py</code></td>
+<td>Intelligent text chunking</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assessment-grading-5-services">Assessment &amp; Grading (5 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assessment_service.py</code></td>
+<td>Generate assessments and quizzes</td>
+</tr>
+<tr>
+<td><code>answer_evaluator.py</code></td>
+<td>Evaluate student answers with LLM</td>
+</tr>
+<tr>
+<td><code>grading_service.py</code></td>
+<td>Automated grading pipeline</td>
+</tr>
+<tr>
+<td><code>interview_evaluator.py</code></td>
+<td>Evaluate mock interview responses</td>
+</tr>
+<tr>
+<td><code>exam_prep.py</code></td>
+<td>Exam preparation material generation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="speech-audio-4-services">Speech &amp; Audio (4 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>speech_service.py</code></td>
+<td>Text-to-speech + speech-to-text</td>
+</tr>
+<tr>
+<td><code>audio_fluency_analyzer.py</code></td>
+<td>Analyze speech fluency metrics</td>
+</tr>
+<tr>
+<td><code>fluency_analyzer.py</code></td>
+<td>Advanced fluency analysis</td>
+</tr>
+<tr>
+<td><code>fluency_evaluator.py</code></td>
+<td>Score fluency evaluation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="soft-skills-behavior-5-services">Soft Skills &amp; Behavior (5 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gaze_analyzer.py</code></td>
+<td>Eye contact and gaze analysis</td>
+</tr>
+<tr>
+<td><code>gesture_analyzer.py</code></td>
+<td>Hand gesture recognition</td>
+</tr>
+<tr>
+<td><code>posture_analyzer.py</code></td>
+<td>Body posture evaluation</td>
+</tr>
+<tr>
+<td><code>grammar_analyzer.py</code></td>
+<td>Grammar and language quality</td>
+</tr>
+<tr>
+<td><code>behavior_analyzer.py</code></td>
+<td>Combined behavioral analysis</td>
+</tr>
+</tbody>
+</table>
+<h3 id="meeting-collaboration-4-services">Meeting &amp; Collaboration (4 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>meeting_embedding_service.py</code></td>
+<td>Embed meeting transcripts</td>
+</tr>
+<tr>
+<td><code>meeting_rag.py</code></td>
+<td>RAG for meeting Q&amp;A</td>
+</tr>
+<tr>
+<td><code>summarizer_service.py</code></td>
+<td>Text summarization</td>
+</tr>
+<tr>
+<td><code>tts_service.py</code></td>
+<td>Text-to-speech service</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notes-embedding-3-services">Notes &amp; Embedding (3 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>notes_embedding.py</code></td>
+<td>Embed student notes in Qdrant</td>
+</tr>
+<tr>
+<td><code>question_service.py</code></td>
+<td>Question generation service</td>
+</tr>
+<tr>
+<td><code>revision_service.py</code></td>
+<td>Spaced revision scheduling</td>
+</tr>
+</tbody>
+</table>
+<h3 id="video-media-analysis-4-services">Video &amp; Media Analysis (4 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>video_analyzer.py</code></td>
+<td>Analyze video for proctoring</td>
+</tr>
+<tr>
+<td><code>video_scoring.py</code></td>
+<td>Score video-based assessments</td>
+</tr>
+<tr>
+<td><code>video_feedback.py</code></td>
+<td>Generate video feedback</td>
+</tr>
+<tr>
+<td><code>filler_detector.py</code></td>
+<td>Detect filler words in speech</td>
+</tr>
+</tbody>
+</table>
+<h3 id="moderation-safety-1-service">Moderation &amp; Safety (1 service)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>moderation.py</code></td>
+<td>Content moderation pipeline</td>
+</tr>
+</tbody>
+</table>
+<h3 id="remaining-services-24-services">Remaining Services (24 services)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>student_performance.py</code></td>
+<td>Student performance analytics</td>
+</tr>
+<tr>
+<td><code>study_plan.py</code></td>
+<td>Generate personalized study plans</td>
+</tr>
+<tr>
+<td><code>topic_service.py</code></td>
+<td>Topic management operations</td>
+</tr>
+<tr>
+<td><code>vocabulary_service.py</code></td>
+<td>Vocabulary building features</td>
+</tr>
+<tr>
+<td><code>pronunciation_service.py</code></td>
+<td>Pronunciation assessment</td>
+</tr>
+<tr>
+<td><code>realtime_service.py</code></td>
+<td>Real-time WebSocket services</td>
+</tr>
+<tr>
+<td><code>resource_recommender.py</code></td>
+<td>Resource recommendation engine</td>
+</tr>
+<tr>
+<td><code>session_intelligence.py</code></td>
+<td>Intelligent session management</td>
+</tr>
+<tr>
+<td><code>session_manager.py</code></td>
+<td>Session lifecycle management</td>
+</tr>
+<tr>
+<td><code>spaced_repetition.py</code></td>
+<td>Spaced repetition scheduling</td>
+</tr>
+<tr>
+<td><code>speech_analytics.py</code></td>
+<td>Speech analytics dashboard data</td>
+</tr>
+<tr>
+<td><code>skill_analyzer.py</code></td>
+<td>Skill gap analysis</td>
+</tr>
+<tr>
+<td><code>subject_classifier.py</code></td>
+<td>Classify content by subject</td>
+</tr>
+<tr>
+<td><code>summary_service.py</code></td>
+<td>Session summary generation</td>
+</tr>
+<tr>
+<td><code>transcription_service.py</code></td>
+<td>Audio transcription management</td>
+</tr>
+<tr>
+<td><code>tutor_service.py</code></td>
+<td>Core tutoring service</td>
+</tr>
+<tr>
+<td><code>unified_report.py</code></td>
+<td>Unified student report generation</td>
+</tr>
+<tr>
+<td><code>upload_service.py</code></td>
+<td>File upload handling</td>
+</tr>
+<tr>
+<td><code>url_validator.py</code></td>
+<td>Validate and sanitize URLs</td>
+</tr>
+<tr>
+<td><code>web_ingest.py</code></td>
+<td>Web content ingestion pipeline</td>
+</tr>
+<tr>
+<td><code>weakness_service.py</code></td>
+<td>Student weakness identification</td>
+</tr>
+<tr>
+<td><code>websocket_manager.py</code></td>
+<td>WebSocket connection management</td>
+</tr>
+<tr>
+<td><code>whisper_service.py</code></td>
+<td>OpenAI Whisper integration</td>
+</tr>
+<tr>
+<td><code>worker_service.py</code></td>
+<td>Background worker tasks</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="service-dependencies">27.3 Service Dependencies</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Service Dependencies "]
+        direction TB
+        N0["llm_provider.py ◄ abcr_service.py, answer_evaluator.py,"]
+        N1["followup_generator.py, tutor_service.py"]
+        N2["openai (GPT-4)"]
+        N3["google.generativeai (Gemini)"]
+        N4["groq (Mixtral/LLaMA)"]
+        N5["ollama (local Mistral)"]
+        N6["qdrant_service.py ◄ rag_service.py, material_indexer.py,"]
+        N7["notes_embedding.py, meeting_embedding_service.py"]
+        N8["qdrant_client"]
+        N9["speech_service.py ◄ audio_fluency_analyzer.py, fluency_evaluator.py"]
+        N10["openai (Whisper)"]
+        N11["boto3 (AWS Polly)"]
+    end
+</pre>
+<hr />
+<h2 id="service-size-distribution">27.4 Service Size Distribution</h2>
+<table>
+<thead>
+<tr>
+<th>Lines</th>
+<th>Count</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 100</td>
+<td>35</td>
+<td>api_key_manager, debug_logger, url_validator</td>
+</tr>
+<tr>
+<td>100-300</td>
+<td>30</td>
+<td>rag_service, assessment_service, gaze_analyzer</td>
+</tr>
+<tr>
+<td>300-500</td>
+<td>15</td>
+<td>document_processor, behavior_analyzer, meeting_rag</td>
+</tr>
+<tr>
+<td>&gt; 500</td>
+<td>9</td>
+<td>abcr_service, tutor_service, web_ingest</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

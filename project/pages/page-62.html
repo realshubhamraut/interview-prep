@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 62: Assessment Engine Deep Dive</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-61.html">&larr; Previous</a> <a href="page-63.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-62-assessment-engine-deep-dive">Page 62: Assessment Engine Deep Dive</h1>
+<hr />
+<h2 id="overview-50">62.1 Overview</h2>
+<p>The assessment engine supports <strong>4 question types</strong>, AI-powered question generation, automated grading (MCQ + descriptive), proctored exam sessions, and detailed analytics. Teachers create assessments; students take them with optional proctoring; AI grades automated sections.</p>
+<hr />
+<h2 id="data-models-4">62.2 Data Models</h2>
+<h3 id="assessment-1">Assessment</h3>
+<div class="sourceCode" id="cb404"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb404-1"><a href="#cb404-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Assessment(db.Model):</span>
+<span id="cb404-2"><a href="#cb404-2" aria-hidden="true" tabindex="-1"></a>    __tablename__ <span class="op">=</span> <span class="st">&quot;assessments&quot;</span></span>
+<span id="cb404-3"><a href="#cb404-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb404-4"><a href="#cb404-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>              <span class="op">=</span> Column(String(<span class="dv">36</span>), primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb404-5"><a href="#cb404-5" aria-hidden="true" tabindex="-1"></a>    title           <span class="op">=</span> Column(String(<span class="dv">200</span>), nullable<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb404-6"><a href="#cb404-6" aria-hidden="true" tabindex="-1"></a>    classroom_id    <span class="op">=</span> Column(String(<span class="dv">36</span>), ForeignKey(<span class="st">&quot;classrooms.id&quot;</span>))</span>
+<span id="cb404-7"><a href="#cb404-7" aria-hidden="true" tabindex="-1"></a>    teacher_id      <span class="op">=</span> Column(String(<span class="dv">36</span>), ForeignKey(<span class="st">&quot;users.id&quot;</span>))</span>
+<span id="cb404-8"><a href="#cb404-8" aria-hidden="true" tabindex="-1"></a>    subject         <span class="op">=</span> Column(String(<span class="dv">100</span>))</span>
+<span id="cb404-9"><a href="#cb404-9" aria-hidden="true" tabindex="-1"></a>    description     <span class="op">=</span> Column(Text)</span>
+<span id="cb404-10"><a href="#cb404-10" aria-hidden="true" tabindex="-1"></a>    total_marks     <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb404-11"><a href="#cb404-11" aria-hidden="true" tabindex="-1"></a>    duration_minutes <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">60</span>)</span>
+<span id="cb404-12"><a href="#cb404-12" aria-hidden="true" tabindex="-1"></a>    is_proctored    <span class="op">=</span> Column(Boolean, default<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb404-13"><a href="#cb404-13" aria-hidden="true" tabindex="-1"></a>    is_published    <span class="op">=</span> Column(Boolean, default<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb404-14"><a href="#cb404-14" aria-hidden="true" tabindex="-1"></a>    due_date        <span class="op">=</span> Column(DateTime)</span>
+<span id="cb404-15"><a href="#cb404-15" aria-hidden="true" tabindex="-1"></a>    created_at      <span class="op">=</span> Column(DateTime, default<span class="op">=</span>datetime.utcnow)</span>
+<span id="cb404-16"><a href="#cb404-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb404-17"><a href="#cb404-17" aria-hidden="true" tabindex="-1"></a>    questions <span class="op">=</span> relationship(<span class="st">&quot;AssessmentQuestion&quot;</span>, back_populates<span class="op">=</span><span class="st">&quot;assessment&quot;</span>)</span>
+<span id="cb404-18"><a href="#cb404-18" aria-hidden="true" tabindex="-1"></a>    results   <span class="op">=</span> relationship(<span class="st">&quot;AssessmentResult&quot;</span>, back_populates<span class="op">=</span><span class="st">&quot;assessment&quot;</span>)</span></code></pre></div>
+<h3 id="assessmentquestion">AssessmentQuestion</h3>
+<div class="sourceCode" id="cb405"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb405-1"><a href="#cb405-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AssessmentQuestion(db.Model):</span>
+<span id="cb405-2"><a href="#cb405-2" aria-hidden="true" tabindex="-1"></a>    __tablename__ <span class="op">=</span> <span class="st">&quot;assessment_questions&quot;</span></span>
+<span id="cb405-3"><a href="#cb405-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb405-4"><a href="#cb405-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>              <span class="op">=</span> Column(String(<span class="dv">36</span>), primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb405-5"><a href="#cb405-5" aria-hidden="true" tabindex="-1"></a>    assessment_id   <span class="op">=</span> Column(String(<span class="dv">36</span>), ForeignKey(<span class="st">&quot;assessments.id&quot;</span>))</span>
+<span id="cb405-6"><a href="#cb405-6" aria-hidden="true" tabindex="-1"></a>    question_text   <span class="op">=</span> Column(Text, nullable<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb405-7"><a href="#cb405-7" aria-hidden="true" tabindex="-1"></a>    question_type   <span class="op">=</span> Column(String(<span class="dv">20</span>))    <span class="co"># &#39;mcq&#39;, &#39;descriptive&#39;, &#39;true_false&#39;, &#39;fill_blank&#39;</span></span>
+<span id="cb405-8"><a href="#cb405-8" aria-hidden="true" tabindex="-1"></a>    options         <span class="op">=</span> Column(JSON)           <span class="co"># For MCQ: [&quot;A) ...&quot;, &quot;B) ...&quot;, ...]</span></span>
+<span id="cb405-9"><a href="#cb405-9" aria-hidden="true" tabindex="-1"></a>    correct_answer  <span class="op">=</span> Column(Text)           <span class="co"># For MCQ: &quot;A&quot;, For others: answer text</span></span>
+<span id="cb405-10"><a href="#cb405-10" aria-hidden="true" tabindex="-1"></a>    marks           <span class="op">=</span> Column(Integer, default<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb405-11"><a href="#cb405-11" aria-hidden="true" tabindex="-1"></a>    difficulty      <span class="op">=</span> Column(String(<span class="dv">20</span>))     <span class="co"># easy, medium, hard</span></span>
+<span id="cb405-12"><a href="#cb405-12" aria-hidden="true" tabindex="-1"></a>    bloom_level     <span class="op">=</span> Column(String(<span class="dv">30</span>))     <span class="co"># remember, understand, apply, analyze, evaluate, create</span></span>
+<span id="cb405-13"><a href="#cb405-13" aria-hidden="true" tabindex="-1"></a>    explanation     <span class="op">=</span> Column(Text)</span>
+<span id="cb405-14"><a href="#cb405-14" aria-hidden="true" tabindex="-1"></a>    order           <span class="op">=</span> Column(Integer)</span></code></pre></div>
+<h3 id="assessmentresult">AssessmentResult</h3>
+<div class="sourceCode" id="cb406"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb406-1"><a href="#cb406-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AssessmentResult(db.Model):</span>
+<span id="cb406-2"><a href="#cb406-2" aria-hidden="true" tabindex="-1"></a>    __tablename__ <span class="op">=</span> <span class="st">&quot;assessment_results&quot;</span></span>
+<span id="cb406-3"><a href="#cb406-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb406-4"><a href="#cb406-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>              <span class="op">=</span> Column(String(<span class="dv">36</span>), primary_key<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb406-5"><a href="#cb406-5" aria-hidden="true" tabindex="-1"></a>    assessment_id   <span class="op">=</span> Column(String(<span class="dv">36</span>), ForeignKey(<span class="st">&quot;assessments.id&quot;</span>))</span>
+<span id="cb406-6"><a href="#cb406-6" aria-hidden="true" tabindex="-1"></a>    student_id      <span class="op">=</span> Column(String(<span class="dv">36</span>), ForeignKey(<span class="st">&quot;users.id&quot;</span>))</span>
+<span id="cb406-7"><a href="#cb406-7" aria-hidden="true" tabindex="-1"></a>    responses       <span class="op">=</span> Column(JSON)           <span class="co"># {question_id: student_answer}</span></span>
+<span id="cb406-8"><a href="#cb406-8" aria-hidden="true" tabindex="-1"></a>    score           <span class="op">=</span> Column(Float)</span>
+<span id="cb406-9"><a href="#cb406-9" aria-hidden="true" tabindex="-1"></a>    total_marks     <span class="op">=</span> Column(Integer)</span>
+<span id="cb406-10"><a href="#cb406-10" aria-hidden="true" tabindex="-1"></a>    percentage      <span class="op">=</span> Column(Float)</span>
+<span id="cb406-11"><a href="#cb406-11" aria-hidden="true" tabindex="-1"></a>    grade           <span class="op">=</span> Column(String(<span class="dv">5</span>))      <span class="co"># A, B, C, D, F</span></span>
+<span id="cb406-12"><a href="#cb406-12" aria-hidden="true" tabindex="-1"></a>    feedback        <span class="op">=</span> Column(JSON)           <span class="co"># Per-question feedback</span></span>
+<span id="cb406-13"><a href="#cb406-13" aria-hidden="true" tabindex="-1"></a>    time_taken      <span class="op">=</span> Column(Integer)        <span class="co"># Seconds</span></span>
+<span id="cb406-14"><a href="#cb406-14" aria-hidden="true" tabindex="-1"></a>    submitted_at    <span class="op">=</span> Column(DateTime)</span>
+<span id="cb406-15"><a href="#cb406-15" aria-hidden="true" tabindex="-1"></a>    graded_at       <span class="op">=</span> Column(DateTime)</span>
+<span id="cb406-16"><a href="#cb406-16" aria-hidden="true" tabindex="-1"></a>    grading_method  <span class="op">=</span> Column(String(<span class="dv">20</span>))     <span class="co"># &#39;auto&#39;, &#39;ai&#39;, &#39;manual&#39;</span></span></code></pre></div>
+<hr />
+<h2 id="question-types">62.3 Question Types</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Auto-Gradable</th>
+<th>AI-Gradable</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCQ</td>
+<td>(exact match)</td>
+<td>—</td>
+<td>4-option single answer</td>
+</tr>
+<tr>
+<td>True/False</td>
+<td></td>
+<td>—</td>
+<td>Binary choice</td>
+</tr>
+<tr>
+<td>Fill in Blank</td>
+<td>(fuzzy match)</td>
+<td>—</td>
+<td>Single word/phrase</td>
+</tr>
+<tr>
+<td>Descriptive</td>
+<td>—</td>
+<td>(LLM grading)</td>
+<td>Short/long essay</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="assessment-lifecycle">62.4 Assessment Lifecycle</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Assessment Lifecycle "]
+        direction TB
+        N0["CREATE  ADD QUESTIONS  PUBLISH  TAKE  SUBMIT  GRADE  REVIEW"]
+        N1["Teacher    Teacher/AI     Teacher     Student  Student      AI/Auto   Student"]
+    end
+</pre>
+<h3 id="step-1-create-add-questions-teacher">Step 1: Create &amp; Add Questions (Teacher)</h3>
+<pre><code>POST /api/assessments
+POST /api/assessments/{id}/questions
+  or
+POST /api/assessments/{id}/generate (AI-generated)</code></pre>
+<h3 id="step-2-ai-question-generation">Step 2: AI Question Generation</h3>
+<div class="sourceCode" id="cb409"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb409-1"><a href="#cb409-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AI Service generates questions from classroom materials</span></span>
+<span id="cb409-2"><a href="#cb409-2" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/assessments/generate&quot;</span>)</span>
+<span id="cb409-3"><a href="#cb409-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> generate_questions(request: GenerateRequest):</span>
+<span id="cb409-4"><a href="#cb409-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get classroom context</span></span>
+<span id="cb409-5"><a href="#cb409-5" aria-hidden="true" tabindex="-1"></a>    context <span class="op">=</span> qdrant.search(<span class="st">&quot;classroom_materials&quot;</span>, request.topic)</span>
+<span id="cb409-6"><a href="#cb409-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb409-7"><a href="#cb409-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># LLM generates questions</span></span>
+<span id="cb409-8"><a href="#cb409-8" aria-hidden="true" tabindex="-1"></a>    questions <span class="op">=</span> <span class="cf">await</span> llm.generate(</span>
+<span id="cb409-9"><a href="#cb409-9" aria-hidden="true" tabindex="-1"></a>        MCQ_PROMPT.<span class="bu">format</span>(</span>
+<span id="cb409-10"><a href="#cb409-10" aria-hidden="true" tabindex="-1"></a>            topic<span class="op">=</span>request.topic,</span>
+<span id="cb409-11"><a href="#cb409-11" aria-hidden="true" tabindex="-1"></a>            count<span class="op">=</span>request.count,</span>
+<span id="cb409-12"><a href="#cb409-12" aria-hidden="true" tabindex="-1"></a>            difficulty<span class="op">=</span>request.difficulty,</span>
+<span id="cb409-13"><a href="#cb409-13" aria-hidden="true" tabindex="-1"></a>            context<span class="op">=</span>context</span>
+<span id="cb409-14"><a href="#cb409-14" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb409-15"><a href="#cb409-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb409-16"><a href="#cb409-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb409-17"><a href="#cb409-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> parse_questions(questions)</span></code></pre></div>
+<h3 id="step-3-student-takes-assessment">Step 3: Student Takes Assessment</h3>
+<pre><code>GET /api/assessments/{id}/take
+  → Returns questions (without correct answers)
+  → Starts timer
+  → Activates proctoring if is_proctored=True</code></pre>
+<h3 id="step-4-auto-ai-grading">Step 4: Auto + AI Grading</h3>
+<div class="sourceCode" id="cb411"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb411-1"><a href="#cb411-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> grade_assessment(result: AssessmentResult, questions: <span class="bu">list</span>):</span>
+<span id="cb411-2"><a href="#cb411-2" aria-hidden="true" tabindex="-1"></a>    total_score <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb411-3"><a href="#cb411-3" aria-hidden="true" tabindex="-1"></a>    feedback <span class="op">=</span> {}</span>
+<span id="cb411-4"><a href="#cb411-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb411-5"><a href="#cb411-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> q <span class="kw">in</span> questions:</span>
+<span id="cb411-6"><a href="#cb411-6" aria-hidden="true" tabindex="-1"></a>        student_answer <span class="op">=</span> result.responses.get(q.<span class="bu">id</span>)</span>
+<span id="cb411-7"><a href="#cb411-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb411-8"><a href="#cb411-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> q.question_type <span class="op">==</span> <span class="st">&quot;mcq&quot;</span>:</span>
+<span id="cb411-9"><a href="#cb411-9" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Exact match</span></span>
+<span id="cb411-10"><a href="#cb411-10" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> q.marks <span class="cf">if</span> student_answer <span class="op">==</span> q.correct_answer <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb411-11"><a href="#cb411-11" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb411-12"><a href="#cb411-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> q.question_type <span class="op">==</span> <span class="st">&quot;true_false&quot;</span>:</span>
+<span id="cb411-13"><a href="#cb411-13" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> q.marks <span class="cf">if</span> student_answer <span class="op">==</span> q.correct_answer <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb411-14"><a href="#cb411-14" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb411-15"><a href="#cb411-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> q.question_type <span class="op">==</span> <span class="st">&quot;fill_blank&quot;</span>:</span>
+<span id="cb411-16"><a href="#cb411-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Fuzzy match (Levenshtein distance)</span></span>
+<span id="cb411-17"><a href="#cb411-17" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> q.marks <span class="cf">if</span> fuzzy_match(student_answer, q.correct_answer) <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb411-18"><a href="#cb411-18" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb411-19"><a href="#cb411-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> q.question_type <span class="op">==</span> <span class="st">&quot;descriptive&quot;</span>:</span>
+<span id="cb411-20"><a href="#cb411-20" aria-hidden="true" tabindex="-1"></a>            <span class="co"># LLM grading</span></span>
+<span id="cb411-21"><a href="#cb411-21" aria-hidden="true" tabindex="-1"></a>            grading_result <span class="op">=</span> <span class="cf">await</span> grade_descriptive(</span>
+<span id="cb411-22"><a href="#cb411-22" aria-hidden="true" tabindex="-1"></a>                question<span class="op">=</span>q.question_text,</span>
+<span id="cb411-23"><a href="#cb411-23" aria-hidden="true" tabindex="-1"></a>                expected<span class="op">=</span>q.correct_answer,</span>
+<span id="cb411-24"><a href="#cb411-24" aria-hidden="true" tabindex="-1"></a>                student_answer<span class="op">=</span>student_answer,</span>
+<span id="cb411-25"><a href="#cb411-25" aria-hidden="true" tabindex="-1"></a>                max_marks<span class="op">=</span>q.marks</span>
+<span id="cb411-26"><a href="#cb411-26" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb411-27"><a href="#cb411-27" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> grading_result.score</span>
+<span id="cb411-28"><a href="#cb411-28" aria-hidden="true" tabindex="-1"></a>            feedback[q.<span class="bu">id</span>] <span class="op">=</span> grading_result.feedback</span>
+<span id="cb411-29"><a href="#cb411-29" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb411-30"><a href="#cb411-30" aria-hidden="true" tabindex="-1"></a>        total_score <span class="op">+=</span> score</span>
+<span id="cb411-31"><a href="#cb411-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb411-32"><a href="#cb411-32" aria-hidden="true" tabindex="-1"></a>    result.score <span class="op">=</span> total_score</span>
+<span id="cb411-33"><a href="#cb411-33" aria-hidden="true" tabindex="-1"></a>    result.percentage <span class="op">=</span> (total_score <span class="op">/</span> result.total_marks) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb411-34"><a href="#cb411-34" aria-hidden="true" tabindex="-1"></a>    result.grade <span class="op">=</span> calculate_grade(result.percentage)</span></code></pre></div>
+<hr />
+<h2 id="blooms-taxonomy-integration">62.5 Bloom’s Taxonomy Integration</h2>
+<p>Questions are tagged with Bloom’s taxonomy levels:</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 38%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Level</th>
+<th>Keywords</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Remember</td>
+<td>Define, list, recall</td>
+<td>“What is photosynthesis?”</td>
+</tr>
+<tr>
+<td>Understand</td>
+<td>Explain, summarize</td>
+<td>“Explain the water cycle”</td>
+</tr>
+<tr>
+<td>Apply</td>
+<td>Solve, demonstrate</td>
+<td>“Calculate the moles in 50g NaCl”</td>
+</tr>
+<tr>
+<td>Analyze</td>
+<td>Compare, contrast</td>
+<td>“Compare mitosis and meiosis”</td>
+</tr>
+<tr>
+<td>Evaluate</td>
+<td>Justify, critique</td>
+<td>“Evaluate the impact of deforestation”</td>
+</tr>
+<tr>
+<td>Create</td>
+<td>Design, propose</td>
+<td>“Design an experiment to test…”</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="assessment-analytics">62.6 Assessment Analytics</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 50%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Calculation</th>
+<th>API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Class average</td>
+<td>Mean of all scores</td>
+<td><code>/api/assessments/{id}/analytics</code></td>
+</tr>
+<tr>
+<td>Difficulty index</td>
+<td>% correct per question</td>
+<td>Per-question stats</td>
+</tr>
+<tr>
+<td>Discrimination index</td>
+<td>Top 27% vs bottom 27%</td>
+<td>Question quality</td>
+</tr>
+<tr>
+<td>Score distribution</td>
+<td>Histogram of scores</td>
+<td>Chart data</td>
+</tr>
+<tr>
+<td>Time analysis</td>
+<td>Average time per question</td>
+<td>/analytics</td>
+</tr>
+<tr>
+<td>Bloom coverage</td>
+<td>% at each taxonomy level</td>
+<td>Report</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

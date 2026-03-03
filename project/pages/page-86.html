@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 86: Meeting Recording Pipeline</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-85.html">&larr; Previous</a> <a href="page-87.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-86-meeting-recording-pipeline">Page 86: Meeting Recording Pipeline</h1>
+<blockquote>
+<p>End-to-end recording processing: video upload → audio extraction → Whisper transcription → speaker diarization → embedding generation → meeting RAG.</p>
+</blockquote>
+<hr />
+<h2 id="pipeline-architecture-1">86.1 Pipeline Architecture</h2>
+<pre class="mermaid">flowchart TB
+    VU["📹 Video Upload<br/>WebM/MP4"] --> RP["recording_pipeline<br/>6.5KB — Orchestrates full flow"]
+
+    subgraph TS["TranscriptionService — 25KB"]
+        direction TB
+        EA["extract_audio()<br/>FFmpeg → WAV 16kHz mono"]
+        TR["transcribe()<br/>Local Whisper model"]
+        DI["diarize()<br/>Speaker identification"]
+        AL["align()<br/>Match speakers to segments"]
+        EA --> TR --> DI --> AL
+    end
+
+    RP --> TS
+    TS --> MES["MeetingEmbedding Service<br/>12.6KB — Chunk + embed transcripts<br/>→ Qdrant 'meeting_transcripts'"]
+    MES --> MRAG["MeetingRAG<br/>8.4KB — Semantic Q&A over meetings<br/>Speaker attribution + timestamps"]
+</pre>
+<h3 id="source-files-3">Source Files</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api/process_recording.py</code></td>
+<td>8.4KB</td>
+<td>Upload + process endpoint</td>
+</tr>
+<tr>
+<td><code>api/meeting_qa.py</code></td>
+<td>4.7KB</td>
+<td>Q&amp;A over meeting transcripts</td>
+</tr>
+<tr>
+<td><code>services/recording_pipeline.py</code></td>
+<td>6.5KB</td>
+<td>Pipeline orchestrator</td>
+</tr>
+<tr>
+<td><code>services/transcription_service.py</code></td>
+<td>25KB</td>
+<td>Whisper + diarization</td>
+</tr>
+<tr>
+<td><code>services/meeting_embedding_service.py</code></td>
+<td>12.6KB</td>
+<td>Transcript embedding</td>
+</tr>
+<tr>
+<td><code>services/meeting_rag.py</code></td>
+<td>8.4KB</td>
+<td>Meeting-aware RAG</td>
+</tr>
+<tr>
+<td><code>core-service/app/routes/recordings.py</code></td>
+<td>17KB</td>
+<td>Recording CRUD</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="transcriptionservice">86.2 TranscriptionService</h2>
+<h3 id="data-models-7">Data Models</h3>
+<div class="sourceCode" id="cb556"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb556-1"><a href="#cb556-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TranscriptSegment(BaseModel):</span>
+<span id="cb556-2"><a href="#cb556-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>: <span class="bu">int</span></span>
+<span id="cb556-3"><a href="#cb556-3" aria-hidden="true" tabindex="-1"></a>    start: <span class="bu">float</span>            <span class="co"># Start time (seconds)</span></span>
+<span id="cb556-4"><a href="#cb556-4" aria-hidden="true" tabindex="-1"></a>    end: <span class="bu">float</span>              <span class="co"># End time (seconds)</span></span>
+<span id="cb556-5"><a href="#cb556-5" aria-hidden="true" tabindex="-1"></a>    speaker_id: <span class="bu">int</span></span>
+<span id="cb556-6"><a href="#cb556-6" aria-hidden="true" tabindex="-1"></a>    speaker_name: Optional[<span class="bu">str</span>]</span>
+<span id="cb556-7"><a href="#cb556-7" aria-hidden="true" tabindex="-1"></a>    text: <span class="bu">str</span></span>
+<span id="cb556-8"><a href="#cb556-8" aria-hidden="true" tabindex="-1"></a>    confidence: <span class="bu">float</span></span>
+<span id="cb556-9"><a href="#cb556-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb556-10"><a href="#cb556-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpeakerInfo(BaseModel):</span>
+<span id="cb556-11"><a href="#cb556-11" aria-hidden="true" tabindex="-1"></a>    speaker_id: <span class="bu">int</span></span>
+<span id="cb556-12"><a href="#cb556-12" aria-hidden="true" tabindex="-1"></a>    user_name: Optional[<span class="bu">str</span>]</span>
+<span id="cb556-13"><a href="#cb556-13" aria-hidden="true" tabindex="-1"></a>    total_speaking_time_seconds: <span class="bu">float</span></span>
+<span id="cb556-14"><a href="#cb556-14" aria-hidden="true" tabindex="-1"></a>    segment_count: <span class="bu">int</span></span>
+<span id="cb556-15"><a href="#cb556-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb556-16"><a href="#cb556-16" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MeetingTranscript(BaseModel):</span>
+<span id="cb556-17"><a href="#cb556-17" aria-hidden="true" tabindex="-1"></a>    recording_id: <span class="bu">str</span></span>
+<span id="cb556-18"><a href="#cb556-18" aria-hidden="true" tabindex="-1"></a>    meeting_id: <span class="bu">str</span></span>
+<span id="cb556-19"><a href="#cb556-19" aria-hidden="true" tabindex="-1"></a>    classroom_id: <span class="bu">str</span></span>
+<span id="cb556-20"><a href="#cb556-20" aria-hidden="true" tabindex="-1"></a>    language: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;en&quot;</span></span>
+<span id="cb556-21"><a href="#cb556-21" aria-hidden="true" tabindex="-1"></a>    duration_seconds: <span class="bu">float</span></span>
+<span id="cb556-22"><a href="#cb556-22" aria-hidden="true" tabindex="-1"></a>    speakers: List[SpeakerInfo]</span>
+<span id="cb556-23"><a href="#cb556-23" aria-hidden="true" tabindex="-1"></a>    segments: List[TranscriptSegment]</span>
+<span id="cb556-24"><a href="#cb556-24" aria-hidden="true" tabindex="-1"></a>    full_text: <span class="bu">str</span></span>
+<span id="cb556-25"><a href="#cb556-25" aria-hidden="true" tabindex="-1"></a>    formatted_transcript: <span class="bu">str</span></span>
+<span id="cb556-26"><a href="#cb556-26" aria-hidden="true" tabindex="-1"></a>    summary: <span class="bu">str</span></span>
+<span id="cb556-27"><a href="#cb556-27" aria-hidden="true" tabindex="-1"></a>    word_count: <span class="bu">int</span></span></code></pre></div>
+<h3 id="transcription-flow">Transcription Flow</h3>
+<div class="sourceCode" id="cb557"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb557-1"><a href="#cb557-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TranscriptionService:</span>
+<span id="cb557-2"><a href="#cb557-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Extract audio</span></span>
+<span id="cb557-3"><a href="#cb557-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> extract_audio(<span class="va">self</span>, video_path: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb557-4"><a href="#cb557-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;FFmpeg: video → WAV (16kHz mono for Whisper)&quot;&quot;&quot;</span></span>
+<span id="cb557-5"><a href="#cb557-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb557-6"><a href="#cb557-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 2: Transcribe with local Whisper</span></span>
+<span id="cb557-7"><a href="#cb557-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> transcribe_with_whisper(<span class="va">self</span>, audio_path, language<span class="op">=</span><span class="st">&quot;en&quot;</span>):</span>
+<span id="cb557-8"><a href="#cb557-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Uses openai-whisper package (free, local)</span></span>
+<span id="cb557-9"><a href="#cb557-9" aria-hidden="true" tabindex="-1"></a><span class="co">        Models: tiny(39M) → base(74M) → small(244M) → medium(769M) → large(1.5B)&quot;&quot;&quot;</span></span>
+<span id="cb557-10"><a href="#cb557-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb557-11"><a href="#cb557-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 3: Speaker diarization</span></span>
+<span id="cb557-12"><a href="#cb557-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> run_speaker_diarization(<span class="va">self</span>, audio_path, num_speakers<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb557-13"><a href="#cb557-13" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Uses simple_diarizer for local, free diarization&quot;&quot;&quot;</span></span>
+<span id="cb557-14"><a href="#cb557-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb557-15"><a href="#cb557-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 4: Align speakers with transcript</span></span>
+<span id="cb557-16"><a href="#cb557-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> align_speakers_with_transcript(<span class="va">self</span>, transcript_segments, diarization_segments):</span>
+<span id="cb557-17"><a href="#cb557-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Match speaker IDs to transcript segments by time overlap&quot;&quot;&quot;</span></span>
+<span id="cb557-18"><a href="#cb557-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb557-19"><a href="#cb557-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 5: Generate formatted output</span></span>
+<span id="cb557-20"><a href="#cb557-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _generate_formatted_transcript(<span class="va">self</span>, segments):</span>
+<span id="cb557-21"><a href="#cb557-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Groups consecutive segments by speaker:</span></span>
+<span id="cb557-22"><a href="#cb557-22" aria-hidden="true" tabindex="-1"></a><span class="co">        Speaker 1: Hello everyone...</span></span>
+<span id="cb557-23"><a href="#cb557-23" aria-hidden="true" tabindex="-1"></a><span class="co">        Speaker 2: Thank you...</span></span>
+<span id="cb557-24"><a href="#cb557-24" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb557-25"><a href="#cb557-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb557-26"><a href="#cb557-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 6: Extractive summary</span></span>
+<span id="cb557-27"><a href="#cb557-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> generate_summary(<span class="va">self</span>, full_text):</span>
+<span id="cb557-28"><a href="#cb557-28" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Top sentences by TF-IDF relevance&quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="storage">Storage</h3>
+<p>Transcripts stored in <strong>MongoDB</strong> (<code>ensure_study_meetings</code> database) for flexible querying and full-text search.</p>
+<hr />
+<h2 id="meeting-embedding-rag">86.3 Meeting Embedding &amp; RAG</h2>
+<h3 id="meeting-embedding-service-1">Meeting Embedding Service</h3>
+<p>Chunks transcripts and stores embeddings in Qdrant for semantic search:</p>
+<div class="sourceCode" id="cb558"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb558-1"><a href="#cb558-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MeetingEmbeddingService:</span>
+<span id="cb558-2"><a href="#cb558-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> embed_transcript(<span class="va">self</span>, transcript: MeetingTranscript):</span>
+<span id="cb558-3"><a href="#cb558-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb558-4"><a href="#cb558-4" aria-hidden="true" tabindex="-1"></a><span class="co">        1. Split transcript into ~500-word chunks with speaker context</span></span>
+<span id="cb558-5"><a href="#cb558-5" aria-hidden="true" tabindex="-1"></a><span class="co">        2. Generate embeddings via SentenceTransformer</span></span>
+<span id="cb558-6"><a href="#cb558-6" aria-hidden="true" tabindex="-1"></a><span class="co">        3. Store in Qdrant &#39;meeting_transcripts&#39; collection</span></span>
+<span id="cb558-7"><a href="#cb558-7" aria-hidden="true" tabindex="-1"></a><span class="co">        4. Metadata: meeting_id, classroom_id, speaker, timestamp range</span></span>
+<span id="cb558-8"><a href="#cb558-8" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="meeting-rag-1">Meeting RAG</h3>
+<div class="sourceCode" id="cb559"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb559-1"><a href="#cb559-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MeetingRAG:</span>
+<span id="cb559-2"><a href="#cb559-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> query(<span class="va">self</span>, question: <span class="bu">str</span>, classroom_id: <span class="bu">str</span>, meeting_id: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb559-3"><a href="#cb559-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb559-4"><a href="#cb559-4" aria-hidden="true" tabindex="-1"></a><span class="co">        1. Embed question</span></span>
+<span id="cb559-5"><a href="#cb559-5" aria-hidden="true" tabindex="-1"></a><span class="co">        2. Search Qdrant with classroom_id filter</span></span>
+<span id="cb559-6"><a href="#cb559-6" aria-hidden="true" tabindex="-1"></a><span class="co">        3. Retrieve top-k chunks with speaker attribution</span></span>
+<span id="cb559-7"><a href="#cb559-7" aria-hidden="true" tabindex="-1"></a><span class="co">        4. LLM generates answer citing specific speakers + timestamps</span></span>
+<span id="cb559-8"><a href="#cb559-8" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="recording-api-endpoints">86.4 Recording API Endpoints</h2>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 25%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/recordings/upload</code></td>
+<td>POST</td>
+<td>Upload recording file</td>
+</tr>
+<tr>
+<td><code>POST /api/recordings/{id}/process</code></td>
+<td>POST</td>
+<td>Trigger processing pipeline</td>
+</tr>
+<tr>
+<td><code>GET /api/recordings/{id}/transcript</code></td>
+<td>GET</td>
+<td>Get full transcript</td>
+</tr>
+<tr>
+<td><code>GET /api/recordings/{id}/summary</code></td>
+<td>GET</td>
+<td>Get meeting summary</td>
+</tr>
+<tr>
+<td><code>POST /api/meetings/{id}/qa</code></td>
+<td>POST</td>
+<td>Ask question about meeting</td>
+</tr>
+<tr>
+<td><code>GET /api/recordings/search</code></td>
+<td>GET</td>
+<td>Full-text search across transcripts</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

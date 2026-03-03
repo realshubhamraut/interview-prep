@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 36: Dependency Analysis — 152 Python + 80 Node.js Packages</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-35.html">&larr; Previous</a> <a href="page-37.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-36-dependency-analysis-152-python-80-node.js-packages">Page 36: Dependency Analysis — 152 Python + 80 Node.js Packages</h1>
+<hr />
+<h2 id="overview-27">36.1 Overview</h2>
+<p>ensureStudy’s dependency footprint spans <strong>111 Python packages</strong> (AI Service), <strong>41 Python packages</strong> (Core Service), and <strong>~80 Node.js packages</strong> (Frontend). This page catalogs every dependency by category, its purpose, and licensing considerations.</p>
+<hr />
+<h2 id="ai-service-dependencies-111-packages">36.2 AI Service Dependencies (111 packages)</h2>
+<h3 id="source-backendai-servicerequirements.txt">Source: <code>backend/ai-service/requirements.txt</code></h3>
+<h4 id="core-framework">Core Framework</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fastapi</code></td>
+<td>≥0.109.0</td>
+<td>Async web framework</td>
+</tr>
+<tr>
+<td><code>uvicorn</code></td>
+<td>≥0.27.0</td>
+<td>ASGI server</td>
+</tr>
+<tr>
+<td><code>pydantic</code></td>
+<td>≥2.5.0</td>
+<td>Data validation</td>
+</tr>
+<tr>
+<td><code>pydantic-settings</code></td>
+<td>≥2.1.0</td>
+<td>Settings management</td>
+</tr>
+<tr>
+<td><code>sse-starlette</code></td>
+<td>≥1.6.0</td>
+<td>Server-Sent Events</td>
+</tr>
+</tbody>
+</table>
+<h4 id="aiml-models-local-free">AI/ML Models (Local, Free)</h4>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 27%" />
+<col style="width: 27%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sentence-transformers</code></td>
+<td>≥2.3.0</td>
+<td>Text embeddings (all-mpnet-base-v2)</td>
+<td>~400 MB</td>
+</tr>
+<tr>
+<td><code>transformers</code></td>
+<td>≥4.45.0</td>
+<td>Hugging Face model hub</td>
+<td>~100 MB</td>
+</tr>
+<tr>
+<td><code>torch</code></td>
+<td>≥2.1.0</td>
+<td>PyTorch deep learning</td>
+<td>~2 GB</td>
+</tr>
+<tr>
+<td><code>torchvision</code></td>
+<td>≥0.16.0</td>
+<td>Vision models</td>
+<td>~100 MB</td>
+</tr>
+<tr>
+<td><code>qwen-vl-utils</code></td>
+<td>≥0.0.8</td>
+<td>Nanonets-OCR2-3B support</td>
+<td>~50 MB</td>
+</tr>
+<tr>
+<td><code>openai-whisper</code></td>
+<td>≥20231117</td>
+<td>Speech-to-text (local)</td>
+<td>~140 MB (base)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="agent-framework">Agent Framework</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>langchain</code></td>
+<td>≥0.1.0</td>
+<td>LLM orchestration</td>
+</tr>
+<tr>
+<td><code>langgraph</code></td>
+<td>≥0.0.20</td>
+<td>Agentic workflow graphs</td>
+</tr>
+<tr>
+<td><code>google-generativeai</code></td>
+<td>≥0.3.0</td>
+<td>Gemini LLM API</td>
+</tr>
+</tbody>
+</table>
+<h4 id="vector-database">Vector Database</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>qdrant-client</code></td>
+<td>≥1.7.0</td>
+<td>Qdrant vector DB client</td>
+</tr>
+</tbody>
+</table>
+<h4 id="document-processing-1">Document Processing</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pymupdf</code></td>
+<td>≥1.23.0</td>
+<td>PDF text extraction</td>
+</tr>
+<tr>
+<td><code>pypdf</code></td>
+<td>≥4.0.0</td>
+<td>PDF parsing</td>
+</tr>
+<tr>
+<td><code>pdf2image</code></td>
+<td>≥1.17.0</td>
+<td>PDF → image conversion</td>
+</tr>
+<tr>
+<td><code>python-pptx</code></td>
+<td>≥0.6.23</td>
+<td>PowerPoint processing</td>
+</tr>
+<tr>
+<td><code>mammoth</code></td>
+<td>≥1.6.0</td>
+<td>Word document processing</td>
+</tr>
+<tr>
+<td><code>pytesseract</code></td>
+<td>≥0.3.10</td>
+<td>Tesseract OCR wrapper</td>
+</tr>
+</tbody>
+</table>
+<h4 id="computer-vision-proctoring">Computer Vision (Proctoring)</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>opencv-python</code></td>
+<td>≥4.9.0</td>
+<td>Video frame processing</td>
+</tr>
+<tr>
+<td><code>dlib</code></td>
+<td>≥19.24.0</td>
+<td>Face detection &amp; landmarks</td>
+</tr>
+<tr>
+<td><code>deepface</code></td>
+<td>≥0.0.79</td>
+<td>Face verification</td>
+</tr>
+<tr>
+<td><code>Pillow</code></td>
+<td>≥10.0.0</td>
+<td>Image manipulation</td>
+</tr>
+<tr>
+<td><code>scikit-image</code></td>
+<td>≥0.22.0</td>
+<td>Advanced image processing</td>
+</tr>
+</tbody>
+</table>
+<h4 id="nlp-content-extraction">NLP &amp; Content Extraction</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>spacy</code></td>
+<td>≥3.7.0</td>
+<td>NLP (noun chunks, cache matching)</td>
+</tr>
+<tr>
+<td><code>beautifulsoup4</code></td>
+<td>≥4.12.0</td>
+<td>HTML parsing</td>
+</tr>
+<tr>
+<td><code>readability-lxml</code></td>
+<td>≥0.8.1</td>
+<td>Article text extraction</td>
+</tr>
+<tr>
+<td><code>lxml</code></td>
+<td>≥5.0.0</td>
+<td>XML/HTML parser</td>
+</tr>
+<tr>
+<td><code>trafilatura</code></td>
+<td>≥2.0.0</td>
+<td>Web content extraction</td>
+</tr>
+</tbody>
+</table>
+<h4 id="web-search-free-no-api-keys">Web Search (Free, No API Keys)</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>youtube-search-python</code></td>
+<td>≥1.6.6</td>
+<td>YouTube video search</td>
+</tr>
+<tr>
+<td><code>youtube-transcript-api</code></td>
+<td>≥0.6.0</td>
+<td>YouTube transcripts</td>
+</tr>
+<tr>
+<td><code>duckduckgo-search</code></td>
+<td>≥4.1.1</td>
+<td>Web search (free)</td>
+</tr>
+<tr>
+<td><code>ddgs</code></td>
+<td>≥9.10.0</td>
+<td>DuckDuckGo image search</td>
+</tr>
+</tbody>
+</table>
+<h4 id="audio-processing">Audio Processing</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>simple-diarizer</code></td>
+<td>≥0.0.13</td>
+<td>Speaker diarization</td>
+</tr>
+<tr>
+<td><code>pydub</code></td>
+<td>≥0.25.1</td>
+<td>Audio processing</td>
+</tr>
+</tbody>
+</table>
+<h4 id="infrastructure">Infrastructure</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>redis</code></td>
+<td>≥5.0.0</td>
+<td>Caching client</td>
+</tr>
+<tr>
+<td><code>httpx</code></td>
+<td>≥0.26.0</td>
+<td>Async HTTP</td>
+</tr>
+<tr>
+<td><code>requests</code></td>
+<td>≥2.31.0</td>
+<td>Sync HTTP</td>
+</tr>
+<tr>
+<td><code>aiohttp</code></td>
+<td>≥3.9.0</td>
+<td>Async HTTP client</td>
+</tr>
+<tr>
+<td><code>websockets</code></td>
+<td>≥12.0</td>
+<td>WebSocket support</td>
+</tr>
+<tr>
+<td><code>python-dotenv</code></td>
+<td>≥1.0.0</td>
+<td>Environment loading</td>
+</tr>
+<tr>
+<td><code>numpy</code></td>
+<td>≥1.24.0</td>
+<td>Numerical computing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="core-service-dependencies-41-packages">36.3 Core Service Dependencies (41 packages)</h2>
+<h3 id="source-backendcore-servicerequirements.txt">Source: <code>backend/core-service/requirements.txt</code></h3>
+<h4 id="framework-orm">Framework &amp; ORM</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flask</code></td>
+<td>3.0.0</td>
+<td>Web framework</td>
+</tr>
+<tr>
+<td><code>flask-cors</code></td>
+<td>4.0.0</td>
+<td>CORS middleware</td>
+</tr>
+<tr>
+<td><code>flask-sqlalchemy</code></td>
+<td>3.1.1</td>
+<td>SQLAlchemy integration</td>
+</tr>
+<tr>
+<td><code>flask-migrate</code></td>
+<td>4.0.5</td>
+<td>Alembic migrations</td>
+</tr>
+<tr>
+<td><code>sqlalchemy</code></td>
+<td>2.0.23</td>
+<td>ORM</td>
+</tr>
+<tr>
+<td><code>alembic</code></td>
+<td>1.13.0</td>
+<td>Migration tool</td>
+</tr>
+</tbody>
+</table>
+<h4 id="database-storage">Database &amp; Storage</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>psycopg[binary]</code></td>
+<td>≥3.1.0</td>
+<td>PostgreSQL driver</td>
+</tr>
+<tr>
+<td><code>redis</code></td>
+<td>5.0.1</td>
+<td>Redis caching</td>
+</tr>
+<tr>
+<td><code>kafka-python</code></td>
+<td>2.0.2</td>
+<td>Kafka producer</td>
+</tr>
+<tr>
+<td><code>boto3</code></td>
+<td>≥1.34.0</td>
+<td>AWS S3 SDK</td>
+</tr>
+</tbody>
+</table>
+<h4 id="auth-security">Auth &amp; Security</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pyjwt</code></td>
+<td>2.8.0</td>
+<td>JWT tokens</td>
+</tr>
+<tr>
+<td><code>werkzeug</code></td>
+<td>3.0.1</td>
+<td>Password hashing</td>
+</tr>
+</tbody>
+</table>
+<h4 id="integrations">Integrations</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>livekit-api</code></td>
+<td>≥0.7.0</td>
+<td>LiveKit room management</td>
+</tr>
+</tbody>
+</table>
+<h4 id="dev-testing">Dev &amp; Testing</h4>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pytest</code></td>
+<td>7.4.3</td>
+<td>Testing</td>
+</tr>
+<tr>
+<td><code>pytest-flask</code></td>
+<td>1.3.0</td>
+<td>Flask test fixtures</td>
+</tr>
+<tr>
+<td><code>pytest-cov</code></td>
+<td>4.1.0</td>
+<td>Coverage reporting</td>
+</tr>
+<tr>
+<td><code>black</code></td>
+<td>23.12.0</td>
+<td>Code formatting</td>
+</tr>
+<tr>
+<td><code>flake8</code></td>
+<td>6.1.0</td>
+<td>Linting</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="frontend-dependencies-key-packages">36.4 Frontend Dependencies (key packages)</h2>
+<h3 id="source-frontendpackage.json">Source: <code>frontend/package.json</code></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Key Packages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework</strong></td>
+<td>next 14, react 18, typescript</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>next-auth</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>zustand</td>
+</tr>
+<tr>
+<td><strong>UI</strong></td>
+<td>tailwindcss, lucide-react, framer-motion</td>
+</tr>
+<tr>
+<td><strong>Video</strong></td>
+<td><span class="citation" data-cites="livekit/components-react">@livekit/components-react</span>, livekit-client</td>
+</tr>
+<tr>
+<td><strong>3D</strong></td>
+<td>three, <span class="citation" data-cites="react-three/fiber">@react-three/fiber</span>, <span class="citation" data-cites="react-three/drei">@react-three/drei</span></td>
+</tr>
+<tr>
+<td><strong>Markdown</strong></td>
+<td>react-markdown, remark-math, rehype-katex</td>
+</tr>
+<tr>
+<td><strong>Charts</strong></td>
+<td>recharts</td>
+</tr>
+<tr>
+<td><strong>HTTP</strong></td>
+<td>axios</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="system-dependencies">36.5 System Dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Install Method</th>
+<th>Required By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tesseract OCR</strong></td>
+<td><code>brew install tesseract</code></td>
+<td>pytesseract</td>
+</tr>
+<tr>
+<td><strong>poppler</strong></td>
+<td><code>brew install poppler</code></td>
+<td>pdf2image</td>
+</tr>
+<tr>
+<td><strong>ffmpeg</strong></td>
+<td><code>brew install ffmpeg</code></td>
+<td>openai-whisper</td>
+</tr>
+<tr>
+<td><strong>portaudio</strong></td>
+<td><code>brew install portaudio</code></td>
+<td>pyaudio (optional)</td>
+</tr>
+<tr>
+<td><strong>Docker</strong></td>
+<td>Docker Desktop</td>
+<td>All infrastructure</td>
+</tr>
+<tr>
+<td><strong>mkcert</strong></td>
+<td><code>brew install mkcert</code></td>
+<td>LAN TLS certificates</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

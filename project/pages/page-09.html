@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 9: Document Processing Pipeline (7-Stage)</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-08.html">&larr; Previous</a> <a href="page-10.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-9-document-processing-pipeline-7-stage">Page 9: Document Processing Pipeline (7-Stage)</h1>
+<hr />
+<h2 id="overview-3">9.1 Overview</h2>
+<p>The Document Processing Agent orchestrates a <strong>7-stage ingestion pipeline</strong> using LangGraph, transforming uploaded documents (PDF, DOCX, PPTX, images) into searchable, embeddable chunks indexed in Qdrant.</p>
+<h3 id="source-backendai-serviceappagentsdocument_agent.py-617-lines">Source: <code>backend/ai-service/app/agents/document_agent.py</code> (617 lines)</h3>
+<hr />
+<h2 id="processing-stages">9.2 Processing Stages</h2>
+<div class="sourceCode" id="cb82"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ProcessingStage(<span class="bu">str</span>, Enum):</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>    PENDING <span class="op">=</span> <span class="st">&quot;pending&quot;</span></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>    VALIDATING <span class="op">=</span> <span class="st">&quot;validating&quot;</span></span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>    PREPROCESSING <span class="op">=</span> <span class="st">&quot;preprocessing&quot;</span></span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>    OCR <span class="op">=</span> <span class="st">&quot;ocr&quot;</span></span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>    CHUNKING <span class="op">=</span> <span class="st">&quot;chunking&quot;</span></span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>    EMBEDDING <span class="op">=</span> <span class="st">&quot;embedding&quot;</span></span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>    INDEXING <span class="op">=</span> <span class="st">&quot;indexing&quot;</span></span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>    COMPLETED <span class="op">=</span> <span class="st">&quot;completed&quot;</span></span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a>    FAILED <span class="op">=</span> <span class="st">&quot;failed&quot;</span></span></code></pre></div>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> validate_document: Document uploaded
+
+    state validate_routing <(choice)>
+    validate_document --> validate_routing: 10%
+    validate_routing --> FAILED: Validation error
+    validate_routing --> preprocess_document: Valid
+
+    state preprocess_routing <(choice)>
+    preprocess_document --> preprocess_routing: 25%
+    preprocess_routing --> extract_text_ocr: Scanned/image (raw_text < 50 chars)
+    preprocess_routing --> chunk_text: Text PDF (skip OCR)
+    preprocess_routing --> FAILED: Preprocessing error
+
+    extract_text_ocr --> chunk_text: 45%
+    note right of extract_text_ocr
+        Image enhancement → Hybrid OCR
+        Tesseract → Nanonets → SageMaker
+        Per-page confidence scoring
+    end note
+
+    chunk_text --> generate_embeddings: 60%
+    note right of chunk_text
+        512 tokens/chunk, 50 overlap
+        Respects headers & paragraphs
+    end note
+
+    generate_embeddings --> index_in_qdrant: 75%
+    note right of generate_embeddings
+        all-mpnet-base-v2 (768-dim)
+        Batch size: 32
+    end note
+
+    index_in_qdrant --> complete_processing: 90%
+    complete_processing --> [*]: 100% → SSE notification
+    FAILED --> [*]: Error callback to core service</pre>
+<hr />
+<h2 id="state-definition-1">9.3 State Definition</h2>
+<div class="sourceCode" id="cb84"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DocumentProcessingState(TypedDict):</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>    document_id: <span class="bu">str</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>    student_id: <span class="bu">str</span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>    classroom_id: <span class="bu">str</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>    source_url: <span class="bu">str</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>    file_type: <span class="bu">str</span>              <span class="co"># &quot;pdf&quot;, &quot;docx&quot;, &quot;pptx&quot;, &quot;png&quot;, &quot;jpg&quot;</span></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>    subject: Optional[<span class="bu">str</span>]</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>    is_teacher_material: <span class="bu">bool</span></span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>    raw_text: <span class="bu">str</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>    ocr_results: List[Dict]</span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>    chunks: List[Dict]</span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>    embeddings: List[List[<span class="bu">float</span>]]</span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>    current_stage: <span class="bu">str</span></span>
+<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a>    progress: <span class="bu">int</span>               <span class="co"># 0-100</span></span>
+<span id="cb84-15"><a href="#cb84-15" aria-hidden="true" tabindex="-1"></a>    completed_stages: List[<span class="bu">str</span>]</span>
+<span id="cb84-16"><a href="#cb84-16" aria-hidden="true" tabindex="-1"></a>    error: Optional[<span class="bu">str</span>]</span>
+<span id="cb84-17"><a href="#cb84-17" aria-hidden="true" tabindex="-1"></a>    retry_count: <span class="bu">int</span></span>
+<span id="cb84-18"><a href="#cb84-18" aria-hidden="true" tabindex="-1"></a>    qdrant_point_ids: List[<span class="bu">str</span>]</span>
+<span id="cb84-19"><a href="#cb84-19" aria-hidden="true" tabindex="-1"></a>    total_tokens: <span class="bu">int</span></span>
+<span id="cb84-20"><a href="#cb84-20" aria-hidden="true" tabindex="-1"></a>    total_chunks: <span class="bu">int</span></span>
+<span id="cb84-21"><a href="#cb84-21" aria-hidden="true" tabindex="-1"></a>    avg_confidence: <span class="bu">float</span></span></code></pre></div>
+<h3 id="supporting-data-classes">Supporting Data Classes</h3>
+<div class="sourceCode" id="cb85"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TextChunk:</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>    chunk_id: <span class="bu">str</span></span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>    document_id: <span class="bu">str</span></span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>    chunk_index: <span class="bu">int</span></span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>    text: <span class="bu">str</span></span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>    token_count: <span class="bu">int</span></span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>    page_number: <span class="bu">int</span></span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>    section_heading: Optional[<span class="bu">str</span>]</span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>    source_confidence: <span class="bu">float</span></span>
+<span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a>    contains_formula: <span class="bu">bool</span></span>
+<span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a>    formula_latex: Optional[<span class="bu">str</span>] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb85-13"><a href="#cb85-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-14"><a href="#cb85-14" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OCRResult:</span>
+<span id="cb85-16"><a href="#cb85-16" aria-hidden="true" tabindex="-1"></a>    page_number: <span class="bu">int</span></span>
+<span id="cb85-17"><a href="#cb85-17" aria-hidden="true" tabindex="-1"></a>    text: <span class="bu">str</span></span>
+<span id="cb85-18"><a href="#cb85-18" aria-hidden="true" tabindex="-1"></a>    confidence: <span class="bu">float</span></span>
+<span id="cb85-19"><a href="#cb85-19" aria-hidden="true" tabindex="-1"></a>    formulas: List[Dict[<span class="bu">str</span>, Any]]</span>
+<span id="cb85-20"><a href="#cb85-20" aria-hidden="true" tabindex="-1"></a>    headings: List[<span class="bu">str</span>]</span></code></pre></div>
+<hr />
+<h2 id="stage-details">9.4 Stage Details</h2>
+<h3 id="stage-1-validate_document">Stage 1: <code>validate_document</code></h3>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File exists</td>
+<td>Source URL/path is accessible</td>
+</tr>
+<tr>
+<td>Format support</td>
+<td>PDF, DOCX, PPTX, PNG, JPG</td>
+</tr>
+<tr>
+<td>File size</td>
+<td>≤ 500 MB</td>
+</tr>
+<tr>
+<td>MIME verification</td>
+<td>Magic bytes match extension</td>
+</tr>
+<tr>
+<td>Duplicate check</td>
+<td>Hash-based dedup</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stage-2-preprocess_document">Stage 2: <code>preprocess_document</code></h3>
+<p>Format-specific extraction: - <strong>PDF</strong>: <code>pdf_extractor.py</code> (PyMuPDF) → determines if OCR needed - <strong>DOCX</strong>: <code>document_preprocessor.py</code> (python-docx) → direct text - <strong>PPTX</strong>: <code>pptx_extractor.py</code> (python-pptx) → slide text - <strong>Images</strong>: Always routed to OCR</p>
+<h3 id="stage-3-extract_text_ocr-conditional">Stage 3: <code>extract_text_ocr</code> (Conditional)</h3>
+<p>Only runs if preprocessing determines text extraction was insufficient:</p>
+<ul>
+<li>Image enhancement pipeline (contrast, deskew, denoise, binarize)</li>
+<li>Hybrid OCR with multi-backend fallback: Tesseract → Nanonets → SageMaker</li>
+<li>Per-page confidence scoring</li>
+<li>Formula and heading detection</li>
+</ul>
+<h3 id="stage-4-chunk_text">Stage 4: <code>chunk_text</code></h3>
+<p>Semantic chunking with the <code>ChunkingService</code>: - Default chunk size: 512 tokens - Overlap: 50 tokens - Respects section headers and paragraph boundaries - Enriches chunks with page number, heading, formula detection</p>
+<h3 id="stage-5-generate_embeddings">Stage 5: <code>generate_embeddings</code></h3>
+<p>Batch embedding via sentence-transformers (<code>all-mpnet-base-v2</code>): - Batch size: 32 - Normalized embeddings for cosine similarity - Output: 768-dimensional float32 vectors</p>
+<h3 id="stage-6-index_in_qdrant">Stage 6: <code>index_in_qdrant</code></h3>
+<p>Upserts points with full metadata payloads: - <code>text</code>, <code>document_id</code>, <code>classroom_id</code>, <code>page_number</code>, <code>chunk_index</code> - <code>source_type</code> (teacher_material / student_material) - <code>subject</code>, <code>contains_formula</code>, <code>source_confidence</code> - <code>processed_at</code> timestamp</p>
+<h3 id="stage-7-complete_processing">Stage 7: <code>complete_processing</code></h3>
+<ul>
+<li>HTTP callback to core service with final status</li>
+<li>SSE notification to frontend</li>
+<li>Logging of processing metrics</li>
+</ul>
+<hr />
+<h2 id="conditional-routing">9.5 Conditional Routing</h2>
+<div class="sourceCode" id="cb86"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> route_after_preprocess(state):</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> state.get(<span class="st">&quot;error&quot;</span>):</span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> END</span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> state.get(<span class="st">&quot;raw_text&quot;</span>) <span class="kw">or</span> <span class="bu">len</span>(state[<span class="st">&quot;raw_text&quot;</span>]) <span class="op">&lt;</span> <span class="dv">50</span>:</span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;ocr&quot;</span>    <span class="co"># Needs OCR</span></span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot;chunk&quot;</span>      <span class="co"># Text PDF, skip OCR</span></span></code></pre></div>
+<p>Each stage has a routing function that checks for errors and determines whether to proceed or terminate.</p>
+<hr />
+<h2 id="ocr-architecture">9.6 OCR Architecture</h2>
+<h3 id="image-enhancement-pipeline">Image Enhancement Pipeline</h3>
+<p>Source: <code>services/image_enhancer.py</code> (19,344 bytes)</p>
+<ol type="1">
+<li><strong>CLAHE</strong> — Contrast Limited Adaptive Histogram Equalization</li>
+<li><strong>Deskewing</strong> — Hough line-based rotation correction</li>
+<li><strong>Denoising</strong> — Non-local means denoising</li>
+<li><strong>Binarization</strong> — Otsu’s thresholding</li>
+<li><strong>Border removal</strong> — Crop non-content areas</li>
+<li><strong>Resolution scaling</strong> — Upscale low-DPI images</li>
+</ol>
+<h3 id="hybrid-ocr-backends">Hybrid OCR Backends</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 16%" />
+<col style="width: 27%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Backend</th>
+<th>File</th>
+<th>Priority</th>
+<th>Strengths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tesseract</td>
+<td><code>ocr_service.py</code> (15,901 bytes)</td>
+<td>Primary</td>
+<td>Free, local, reliable</td>
+</tr>
+<tr>
+<td>Nanonets</td>
+<td><code>nanonets_ocr.py</code></td>
+<td>Secondary</td>
+<td>Better for complex layouts</td>
+</tr>
+<tr>
+<td>SageMaker</td>
+<td><code>sagemaker_ocr.py</code></td>
+<td>Tertiary</td>
+<td>Enterprise-grade accuracy</td>
+</tr>
+<tr>
+<td>Hybrid Orchestrator</td>
+<td><code>hybrid_ocr.py</code> (12,361 bytes)</td>
+<td>Controller</td>
+<td>Tries backends in order</td>
+</tr>
+<tr>
+<td>OCR Adapter</td>
+<td><code>ocr_adapter.py</code> (16,689 bytes)</td>
+<td>Interface</td>
+<td>Unified API for all backends</td>
+</tr>
+</tbody>
+</table>
+<h3 id="latex-formula-handling">LaTeX Formula Handling</h3>
+<p>Source: <code>services/latex_converter.py</code> (11,905 bytes)</p>
+<ul>
+<li>Pattern-based formula region detection in OCR output</li>
+<li>Conversion to LaTeX notation</li>
+<li>Dual storage: raw text + LaTeX in chunk metadata</li>
+<li>KaTeX rendering in frontend</li>
+</ul>
+<hr />
+<h2 id="progress-reporting">9.7 Progress Reporting</h2>
+<p>The agent updates the core service at each stage:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Progress %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validating</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>Preprocessing</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>OCR</td>
+<td>45%</td>
+</tr>
+<tr>
+<td>Chunking</td>
+<td>60%</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>75%</td>
+</tr>
+<tr>
+<td>Indexing</td>
+<td>90%</td>
+</tr>
+<tr>
+<td>Completed</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="performance">9.8 Performance</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Text PDF (100 pg)</th>
+<th>Scanned PDF (100 pg)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validation</td>
+<td>&lt; 1s</td>
+<td>&lt; 1s</td>
+</tr>
+<tr>
+<td>Preprocessing</td>
+<td>2-5s</td>
+<td>2-5s</td>
+</tr>
+<tr>
+<td>OCR</td>
+<td>Skipped</td>
+<td>30-120s</td>
+</tr>
+<tr>
+<td>Chunking</td>
+<td>&lt; 1s</td>
+<td>&lt; 1s</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>2-5s</td>
+<td>2-5s</td>
+</tr>
+<tr>
+<td>Indexing</td>
+<td>&lt; 1s</td>
+<td>&lt; 1s</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>5-10s</strong></td>
+<td><strong>35-130s</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="notes-processing-agent">9.9 Notes Processing Agent</h2>
+<h3 id="source-backendai-serviceappagentsnotes_agent.py-483-lines">Source: <code>backend/ai-service/app/agents/notes_agent.py</code> (483 lines)</h3>
+<p>A specialized document processor for student handwritten notes:</p>
+<p><strong>Pipeline</strong>: Extract frames → Enhance → OCR → Generate searchable PDF</p>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Video input</td>
+<td>Extracts best frames from lecture recordings</td>
+</tr>
+<tr>
+<td>Frame selection</td>
+<td>Blur detection (threshold: 80.0) + interval sampling</td>
+</tr>
+<tr>
+<td>Max frames</td>
+<td>30 per video</td>
+</tr>
+<tr>
+<td>Image enhancement</td>
+<td>Minimal — preserves handwriting quality</td>
+</tr>
+<tr>
+<td>OCR backend</td>
+<td>HuggingFace API (Nanonets-OCR2-3B or olmOCR-7B)</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Searchable PDF with embedded OCR text layer</td>
+</tr>
+<tr>
+<td>Multi-format</td>
+<td>Video, images, PDF, PPTX, DOCX</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

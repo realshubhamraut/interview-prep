@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 24: Observability, Logging &amp;amp; Monitoring</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-23.html">&larr; Previous</a> <a href="page-25.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-24-observability-logging-monitoring">Page 24: Observability, Logging &amp; Monitoring</h1>
+<hr />
+<h2 id="overview-16">24.1 Overview</h2>
+<p>ensureStudy implements observability across <strong>request logging, application logging, ML experiment tracking, data dashboards, and health monitoring</strong>. The system uses structured logging, MLflow for experiment management, Streamlit for dashboards, and Docker healthchecks for service monitoring.</p>
+<hr />
+<h2 id="request-logging-ai-service">24.2 Request Logging (AI Service)</h2>
+<h3 id="source-backendai-serviceappmain.py">Source: <code>backend/ai-service/app/main.py</code></h3>
+<p>Every HTTP request is logged with execution time:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.middleware</span>(<span class="st">&quot;http&quot;</span>)</span>
+<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> log_requests(request: Request, call_next):</span>
+<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>    start <span class="op">=</span> time.time()</span>
+<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> <span class="cf">await</span> call_next(request)</span>
+<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a>    duration <span class="op">=</span> time.time() <span class="op">-</span> start</span>
+<span id="cb178-6"><a href="#cb178-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb178-7"><a href="#cb178-7" aria-hidden="true" tabindex="-1"></a>    logger.info(</span>
+<span id="cb178-8"><a href="#cb178-8" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f&quot;</span><span class="sc">{</span>request<span class="sc">.</span>method<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>request<span class="sc">.</span>url<span class="sc">.</span>path<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>response<span class="sc">.</span>status_code<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>duration<span class="sc">:.2f}</span><span class="ss">s)&quot;</span></span>
+<span id="cb178-9"><a href="#cb178-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb178-10"><a href="#cb178-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response</span></code></pre></div>
+<h3 id="frontend-action-logging">Frontend Action Logging</h3>
+<div class="sourceCode" id="cb179"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.post</span>(<span class="st">&quot;/api/log-action&quot;</span>)</span>
+<span id="cb179-2"><a href="#cb179-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> log_frontend_action(request: Request):</span>
+<span id="cb179-3"><a href="#cb179-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Log frontend actions for debugging.</span></span>
+<span id="cb179-4"><a href="#cb179-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Body: { action, target, details }</span></span>
+<span id="cb179-5"><a href="#cb179-5" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb179-6"><a href="#cb179-6" aria-hidden="true" tabindex="-1"></a>    body <span class="op">=</span> <span class="cf">await</span> request.json()</span>
+<span id="cb179-7"><a href="#cb179-7" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f&quot;[Frontend] </span><span class="sc">{</span>body[<span class="st">&#39;action&#39;</span>]<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>body[<span class="st">&#39;target&#39;</span>]<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>body<span class="sc">.</span>get(<span class="st">&#39;details&#39;</span>, <span class="st">&#39;&#39;</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<h2 id="application-logging">24.3 Application Logging</h2>
+<h3 id="log-format">Log Format</h3>
+<div class="sourceCode" id="cb180"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(</span>
+<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a>    level<span class="op">=</span>logging.INFO,</span>
+<span id="cb180-5"><a href="#cb180-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">&quot;</span><span class="sc">%(asctime)s</span><span class="st"> | </span><span class="sc">%(name)s</span><span class="st"> | </span><span class="sc">%(levelname)s</span><span class="st"> | </span><span class="sc">%(message)s</span><span class="st">&quot;</span>,</span>
+<span id="cb180-6"><a href="#cb180-6" aria-hidden="true" tabindex="-1"></a>    datefmt<span class="op">=</span><span class="st">&quot;%Y-%m-</span><span class="sc">%d</span><span class="st"> %H:%M:%S&quot;</span></span>
+<span id="cb180-7"><a href="#cb180-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="per-module-loggers">Per-Module Loggers</h3>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Logger Name</th>
+<th>Key Events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Orchestrator</td>
+<td><code>orchestrator</code></td>
+<td>Agent selection, routing decisions</td>
+</tr>
+<tr>
+<td>Tutor Agent</td>
+<td><code>tutor_agent</code></td>
+<td>TAL level changes, ABCR transitions</td>
+</tr>
+<tr>
+<td>RAG Pipeline</td>
+<td><code>rag_service</code></td>
+<td>Query rewriting, retrieval stats</td>
+</tr>
+<tr>
+<td>Document Agent</td>
+<td><code>document_agent</code></td>
+<td>Processing stages, OCR results</td>
+</tr>
+<tr>
+<td>Proctoring</td>
+<td><code>proctor.session</code></td>
+<td>Frame analysis, flag triggers</td>
+</tr>
+<tr>
+<td>Web Ingest</td>
+<td><code>web_ingest</code></td>
+<td>Crawl status, PDF downloads</td>
+</tr>
+<tr>
+<td>Curriculum</td>
+<td><code>curriculum_agent</code></td>
+<td>Topology sort, scheduling</td>
+</tr>
+<tr>
+<td>Learning Agent</td>
+<td><code>learning_agent</code></td>
+<td>Critic scores, strategy updates</td>
+</tr>
+</tbody>
+</table>
+<h3 id="log-levels-usage">Log Levels Usage</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEBUG</code></td>
+<td>Detailed processing steps, prompt contents</td>
+</tr>
+<tr>
+<td><code>INFO</code></td>
+<td>Request flow, agent decisions, timing</td>
+</tr>
+<tr>
+<td><code>WARNING</code></td>
+<td>Rate limits, fallback triggers, degraded performance</td>
+</tr>
+<tr>
+<td><code>ERROR</code></td>
+<td>API failures, model errors, database issues</td>
+</tr>
+<tr>
+<td><code>CRITICAL</code></td>
+<td>Service crashes, data corruption</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="docker-container-logging">24.4 Docker Container Logging</h2>
+<div class="sourceCode" id="cb181"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View all service logs</span></span>
+<span id="cb181-2"><a href="#cb181-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker-compose</span> logs <span class="at">-f</span></span>
+<span id="cb181-3"><a href="#cb181-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb181-4"><a href="#cb181-4" aria-hidden="true" tabindex="-1"></a><span class="co"># View specific service</span></span>
+<span id="cb181-5"><a href="#cb181-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker-compose</span> logs <span class="at">-f</span> ai-service</span>
+<span id="cb181-6"><a href="#cb181-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb181-7"><a href="#cb181-7" aria-hidden="true" tabindex="-1"></a><span class="co"># View with timestamps and tail</span></span>
+<span id="cb181-8"><a href="#cb181-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker-compose</span> logs <span class="at">-f</span> <span class="at">--tail</span><span class="op">=</span>100 <span class="at">--timestamps</span> core-api</span></code></pre></div>
+<h3 id="log-directory">Log Directory</h3>
+<p>Source: <code>logs/</code> directory stores persistent log files for debugging.</p>
+<hr />
+<h2 id="mlflow-experiment-tracking">24.5 MLflow Experiment Tracking</h2>
+<h3 id="source-docker-compose.yml-mlflow-service">Source: <code>docker-compose.yml</code> (MLflow service)</h3>
+<div class="sourceCode" id="cb182"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mlflow</span><span class="kw">:</span></span>
+<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ghcr.io/mlflow/mlflow:v2.9.0</span></span>
+<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb182-4"><a href="#cb182-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;5000:5000&quot;</span></span>
+<span id="cb182-5"><a href="#cb182-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb182-6"><a href="#cb182-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">MLFLOW_BACKEND_STORE_URI</span><span class="kw">:</span><span class="at"> postgresql://...@postgres:5432/ensure_study</span></span>
+<span id="cb182-7"><a href="#cb182-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">MLFLOW_DEFAULT_ARTIFACT_ROOT</span><span class="kw">:</span><span class="at"> /mlflow/artifacts</span></span></code></pre></div>
+<h3 id="tracked-experiments">Tracked Experiments</h3>
+<table>
+<thead>
+<tr>
+<th>Experiment</th>
+<th>Metrics</th>
+<th>Artifacts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Engagement Model</td>
+<td>MSE, val_loss, epoch</td>
+<td><code>engagement_model.pth</code></td>
+</tr>
+<tr>
+<td>Content Recommendation</td>
+<td>NDCG, hit_rate</td>
+<td>Model weights</td>
+</tr>
+<tr>
+<td>Difficulty Predictor</td>
+<td>accuracy, F1 per class</td>
+<td>Model weights</td>
+</tr>
+<tr>
+<td>Proctoring Static</td>
+<td>precision, recall, F1</td>
+<td>LightGBM <code>.pkl</code></td>
+</tr>
+<tr>
+<td>Proctoring Temporal</td>
+<td>accuracy, AUC-ROC</td>
+<td>LSTM <code>.pt</code></td>
+</tr>
+<tr>
+<td>Filler Detection</td>
+<td>accuracy, per-class F1</td>
+<td>XGBoost <code>.joblib</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="mlflow-usage-pattern">MLflow Usage Pattern</h3>
+<div class="sourceCode" id="cb183"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mlflow</span>
+<span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> mlflow.start_run(experiment_id<span class="op">=</span><span class="st">&quot;engagement&quot;</span>):</span>
+<span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a>    mlflow.log_param(<span class="st">&quot;hidden_dims&quot;</span>, [<span class="dv">64</span>, <span class="dv">32</span>, <span class="dv">16</span>])</span>
+<span id="cb183-5"><a href="#cb183-5" aria-hidden="true" tabindex="-1"></a>    mlflow.log_param(<span class="st">&quot;learning_rate&quot;</span>, <span class="fl">0.001</span>)</span>
+<span id="cb183-6"><a href="#cb183-6" aria-hidden="true" tabindex="-1"></a>    mlflow.log_param(<span class="st">&quot;epochs&quot;</span>, <span class="dv">50</span>)</span>
+<span id="cb183-7"><a href="#cb183-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb183-8"><a href="#cb183-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Training loop...</span></span>
+<span id="cb183-9"><a href="#cb183-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb183-10"><a href="#cb183-10" aria-hidden="true" tabindex="-1"></a>    mlflow.log_metric(<span class="st">&quot;train_loss&quot;</span>, train_loss, step<span class="op">=</span>epoch)</span>
+<span id="cb183-11"><a href="#cb183-11" aria-hidden="true" tabindex="-1"></a>    mlflow.log_metric(<span class="st">&quot;val_loss&quot;</span>, val_loss, step<span class="op">=</span>epoch)</span>
+<span id="cb183-12"><a href="#cb183-12" aria-hidden="true" tabindex="-1"></a>    mlflow.log_metric(<span class="st">&quot;best_val_loss&quot;</span>, best_val_loss)</span>
+<span id="cb183-13"><a href="#cb183-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb183-14"><a href="#cb183-14" aria-hidden="true" tabindex="-1"></a>    mlflow.pytorch.log_model(model, <span class="st">&quot;engagement_model&quot;</span>)</span></code></pre></div>
+<hr />
+<h2 id="streamlit-dashboards">24.6 Streamlit Dashboards</h2>
+<h3 id="source-dashboards-directory">Source: <code>dashboards/</code> directory</h3>
+<div class="sourceCode" id="cb184"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dashboards</span><span class="kw">:</span></span>
+<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;8501:8501&quot;</span><span class="kw">]</span></span>
+<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">command</span><span class="kw">:</span><span class="at"> streamlit run app.py --server.port 8501 --server.address 0.0.0.0</span></span></code></pre></div>
+<p>Dashboard capabilities: - <strong>Real-time metrics</strong>: Active users, assessments completed, API latency - <strong>Qdrant stats</strong>: Collection sizes, query performance - <strong>Kafka monitoring</strong>: Topic lag, consumer group status - <strong>Student analytics</strong>: Engagement scores, progress distributions</p>
+<hr />
+<h2 id="health-monitoring">24.7 Health Monitoring</h2>
+<h3 id="healthcheck-configuration">Healthcheck Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Check Method</th>
+<th>Interval</th>
+<th>Retries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td><code>pg_isready</code></td>
+<td>10s</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td><code>redis-cli ping</code></td>
+<td>10s</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>HTTP <code>/health</code></td>
+<td>10s</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Zookeeper</td>
+<td><code>nc -z :2181</code></td>
+<td>10s</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Kafka</td>
+<td><code>kafka-broker-api-versions</code></td>
+<td>10s</td>
+<td>5</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td><code>mongosh ping</code></td>
+<td>10s</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Cassandra</td>
+<td><code>cqlsh describe</code></td>
+<td>30s</td>
+<td>5</td>
+</tr>
+<tr>
+<td>MinIO</td>
+<td>HTTP <code>/minio/health/live</code></td>
+<td>30s</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Core API (prod)</td>
+<td>HTTP <code>/health</code></td>
+<td>30s</td>
+<td>3</td>
+</tr>
+<tr>
+<td>AI Service (prod)</td>
+<td>HTTP <code>/health</code></td>
+<td>30s</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="health-endpoints">Health Endpoints</h3>
+<div class="sourceCode" id="cb185"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Core Service</span></span>
+<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a><span class="at">@app.route</span>(<span class="st">&#39;/health&#39;</span>)</span>
+<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> health():</span>
+<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&#39;status&#39;</span>: <span class="st">&#39;healthy&#39;</span>, <span class="st">&#39;service&#39;</span>: <span class="st">&#39;core-api&#39;</span>}</span>
+<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a><span class="co"># AI Service</span></span>
+<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a><span class="at">@app.get</span>(<span class="st">&quot;/health&quot;</span>)</span>
+<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> health_check():</span>
+<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;status&quot;</span>: <span class="st">&quot;healthy&quot;</span>, <span class="st">&quot;service&quot;</span>: <span class="st">&quot;ai-tutor&quot;</span>, <span class="st">&quot;version&quot;</span>: <span class="st">&quot;2.0.0&quot;</span>}</span></code></pre></div>
+<h3 id="makefile-health-check">Makefile Health Check</h3>
+<div class="sourceCode" id="cb186"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> health-check</span>
+<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking Qdrant... {&quot;title&quot;:&quot;qdrant&quot;,&quot;version&quot;:&quot;1.x&quot;}</span></span>
+<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking PostgreSQL... /var/run/postgresql:5432 - accepting connections</span></span>
+<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking Redis... PONG</span></span>
+<span id="cb186-5"><a href="#cb186-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking Kafka... student-events, chat-messages, ...</span></span></code></pre></div>
+<hr />
+<h2 id="agent-performance-tracking">24.8 Agent Performance Tracking</h2>
+<h3 id="source-backendcore-serviceappmodelsfeedback.py">Source: <code>backend/core-service/app/models/feedback.py</code></h3>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AgentInteraction</code></td>
+<td>Logs every agent invocation (agent type, duration, tokens used)</td>
+</tr>
+<tr>
+<td><code>InteractionFeedback</code></td>
+<td>Student feedback on agent responses (helpful/not helpful)</td>
+</tr>
+<tr>
+<td><code>LearningExample</code></td>
+<td>Stores positive/negative examples for agent improvement</td>
+</tr>
+<tr>
+<td><code>AgentPerformanceMetrics</code></td>
+<td>Aggregated metrics per agent (avg response time, satisfaction)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="error-tracking-production">24.9 Error Tracking (Production)</h2>
+<h3 id="sentry-integration-optional">Sentry Integration (Optional)</h3>
+<div class="sourceCode" id="cb187"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .env.production.example</span></span>
+<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a><span class="va">SENTRY_DSN</span><span class="op">=</span>https://your-sentry-dsn</span></code></pre></div>
+<p>When configured, Sentry captures: - Unhandled exceptions in both services - Performance transactions - Breadcrumbs for debugging - Release tracking</p>
+<hr />
+
+</body>
+</html>

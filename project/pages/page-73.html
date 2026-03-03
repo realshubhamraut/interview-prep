@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 73: Background Workers &amp;amp; Celery Task Queue</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-72.html">&larr; Previous</a> <a href="page-74.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-73-background-workers-celery-task-queue">Page 73: Background Workers &amp; Celery Task Queue</h1>
+<hr />
+<h2 id="overview-61">73.1 Overview</h2>
+<p>ensureStudy uses <strong>background workers</strong> for long-running tasks that cannot block API responses: document processing, embedding generation, meeting transcription, ML training, and batch analytics. These are implemented via Celery (with Redis as broker) and Kafka consumers.</p>
+<hr />
+<h2 id="worker-architecture">73.2 Worker Architecture</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Worker Architecture "]
+        direction TB
+        N0["API Request (fast, <500ms)"]
+        N1["Return 202 Accepted immediately"]
+        N2["Enqueue background task"]
+        N3["Celery Worker → Redis Broker → Worker Process"]
+        N4["Kafka Consumer → Kafka Broker → Consumer Process"]
+    end
+</pre>
+<hr />
+<h2 id="worker-files">73.3 Worker Files</h2>
+<h3 id="source-backendai-serviceappworkers">Source: <code>backend/ai-service/app/workers/</code></h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 23%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Tasks</th>
+<th>Typical Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>document_tasks.py</code></td>
+<td>PDF processing, OCR, chunking, embedding</td>
+<td>10s-5min</td>
+</tr>
+<tr>
+<td>(Kafka consumers)</td>
+<td>Meeting transcription</td>
+<td>2-10min</td>
+</tr>
+<tr>
+<td>(Kafka consumers)</td>
+<td>Assessment grading</td>
+<td>5-30s</td>
+</tr>
+<tr>
+<td>(Kafka consumers)</td>
+<td>Analytics aggregation</td>
+<td>1-5s</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="document-processing-worker">73.4 Document Processing Worker</h2>
+<div class="sourceCode" id="cb468"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb468-1"><a href="#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="co"># workers/document_tasks.py</span></span>
+<span id="cb468-2"><a href="#cb468-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> celery <span class="im">import</span> Celery</span>
+<span id="cb468-3"><a href="#cb468-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-4"><a href="#cb468-4" aria-hidden="true" tabindex="-1"></a>celery_app <span class="op">=</span> Celery(</span>
+<span id="cb468-5"><a href="#cb468-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ensurestudy&#39;</span>,</span>
+<span id="cb468-6"><a href="#cb468-6" aria-hidden="true" tabindex="-1"></a>    broker<span class="op">=</span>os.getenv(<span class="st">&#39;REDIS_URL&#39;</span>, <span class="st">&#39;redis://redis:6379/0&#39;</span>),</span>
+<span id="cb468-7"><a href="#cb468-7" aria-hidden="true" tabindex="-1"></a>    backend<span class="op">=</span>os.getenv(<span class="st">&#39;REDIS_URL&#39;</span>, <span class="st">&#39;redis://redis:6379/0&#39;</span>)</span>
+<span id="cb468-8"><a href="#cb468-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb468-9"><a href="#cb468-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-10"><a href="#cb468-10" aria-hidden="true" tabindex="-1"></a><span class="at">@celery_app.task</span>(bind<span class="op">=</span><span class="va">True</span>, max_retries<span class="op">=</span><span class="dv">3</span>, default_retry_delay<span class="op">=</span><span class="dv">60</span>)</span>
+<span id="cb468-11"><a href="#cb468-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_document(<span class="va">self</span>, document_id: <span class="bu">str</span>, file_path: <span class="bu">str</span>, </span>
+<span id="cb468-12"><a href="#cb468-12" aria-hidden="true" tabindex="-1"></a>                     classroom_id: <span class="bu">str</span>):</span>
+<span id="cb468-13"><a href="#cb468-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb468-14"><a href="#cb468-14" aria-hidden="true" tabindex="-1"></a><span class="co">    Full document processing pipeline:</span></span>
+<span id="cb468-15"><a href="#cb468-15" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Extract text (digital or OCR)</span></span>
+<span id="cb468-16"><a href="#cb468-16" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Detect layout (tables, images, formulas)</span></span>
+<span id="cb468-17"><a href="#cb468-17" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Chunk text (500 chars, 50 overlap)</span></span>
+<span id="cb468-18"><a href="#cb468-18" aria-hidden="true" tabindex="-1"></a><span class="co">    4. Generate embeddings (all-mpnet-base-v2)</span></span>
+<span id="cb468-19"><a href="#cb468-19" aria-hidden="true" tabindex="-1"></a><span class="co">    5. Upsert to Qdrant</span></span>
+<span id="cb468-20"><a href="#cb468-20" aria-hidden="true" tabindex="-1"></a><span class="co">    6. Callback to core service with status</span></span>
+<span id="cb468-21"><a href="#cb468-21" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb468-22"><a href="#cb468-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb468-23"><a href="#cb468-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update status: processing</span></span>
+<span id="cb468-24"><a href="#cb468-24" aria-hidden="true" tabindex="-1"></a>        callback_status(document_id, <span class="st">&quot;processing&quot;</span>)</span>
+<span id="cb468-25"><a href="#cb468-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb468-26"><a href="#cb468-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 1: Extract</span></span>
+<span id="cb468-27"><a href="#cb468-27" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> pdf_processor.process(file_path)</span>
+<span id="cb468-28"><a href="#cb468-28" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb468-29"><a href="#cb468-29" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 2: Chunk</span></span>
+<span id="cb468-30"><a href="#cb468-30" aria-hidden="true" tabindex="-1"></a>        chunks <span class="op">=</span> text_chunker.chunk(text, chunk_size<span class="op">=</span><span class="dv">500</span>)</span>
+<span id="cb468-31"><a href="#cb468-31" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb468-32"><a href="#cb468-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 3: Embed</span></span>
+<span id="cb468-33"><a href="#cb468-33" aria-hidden="true" tabindex="-1"></a>        embeddings <span class="op">=</span> embedding_model.encode(</span>
+<span id="cb468-34"><a href="#cb468-34" aria-hidden="true" tabindex="-1"></a>            [c.text <span class="cf">for</span> c <span class="kw">in</span> chunks], batch_size<span class="op">=</span><span class="dv">32</span></span>
+<span id="cb468-35"><a href="#cb468-35" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb468-36"><a href="#cb468-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb468-37"><a href="#cb468-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 4: Index</span></span>
+<span id="cb468-38"><a href="#cb468-38" aria-hidden="true" tabindex="-1"></a>        qdrant.upsert_batch(</span>
+<span id="cb468-39"><a href="#cb468-39" aria-hidden="true" tabindex="-1"></a>            collection<span class="op">=</span><span class="st">&quot;classroom_materials&quot;</span>,</span>
+<span id="cb468-40"><a href="#cb468-40" aria-hidden="true" tabindex="-1"></a>            chunks<span class="op">=</span>chunks,</span>
+<span id="cb468-41"><a href="#cb468-41" aria-hidden="true" tabindex="-1"></a>            embeddings<span class="op">=</span>embeddings,</span>
+<span id="cb468-42"><a href="#cb468-42" aria-hidden="true" tabindex="-1"></a>            metadata<span class="op">=</span>{<span class="st">&quot;classroom_id&quot;</span>: classroom_id}</span>
+<span id="cb468-43"><a href="#cb468-43" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb468-44"><a href="#cb468-44" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb468-45"><a href="#cb468-45" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 5: Callback</span></span>
+<span id="cb468-46"><a href="#cb468-46" aria-hidden="true" tabindex="-1"></a>        callback_status(document_id, <span class="st">&quot;indexed&quot;</span>, </span>
+<span id="cb468-47"><a href="#cb468-47" aria-hidden="true" tabindex="-1"></a>                       chunks_count<span class="op">=</span><span class="bu">len</span>(chunks))</span>
+<span id="cb468-48"><a href="#cb468-48" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb468-49"><a href="#cb468-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
+<span id="cb468-50"><a href="#cb468-50" aria-hidden="true" tabindex="-1"></a>        callback_status(document_id, <span class="st">&quot;failed&quot;</span>, error<span class="op">=</span><span class="bu">str</span>(exc))</span>
+<span id="cb468-51"><a href="#cb468-51" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.retry(exc<span class="op">=</span>exc)</span></code></pre></div>
+<hr />
+<h2 id="celery-configuration">73.5 Celery Configuration</h2>
+<div class="sourceCode" id="cb469"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb469-1"><a href="#cb469-1" aria-hidden="true" tabindex="-1"></a>celery_app.conf.update(</span>
+<span id="cb469-2"><a href="#cb469-2" aria-hidden="true" tabindex="-1"></a>    task_serializer<span class="op">=</span><span class="st">&#39;json&#39;</span>,</span>
+<span id="cb469-3"><a href="#cb469-3" aria-hidden="true" tabindex="-1"></a>    accept_content<span class="op">=</span>[<span class="st">&#39;json&#39;</span>],</span>
+<span id="cb469-4"><a href="#cb469-4" aria-hidden="true" tabindex="-1"></a>    result_serializer<span class="op">=</span><span class="st">&#39;json&#39;</span>,</span>
+<span id="cb469-5"><a href="#cb469-5" aria-hidden="true" tabindex="-1"></a>    timezone<span class="op">=</span><span class="st">&#39;UTC&#39;</span>,</span>
+<span id="cb469-6"><a href="#cb469-6" aria-hidden="true" tabindex="-1"></a>    enable_utc<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb469-7"><a href="#cb469-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb469-8"><a href="#cb469-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Concurrency</span></span>
+<span id="cb469-9"><a href="#cb469-9" aria-hidden="true" tabindex="-1"></a>    worker_concurrency<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb469-10"><a href="#cb469-10" aria-hidden="true" tabindex="-1"></a>    worker_prefetch_multiplier<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb469-11"><a href="#cb469-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb469-12"><a href="#cb469-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rate limiting</span></span>
+<span id="cb469-13"><a href="#cb469-13" aria-hidden="true" tabindex="-1"></a>    task_default_rate_limit<span class="op">=</span><span class="st">&#39;10/m&#39;</span>,</span>
+<span id="cb469-14"><a href="#cb469-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb469-15"><a href="#cb469-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Task time limits</span></span>
+<span id="cb469-16"><a href="#cb469-16" aria-hidden="true" tabindex="-1"></a>    task_soft_time_limit<span class="op">=</span><span class="dv">300</span>,    <span class="co"># 5 min soft limit</span></span>
+<span id="cb469-17"><a href="#cb469-17" aria-hidden="true" tabindex="-1"></a>    task_time_limit<span class="op">=</span><span class="dv">600</span>,         <span class="co"># 10 min hard limit</span></span>
+<span id="cb469-18"><a href="#cb469-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb469-19"><a href="#cb469-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Result expiry</span></span>
+<span id="cb469-20"><a href="#cb469-20" aria-hidden="true" tabindex="-1"></a>    result_expires<span class="op">=</span><span class="dv">3600</span>,         <span class="co"># 1 hour</span></span>
+<span id="cb469-21"><a href="#cb469-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb469-22"><a href="#cb469-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Retry policy</span></span>
+<span id="cb469-23"><a href="#cb469-23" aria-hidden="true" tabindex="-1"></a>    task_acks_late<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb469-24"><a href="#cb469-24" aria-hidden="true" tabindex="-1"></a>    task_reject_on_worker_lost<span class="op">=</span><span class="va">True</span></span>
+<span id="cb469-25"><a href="#cb469-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="test-scripts">73.6 Test Scripts</h2>
+<p>The root-level test scripts validate worker functionality:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_workers.py</code></td>
+<td>Test all worker tasks end-to-end</td>
+</tr>
+<tr>
+<td><code>test_worker6.py</code></td>
+<td>Test specific worker task (chunking)</td>
+</tr>
+<tr>
+<td><code>test_full_pipeline.py</code></td>
+<td>Full document → index pipeline</td>
+</tr>
+<tr>
+<td><code>test_chunk_only.py</code></td>
+<td>Chunking step in isolation</td>
+</tr>
+<tr>
+<td><code>test_chunking.py</code></td>
+<td>Chunking strategy comparison</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="worker-monitoring">73.7 Worker Monitoring</h2>
+<div class="sourceCode" id="cb470"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb470-1"><a href="#cb470-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check task status</span></span>
+<span id="cb470-2"><a href="#cb470-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> process_document.AsyncResult(task_id)</span>
+<span id="cb470-3"><a href="#cb470-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.state)    <span class="co"># PENDING, STARTED, SUCCESS, FAILURE, RETRY</span></span>
+<span id="cb470-4"><a href="#cb470-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.result)   <span class="co"># Return value or exception</span></span>
+<span id="cb470-5"><a href="#cb470-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb470-6"><a href="#cb470-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor via Flower (Celery web UI)</span></span>
+<span id="cb470-7"><a href="#cb470-7" aria-hidden="true" tabindex="-1"></a><span class="co"># celery -A workers.celery_app flower --port=5555</span></span></code></pre></div>
+<hr />
+<h2 id="kafka-vs-celery-when-to-use-each">73.8 Kafka vs Celery: When to Use Each</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Celery</th>
+<th>Kafka</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Best for</td>
+<td>One-off tasks</td>
+<td>Event streams</td>
+</tr>
+<tr>
+<td>Retry</td>
+<td>Built-in</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>Result tracking</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Ordering</td>
+<td>No guarantee</td>
+<td>Per-partition</td>
+</tr>
+<tr>
+<td>Fan-out</td>
+<td>No</td>
+<td>Yes (multiple consumers)</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>Redis (volatile)</td>
+<td>Disk (7 days)</td>
+</tr>
+<tr>
+<td>Use in ensureStudy</td>
+<td>Document processing</td>
+<td>Chat, meetings, analytics</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

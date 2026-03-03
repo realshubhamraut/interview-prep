@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 56: Database Migrations &amp;amp; Schema Evolution</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-55.html">&larr; Previous</a> <a href="page-57.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-56-database-migrations-schema-evolution">Page 56: Database Migrations &amp; Schema Evolution</h1>
+<hr />
+<h2 id="overview-44">56.1 Overview</h2>
+<p>ensureStudy uses <strong>Flask-Migrate</strong> (Alembic) for SQLAlchemy model migrations and <strong>raw SQL migration files</strong> for complex schema changes. The <code>migrations/</code> directory contains 4 migration files that track the database schema from initial setup through feature additions.</p>
+<hr />
+<h2 id="migration-tooling">56.2 Migration Tooling</h2>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flask-Migrate</td>
+<td>Auto-generate migrations from SQLAlchemy model changes</td>
+</tr>
+<tr>
+<td>Alembic</td>
+<td>Underlying migration engine</td>
+</tr>
+<tr>
+<td>Raw SQL</td>
+<td>Complex DDL changes, indexes, data migrations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="commands">Commands</h3>
+<div class="sourceCode" id="cb362"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb362-1"><a href="#cb362-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Auto-generate migration from model changes</span></span>
+<span id="cb362-2"><a href="#cb362-2" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db migrate <span class="at">-m</span> <span class="st">&quot;Add new fields to progress&quot;</span></span>
+<span id="cb362-3"><a href="#cb362-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb362-4"><a href="#cb362-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply all pending migrations</span></span>
+<span id="cb362-5"><a href="#cb362-5" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db upgrade</span>
+<span id="cb362-6"><a href="#cb362-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb362-7"><a href="#cb362-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Rollback last migration</span></span>
+<span id="cb362-8"><a href="#cb362-8" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db downgrade</span>
+<span id="cb362-9"><a href="#cb362-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb362-10"><a href="#cb362-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Show current migration version</span></span>
+<span id="cb362-11"><a href="#cb362-11" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db current</span>
+<span id="cb362-12"><a href="#cb362-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb362-13"><a href="#cb362-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Show migration history</span></span>
+<span id="cb362-14"><a href="#cb362-14" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db history</span></code></pre></div>
+<hr />
+<h2 id="migration-files">56.3 Migration Files</h2>
+<h3 id="init.sql-initial-schema"><code>init.sql</code> — Initial Schema</h3>
+<p>Creates all core tables:</p>
+<div class="sourceCode" id="cb363"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb363-1"><a href="#cb363-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Users</span></span>
+<span id="cb363-2"><a href="#cb363-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> users (</span>
+<span id="cb363-3"><a href="#cb363-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb363-4"><a href="#cb363-4" aria-hidden="true" tabindex="-1"></a>    username <span class="dt">VARCHAR</span>(<span class="dv">80</span>) <span class="kw">UNIQUE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb363-5"><a href="#cb363-5" aria-hidden="true" tabindex="-1"></a>    email <span class="dt">VARCHAR</span>(<span class="dv">120</span>) <span class="kw">UNIQUE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb363-6"><a href="#cb363-6" aria-hidden="true" tabindex="-1"></a>    password_hash <span class="dt">VARCHAR</span>(<span class="dv">256</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb363-7"><a href="#cb363-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">role</span> <span class="dt">VARCHAR</span>(<span class="dv">20</span>) <span class="kw">DEFAULT</span> <span class="st">&#39;student&#39;</span>,</span>
+<span id="cb363-8"><a href="#cb363-8" aria-hidden="true" tabindex="-1"></a>    first_name <span class="dt">VARCHAR</span>(<span class="dv">50</span>),</span>
+<span id="cb363-9"><a href="#cb363-9" aria-hidden="true" tabindex="-1"></a>    last_name <span class="dt">VARCHAR</span>(<span class="dv">50</span>),</span>
+<span id="cb363-10"><a href="#cb363-10" aria-hidden="true" tabindex="-1"></a>    is_active <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">TRUE</span>,</span>
+<span id="cb363-11"><a href="#cb363-11" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb363-12"><a href="#cb363-12" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb363-13"><a href="#cb363-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb363-14"><a href="#cb363-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- Classrooms</span></span>
+<span id="cb363-15"><a href="#cb363-15" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> classrooms (</span>
+<span id="cb363-16"><a href="#cb363-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb363-17"><a href="#cb363-17" aria-hidden="true" tabindex="-1"></a>    name <span class="dt">VARCHAR</span>(<span class="dv">200</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb363-18"><a href="#cb363-18" aria-hidden="true" tabindex="-1"></a>    teacher_id <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">REFERENCES</span> users(<span class="kw">id</span>),</span>
+<span id="cb363-19"><a href="#cb363-19" aria-hidden="true" tabindex="-1"></a>    join_code <span class="dt">VARCHAR</span>(<span class="dv">8</span>) <span class="kw">UNIQUE</span>,</span>
+<span id="cb363-20"><a href="#cb363-20" aria-hidden="true" tabindex="-1"></a>    subject <span class="dt">VARCHAR</span>(<span class="dv">100</span>),</span>
+<span id="cb363-21"><a href="#cb363-21" aria-hidden="true" tabindex="-1"></a>    is_active <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">TRUE</span>,</span>
+<span id="cb363-22"><a href="#cb363-22" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb363-23"><a href="#cb363-23" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb363-24"><a href="#cb363-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb363-25"><a href="#cb363-25" aria-hidden="true" tabindex="-1"></a><span class="co">-- Progress</span></span>
+<span id="cb363-26"><a href="#cb363-26" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> progress (</span>
+<span id="cb363-27"><a href="#cb363-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb363-28"><a href="#cb363-28" aria-hidden="true" tabindex="-1"></a>    user_id <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">REFERENCES</span> users(<span class="kw">id</span>),</span>
+<span id="cb363-29"><a href="#cb363-29" aria-hidden="true" tabindex="-1"></a>    topic <span class="dt">VARCHAR</span>(<span class="dv">200</span>),</span>
+<span id="cb363-30"><a href="#cb363-30" aria-hidden="true" tabindex="-1"></a>    confidence_score <span class="dt">FLOAT</span> <span class="kw">DEFAULT</span> <span class="fl">0.0</span>,</span>
+<span id="cb363-31"><a href="#cb363-31" aria-hidden="true" tabindex="-1"></a>    times_studied <span class="dt">INTEGER</span> <span class="kw">DEFAULT</span> <span class="dv">0</span>,</span>
+<span id="cb363-32"><a href="#cb363-32" aria-hidden="true" tabindex="-1"></a>    is_weak <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">FALSE</span>,</span>
+<span id="cb363-33"><a href="#cb363-33" aria-hidden="true" tabindex="-1"></a>    tal_level <span class="dt">INTEGER</span> <span class="kw">DEFAULT</span> <span class="dv">1</span>,</span>
+<span id="cb363-34"><a href="#cb363-34" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb363-35"><a href="#cb363-35" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb363-36"><a href="#cb363-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb363-37"><a href="#cb363-37" aria-hidden="true" tabindex="-1"></a><span class="co">-- ... (40+ tables total)</span></span></code></pre></div>
+<h3 id="document_ingestion.sql-document-processing"><code>003_document_ingestion.sql</code> — Document Processing</h3>
+<div class="sourceCode" id="cb364"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb364-1"><a href="#cb364-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Document Intelligence metadata</span></span>
+<span id="cb364-2"><a href="#cb364-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> document_intelligence (</span>
+<span id="cb364-3"><a href="#cb364-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb364-4"><a href="#cb364-4" aria-hidden="true" tabindex="-1"></a>    document_id <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">REFERENCES</span> documents(<span class="kw">id</span>),</span>
+<span id="cb364-5"><a href="#cb364-5" aria-hidden="true" tabindex="-1"></a>    total_pages <span class="dt">INTEGER</span>,</span>
+<span id="cb364-6"><a href="#cb364-6" aria-hidden="true" tabindex="-1"></a>    has_images <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">FALSE</span>,</span>
+<span id="cb364-7"><a href="#cb364-7" aria-hidden="true" tabindex="-1"></a>    has_tables <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">FALSE</span>,</span>
+<span id="cb364-8"><a href="#cb364-8" aria-hidden="true" tabindex="-1"></a>    language <span class="dt">VARCHAR</span>(<span class="dv">10</span>) <span class="kw">DEFAULT</span> <span class="st">&#39;en&#39;</span>,</span>
+<span id="cb364-9"><a href="#cb364-9" aria-hidden="true" tabindex="-1"></a>    ocr_confidence <span class="dt">FLOAT</span>,</span>
+<span id="cb364-10"><a href="#cb364-10" aria-hidden="true" tabindex="-1"></a>    processing_time_ms <span class="dt">INTEGER</span>,</span>
+<span id="cb364-11"><a href="#cb364-11" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb364-12"><a href="#cb364-12" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb364-13"><a href="#cb364-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb364-14"><a href="#cb364-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- Document chunks for vector search</span></span>
+<span id="cb364-15"><a href="#cb364-15" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> document_chunks (</span>
+<span id="cb364-16"><a href="#cb364-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb364-17"><a href="#cb364-17" aria-hidden="true" tabindex="-1"></a>    document_id <span class="dt">VARCHAR</span>(<span class="dv">36</span>) <span class="kw">REFERENCES</span> documents(<span class="kw">id</span>),</span>
+<span id="cb364-18"><a href="#cb364-18" aria-hidden="true" tabindex="-1"></a>    chunk_index <span class="dt">INTEGER</span>,</span>
+<span id="cb364-19"><a href="#cb364-19" aria-hidden="true" tabindex="-1"></a>    text TEXT,</span>
+<span id="cb364-20"><a href="#cb364-20" aria-hidden="true" tabindex="-1"></a>    page_number <span class="dt">INTEGER</span>,</span>
+<span id="cb364-21"><a href="#cb364-21" aria-hidden="true" tabindex="-1"></a>    qdrant_point_id <span class="dt">VARCHAR</span>(<span class="dv">36</span>),</span>
+<span id="cb364-22"><a href="#cb364-22" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb364-23"><a href="#cb364-23" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="add_ocr_bboxes.sql-ocr-bounding-boxes"><code>004_add_ocr_bboxes.sql</code> — OCR Bounding Boxes</h3>
+<div class="sourceCode" id="cb365"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb365-1"><a href="#cb365-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> document_intelligence</span>
+<span id="cb365-2"><a href="#cb365-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">COLUMN</span> ocr_bboxes JSONB,</span>
+<span id="cb365-3"><a href="#cb365-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">COLUMN</span> text_regions JSONB,</span>
+<span id="cb365-4"><a href="#cb365-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">COLUMN</span> layout_analysis JSONB;</span></code></pre></div>
+<h3 id="add_learning_agent_tables.py-learning-agent-memory"><code>add_learning_agent_tables.py</code> — Learning Agent Memory</h3>
+<div class="sourceCode" id="cb366"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb366-1"><a href="#cb366-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> upgrade():</span>
+<span id="cb366-2"><a href="#cb366-2" aria-hidden="true" tabindex="-1"></a>    op.create_table(<span class="st">&#39;learning_agent_memory&#39;</span>,</span>
+<span id="cb366-3"><a href="#cb366-3" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;id&#39;</span>, sa.String(<span class="dv">36</span>), primary_key<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb366-4"><a href="#cb366-4" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;topic_id&#39;</span>, sa.String(<span class="dv">36</span>)),</span>
+<span id="cb366-5"><a href="#cb366-5" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;strategy&#39;</span>, sa.JSON),</span>
+<span id="cb366-6"><a href="#cb366-6" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;critic_scores&#39;</span>, sa.JSON),</span>
+<span id="cb366-7"><a href="#cb366-7" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;iteration&#39;</span>, sa.Integer, default<span class="op">=</span><span class="dv">0</span>),</span>
+<span id="cb366-8"><a href="#cb366-8" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;created_at&#39;</span>, sa.DateTime, default<span class="op">=</span>datetime.utcnow),</span>
+<span id="cb366-9"><a href="#cb366-9" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;updated_at&#39;</span>, sa.DateTime)</span>
+<span id="cb366-10"><a href="#cb366-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb366-11"><a href="#cb366-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb366-12"><a href="#cb366-12" aria-hidden="true" tabindex="-1"></a>    op.create_table(<span class="st">&#39;question_effectiveness&#39;</span>,</span>
+<span id="cb366-13"><a href="#cb366-13" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;id&#39;</span>, sa.String(<span class="dv">36</span>), primary_key<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb366-14"><a href="#cb366-14" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;question_id&#39;</span>, sa.String(<span class="dv">36</span>)),</span>
+<span id="cb366-15"><a href="#cb366-15" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;times_asked&#39;</span>, sa.Integer, default<span class="op">=</span><span class="dv">0</span>),</span>
+<span id="cb366-16"><a href="#cb366-16" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;correct_rate&#39;</span>, sa.Float, default<span class="op">=</span><span class="fl">0.0</span>),</span>
+<span id="cb366-17"><a href="#cb366-17" aria-hidden="true" tabindex="-1"></a>        sa.Column(<span class="st">&#39;discrimination_index&#39;</span>, sa.Float)</span>
+<span id="cb366-18"><a href="#cb366-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb366-19"><a href="#cb366-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb366-20"><a href="#cb366-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> downgrade():</span>
+<span id="cb366-21"><a href="#cb366-21" aria-hidden="true" tabindex="-1"></a>    op.drop_table(<span class="st">&#39;question_effectiveness&#39;</span>)</span>
+<span id="cb366-22"><a href="#cb366-22" aria-hidden="true" tabindex="-1"></a>    op.drop_table(<span class="st">&#39;learning_agent_memory&#39;</span>)</span></code></pre></div>
+<hr />
+<h2 id="seed-data-scripts">56.4 Seed Data Scripts</h2>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>seed_database.py</code></td>
+<td>Create demo users, classrooms, subjects, topics</td>
+</tr>
+<tr>
+<td><code>seed_progress_data.py</code></td>
+<td>Generate progress records, leaderboard entries</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="migration-best-practices">56.5 Migration Best Practices</h2>
+<table>
+<thead>
+<tr>
+<th>Practice</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Atomic migrations</strong></td>
+<td>Each file does one logical change</td>
+</tr>
+<tr>
+<td><strong>Reversible</strong></td>
+<td>Every <code>upgrade()</code> has a <code>downgrade()</code></td>
+</tr>
+<tr>
+<td><strong>Idempotent</strong></td>
+<td><code>CREATE TABLE IF NOT EXISTS</code> where possible</td>
+</tr>
+<tr>
+<td><strong>Data-safe</strong></td>
+<td><code>ALTER TABLE ADD COLUMN</code> (never drop in prod)</td>
+</tr>
+<tr>
+<td><strong>Ordered</strong></td>
+<td>Numeric prefixes ensure correct sequence</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

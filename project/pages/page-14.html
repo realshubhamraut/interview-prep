@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 14: Database Architecture</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-13.html">&larr; Previous</a> <a href="page-15.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-14-database-architecture">Page 14: Database Architecture</h1>
+<hr />
+<h2 id="overview-6">14.1 Overview</h2>
+<p>ensureStudy uses a <strong>polyglot persistence</strong> strategy with 5 database technologies, each chosen for specific workload characteristics:</p>
+<pre class="mermaid">flowchart LR
+    subgraph DB["🗄️ DATABASE LAYER"]
+        PG["PostgreSQL<br/>(OLTP)<br/>Port 5432"]
+        QD["Qdrant<br/>(Vector)<br/>Port 6333"]
+        RD["Redis<br/>(Cache)<br/>Port 6379"]
+        MDB["MongoDB<br/>(Proctor)<br/>Port 27017"]
+        CAS["Apache Cassandra<br/>(Time-series)<br/>Port 9042"]
+    end
+</pre>
+<hr />
+<h2 id="postgresql-primary-relational-store">14.2 PostgreSQL — Primary Relational Store</h2>
+<h3 id="configuration-1">Configuration</h3>
+<div class="sourceCode" id="cb112"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml</span></span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>postgres:</span>
+<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a>  image: postgres:<span class="dv">15</span></span>
+<span id="cb112-4"><a href="#cb112-4" aria-hidden="true" tabindex="-1"></a>  environment:</span>
+<span id="cb112-5"><a href="#cb112-5" aria-hidden="true" tabindex="-1"></a>    POSTGRES_DB: ensure_study</span>
+<span id="cb112-6"><a href="#cb112-6" aria-hidden="true" tabindex="-1"></a>    POSTGRES_USER: ensure_study_user</span>
+<span id="cb112-7"><a href="#cb112-7" aria-hidden="true" tabindex="-1"></a>    POSTGRES_PASSWORD: secure_password_123</span>
+<span id="cb112-8"><a href="#cb112-8" aria-hidden="true" tabindex="-1"></a>  ports:</span>
+<span id="cb112-9"><a href="#cb112-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> <span class="st">&quot;5432:5432&quot;</span></span>
+<span id="cb112-10"><a href="#cb112-10" aria-hidden="true" tabindex="-1"></a>  volumes:</span>
+<span id="cb112-11"><a href="#cb112-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> postgres_data:<span class="op">/</span>var<span class="op">/</span>lib<span class="op">/</span>postgresql<span class="op">/</span>data</span></code></pre></div>
+<h3 id="schema-statistics">Schema Statistics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total tables</td>
+<td>40+</td>
+</tr>
+<tr>
+<td>Model files</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Foreign keys</td>
+<td>30+</td>
+</tr>
+<tr>
+<td>Unique constraints</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Composite indexes</td>
+<td>13</td>
+</tr>
+<tr>
+<td>JSON columns</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<h3 id="table-groups">Table Groups</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 33%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Group</th>
+<th>Tables</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Identity</strong></td>
+<td>users, organizations, student_profiles, parent_student_links</td>
+<td>User management, multi-tenancy</td>
+</tr>
+<tr>
+<td><strong>Classroom</strong></td>
+<td>classrooms, student_classrooms, classroom_materials, chapters</td>
+<td>Google Classroom-style hierarchy</td>
+</tr>
+<tr>
+<td><strong>Curriculum</strong></td>
+<td>subjects, topics, subtopics, syllabi, classroom_topics</td>
+<td>Learning hierarchies</td>
+</tr>
+<tr>
+<td><strong>Assessment</strong></td>
+<td>assessments, assessment_results, assessment_challenges, subtopic_assessments</td>
+<td>Quizzes, grades, peer challenges</td>
+</tr>
+<tr>
+<td><strong>Questions</strong></td>
+<td>question_banks, questions, topic_questions, student_question_responses</td>
+<td>Question pool and analytics</td>
+</tr>
+<tr>
+<td><strong>Progress</strong></td>
+<td>progress, student_subtopic_progress, student_topic_scores, study_schedule_entries</td>
+<td>Mastery tracking, scheduling</td>
+</tr>
+<tr>
+<td><strong>AI Learning</strong></td>
+<td>learning_agent_memory, question_effectiveness</td>
+<td>Type 5 agent persistence</td>
+</tr>
+<tr>
+<td><strong>Chat</strong></td>
+<td>chat_sessions, chat_conversations, chat_messages, chat_sources</td>
+<td>Tutor conversations with citations</td>
+</tr>
+<tr>
+<td><strong>Notes</strong></td>
+<td>study_notes, note_processing_jobs, digitized_note_pages, note_embeddings</td>
+<td>Note digitization pipeline</td>
+</tr>
+<tr>
+<td><strong>Meetings</strong></td>
+<td>meetings, meeting_participants, meeting_recordings</td>
+<td>Video conferencing</td>
+</tr>
+<tr>
+<td><strong>Assignments</strong></td>
+<td>assignments, assignment_attachments, submissions, submission_files</td>
+<td>Teacher assignments</td>
+</tr>
+<tr>
+<td><strong>System</strong></td>
+<td>moderation_logs, notifications, leaderboard, agent_interactions, feedback</td>
+<td>Platform operations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="migration-strategy">Migration Strategy</h3>
+<div class="sourceCode" id="cb113"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flask-Migrate (Alembic under the hood)</span></span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db init        <span class="co"># Initialize migrations</span></span>
+<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db migrate     <span class="co"># Auto-generate migration</span></span>
+<span id="cb113-4"><a href="#cb113-4" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db upgrade     <span class="co"># Apply migrations</span></span>
+<span id="cb113-5"><a href="#cb113-5" aria-hidden="true" tabindex="-1"></a><span class="ex">flask</span> db downgrade   <span class="co"># Rollback</span></span></code></pre></div>
+<p><strong>Current approach</strong>: <code>db.create_all()</code> on startup (auto-creates missing tables). Flask-Migrate configured for production migrations.</p>
+<hr />
+<h2 id="qdrant-vector-database-1">14.3 Qdrant — Vector Database</h2>
+<h3 id="configuration-2">Configuration</h3>
+<div class="sourceCode" id="cb114"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml</span></span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>qdrant:</span>
+<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a>  image: qdrant<span class="op">/</span>qdrant:latest</span>
+<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a>  ports:</span>
+<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> <span class="st">&quot;6333:6333&quot;</span>    <span class="co"># REST API</span></span>
+<span id="cb114-6"><a href="#cb114-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> <span class="st">&quot;6334:6334&quot;</span>    <span class="co"># gRPC</span></span>
+<span id="cb114-7"><a href="#cb114-7" aria-hidden="true" tabindex="-1"></a>  volumes:</span>
+<span id="cb114-8"><a href="#cb114-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> qdrant_data:<span class="op">/</span>qdrant<span class="op">/</span>storage</span></code></pre></div>
+<h3 id="collections">Collections</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 29%" />
+<col style="width: 22%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Collection</th>
+<th>Vector Size</th>
+<th>Distance</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>classroom_materials</code></td>
+<td>768</td>
+<td>Cosine</td>
+<td>Document chunks from uploaded materials</td>
+</tr>
+<tr>
+<td><code>web_content</code></td>
+<td>768</td>
+<td>Cosine</td>
+<td>Web-crawled and research content</td>
+</tr>
+<tr>
+<td><code>note_embeddings</code></td>
+<td>768</td>
+<td>Cosine</td>
+<td>Digitized note text embeddings</td>
+</tr>
+<tr>
+<td>Dynamic per-classroom</td>
+<td>768</td>
+<td>Cosine</td>
+<td>Classroom-specific collections</td>
+</tr>
+</tbody>
+</table>
+<h3 id="payload-schema">Payload Schema</h3>
+<p>Every Qdrant point carries metadata:</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;Newton&#39;s Third Law states...&quot;</span><span class="fu">,</span></span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;document_id&quot;</span><span class="fu">:</span> <span class="st">&quot;doc_abc123&quot;</span><span class="fu">,</span></span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;classroom_id&quot;</span><span class="fu">:</span> <span class="st">&quot;class_xyz789&quot;</span><span class="fu">,</span></span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;student_id&quot;</span><span class="fu">:</span> <span class="st">&quot;user_001&quot;</span><span class="fu">,</span></span>
+<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;page_number&quot;</span><span class="fu">:</span> <span class="dv">15</span><span class="fu">,</span></span>
+<span id="cb115-7"><a href="#cb115-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;chunk_index&quot;</span><span class="fu">:</span> <span class="dv">42</span><span class="fu">,</span></span>
+<span id="cb115-8"><a href="#cb115-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;section_heading&quot;</span><span class="fu">:</span> <span class="st">&quot;Newton&#39;s Laws of Motion&quot;</span><span class="fu">,</span></span>
+<span id="cb115-9"><a href="#cb115-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;source_type&quot;</span><span class="fu">:</span> <span class="st">&quot;teacher_material&quot;</span><span class="fu">,</span></span>
+<span id="cb115-10"><a href="#cb115-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;file_type&quot;</span><span class="fu">:</span> <span class="st">&quot;pdf&quot;</span><span class="fu">,</span></span>
+<span id="cb115-11"><a href="#cb115-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;subject&quot;</span><span class="fu">:</span> <span class="st">&quot;Physics&quot;</span><span class="fu">,</span></span>
+<span id="cb115-12"><a href="#cb115-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;contains_formula&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb115-13"><a href="#cb115-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;source_confidence&quot;</span><span class="fu">:</span> <span class="fl">0.95</span><span class="fu">,</span></span>
+<span id="cb115-14"><a href="#cb115-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;processed_at&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-02-20T10:00:00Z&quot;</span></span>
+<span id="cb115-15"><a href="#cb115-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="filtering-in-rag-queries">Filtering in RAG Queries</h3>
+<div class="sourceCode" id="cb116"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Smart retrieval with filters</span></span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> <span class="cf">await</span> qdrant.search(</span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a>    collection<span class="op">=</span><span class="st">&quot;classroom_materials&quot;</span>,</span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>    query_vector<span class="op">=</span>query_embedding,</span>
+<span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a>    limit<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb116-6"><a href="#cb116-6" aria-hidden="true" tabindex="-1"></a>    query_filter<span class="op">=</span>Filter(</span>
+<span id="cb116-7"><a href="#cb116-7" aria-hidden="true" tabindex="-1"></a>        must<span class="op">=</span>[</span>
+<span id="cb116-8"><a href="#cb116-8" aria-hidden="true" tabindex="-1"></a>            FieldCondition(key<span class="op">=</span><span class="st">&quot;classroom_id&quot;</span>, match<span class="op">=</span>MatchValue(value<span class="op">=</span>classroom_id)),</span>
+<span id="cb116-9"><a href="#cb116-9" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb116-10"><a href="#cb116-10" aria-hidden="true" tabindex="-1"></a>        should<span class="op">=</span>[</span>
+<span id="cb116-11"><a href="#cb116-11" aria-hidden="true" tabindex="-1"></a>            FieldCondition(key<span class="op">=</span><span class="st">&quot;subject&quot;</span>, match<span class="op">=</span>MatchValue(value<span class="op">=</span>detected_subject)),</span>
+<span id="cb116-12"><a href="#cb116-12" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb116-13"><a href="#cb116-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb116-14"><a href="#cb116-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="embedding-model">Embedding Model</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td><code>sentence-transformers/all-mpnet-base-v2</code></td>
+</tr>
+<tr>
+<td>Vector dimensions</td>
+<td>768</td>
+</tr>
+<tr>
+<td>Max sequence length</td>
+<td>384 tokens</td>
+</tr>
+<tr>
+<td>Normalization</td>
+<td>L2 normalized</td>
+</tr>
+<tr>
+<td>Batch size</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="redis-caching-sessions">14.4 Redis — Caching &amp; Sessions</h2>
+<h3 id="configuration-3">Configuration</h3>
+<div class="sourceCode" id="cb117"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml</span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>redis:</span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>  image: redis:<span class="dv">7</span><span class="op">-</span>alpine</span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>  ports:</span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> <span class="st">&quot;6379:6379&quot;</span></span>
+<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a>  command: redis<span class="op">-</span>server <span class="op">--</span>maxmemory <span class="dv">256</span><span class="er">mb</span> <span class="op">--</span>maxmemory<span class="op">-</span>policy allkeys<span class="op">-</span>lru</span></code></pre></div>
+<h3 id="cache-usage-patterns">Cache Usage Patterns</h3>
+<table>
+<thead>
+<tr>
+<th>Cache Key Pattern</th>
+<th>TTL</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web_resources:{query_hash}</code></td>
+<td>24h</td>
+<td>Web enrichment results</td>
+</tr>
+<tr>
+<td><code>response_cache:{query_hash}</code></td>
+<td>1h</td>
+<td>LLM response caching</td>
+</tr>
+<tr>
+<td><code>embedding:{text_hash}</code></td>
+<td>7d</td>
+<td>Embedding vector caching</td>
+</tr>
+<tr>
+<td><code>session:{session_id}</code></td>
+<td>2h</td>
+<td>Tutor session state (TAL levels)</td>
+</tr>
+<tr>
+<td><code>rate_limit:{user_id}</code></td>
+<td>1min</td>
+<td>API rate limiting</td>
+</tr>
+<tr>
+<td><code>topic_extract:{doc_hash}</code></td>
+<td>24h</td>
+<td>Extracted topics caching</td>
+</tr>
+</tbody>
+</table>
+<h3 id="redis-services">Redis Services</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 19%" />
+<col style="width: 22%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>File</th>
+<th>Lines</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>response_cache.py</code></td>
+<td><code>services/response_cache.py</code></td>
+<td>~200</td>
+<td>LLM response deduplication</td>
+</tr>
+<tr>
+<td><code>web_cache_service.py</code></td>
+<td><code>services/web_cache_service.py</code></td>
+<td>14,055 bytes</td>
+<td>Web content caching</td>
+</tr>
+<tr>
+<td><code>session_manager.py</code></td>
+<td><code>services/session_manager.py</code></td>
+<td>~150</td>
+<td>TAL/ABCR session state</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mongodb-proctoring-data">14.5 MongoDB — Proctoring Data</h2>
+<h3 id="configuration-4">Configuration</h3>
+<div class="sourceCode" id="cb118"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml</span></span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>mongodb:</span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>  image: mongo:<span class="dv">7</span></span>
+<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a>  ports:</span>
+<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> <span class="st">&quot;27017:27017&quot;</span></span>
+<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a>  environment:</span>
+<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a>    MONGO_INITDB_ROOT_USERNAME: admin</span>
+<span id="cb118-8"><a href="#cb118-8" aria-hidden="true" tabindex="-1"></a>    MONGO_INITDB_ROOT_PASSWORD: password</span>
+<span id="cb118-9"><a href="#cb118-9" aria-hidden="true" tabindex="-1"></a>  volumes:</span>
+<span id="cb118-10"><a href="#cb118-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> mongo_data:<span class="op">/</span>data<span class="op">/</span>db</span></code></pre></div>
+<h3 id="collections-1">Collections</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 41%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Collection</th>
+<th>Document Shape</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proctoring_sessions</code></td>
+<td>Session metadata, start/end times, final score</td>
+<td>Proctoring session tracking</td>
+</tr>
+<tr>
+<td><code>proctoring_frames</code></td>
+<td>Frame analysis results (per-frame detections)</td>
+<td>Individual frame data</td>
+</tr>
+<tr>
+<td><code>proctoring_violations</code></td>
+<td>Violation type, timestamp, confidence, evidence</td>
+<td>Detected violations</td>
+</tr>
+<tr>
+<td><code>proctoring_scores</code></td>
+<td>Per-category scores, weighted final score</td>
+<td>Scoring breakdown</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-mongodb">Why MongoDB?</h3>
+<ol type="1">
+<li><strong>Schema flexibility</strong>: Detector outputs vary (face detection has bounding boxes, audio has frequencies)</li>
+<li><strong>High write throughput</strong>: 1 frame/second per student → 60 writes/minute per session</li>
+<li><strong>Document nesting</strong>: Natural fit for nested detector results</li>
+<li><strong>TTL indexes</strong>: Auto-expire frame data after 30 days</li>
+</ol>
+<hr />
+<h2 id="apache-cassandra-time-series-analytics">14.6 Apache Cassandra — Time-Series Analytics</h2>
+<h3 id="configuration-5">Configuration</h3>
+<div class="sourceCode" id="cb119"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml</span></span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>cassandra:</span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>  image: cassandra:<span class="fl">4.1</span></span>
+<span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a>  ports:</span>
+<span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> <span class="st">&quot;9042:9042&quot;</span></span>
+<span id="cb119-6"><a href="#cb119-6" aria-hidden="true" tabindex="-1"></a>  environment:</span>
+<span id="cb119-7"><a href="#cb119-7" aria-hidden="true" tabindex="-1"></a>    CASSANDRA_CLUSTER_NAME: ensure<span class="op">-</span>study</span>
+<span id="cb119-8"><a href="#cb119-8" aria-hidden="true" tabindex="-1"></a>  volumes:</span>
+<span id="cb119-9"><a href="#cb119-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> cassandra_data:<span class="op">/</span>var<span class="op">/</span>lib<span class="op">/</span>cassandra</span></code></pre></div>
+<h3 id="keyspace-tables">Keyspace &amp; Tables</h3>
+<div class="sourceCode" id="cb120"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> KEYSPACE ensure_study <span class="kw">WITH</span> replication <span class="op">=</span> {</span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;class&#39;</span>: <span class="st">&#39;SimpleStrategy&#39;</span>,</span>
+<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;replication_factor&#39;</span>: <span class="dv">1</span></span>
+<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- Time-series: student activity events</span></span>
+<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> student_activity (</span>
+<span id="cb120-8"><a href="#cb120-8" aria-hidden="true" tabindex="-1"></a>    student_id UUID,</span>
+<span id="cb120-9"><a href="#cb120-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">timestamp</span> <span class="dt">TIMESTAMP</span>,</span>
+<span id="cb120-10"><a href="#cb120-10" aria-hidden="true" tabindex="-1"></a>    event_type TEXT,</span>
+<span id="cb120-11"><a href="#cb120-11" aria-hidden="true" tabindex="-1"></a>    subject TEXT,</span>
+<span id="cb120-12"><a href="#cb120-12" aria-hidden="true" tabindex="-1"></a>    duration_seconds <span class="dt">INT</span>,</span>
+<span id="cb120-13"><a href="#cb120-13" aria-hidden="true" tabindex="-1"></a>    metadata MAP<span class="op">&lt;</span>TEXT, TEXT<span class="op">&gt;</span>,</span>
+<span id="cb120-14"><a href="#cb120-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> ((student_id), <span class="dt">timestamp</span>)</span>
+<span id="cb120-15"><a href="#cb120-15" aria-hidden="true" tabindex="-1"></a>) <span class="kw">WITH</span> CLUSTERING <span class="kw">ORDER</span> <span class="kw">BY</span> (<span class="dt">timestamp</span> <span class="kw">DESC</span>);</span>
+<span id="cb120-16"><a href="#cb120-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb120-17"><a href="#cb120-17" aria-hidden="true" tabindex="-1"></a><span class="co">-- Analytics: daily aggregated metrics</span></span>
+<span id="cb120-18"><a href="#cb120-18" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> daily_metrics (</span>
+<span id="cb120-19"><a href="#cb120-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">date</span> <span class="dt">DATE</span>,</span>
+<span id="cb120-20"><a href="#cb120-20" aria-hidden="true" tabindex="-1"></a>    metric_name TEXT,</span>
+<span id="cb120-21"><a href="#cb120-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">value</span> <span class="dt">DOUBLE</span>,</span>
+<span id="cb120-22"><a href="#cb120-22" aria-hidden="true" tabindex="-1"></a>    dimensions MAP<span class="op">&lt;</span>TEXT, TEXT<span class="op">&gt;</span>,</span>
+<span id="cb120-23"><a href="#cb120-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> ((<span class="dt">date</span>), metric_name)</span>
+<span id="cb120-24"><a href="#cb120-24" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="why-cassandra">Why Cassandra?</h3>
+<ol type="1">
+<li><strong>Write-optimized</strong>: Handles high-frequency activity events</li>
+<li><strong>Time-series native</strong>: Efficient range queries on timestamps</li>
+<li><strong>Partitioning</strong>: Student-based partitioning for even distribution</li>
+<li><strong>Compaction</strong>: Time-window compaction for analytics data</li>
+</ol>
+<hr />
+<h2 id="database-selection-matrix">14.7 Database Selection Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Database</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User profiles, classrooms</td>
+<td>PostgreSQL</td>
+<td>Relational integrity, JOINs</td>
+</tr>
+<tr>
+<td>Assessment responses</td>
+<td>PostgreSQL</td>
+<td>ACID transactions</td>
+</tr>
+<tr>
+<td>Document vectors</td>
+<td>Qdrant</td>
+<td>ANN search, filters</td>
+</tr>
+<tr>
+<td>Web search cache</td>
+<td>Redis</td>
+<td>Sub-ms access, TTL expiry</td>
+</tr>
+<tr>
+<td>Session state</td>
+<td>Redis</td>
+<td>Ephemeral, fast access</td>
+</tr>
+<tr>
+<td>Proctoring frames</td>
+<td>MongoDB</td>
+<td>Flexible schema, high writes</td>
+</tr>
+<tr>
+<td>Activity time-series</td>
+<td>Cassandra</td>
+<td>Write throughput, range scans</td>
+</tr>
+<tr>
+<td>Agent learning memory</td>
+<td>PostgreSQL</td>
+<td>Durable, relational links</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="docker-volume-strategy">14.8 Docker Volume Strategy</h2>
+<div class="sourceCode" id="cb121"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">postgres_data</span><span class="kw">:</span><span class="co">    # Persistent — user data, assessments</span></span>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">qdrant_data</span><span class="kw">:</span><span class="co">      # Persistent — embeddings, re-indexable</span></span>
+<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">redis_data</span><span class="kw">:</span><span class="co">       # Semi-persistent — cache, rebuilt on loss</span></span>
+<span id="cb121-5"><a href="#cb121-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mongo_data</span><span class="kw">:</span><span class="co">       # Persistent — proctoring evidence</span></span>
+<span id="cb121-6"><a href="#cb121-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">cassandra_data</span><span class="kw">:</span><span class="co">   # Persistent — analytics history</span></span>
+<span id="cb121-7"><a href="#cb121-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">upload_data</span><span class="kw">:</span><span class="co">      # Persistent — uploaded files (PDFs, images)</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

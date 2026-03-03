@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 57: OCR Pipeline Deep Dive — 6 Engines &amp;amp; Hybrid Strategy</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-56.html">&larr; Previous</a> <a href="page-58.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-57-ocr-pipeline-deep-dive-6-engines-hybrid-strategy">Page 57: OCR Pipeline Deep Dive — 6 Engines &amp; Hybrid Strategy</h1>
+<hr />
+<h2 id="overview-45">57.1 Overview</h2>
+<p>ensureStudy implements a <strong>multi-engine OCR pipeline</strong> with 6 different OCR backends, a hybrid fallback strategy, and pre-processing stages for image enhancement. This enables recognition of printed text, handwritten notes, mathematical formulas, and scanned documents.</p>
+<h3 id="source-18-files-in-backendai-serviceappservices">Source: 18 files in <code>backend/ai-service/app/services/</code></h3>
+<hr />
+<h2 id="ocr-engine-inventory">57.2 OCR Engine Inventory</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 25%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Engine</th>
+<th>File</th>
+<th>Type</th>
+<th>Best For</th>
+<th>License</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tesseract</td>
+<td><code>ocr_service.py</code></td>
+<td>Traditional</td>
+<td>Printed text, clean documents</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td>TrOCR (HuggingFace)</td>
+<td><code>ocr_service.py</code></td>
+<td>Transformer</td>
+<td>Handwritten text</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>Nanonets OCR2</td>
+<td><code>nanonets_ocr.py</code></td>
+<td>VLM (Qwen2.5-VL)</td>
+<td>Complex layouts</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>SageMaker OCR</td>
+<td><code>sagemaker_ocr.py</code></td>
+<td>Cloud (AWS)</td>
+<td>Production scale</td>
+<td>Managed</td>
+</tr>
+<tr>
+<td>Hybrid OCR</td>
+<td><code>hybrid_ocr.py</code></td>
+<td>Multi-engine</td>
+<td>Best accuracy</td>
+<td>Combined</td>
+</tr>
+<tr>
+<td>EasyOCR</td>
+<td>via adapter</td>
+<td>Deep learning</td>
+<td>Multi-language</td>
+<td>Apache 2.0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ocr-adapter-pattern">57.3 OCR Adapter Pattern</h2>
+<h3 id="source-servicesocr_adapter.py">Source: <code>services/ocr_adapter.py</code></h3>
+<div class="sourceCode" id="cb367"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb367-1"><a href="#cb367-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OCRAdapter:</span>
+<span id="cb367-2"><a href="#cb367-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Unified interface for multiple OCR engines&quot;&quot;&quot;</span></span>
+<span id="cb367-3"><a href="#cb367-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb367-4"><a href="#cb367-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb367-5"><a href="#cb367-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.engines <span class="op">=</span> {</span>
+<span id="cb367-6"><a href="#cb367-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;tesseract&quot;</span>: TesseractEngine(),</span>
+<span id="cb367-7"><a href="#cb367-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;trocr&quot;</span>: TrOCREngine(),</span>
+<span id="cb367-8"><a href="#cb367-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;nanonets&quot;</span>: NanonetsEngine(),</span>
+<span id="cb367-9"><a href="#cb367-9" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb367-10"><a href="#cb367-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.default_engine <span class="op">=</span> <span class="st">&quot;hybrid&quot;</span></span>
+<span id="cb367-11"><a href="#cb367-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb367-12"><a href="#cb367-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> recognize(<span class="va">self</span>, image, engine: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>) <span class="op">-&gt;</span> OCRResult:</span>
+<span id="cb367-13"><a href="#cb367-13" aria-hidden="true" tabindex="-1"></a>        engine <span class="op">=</span> engine <span class="kw">or</span> <span class="va">self</span>.default_engine</span>
+<span id="cb367-14"><a href="#cb367-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb367-15"><a href="#cb367-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> engine <span class="op">==</span> <span class="st">&quot;hybrid&quot;</span>:</span>
+<span id="cb367-16"><a href="#cb367-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">self</span>._hybrid_recognize(image)</span>
+<span id="cb367-17"><a href="#cb367-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb367-18"><a href="#cb367-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.engines[engine].recognize(image)</span></code></pre></div>
+<hr />
+<h2 id="hybrid-ocr-strategy">57.4 Hybrid OCR Strategy</h2>
+<h3 id="source-serviceshybrid_ocr.py">Source: <code>services/hybrid_ocr.py</code></h3>
+<div class="sourceCode" id="cb368"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb368-1"><a href="#cb368-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HybridOCR:</span>
+<span id="cb368-2"><a href="#cb368-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb368-3"><a href="#cb368-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Multi-engine OCR with confidence-based selection.</span></span>
+<span id="cb368-4"><a href="#cb368-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb368-5"><a href="#cb368-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Strategy:</span></span>
+<span id="cb368-6"><a href="#cb368-6" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Run Tesseract (fast, good for printed text)</span></span>
+<span id="cb368-7"><a href="#cb368-7" aria-hidden="true" tabindex="-1"></a><span class="co">    2. If confidence &lt; 0.7, run TrOCR (better for handwritten)</span></span>
+<span id="cb368-8"><a href="#cb368-8" aria-hidden="true" tabindex="-1"></a><span class="co">    3. If still &lt; 0.7, run Nanonets (VLM, best accuracy)</span></span>
+<span id="cb368-9"><a href="#cb368-9" aria-hidden="true" tabindex="-1"></a><span class="co">    4. Return highest-confidence result</span></span>
+<span id="cb368-10"><a href="#cb368-10" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb368-11"><a href="#cb368-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb368-12"><a href="#cb368-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> recognize(<span class="va">self</span>, image) <span class="op">-&gt;</span> OCRResult:</span>
+<span id="cb368-13"><a href="#cb368-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 1: Tesseract (fast)</span></span>
+<span id="cb368-14"><a href="#cb368-14" aria-hidden="true" tabindex="-1"></a>        tess_result <span class="op">=</span> <span class="va">self</span>.tesseract.recognize(image)</span>
+<span id="cb368-15"><a href="#cb368-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> tess_result.confidence <span class="op">&gt;=</span> <span class="fl">0.7</span>:</span>
+<span id="cb368-16"><a href="#cb368-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> tess_result</span>
+<span id="cb368-17"><a href="#cb368-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb368-18"><a href="#cb368-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 2: TrOCR (transformer)</span></span>
+<span id="cb368-19"><a href="#cb368-19" aria-hidden="true" tabindex="-1"></a>        trocr_result <span class="op">=</span> <span class="va">self</span>.trocr.recognize(image)</span>
+<span id="cb368-20"><a href="#cb368-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> trocr_result.confidence <span class="op">&gt;=</span> <span class="fl">0.7</span>:</span>
+<span id="cb368-21"><a href="#cb368-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> trocr_result</span>
+<span id="cb368-22"><a href="#cb368-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb368-23"><a href="#cb368-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Stage 3: Nanonets VLM (most accurate)</span></span>
+<span id="cb368-24"><a href="#cb368-24" aria-hidden="true" tabindex="-1"></a>        nano_result <span class="op">=</span> <span class="va">self</span>.nanonets.recognize(image)</span>
+<span id="cb368-25"><a href="#cb368-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb368-26"><a href="#cb368-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Return best result</span></span>
+<span id="cb368-27"><a href="#cb368-27" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> [tess_result, trocr_result, nano_result]</span>
+<span id="cb368-28"><a href="#cb368-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">max</span>(results, key<span class="op">=</span><span class="kw">lambda</span> r: r.confidence)</span></code></pre></div>
+<hr />
+<h2 id="image-pre-processing-pipeline">57.5 Image Pre-Processing Pipeline</h2>
+<h3 id="source-servicesimage_enhancer.py">Source: <code>services/image_enhancer.py</code></h3>
+<div class="sourceCode" id="cb369"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb369-1"><a href="#cb369-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ImageEnhancer:</span>
+<span id="cb369-2"><a href="#cb369-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Pre-process images for better OCR accuracy&quot;&quot;&quot;</span></span>
+<span id="cb369-3"><a href="#cb369-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb369-4"><a href="#cb369-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> enhance(<span class="va">self</span>, image) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb369-5"><a href="#cb369-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Convert to grayscale</span></span>
+<span id="cb369-6"><a href="#cb369-6" aria-hidden="true" tabindex="-1"></a>        gray <span class="op">=</span> cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span>
+<span id="cb369-7"><a href="#cb369-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb369-8"><a href="#cb369-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Deskew (fix rotation)</span></span>
+<span id="cb369-9"><a href="#cb369-9" aria-hidden="true" tabindex="-1"></a>        deskewed <span class="op">=</span> <span class="va">self</span>._deskew(gray)</span>
+<span id="cb369-10"><a href="#cb369-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb369-11"><a href="#cb369-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Denoise</span></span>
+<span id="cb369-12"><a href="#cb369-12" aria-hidden="true" tabindex="-1"></a>        denoised <span class="op">=</span> cv2.fastNlMeansDenoising(deskewed, h<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb369-13"><a href="#cb369-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb369-14"><a href="#cb369-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 4. Adaptive thresholding (binarization)</span></span>
+<span id="cb369-15"><a href="#cb369-15" aria-hidden="true" tabindex="-1"></a>        binary <span class="op">=</span> cv2.adaptiveThreshold(</span>
+<span id="cb369-16"><a href="#cb369-16" aria-hidden="true" tabindex="-1"></a>            denoised, <span class="dv">255</span>,</span>
+<span id="cb369-17"><a href="#cb369-17" aria-hidden="true" tabindex="-1"></a>            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,</span>
+<span id="cb369-18"><a href="#cb369-18" aria-hidden="true" tabindex="-1"></a>            cv2.THRESH_BINARY, <span class="dv">11</span>, <span class="dv">2</span></span>
+<span id="cb369-19"><a href="#cb369-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb369-20"><a href="#cb369-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb369-21"><a href="#cb369-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 5. Contrast enhancement</span></span>
+<span id="cb369-22"><a href="#cb369-22" aria-hidden="true" tabindex="-1"></a>        enhanced <span class="op">=</span> <span class="va">self</span>._enhance_contrast(binary)</span>
+<span id="cb369-23"><a href="#cb369-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb369-24"><a href="#cb369-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> enhanced</span></code></pre></div>
+<h3 id="enhancement-steps">Enhancement Steps</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Purpose</th>
+<th>Technique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grayscale</td>
+<td>Simplify image</td>
+<td><code>cv2.cvtColor</code></td>
+</tr>
+<tr>
+<td>Deskew</td>
+<td>Fix scanned tilt</td>
+<td>Hough transform → rotation</td>
+</tr>
+<tr>
+<td>Denoise</td>
+<td>Remove noise</td>
+<td>Non-local means denoising</td>
+</tr>
+<tr>
+<td>Binarize</td>
+<td>Black/white text</td>
+<td>Adaptive Gaussian threshold</td>
+</tr>
+<tr>
+<td>Contrast</td>
+<td>Sharpen text</td>
+<td>CLAHE histogram equalization</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="layout-analysis">57.6 Layout Analysis</h2>
+<h3 id="source-serviceslayout_service.py">Source: <code>services/layout_service.py</code></h3>
+<div class="sourceCode" id="cb370"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb370-1"><a href="#cb370-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LayoutService:</span>
+<span id="cb370-2"><a href="#cb370-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Detect text regions, tables, figures in documents&quot;&quot;&quot;</span></span>
+<span id="cb370-3"><a href="#cb370-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb370-4"><a href="#cb370-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> analyze_layout(<span class="va">self</span>, image) <span class="op">-&gt;</span> LayoutResult:</span>
+<span id="cb370-5"><a href="#cb370-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Detect text blocks</span></span>
+<span id="cb370-6"><a href="#cb370-6" aria-hidden="true" tabindex="-1"></a>        text_regions <span class="op">=</span> <span class="va">self</span>._detect_text_regions(image)</span>
+<span id="cb370-7"><a href="#cb370-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb370-8"><a href="#cb370-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Detect tables</span></span>
+<span id="cb370-9"><a href="#cb370-9" aria-hidden="true" tabindex="-1"></a>        tables <span class="op">=</span> <span class="va">self</span>._detect_tables(image)</span>
+<span id="cb370-10"><a href="#cb370-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb370-11"><a href="#cb370-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Detect figures/diagrams</span></span>
+<span id="cb370-12"><a href="#cb370-12" aria-hidden="true" tabindex="-1"></a>        figures <span class="op">=</span> <span class="va">self</span>._detect_figures(image)</span>
+<span id="cb370-13"><a href="#cb370-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb370-14"><a href="#cb370-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> LayoutResult(</span>
+<span id="cb370-15"><a href="#cb370-15" aria-hidden="true" tabindex="-1"></a>            text_regions<span class="op">=</span>text_regions,</span>
+<span id="cb370-16"><a href="#cb370-16" aria-hidden="true" tabindex="-1"></a>            tables<span class="op">=</span>tables,</span>
+<span id="cb370-17"><a href="#cb370-17" aria-hidden="true" tabindex="-1"></a>            figures<span class="op">=</span>figures,</span>
+<span id="cb370-18"><a href="#cb370-18" aria-hidden="true" tabindex="-1"></a>            reading_order<span class="op">=</span><span class="va">self</span>._determine_reading_order(text_regions)</span>
+<span id="cb370-19"><a href="#cb370-19" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<hr />
+<h2 id="pdf-processing">57.7 PDF Processing</h2>
+<h3 id="source-servicespdf_extractor.py-servicespdf_processor.py">Source: <code>services/pdf_extractor.py</code>, <code>services/pdf_processor.py</code></h3>
+<div class="sourceCode" id="cb371"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb371-1"><a href="#cb371-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PDFProcessor:</span>
+<span id="cb371-2"><a href="#cb371-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process(<span class="va">self</span>, pdf_path: <span class="bu">str</span>) <span class="op">-&gt;</span> ProcessedDocument:</span>
+<span id="cb371-3"><a href="#cb371-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Try digital text extraction (PyMuPDF)</span></span>
+<span id="cb371-4"><a href="#cb371-4" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> <span class="va">self</span>._extract_digital_text(pdf_path)</span>
+<span id="cb371-5"><a href="#cb371-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb371-6"><a href="#cb371-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> text <span class="kw">and</span> <span class="bu">len</span>(text.strip()) <span class="op">&gt;</span> <span class="dv">100</span>:</span>
+<span id="cb371-7"><a href="#cb371-7" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Digital PDF — no OCR needed</span></span>
+<span id="cb371-8"><a href="#cb371-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> ProcessedDocument(text<span class="op">=</span>text, method<span class="op">=</span><span class="st">&quot;digital&quot;</span>)</span>
+<span id="cb371-9"><a href="#cb371-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb371-10"><a href="#cb371-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Convert pages to images</span></span>
+<span id="cb371-11"><a href="#cb371-11" aria-hidden="true" tabindex="-1"></a>        images <span class="op">=</span> pdf2image.convert_from_path(pdf_path)</span>
+<span id="cb371-12"><a href="#cb371-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb371-13"><a href="#cb371-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. OCR each page</span></span>
+<span id="cb371-14"><a href="#cb371-14" aria-hidden="true" tabindex="-1"></a>        pages <span class="op">=</span> []</span>
+<span id="cb371-15"><a href="#cb371-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, img <span class="kw">in</span> <span class="bu">enumerate</span>(images):</span>
+<span id="cb371-16"><a href="#cb371-16" aria-hidden="true" tabindex="-1"></a>            enhanced <span class="op">=</span> <span class="va">self</span>.enhancer.enhance(np.array(img))</span>
+<span id="cb371-17"><a href="#cb371-17" aria-hidden="true" tabindex="-1"></a>            ocr_result <span class="op">=</span> <span class="va">self</span>.hybrid_ocr.recognize(enhanced)</span>
+<span id="cb371-18"><a href="#cb371-18" aria-hidden="true" tabindex="-1"></a>            pages.append(ocr_result.text)</span>
+<span id="cb371-19"><a href="#cb371-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb371-20"><a href="#cb371-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ProcessedDocument(</span>
+<span id="cb371-21"><a href="#cb371-21" aria-hidden="true" tabindex="-1"></a>            text<span class="op">=</span><span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>.join(pages),</span>
+<span id="cb371-22"><a href="#cb371-22" aria-hidden="true" tabindex="-1"></a>            method<span class="op">=</span><span class="st">&quot;ocr&quot;</span>,</span>
+<span id="cb371-23"><a href="#cb371-23" aria-hidden="true" tabindex="-1"></a>            page_count<span class="op">=</span><span class="bu">len</span>(pages)</span>
+<span id="cb371-24"><a href="#cb371-24" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<hr />
+<h2 id="searchable-pdf-generation">57.8 Searchable PDF Generation</h2>
+<h3 id="source-servicessearchable_pdf.py">Source: <code>services/searchable_pdf.py</code></h3>
+<div class="sourceCode" id="cb372"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb372-1"><a href="#cb372-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SearchablePDFService:</span>
+<span id="cb372-2"><a href="#cb372-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Convert scanned PDFs to searchable PDFs with invisible text layer&quot;&quot;&quot;</span></span>
+<span id="cb372-3"><a href="#cb372-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb372-4"><a href="#cb372-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> make_searchable(<span class="va">self</span>, input_pdf: <span class="bu">str</span>, output_pdf: <span class="bu">str</span>):</span>
+<span id="cb372-5"><a href="#cb372-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Extract pages as images</span></span>
+<span id="cb372-6"><a href="#cb372-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. OCR each page</span></span>
+<span id="cb372-7"><a href="#cb372-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Create invisible text overlay at correct coordinates</span></span>
+<span id="cb372-8"><a href="#cb372-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 4. Merge overlay with original image</span></span>
+<span id="cb372-9"><a href="#cb372-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Output: PDF that looks identical but has selectable text</span></span></code></pre></div>
+<hr />
+<h2 id="latexmath-formula-recognition">57.9 LaTeX/Math Formula Recognition</h2>
+<h3 id="source-serviceslatex_converter.py">Source: <code>services/latex_converter.py</code></h3>
+<div class="sourceCode" id="cb373"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb373-1"><a href="#cb373-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LaTeXConverter:</span>
+<span id="cb373-2"><a href="#cb373-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Convert detected math regions to LaTeX notation&quot;&quot;&quot;</span></span>
+<span id="cb373-3"><a href="#cb373-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb373-4"><a href="#cb373-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> image_to_latex(<span class="va">self</span>, math_region: np.ndarray) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb373-5"><a href="#cb373-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Use VLM (Nanonets/Gemini) to recognize math formulas</span></span>
+<span id="cb373-6"><a href="#cb373-6" aria-hidden="true" tabindex="-1"></a>        prompt <span class="op">=</span> <span class="st">&quot;Convert this mathematical formula image to LaTeX notation.&quot;</span></span>
+<span id="cb373-7"><a href="#cb373-7" aria-hidden="true" tabindex="-1"></a>        latex <span class="op">=</span> <span class="va">self</span>.llm.generate(prompt, image<span class="op">=</span>math_region)</span>
+<span id="cb373-8"><a href="#cb373-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> latex  <span class="co"># e.g., &quot;\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="ocr-performance">57.10 OCR Performance</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 9%" />
+<col style="width: 28%" />
+<col style="width: 32%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Speed</th>
+<th>Accuracy (Printed)</th>
+<th>Accuracy (Handwritten)</th>
+<th>GPU Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tesseract</td>
+<td>~100ms/page</td>
+<td>95%+</td>
+<td>60%</td>
+<td>No</td>
+</tr>
+<tr>
+<td>TrOCR</td>
+<td>~500ms/page</td>
+<td>92%</td>
+<td>85%</td>
+<td>Preferred</td>
+</tr>
+<tr>
+<td>Nanonets VLM</td>
+<td>~2s/page</td>
+<td>98%</td>
+<td>90%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td>~500ms-2s</td>
+<td>98%</td>
+<td>90%</td>
+<td>Preferred</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

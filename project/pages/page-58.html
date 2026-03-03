@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 58: Inter-Service Communication Patterns</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-57.html">&larr; Previous</a> <a href="page-59.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-58-inter-service-communication-patterns">Page 58: Inter-Service Communication Patterns</h1>
+<hr />
+<h2 id="overview-46">58.1 Overview</h2>
+<p>ensureStudy’s microservices communicate via <strong>4 patterns</strong>: synchronous HTTP, asynchronous Kafka events, callback webhooks, and shared database access. This page documents every communication path between services.</p>
+<hr />
+<h2 id="communication-matrix">58.2 Communication Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+<th>Pattern</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend → Core</td>
+<td>REST HTTP</td>
+<td>CRUD, auth, classroom ops</td>
+<td></td>
+</tr>
+<tr>
+<td>Frontend → AI</td>
+<td>REST HTTP + SSE</td>
+<td>Tutor chat, document upload</td>
+<td></td>
+</tr>
+<tr>
+<td>Core → AI</td>
+<td>REST HTTP</td>
+<td>Trigger processing, get results</td>
+<td></td>
+</tr>
+<tr>
+<td>AI → Core</td>
+<td>HTTP Callback</td>
+<td>Report grading, indexing status</td>
+<td></td>
+</tr>
+<tr>
+<td>Core → Kafka</td>
+<td>Async Event</td>
+<td>Publish document/chat/meeting events</td>
+<td></td>
+</tr>
+<tr>
+<td>Kafka → AI</td>
+<td>Async Consumer</td>
+<td>Process documents, grade assessments</td>
+<td></td>
+</tr>
+<tr>
+<td>AI → Qdrant</td>
+<td>gRPC/HTTP</td>
+<td>Vector operations</td>
+<td></td>
+</tr>
+<tr>
+<td>Core → PostgreSQL</td>
+<td>SQL (SQLAlchemy)</td>
+<td>Data persistence</td>
+<td></td>
+</tr>
+<tr>
+<td>AI → Redis</td>
+<td>Redis Protocol</td>
+<td>Caching</td>
+<td></td>
+</tr>
+<tr>
+<td>Core → Redis</td>
+<td>Redis Protocol</td>
+<td>Session state</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="pattern-1-frontend-backend-rest">58.3 Pattern 1: Frontend → Backend (REST)</h2>
+<pre class="mermaid">flowchart LR
+    B["Browser"] -->|"GET /api/classrooms"| CS["Core Service :8000"]
+    B -->|"POST /api/tutor/chat (SSE)"| AI["AI Service :8001"]
+    B -->|"POST /api/auth/login"| CS
+    B -->|"POST /api/documents/process"| AI</pre>
+<h3 id="frontend-api-client">Frontend API Client</h3>
+<div class="sourceCode" id="cb375"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb375-1"><a href="#cb375-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> API_URL <span class="op">=</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">NEXT_PUBLIC_API_URL</span> <span class="op">||</span> <span class="st">&#39;http://localhost:8000&#39;</span><span class="op">;</span></span>
+<span id="cb375-2"><a href="#cb375-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> AI_URL <span class="op">=</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">NEXT_PUBLIC_AI_URL</span> <span class="op">||</span> <span class="st">&#39;http://localhost:8001&#39;</span><span class="op">;</span></span>
+<span id="cb375-3"><a href="#cb375-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb375-4"><a href="#cb375-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Core Service calls</span></span>
+<span id="cb375-5"><a href="#cb375-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> coreApi <span class="op">=</span> axios<span class="op">.</span><span class="fu">create</span>({</span>
+<span id="cb375-6"><a href="#cb375-6" aria-hidden="true" tabindex="-1"></a>    baseURL<span class="op">:</span> <span class="vs">`</span><span class="sc">${</span>API_URL<span class="sc">}</span><span class="vs">/api`</span><span class="op">,</span></span>
+<span id="cb375-7"><a href="#cb375-7" aria-hidden="true" tabindex="-1"></a>    headers<span class="op">:</span> { Authorization<span class="op">:</span> <span class="vs">`Bearer </span><span class="sc">${</span>session<span class="op">.</span><span class="at">accessToken</span><span class="sc">}</span><span class="vs">`</span> }</span>
+<span id="cb375-8"><a href="#cb375-8" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb375-9"><a href="#cb375-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb375-10"><a href="#cb375-10" aria-hidden="true" tabindex="-1"></a><span class="co">// AI Service calls  </span></span>
+<span id="cb375-11"><a href="#cb375-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> aiApi <span class="op">=</span> axios<span class="op">.</span><span class="fu">create</span>({</span>
+<span id="cb375-12"><a href="#cb375-12" aria-hidden="true" tabindex="-1"></a>    baseURL<span class="op">:</span> <span class="vs">`</span><span class="sc">${</span>AI_URL<span class="sc">}</span><span class="vs">/api`</span></span>
+<span id="cb375-13"><a href="#cb375-13" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr />
+<h2 id="pattern-2-ai-core-callbacks">58.4 Pattern 2: AI → Core (Callbacks)</h2>
+<p>The AI Service calls back to the Core Service to update records after async processing:</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb376-1"><a href="#cb376-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AI Service: services/grading_service.py</span></span>
+<span id="cb376-2"><a href="#cb376-2" aria-hidden="true" tabindex="-1"></a>CORE_SERVICE_URL <span class="op">=</span> os.getenv(<span class="st">&quot;CORE_SERVICE_URL&quot;</span>, <span class="st">&quot;http://core-service:8000&quot;</span>)</span>
+<span id="cb376-3"><a href="#cb376-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb376-4"><a href="#cb376-4" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> submit_grading_result(assessment_id, user_id, score, feedback):</span>
+<span id="cb376-5"><a href="#cb376-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> httpx.post(</span>
+<span id="cb376-6"><a href="#cb376-6" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f&quot;</span><span class="sc">{</span>CORE_SERVICE_URL<span class="sc">}</span><span class="ss">/api/grading-callback&quot;</span>,</span>
+<span id="cb376-7"><a href="#cb376-7" aria-hidden="true" tabindex="-1"></a>        json<span class="op">=</span>{</span>
+<span id="cb376-8"><a href="#cb376-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;assessment_id&quot;</span>: assessment_id,</span>
+<span id="cb376-9"><a href="#cb376-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;user_id&quot;</span>: user_id,</span>
+<span id="cb376-10"><a href="#cb376-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;score&quot;</span>: score,</span>
+<span id="cb376-11"><a href="#cb376-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;feedback&quot;</span>: feedback</span>
+<span id="cb376-12"><a href="#cb376-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb376-13"><a href="#cb376-13" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<h3 id="callback-endpoints-core-service">Callback Endpoints (Core Service)</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 29%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Caller</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/grading-callback</code></td>
+<td>AI Service</td>
+<td>Report assessment grading result</td>
+</tr>
+<tr>
+<td><code>/api/documents/&lt;id&gt;/status</code></td>
+<td>AI Service</td>
+<td>Update document indexing status</td>
+</tr>
+<tr>
+<td><code>/api/progress/&lt;id&gt;</code></td>
+<td>AI Service</td>
+<td>Update student progress</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="pattern-3-kafka-async-events">58.5 Pattern 3: Kafka Async Events</h2>
+<pre class="mermaid">flowchart LR
+    CS["Core Service"] -->|publish| KT["Kafka Topic"] -->|consume| AI["AI Service Consumer"]</pre>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 19%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Event Flow</th>
+<th>Topic</th>
+<th>Trigger</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Material upload → processing</td>
+<td><code>document-processing</code></td>
+<td>Teacher uploads PDF</td>
+<td>DocumentConsumer</td>
+</tr>
+<tr>
+<td>Chat message → AI response</td>
+<td><code>chat-events</code></td>
+<td>Student sends message</td>
+<td>AgentConsumer</td>
+</tr>
+<tr>
+<td>Meeting end → transcription</td>
+<td><code>meeting-recordings</code></td>
+<td>Teacher ends meeting</td>
+<td>MeetingConsumer</td>
+</tr>
+<tr>
+<td>Answer submit → grading</td>
+<td><code>assessment-submissions</code></td>
+<td>Student submits</td>
+<td>AgentConsumer</td>
+</tr>
+<tr>
+<td>Activity → analytics</td>
+<td><code>student-events</code></td>
+<td>Any student action</td>
+<td>AnalyticsConsumer</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="pattern-4-shared-infrastructure">58.6 Pattern 4: Shared Infrastructure</h2>
+<pre class="mermaid">flowchart TB
+    BOTH["Both Services"] --> PG["PostgreSQL<br/>Core writes, AI reads via callback"]
+    BOTH --> RD["Redis<br/>shared cache namespace"]
+    BOTH --> QD["Qdrant<br/>AI writes, AI reads"]
+    BOTH --> KFK["Kafka<br/>Core produces, AI consumes"]</pre>
+<h3 id="docker-networking">Docker Networking</h3>
+<div class="sourceCode" id="cb379"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb379-1"><a href="#cb379-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml</span></span>
+<span id="cb379-2"><a href="#cb379-2" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb379-3"><a href="#cb379-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ensurestudy-network</span><span class="kw">:</span></span>
+<span id="cb379-4"><a href="#cb379-4" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> bridge</span></span>
+<span id="cb379-5"><a href="#cb379-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb379-6"><a href="#cb379-6" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb379-7"><a href="#cb379-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">core-service</span><span class="kw">:</span></span>
+<span id="cb379-8"><a href="#cb379-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">networks</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">ensurestudy-network</span><span class="kw">]</span></span>
+<span id="cb379-9"><a href="#cb379-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ai-service</span><span class="kw">:</span></span>
+<span id="cb379-10"><a href="#cb379-10" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">networks</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">ensurestudy-network</span><span class="kw">]</span></span>
+<span id="cb379-11"><a href="#cb379-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">postgres</span><span class="kw">:</span></span>
+<span id="cb379-12"><a href="#cb379-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">networks</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">ensurestudy-network</span><span class="kw">]</span></span>
+<span id="cb379-13"><a href="#cb379-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">redis</span><span class="kw">:</span></span>
+<span id="cb379-14"><a href="#cb379-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">networks</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">ensurestudy-network</span><span class="kw">]</span></span></code></pre></div>
+<p>All services on the same Docker bridge network → internal DNS resolution (<code>core-service:8000</code>, <code>ai-service:8001</code>, <code>postgres:5432</code>).</p>
+<hr />
+<h2 id="service-discovery">58.7 Service Discovery</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Internal URL</th>
+<th>External URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core Service</td>
+<td><code>http://core-service:8000</code></td>
+<td><code>http://localhost:8000</code></td>
+</tr>
+<tr>
+<td>AI Service</td>
+<td><code>http://ai-service:8001</code></td>
+<td><code>http://localhost:8001</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>postgres:5432</code></td>
+<td><code>localhost:5432</code></td>
+</tr>
+<tr>
+<td>Redis</td>
+<td><code>redis:6379</code></td>
+<td><code>localhost:6379</code></td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td><code>qdrant:6333</code></td>
+<td><code>localhost:6333</code></td>
+</tr>
+<tr>
+<td>Kafka</td>
+<td><code>kafka:29092</code></td>
+<td><code>localhost:9092</code></td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td><code>mongodb:27017</code></td>
+<td><code>localhost:27017</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="error-handling-in-inter-service-calls">58.8 Error Handling in Inter-Service Calls</h2>
+<div class="sourceCode" id="cb380"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb380-1"><a href="#cb380-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> httpx</span>
+<span id="cb380-2"><a href="#cb380-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tenacity <span class="im">import</span> retry, stop_after_attempt, wait_exponential</span>
+<span id="cb380-3"><a href="#cb380-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb380-4"><a href="#cb380-4" aria-hidden="true" tabindex="-1"></a><span class="at">@retry</span>(stop<span class="op">=</span>stop_after_attempt(<span class="dv">3</span>), wait<span class="op">=</span>wait_exponential(<span class="bu">min</span><span class="op">=</span><span class="dv">1</span>, <span class="bu">max</span><span class="op">=</span><span class="dv">10</span>))</span>
+<span id="cb380-5"><a href="#cb380-5" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> call_core_service(endpoint: <span class="bu">str</span>, data: <span class="bu">dict</span>):</span>
+<span id="cb380-6"><a href="#cb380-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="cf">with</span> httpx.AsyncClient(timeout<span class="op">=</span><span class="dv">30</span>) <span class="im">as</span> client:</span>
+<span id="cb380-7"><a href="#cb380-7" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> <span class="cf">await</span> client.post(</span>
+<span id="cb380-8"><a href="#cb380-8" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>CORE_SERVICE_URL<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>endpoint<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb380-9"><a href="#cb380-9" aria-hidden="true" tabindex="-1"></a>            json<span class="op">=</span>data</span>
+<span id="cb380-10"><a href="#cb380-10" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb380-11"><a href="#cb380-11" aria-hidden="true" tabindex="-1"></a>        response.raise_for_status()</span>
+<span id="cb380-12"><a href="#cb380-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> response.json()</span></code></pre></div>
+<hr />
+<h2 id="request-flow-complete-example">58.9 Request Flow: Complete Example</h2>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant FE as Frontend
+    participant CS as Core Service
+    participant PG as PostgreSQL
+    participant K as Kafka
+    participant AI as AI Service (AgentConsumer)
+
+    S->>FE: Click Submit Assessment
+    FE->>CS: POST /api/assessments/{id}/submit
+    CS->>PG: Save responses
+    CS->>K: Publish to assessment-submissions
+    CS->>FE: 202 Accepted
+    K->>AI: AgentConsumer
+    AI->>AI: Score MCQ (programmatic)
+    AI->>AI: Score descriptive (LLM)
+    AI->>CS: POST /api/grading-callback
+    CS->>PG: Save AssessmentResult
+    CS->>PG: Update Progress + Leaderboard
+    CS->>FE: Notification: Assessment graded
+    FE->>S: Bell shows 1 new notification</pre>
+<hr />
+
+</body>
+</html>

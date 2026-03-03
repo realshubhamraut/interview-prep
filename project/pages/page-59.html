@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 59: File Upload &amp;amp; Storage Architecture</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-58.html">&larr; Previous</a> <a href="page-60.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-59-file-upload-storage-architecture">Page 59: File Upload &amp; Storage Architecture</h1>
+<hr />
+<h2 id="overview-47">59.1 Overview</h2>
+<p>ensureStudy handles file uploads across <strong>4 content types</strong> (documents, recordings, images, videos) with a dual-backend storage strategy: local filesystem in development and AWS S3/MinIO in production.</p>
+<hr />
+<h2 id="storage-architecture">59.2 Storage Architecture</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Storage Architecture "]
+        direction TB
+        N0["Development                 Production"]
+        N1["Documents       /app/uploads/documents      AWS S3 bucket"]
+        N2["Recordings      /app/recordings/            AWS S3 bucket"]
+        N3["Images          /app/uploads/images         AWS S3 bucket"]
+        N4["Temp files      /tmp/ensurestudy/           /tmp/ (ephemeral)"]
+    end
+</pre>
+<hr />
+<h2 id="upload-routes">59.3 Upload Routes</h2>
+<h3 id="source-backendcore-serviceapproutesfiles.py">Source: <code>backend/core-service/app/routes/files.py</code></h3>
+<div class="sourceCode" id="cb383"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb383-1"><a href="#cb383-1" aria-hidden="true" tabindex="-1"></a>UPLOAD_FOLDER <span class="op">=</span> os.getenv(<span class="st">&quot;UPLOAD_FOLDER&quot;</span>, <span class="st">&quot;/app/uploads&quot;</span>)</span>
+<span id="cb383-2"><a href="#cb383-2" aria-hidden="true" tabindex="-1"></a>MAX_FILE_SIZE <span class="op">=</span> <span class="dv">50</span> <span class="op">*</span> <span class="dv">1024</span> <span class="op">*</span> <span class="dv">1024</span>  <span class="co"># 50 MB</span></span>
+<span id="cb383-3"><a href="#cb383-3" aria-hidden="true" tabindex="-1"></a>ALLOWED_EXTENSIONS <span class="op">=</span> {</span>
+<span id="cb383-4"><a href="#cb383-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;documents&quot;</span>: {<span class="st">&quot;pdf&quot;</span>, <span class="st">&quot;docx&quot;</span>, <span class="st">&quot;pptx&quot;</span>, <span class="st">&quot;txt&quot;</span>, <span class="st">&quot;md&quot;</span>},</span>
+<span id="cb383-5"><a href="#cb383-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;images&quot;</span>: {<span class="st">&quot;png&quot;</span>, <span class="st">&quot;jpg&quot;</span>, <span class="st">&quot;jpeg&quot;</span>, <span class="st">&quot;gif&quot;</span>, <span class="st">&quot;webp&quot;</span>},</span>
+<span id="cb383-6"><a href="#cb383-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;videos&quot;</span>: {<span class="st">&quot;mp4&quot;</span>, <span class="st">&quot;webm&quot;</span>, <span class="st">&quot;mov&quot;</span>},</span>
+<span id="cb383-7"><a href="#cb383-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;audio&quot;</span>: {<span class="st">&quot;mp3&quot;</span>, <span class="st">&quot;wav&quot;</span>, <span class="st">&quot;m4a&quot;</span>}</span>
+<span id="cb383-8"><a href="#cb383-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb383-9"><a href="#cb383-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb383-10"><a href="#cb383-10" aria-hidden="true" tabindex="-1"></a><span class="at">@files_bp.route</span>(<span class="st">&quot;/upload&quot;</span>, methods<span class="op">=</span>[<span class="st">&quot;POST&quot;</span>])</span>
+<span id="cb383-11"><a href="#cb383-11" aria-hidden="true" tabindex="-1"></a><span class="at">@jwt_required</span></span>
+<span id="cb383-12"><a href="#cb383-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> upload_file():</span>
+<span id="cb383-13"><a href="#cb383-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">file</span> <span class="op">=</span> request.files.get(<span class="st">&quot;file&quot;</span>)</span>
+<span id="cb383-14"><a href="#cb383-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb383-15"><a href="#cb383-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate</span></span>
+<span id="cb383-16"><a href="#cb383-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">file</span> <span class="kw">or</span> <span class="kw">not</span> allowed_file(<span class="bu">file</span>.filename):</span>
+<span id="cb383-17"><a href="#cb383-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;Invalid file&quot;</span>}), <span class="dv">400</span></span>
+<span id="cb383-18"><a href="#cb383-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb383-19"><a href="#cb383-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check size</span></span>
+<span id="cb383-20"><a href="#cb383-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> request.content_length <span class="op">&gt;</span> MAX_FILE_SIZE:</span>
+<span id="cb383-21"><a href="#cb383-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> jsonify({<span class="st">&quot;error&quot;</span>: <span class="st">&quot;File too large (max 50MB)&quot;</span>}), <span class="dv">413</span></span>
+<span id="cb383-22"><a href="#cb383-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb383-23"><a href="#cb383-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate unique filename</span></span>
+<span id="cb383-24"><a href="#cb383-24" aria-hidden="true" tabindex="-1"></a>    ext <span class="op">=</span> <span class="bu">file</span>.filename.rsplit(<span class="st">&#39;.&#39;</span>, <span class="dv">1</span>)[<span class="dv">1</span>].lower()</span>
+<span id="cb383-25"><a href="#cb383-25" aria-hidden="true" tabindex="-1"></a>    filename <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>uuid4()<span class="sc">}</span><span class="ss">.</span><span class="sc">{</span>ext<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb383-26"><a href="#cb383-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb383-27"><a href="#cb383-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save</span></span>
+<span id="cb383-28"><a href="#cb383-28" aria-hidden="true" tabindex="-1"></a>    filepath <span class="op">=</span> os.path.join(UPLOAD_FOLDER, filename)</span>
+<span id="cb383-29"><a href="#cb383-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">file</span>.save(filepath)</span>
+<span id="cb383-30"><a href="#cb383-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb383-31"><a href="#cb383-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify({</span>
+<span id="cb383-32"><a href="#cb383-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;file_id&quot;</span>: filename,</span>
+<span id="cb383-33"><a href="#cb383-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;url&quot;</span>: <span class="ss">f&quot;/api/files/</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb383-34"><a href="#cb383-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;size&quot;</span>: os.path.getsize(filepath)</span>
+<span id="cb383-35"><a href="#cb383-35" aria-hidden="true" tabindex="-1"></a>    }), <span class="dv">201</span></span></code></pre></div>
+<h3 id="classroom-material-upload">Classroom Material Upload</h3>
+<div class="sourceCode" id="cb384"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb384-1"><a href="#cb384-1" aria-hidden="true" tabindex="-1"></a><span class="at">@classroom_bp.route</span>(<span class="st">&quot;/&lt;id&gt;/materials&quot;</span>, methods<span class="op">=</span>[<span class="st">&quot;POST&quot;</span>])</span>
+<span id="cb384-2"><a href="#cb384-2" aria-hidden="true" tabindex="-1"></a><span class="at">@role_required</span>(<span class="st">&quot;teacher&quot;</span>, <span class="st">&quot;admin&quot;</span>)</span>
+<span id="cb384-3"><a href="#cb384-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> upload_material(<span class="bu">id</span>):</span>
+<span id="cb384-4"><a href="#cb384-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">file</span> <span class="op">=</span> request.files[<span class="st">&quot;file&quot;</span>]</span>
+<span id="cb384-5"><a href="#cb384-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb384-6"><a href="#cb384-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save file</span></span>
+<span id="cb384-7"><a href="#cb384-7" aria-hidden="true" tabindex="-1"></a>    file_id <span class="op">=</span> save_file(<span class="bu">file</span>)</span>
+<span id="cb384-8"><a href="#cb384-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb384-9"><a href="#cb384-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create record</span></span>
+<span id="cb384-10"><a href="#cb384-10" aria-hidden="true" tabindex="-1"></a>    material <span class="op">=</span> ClassroomMaterial(</span>
+<span id="cb384-11"><a href="#cb384-11" aria-hidden="true" tabindex="-1"></a>        classroom_id<span class="op">=</span><span class="bu">id</span>,</span>
+<span id="cb384-12"><a href="#cb384-12" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span><span class="bu">file</span>.filename,</span>
+<span id="cb384-13"><a href="#cb384-13" aria-hidden="true" tabindex="-1"></a>        file_url<span class="op">=</span><span class="ss">f&quot;/api/files/</span><span class="sc">{</span>file_id<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb384-14"><a href="#cb384-14" aria-hidden="true" tabindex="-1"></a>        file_type<span class="op">=</span>get_file_type(<span class="bu">file</span>.filename),</span>
+<span id="cb384-15"><a href="#cb384-15" aria-hidden="true" tabindex="-1"></a>        uploaded_by<span class="op">=</span>g.current_user_id</span>
+<span id="cb384-16"><a href="#cb384-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb384-17"><a href="#cb384-17" aria-hidden="true" tabindex="-1"></a>    db.session.add(material)</span>
+<span id="cb384-18"><a href="#cb384-18" aria-hidden="true" tabindex="-1"></a>    db.session.commit()</span>
+<span id="cb384-19"><a href="#cb384-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb384-20"><a href="#cb384-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Trigger document processing via Kafka</span></span>
+<span id="cb384-21"><a href="#cb384-21" aria-hidden="true" tabindex="-1"></a>    document_producer.emit_document_uploaded(</span>
+<span id="cb384-22"><a href="#cb384-22" aria-hidden="true" tabindex="-1"></a>        document_id<span class="op">=</span>material.<span class="bu">id</span>,</span>
+<span id="cb384-23"><a href="#cb384-23" aria-hidden="true" tabindex="-1"></a>        classroom_id<span class="op">=</span><span class="bu">id</span>,</span>
+<span id="cb384-24"><a href="#cb384-24" aria-hidden="true" tabindex="-1"></a>        file_path<span class="op">=</span>get_absolute_path(file_id)</span>
+<span id="cb384-25"><a href="#cb384-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb384-26"><a href="#cb384-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb384-27"><a href="#cb384-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify(material.to_dict()), <span class="dv">201</span></span></code></pre></div>
+<hr />
+<h2 id="s3minio-integration">59.4 S3/MinIO Integration</h2>
+<h3 id="source-via-boto3-in-core-service">Source: via <code>boto3</code> in Core Service</h3>
+<div class="sourceCode" id="cb385"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb385-1"><a href="#cb385-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> boto3</span>
+<span id="cb385-2"><a href="#cb385-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb385-3"><a href="#cb385-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StorageService:</span>
+<span id="cb385-4"><a href="#cb385-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb385-5"><a href="#cb385-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.s3 <span class="op">=</span> boto3.client(</span>
+<span id="cb385-6"><a href="#cb385-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;s3&#39;</span>,</span>
+<span id="cb385-7"><a href="#cb385-7" aria-hidden="true" tabindex="-1"></a>            endpoint_url<span class="op">=</span>os.getenv(<span class="st">&quot;S3_ENDPOINT&quot;</span>, <span class="st">&quot;http://minio:9000&quot;</span>),</span>
+<span id="cb385-8"><a href="#cb385-8" aria-hidden="true" tabindex="-1"></a>            aws_access_key_id<span class="op">=</span>os.getenv(<span class="st">&quot;AWS_ACCESS_KEY_ID&quot;</span>),</span>
+<span id="cb385-9"><a href="#cb385-9" aria-hidden="true" tabindex="-1"></a>            aws_secret_access_key<span class="op">=</span>os.getenv(<span class="st">&quot;AWS_SECRET_ACCESS_KEY&quot;</span>),</span>
+<span id="cb385-10"><a href="#cb385-10" aria-hidden="true" tabindex="-1"></a>            region_name<span class="op">=</span>os.getenv(<span class="st">&quot;AWS_REGION&quot;</span>, <span class="st">&quot;us-east-1&quot;</span>)</span>
+<span id="cb385-11"><a href="#cb385-11" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb385-12"><a href="#cb385-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.bucket <span class="op">=</span> os.getenv(<span class="st">&quot;S3_BUCKET&quot;</span>, <span class="st">&quot;ensurestudy-uploads&quot;</span>)</span>
+<span id="cb385-13"><a href="#cb385-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb385-14"><a href="#cb385-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> upload(<span class="va">self</span>, file_obj, key: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb385-15"><a href="#cb385-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.s3.upload_fileobj(file_obj, <span class="va">self</span>.bucket, key)</span>
+<span id="cb385-16"><a href="#cb385-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f&quot;s3://</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb385-17"><a href="#cb385-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb385-18"><a href="#cb385-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> download(<span class="va">self</span>, key: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bytes</span>:</span>
+<span id="cb385-19"><a href="#cb385-19" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> <span class="va">self</span>.s3.get_object(Bucket<span class="op">=</span><span class="va">self</span>.bucket, Key<span class="op">=</span>key)</span>
+<span id="cb385-20"><a href="#cb385-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> response[<span class="st">&#39;Body&#39;</span>].read()</span>
+<span id="cb385-21"><a href="#cb385-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb385-22"><a href="#cb385-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_presigned_url(<span class="va">self</span>, key: <span class="bu">str</span>, expires: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3600</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb385-23"><a href="#cb385-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.s3.generate_presigned_url(</span>
+<span id="cb385-24"><a href="#cb385-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;get_object&#39;</span>,</span>
+<span id="cb385-25"><a href="#cb385-25" aria-hidden="true" tabindex="-1"></a>            Params<span class="op">=</span>{<span class="st">&#39;Bucket&#39;</span>: <span class="va">self</span>.bucket, <span class="st">&#39;Key&#39;</span>: key},</span>
+<span id="cb385-26"><a href="#cb385-26" aria-hidden="true" tabindex="-1"></a>            ExpiresIn<span class="op">=</span>expires</span>
+<span id="cb385-27"><a href="#cb385-27" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<h3 id="minio-docker-configuration">MinIO Docker Configuration</h3>
+<div class="sourceCode" id="cb386"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb386-1"><a href="#cb386-1" aria-hidden="true" tabindex="-1"></a><span class="fu">minio</span><span class="kw">:</span></span>
+<span id="cb386-2"><a href="#cb386-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> minio/minio:latest</span></span>
+<span id="cb386-3"><a href="#cb386-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> server /data --console-address &quot;:9101&quot;</span></span>
+<span id="cb386-4"><a href="#cb386-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb386-5"><a href="#cb386-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;9000:9000&quot;</span><span class="co">     # S3 API</span></span>
+<span id="cb386-6"><a href="#cb386-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;9101:9101&quot;</span><span class="co">     # Web console</span></span>
+<span id="cb386-7"><a href="#cb386-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb386-8"><a href="#cb386-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">MINIO_ROOT_USER</span><span class="kw">:</span><span class="at"> minioadmin</span></span>
+<span id="cb386-9"><a href="#cb386-9" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">MINIO_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> minioadmin</span></span>
+<span id="cb386-10"><a href="#cb386-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb386-11"><a href="#cb386-11" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> minio_data:/data</span></span></code></pre></div>
+<hr />
+<h2 id="file-processing-pipeline">59.5 File Processing Pipeline</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["File Processing Pipeline "]
+        direction TB
+        N0["Upload  Validate  Store  Kafka Event  AI Processing  Index"]
+        N1["Type check (extension whitelist)"]
+        N2["Size check (50 MB limit)"]
+        N3["Virus scan (future)"]
+        N4["Filename sanitization (UUID rename)"]
+    end
+</pre>
+<hr />
+<h2 id="meeting-recording-storage">59.6 Meeting Recording Storage</h2>
+<div class="sourceCode" id="cb388"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb388-1"><a href="#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recording saved after LiveKit session ends</span></span>
+<span id="cb388-2"><a href="#cb388-2" aria-hidden="true" tabindex="-1"></a>recording_path <span class="op">=</span> <span class="ss">f&quot;recordings/</span><span class="sc">{</span>meeting_id<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>uuid4()<span class="sc">}</span><span class="ss">.webm&quot;</span></span>
+<span id="cb388-3"><a href="#cb388-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb388-4"><a href="#cb388-4" aria-hidden="true" tabindex="-1"></a><span class="co"># In production: upload to S3</span></span>
+<span id="cb388-5"><a href="#cb388-5" aria-hidden="true" tabindex="-1"></a>storage.upload(recording_file, recording_path)</span>
+<span id="cb388-6"><a href="#cb388-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb388-7"><a href="#cb388-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create record</span></span>
+<span id="cb388-8"><a href="#cb388-8" aria-hidden="true" tabindex="-1"></a>recording <span class="op">=</span> MeetingRecording(</span>
+<span id="cb388-9"><a href="#cb388-9" aria-hidden="true" tabindex="-1"></a>    meeting_id<span class="op">=</span>meeting_id,</span>
+<span id="cb388-10"><a href="#cb388-10" aria-hidden="true" tabindex="-1"></a>    file_url<span class="op">=</span>recording_path,</span>
+<span id="cb388-11"><a href="#cb388-11" aria-hidden="true" tabindex="-1"></a>    duration_seconds<span class="op">=</span>duration,</span>
+<span id="cb388-12"><a href="#cb388-12" aria-hidden="true" tabindex="-1"></a>    file_size<span class="op">=</span>file_size</span>
+<span id="cb388-13"><a href="#cb388-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="docker-volumes">59.7 Docker Volumes</h2>
+<div class="sourceCode" id="cb389"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb389-1"><a href="#cb389-1" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb389-2"><a href="#cb389-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">uploads_data</span><span class="kw">:</span><span class="co">     # /app/uploads — documents, images</span></span>
+<span id="cb389-3"><a href="#cb389-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">recordings_data</span><span class="kw">:</span><span class="co">  # /app/recordings — meeting recordings</span></span>
+<span id="cb389-4"><a href="#cb389-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">minio_data</span><span class="kw">:</span><span class="co">       # /data — MinIO object storage</span></span></code></pre></div>
+<hr />
+<h2 id="security-measures">59.8 Security Measures</h2>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Extension whitelist</td>
+<td>Only allowed file types accepted</td>
+</tr>
+<tr>
+<td>Size limit</td>
+<td>50 MB max per file</td>
+</tr>
+<tr>
+<td>UUID filenames</td>
+<td>Original names never stored on disk</td>
+</tr>
+<tr>
+<td>Auth required</td>
+<td>All upload endpoints require JWT</td>
+</tr>
+<tr>
+<td>Role check</td>
+<td>Only teachers can upload materials</td>
+</tr>
+<tr>
+<td>CORS restricted</td>
+<td>Only frontend origin allowed</td>
+</tr>
+<tr>
+<td>No directory traversal</td>
+<td><code>secure_filename()</code> applied</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

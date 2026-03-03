@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 13: AI Service — FastAPI Architecture &amp;amp; Routes</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-12.html">&larr; Previous</a> <a href="page-14.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-13-ai-service-fastapi-architecture-routes">Page 13: AI Service — FastAPI Architecture &amp; Routes</h1>
+<hr />
+<h2 id="overview-5">13.1 Overview</h2>
+<p>The AI Service is a <strong>FastAPI application</strong> that handles all AI/ML workloads: LLM inference, agent orchestration, RAG retrieval, document processing, proctoring, speech, and soft skills evaluation. It communicates with the Core Service via HTTP and with clients via REST + Server-Sent Events (SSE).</p>
+<h3 id="source-backendai-serviceappmain.py-231-lines">Source: <code>backend/ai-service/app/main.py</code> (231 lines)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Framework</td>
+<td>FastAPI (Starlette)</td>
+</tr>
+<tr>
+<td>Docs</td>
+<td>Auto-generated at <code>/docs</code> (Swagger) and <code>/redoc</code> (ReDoc)</td>
+</tr>
+<tr>
+<td>CORS</td>
+<td>All origins (<code>*</code>), credentials disabled</td>
+</tr>
+<tr>
+<td>Routers</td>
+<td>27 included</td>
+</tr>
+<tr>
+<td>Middleware</td>
+<td>Request logging with timing</td>
+</tr>
+<tr>
+<td>Startup</td>
+<td>Optional model preloading</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>8001 (default)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="application-setup">13.2 Application Setup</h2>
+<div class="sourceCode" id="cb107"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> FastAPI(</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">&quot;ensureStudy AI Tutor Service&quot;</span>,</span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>    description<span class="op">=</span><span class="st">&quot;AI-powered tutor with multi-agent orchestration&quot;</span>,</span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>    version<span class="op">=</span><span class="st">&quot;2.0.0&quot;</span>,</span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>    docs_url<span class="op">=</span><span class="st">&quot;/docs&quot;</span> <span class="cf">if</span> settings.DEBUG <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a>    redoc_url<span class="op">=</span><span class="st">&quot;/redoc&quot;</span> <span class="cf">if</span> settings.DEBUG <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb107-7"><a href="#cb107-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h3 id="request-logging-middleware">Request Logging Middleware</h3>
+<p>Every request is logged with execution time:</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.middleware</span>(<span class="st">&quot;http&quot;</span>)</span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> log_requests(request: Request, call_next):</span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>    start <span class="op">=</span> time.time()</span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> <span class="cf">await</span> call_next(request)</span>
+<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a>    duration <span class="op">=</span> time.time() <span class="op">-</span> start</span>
+<span id="cb108-6"><a href="#cb108-6" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f&quot;</span><span class="sc">{</span>request<span class="sc">.</span>method<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>request<span class="sc">.</span>url<span class="sc">.</span>path<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>response<span class="sc">.</span>status_code<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>duration<span class="sc">:.2f}</span><span class="ss">s)&quot;</span>)</span>
+<span id="cb108-7"><a href="#cb108-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response</span></code></pre></div>
+<hr />
+<h2 id="complete-router-inventory">13.3 Complete Router Inventory</h2>
+<h3 id="tutor-chat-3-routers">Tutor &amp; Chat (3 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tutor_router</code></td>
+<td><code>/api/ai-tutor</code></td>
+<td><code>routes/tutor.py</code></td>
+<td><code>POST /chat</code> (legacy streaming endpoint)</td>
+</tr>
+<tr>
+<td><code>tutor_chat_router</code></td>
+<td><code>/api/tutor</code></td>
+<td><code>routes/chat.py</code></td>
+<td><code>POST /chat</code> (TAL/ABCR/MCP), <code>GET /session/:id</code></td>
+</tr>
+<tr>
+<td><code>pdf_chat_router</code></td>
+<td><code>/api/tutor/chat</code></td>
+<td>PDF-specific chat</td>
+<td><code>POST /pdf</code> (document-grounded Q&amp;A)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent-system-1-router">Agent System (1 router)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agent_router</code></td>
+<td><code>/api/agent</code></td>
+<td><code>routes/agent.py</code></td>
+<td><code>POST /chat</code> (orchestrator entry), <code>GET /sessions</code>, <code>POST /tool-call</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="document-content-4-routers">Document &amp; Content (4 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>indexing_router</code></td>
+<td><code>/api/index</code></td>
+<td><code>routes/indexing.py</code></td>
+<td><code>POST /document</code>, <code>POST /web-content</code>, <code>GET /status/:id</code></td>
+</tr>
+<tr>
+<td><code>web_ingest_router</code></td>
+<td><code>/api/web-ingest</code></td>
+<td><code>routes/web_ingest.py</code></td>
+<td><code>POST /crawl</code>, <code>POST /pdf</code>, <code>GET /status/:id</code></td>
+</tr>
+<tr>
+<td><code>web_resources_router</code></td>
+<td><code>/api/web-resources</code></td>
+<td><code>routes/web_resources.py</code></td>
+<td><code>GET /search</code>, <code>POST /download-pdf</code>, <code>GET /sources</code></td>
+</tr>
+<tr>
+<td><code>documents_router</code></td>
+<td><code>/api/convert</code></td>
+<td><code>routes/documents.py</code></td>
+<td><code>POST /pptx-to-pdf</code>, <code>GET /document/:id</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="curriculum-questions-4-routers">Curriculum &amp; Questions (4 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_router</code></td>
+<td><code>/api/curriculum</code></td>
+<td><code>routes/curriculum.py</code></td>
+<td><code>POST /generate</code>, <code>GET /:id</code>, <code>POST /exam-prep</code></td>
+</tr>
+<tr>
+<td><code>syllabus_router</code></td>
+<td><code>/api/syllabus</code></td>
+<td><code>routes/syllabus.py</code></td>
+<td><code>POST /extract</code>, <code>GET /topics/:id</code></td>
+</tr>
+<tr>
+<td><code>questions_router</code></td>
+<td><code>/api/questions</code></td>
+<td><code>routes/questions.py</code></td>
+<td><code>POST /generate</code>, <code>GET /topic/:id</code></td>
+</tr>
+<tr>
+<td><code>questions_scoring_router</code></td>
+<td><code>/api/questions</code></td>
+<td><code>routes/questions_scoring.py</code></td>
+<td><code>POST /score-descriptive</code>, <code>POST /evaluate-interview</code></td>
+</tr>
+<tr>
+<td><code>topic_scores_router</code></td>
+<td><code>/api/topic-scores</code></td>
+<td><code>routes/topic_scores.py</code></td>
+<td><code>GET /:topic_id</code>, <code>POST /update</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="classroom-syllabus-1-router">Classroom Syllabus (1 router)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>classroom_syllabus_router</code></td>
+<td><code>/api/classroom-syllabus</code></td>
+<td><code>routes/classroom_syllabus.py</code></td>
+<td><code>POST /extract</code>, <code>GET /topics/:classroom_id</code>, <code>POST /hierarchy</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="assessment-evaluation-2-routers">Assessment &amp; Evaluation (2 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>evaluation_router</code></td>
+<td><code>/api/evaluation</code></td>
+<td><code>routes/evaluation.py</code></td>
+<td><code>POST /exam</code>, <code>POST /score</code>, <code>GET /session/:id</code></td>
+</tr>
+<tr>
+<td><code>mock_interview_router</code></td>
+<td><code>/api/mock-interview</code></td>
+<td><code>routes/mock_interview.py</code></td>
+<td><code>POST /start</code>, <code>POST /respond</code>, <code>POST /evaluate</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="proctoring-soft-skills-2-routers">Proctoring &amp; Soft Skills (2 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proctor_router</code></td>
+<td><code>/api/proctoring</code></td>
+<td>Proctoring API</td>
+<td><code>POST /start</code>, <code>POST /analyze-frame</code>, <code>POST /end</code></td>
+</tr>
+<tr>
+<td><code>softskills_router</code></td>
+<td><code>/api/softskills</code></td>
+<td>Soft skills API</td>
+<td><code>POST /evaluate</code>, <code>GET /results/:id</code>, <code>POST /analyze-frame</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="meetings-notes-3-routers">Meetings &amp; Notes (3 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>meetings_router</code></td>
+<td><code>/api/meetings</code></td>
+<td><code>api/meetings.py</code></td>
+<td><code>POST /process</code>, <code>GET /recording/:id</code></td>
+</tr>
+<tr>
+<td><code>meeting_qa_router</code></td>
+<td><code>/api/meeting-qa</code></td>
+<td><code>api/meeting_qa.py</code></td>
+<td><code>POST /ask</code>, <code>GET /transcript/:id</code></td>
+</tr>
+<tr>
+<td><code>notes_router</code></td>
+<td><code>/api/notes</code></td>
+<td><code>api/notes.py</code></td>
+<td><code>POST /digitize</code>, <code>POST /ocr</code>, <code>GET /search</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="speech-2-routers">Speech (2 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tts_router</code></td>
+<td><code>/api/tts</code></td>
+<td><code>routes/tts.py</code></td>
+<td><code>POST /synthesize</code> (AWS Polly with visemes)</td>
+</tr>
+<tr>
+<td><code>stt_router</code></td>
+<td><code>/api/stt</code></td>
+<td><code>routes/stt.py</code></td>
+<td><code>POST /transcribe</code> (local Whisper fallback)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="grading-1-router">Grading (1 router)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grading_router</code></td>
+<td><code>/api/grading</code></td>
+<td><code>routes/grading.py</code></td>
+<td><code>POST /grade-assignment</code>, <code>POST /grade-submission</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="real-time-2-routers">Real-Time (2 routers)</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Router</th>
+<th>Prefix</th>
+<th>File</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sse_router</code></td>
+<td><code>/sse</code></td>
+<td><code>routes/sse.py</code></td>
+<td><code>GET /stream</code> (Server-Sent Events for real-time updates)</td>
+</tr>
+<tr>
+<td><code>anchor_router</code></td>
+<td>—</td>
+<td><code>routes/anchor_routes.py</code></td>
+<td>Static anchor/utility routes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="streaming-response-pattern">13.4 Streaming Response Pattern</h2>
+<p>The AI Service uses SSE for real-time tutor responses:</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/chat&quot;</span>)</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> tutor_chat(request: TutorChatRequest):</span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> event_generator():</span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">async</span> <span class="cf">for</span> chunk <span class="kw">in</span> orchestrator.stream_response(</span>
+<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a>            query<span class="op">=</span>request.message,</span>
+<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a>            user_id<span class="op">=</span>request.user_id,</span>
+<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a>            session_id<span class="op">=</span>request.session_id,</span>
+<span id="cb109-8"><a href="#cb109-8" aria-hidden="true" tabindex="-1"></a>            classroom_id<span class="op">=</span>request.classroom_id</span>
+<span id="cb109-9"><a href="#cb109-9" aria-hidden="true" tabindex="-1"></a>        ):</span>
+<span id="cb109-10"><a href="#cb109-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> <span class="ss">f&quot;data: </span><span class="sc">{</span>json<span class="sc">.</span>dumps(chunk)<span class="sc">}</span><span class="ch">\n\n</span><span class="ss">&quot;</span></span>
+<span id="cb109-11"><a href="#cb109-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> <span class="st">&quot;data: [DONE]</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb109-12"><a href="#cb109-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb109-13"><a href="#cb109-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> StreamingResponse(</span>
+<span id="cb109-14"><a href="#cb109-14" aria-hidden="true" tabindex="-1"></a>        event_generator(),</span>
+<span id="cb109-15"><a href="#cb109-15" aria-hidden="true" tabindex="-1"></a>        media_type<span class="op">=</span><span class="st">&quot;text/event-stream&quot;</span>,</span>
+<span id="cb109-16"><a href="#cb109-16" aria-hidden="true" tabindex="-1"></a>        headers<span class="op">=</span>{<span class="st">&quot;Cache-Control&quot;</span>: <span class="st">&quot;no-cache&quot;</span>, <span class="st">&quot;X-Accel-Buffering&quot;</span>: <span class="st">&quot;no&quot;</span>}</span>
+<span id="cb109-17"><a href="#cb109-17" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<h3 id="sse-event-types">SSE Event Types</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 42%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th>Event</th>
+<th>Data Shape</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>token</code></td>
+<td><code>{"type": "token", "content": "word"}</code></td>
+<td>Streaming LLM tokens</td>
+</tr>
+<tr>
+<td><code>sources</code></td>
+<td><code>{"type": "sources", "items": [...]}</code></td>
+<td>RAG source citations</td>
+</tr>
+<tr>
+<td><code>web_sources</code></td>
+<td><code>{"type": "web_sources", "items": [...]}</code></td>
+<td>Web enrichment links</td>
+</tr>
+<tr>
+<td><code>agent</code></td>
+<td><code>{"type": "agent", "name": "research"}</code></td>
+<td>Active agent indicator</td>
+</tr>
+<tr>
+<td><code>tool_call</code></td>
+<td><code>{"type": "tool_call", "tool": "...", "args": {...}}</code></td>
+<td>MCP tool invocation</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td><code>{"type": "error", "message": "..."}</code></td>
+<td>Error notification</td>
+</tr>
+<tr>
+<td><code>[DONE]</code></td>
+<td>—</td>
+<td>Stream termination signal</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="startup-model-preloading">13.5 Startup &amp; Model Preloading</h2>
+<div class="sourceCode" id="cb110"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.on_event</span>(<span class="st">&quot;startup&quot;</span>)</span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> startup_event():</span>
+<span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Conditionally preload ML models</span></span>
+<span id="cb110-4"><a href="#cb110-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.getenv(<span class="st">&quot;PRELOAD_MODELS&quot;</span>, <span class="st">&quot;false&quot;</span>).lower() <span class="op">==</span> <span class="st">&quot;true&quot;</span>:</span>
+<span id="cb110-5"><a href="#cb110-5" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> app.services.embedding_service <span class="im">import</span> get_embedding_model</span>
+<span id="cb110-6"><a href="#cb110-6" aria-hidden="true" tabindex="-1"></a>        get_embedding_model()  <span class="co"># Load sentence-transformers</span></span>
+<span id="cb110-7"><a href="#cb110-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb110-8"><a href="#cb110-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize Qdrant collections</span></span>
+<span id="cb110-9"><a href="#cb110-9" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> app.services.qdrant_service <span class="im">import</span> get_qdrant_service</span>
+<span id="cb110-10"><a href="#cb110-10" aria-hidden="true" tabindex="-1"></a>    qdrant <span class="op">=</span> get_qdrant_service()</span>
+<span id="cb110-11"><a href="#cb110-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> qdrant.ensure_collections()</span>
+<span id="cb110-12"><a href="#cb110-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb110-13"><a href="#cb110-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Log configuration</span></span>
+<span id="cb110-14"><a href="#cb110-14" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f&quot;AI Service started | LLM: </span><span class="sc">{</span>settings<span class="sc">.</span>LLM_PROVIDER<span class="sc">}</span><span class="ss"> | Debug: </span><span class="sc">{</span>settings<span class="sc">.</span>DEBUG<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<h2 id="services-layer-89-files">13.6 Services Layer (89 Files)</h2>
+<p>The AI service has <strong>89 service files</strong> in <code>app/services/</code> providing the business logic layer:</p>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 22%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Count</th>
+<th>Key Services</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAG &amp; Vector</td>
+<td>8</td>
+<td><code>qdrant_service.py</code>, <code>embedding_service.py</code>, <code>chunking_service.py</code>, <code>smart_retrieval.py</code></td>
+</tr>
+<tr>
+<td>LLM &amp; Chat</td>
+<td>6</td>
+<td><code>llm_service.py</code>, <code>chat_service.py</code>, <code>response_cache.py</code>, <code>prompt_builder.py</code></td>
+</tr>
+<tr>
+<td>Web &amp; Search</td>
+<td>7</td>
+<td><code>web_ingest_service.py</code> (60KB), <code>search_api.py</code>, <code>content_crawler.py</code>, <code>pdf_downloader.py</code></td>
+</tr>
+<tr>
+<td>OCR &amp; Image</td>
+<td>6</td>
+<td><code>hybrid_ocr.py</code>, <code>ocr_service.py</code>, <code>image_enhancer.py</code>, <code>ocr_adapter.py</code>, <code>nanonets_ocr.py</code></td>
+</tr>
+<tr>
+<td>Curriculum</td>
+<td>5</td>
+<td><code>curriculum_storage.py</code>, <code>syllabus_extractor.py</code> (33KB), <code>topic_extractor.py</code> (37KB), <code>spaced_repetition.py</code></td>
+</tr>
+<tr>
+<td>Speech</td>
+<td>3</td>
+<td><code>tts_service.py</code> (AWS Polly), <code>stt_service.py</code> (Whisper), <code>youtube_transcript_service.py</code></td>
+</tr>
+<tr>
+<td>Proctoring</td>
+<td>4</td>
+<td>Detector coordination, scoring, model inference</td>
+</tr>
+<tr>
+<td>Assessment</td>
+<td>3</td>
+<td><code>assessment_service.py</code>, <code>question_generation.py</code>, <code>scoring_service.py</code></td>
+</tr>
+<tr>
+<td>Meetings</td>
+<td>3</td>
+<td><code>meeting_processor.py</code>, <code>recording_service.py</code>, <code>transcript_service.py</code></td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>3</td>
+<td><code>subject_classifier.py</code>, <code>topic_classifier.py</code>, <code>intent_classifier.py</code></td>
+</tr>
+<tr>
+<td>Miscellaneous</td>
+<td>41</td>
+<td>Config, utilities, adapters, caching, monitoring</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

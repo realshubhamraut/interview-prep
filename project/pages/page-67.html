@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 67: Text Chunking &amp;amp; Embedding Strategies</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-66.html">&larr; Previous</a> <a href="page-68.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-67-text-chunking-embedding-strategies">Page 67: Text Chunking &amp; Embedding Strategies</h1>
+<hr />
+<h2 id="overview-55">67.1 Overview</h2>
+<p>ensureStudy uses <strong>semantic-aware text chunking</strong> to split documents into vector-searchable pieces. The chunking strategy directly impacts RAG quality — chunks must be large enough for context but small enough for precise retrieval.</p>
+<hr />
+<h2 id="chunking-configuration">67.2 Chunking Configuration</h2>
+<div class="sourceCode" id="cb430"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb430-1"><a href="#cb430-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Default chunking parameters</span></span>
+<span id="cb430-2"><a href="#cb430-2" aria-hidden="true" tabindex="-1"></a>CHUNK_SIZE <span class="op">=</span> <span class="dv">500</span>          <span class="co"># Characters per chunk</span></span>
+<span id="cb430-3"><a href="#cb430-3" aria-hidden="true" tabindex="-1"></a>CHUNK_OVERLAP <span class="op">=</span> <span class="dv">50</span>        <span class="co"># Character overlap between chunks</span></span>
+<span id="cb430-4"><a href="#cb430-4" aria-hidden="true" tabindex="-1"></a>SEPARATOR <span class="op">=</span> <span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>        <span class="co"># Preferred split point</span></span>
+<span id="cb430-5"><a href="#cb430-5" aria-hidden="true" tabindex="-1"></a>MIN_CHUNK_SIZE <span class="op">=</span> <span class="dv">100</span>      <span class="co"># Minimum viable chunk</span></span>
+<span id="cb430-6"><a href="#cb430-6" aria-hidden="true" tabindex="-1"></a>MAX_CHUNK_SIZE <span class="op">=</span> <span class="dv">1000</span>     <span class="co"># Hard limit</span></span></code></pre></div>
+<hr />
+<h2 id="chunking-strategies">67.3 Chunking Strategies</h2>
+<h3 id="strategy-1-character-based-default">Strategy 1: Character-Based (Default)</h3>
+<div class="sourceCode" id="cb431"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb431-1"><a href="#cb431-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CharacterChunker:</span>
+<span id="cb431-2"><a href="#cb431-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> chunk(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb431-3"><a href="#cb431-3" aria-hidden="true" tabindex="-1"></a>        chunks <span class="op">=</span> []</span>
+<span id="cb431-4"><a href="#cb431-4" aria-hidden="true" tabindex="-1"></a>        start <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb431-5"><a href="#cb431-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> start <span class="op">&lt;</span> <span class="bu">len</span>(text):</span>
+<span id="cb431-6"><a href="#cb431-6" aria-hidden="true" tabindex="-1"></a>            end <span class="op">=</span> start <span class="op">+</span> CHUNK_SIZE</span>
+<span id="cb431-7"><a href="#cb431-7" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb431-8"><a href="#cb431-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Try to break at paragraph</span></span>
+<span id="cb431-9"><a href="#cb431-9" aria-hidden="true" tabindex="-1"></a>            para_break <span class="op">=</span> text.rfind(<span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>, start, end)</span>
+<span id="cb431-10"><a href="#cb431-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> para_break <span class="op">&gt;</span> start <span class="op">+</span> MIN_CHUNK_SIZE:</span>
+<span id="cb431-11"><a href="#cb431-11" aria-hidden="true" tabindex="-1"></a>                end <span class="op">=</span> para_break</span>
+<span id="cb431-12"><a href="#cb431-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb431-13"><a href="#cb431-13" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Try sentence boundary</span></span>
+<span id="cb431-14"><a href="#cb431-14" aria-hidden="true" tabindex="-1"></a>                sent_break <span class="op">=</span> text.rfind(<span class="st">&quot;. &quot;</span>, start, end)</span>
+<span id="cb431-15"><a href="#cb431-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> sent_break <span class="op">&gt;</span> start <span class="op">+</span> MIN_CHUNK_SIZE:</span>
+<span id="cb431-16"><a href="#cb431-16" aria-hidden="true" tabindex="-1"></a>                    end <span class="op">=</span> sent_break <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb431-17"><a href="#cb431-17" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb431-18"><a href="#cb431-18" aria-hidden="true" tabindex="-1"></a>            chunks.append(text[start:end].strip())</span>
+<span id="cb431-19"><a href="#cb431-19" aria-hidden="true" tabindex="-1"></a>            start <span class="op">=</span> end <span class="op">-</span> CHUNK_OVERLAP</span>
+<span id="cb431-20"><a href="#cb431-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb431-21"><a href="#cb431-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [c <span class="cf">for</span> c <span class="kw">in</span> chunks <span class="cf">if</span> <span class="bu">len</span>(c) <span class="op">&gt;=</span> MIN_CHUNK_SIZE]</span></code></pre></div>
+<h3 id="strategy-2-recursive-text-splitter-langchain">Strategy 2: Recursive Text Splitter (LangChain)</h3>
+<div class="sourceCode" id="cb432"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb432-1"><a href="#cb432-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.text_splitter <span class="im">import</span> RecursiveCharacterTextSplitter</span>
+<span id="cb432-2"><a href="#cb432-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb432-3"><a href="#cb432-3" aria-hidden="true" tabindex="-1"></a>splitter <span class="op">=</span> RecursiveCharacterTextSplitter(</span>
+<span id="cb432-4"><a href="#cb432-4" aria-hidden="true" tabindex="-1"></a>    chunk_size<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb432-5"><a href="#cb432-5" aria-hidden="true" tabindex="-1"></a>    chunk_overlap<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb432-6"><a href="#cb432-6" aria-hidden="true" tabindex="-1"></a>    separators<span class="op">=</span>[<span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="st">&quot;. &quot;</span>, <span class="st">&quot; &quot;</span>, <span class="st">&quot;&quot;</span>],</span>
+<span id="cb432-7"><a href="#cb432-7" aria-hidden="true" tabindex="-1"></a>    length_function<span class="op">=</span><span class="bu">len</span></span>
+<span id="cb432-8"><a href="#cb432-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb432-9"><a href="#cb432-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb432-10"><a href="#cb432-10" aria-hidden="true" tabindex="-1"></a>chunks <span class="op">=</span> splitter.split_text(document_text)</span></code></pre></div>
+<h3 id="strategy-3-semantic-chunking">Strategy 3: Semantic Chunking</h3>
+<div class="sourceCode" id="cb433"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb433-1"><a href="#cb433-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SemanticChunker:</span>
+<span id="cb433-2"><a href="#cb433-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Split based on topic boundaries using embeddings&quot;&quot;&quot;</span></span>
+<span id="cb433-3"><a href="#cb433-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb433-4"><a href="#cb433-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> chunk(<span class="va">self</span>, text: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb433-5"><a href="#cb433-5" aria-hidden="true" tabindex="-1"></a>        sentences <span class="op">=</span> <span class="va">self</span>._split_sentences(text)</span>
+<span id="cb433-6"><a href="#cb433-6" aria-hidden="true" tabindex="-1"></a>        embeddings <span class="op">=</span> <span class="va">self</span>.model.encode(sentences)</span>
+<span id="cb433-7"><a href="#cb433-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb433-8"><a href="#cb433-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Find semantic boundaries</span></span>
+<span id="cb433-9"><a href="#cb433-9" aria-hidden="true" tabindex="-1"></a>        boundaries <span class="op">=</span> []</span>
+<span id="cb433-10"><a href="#cb433-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(embeddings)):</span>
+<span id="cb433-11"><a href="#cb433-11" aria-hidden="true" tabindex="-1"></a>            similarity <span class="op">=</span> cosine_similarity(embeddings[i<span class="op">-</span><span class="dv">1</span>], embeddings[i])</span>
+<span id="cb433-12"><a href="#cb433-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> similarity <span class="op">&lt;</span> BOUNDARY_THRESHOLD:</span>
+<span id="cb433-13"><a href="#cb433-13" aria-hidden="true" tabindex="-1"></a>                boundaries.append(i)</span>
+<span id="cb433-14"><a href="#cb433-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb433-15"><a href="#cb433-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Group sentences between boundaries</span></span>
+<span id="cb433-16"><a href="#cb433-16" aria-hidden="true" tabindex="-1"></a>        chunks <span class="op">=</span> <span class="va">self</span>._group_by_boundaries(sentences, boundaries)</span>
+<span id="cb433-17"><a href="#cb433-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> chunks</span></code></pre></div>
+<hr />
+<h2 id="content-type-specific-chunking">67.4 Content-Type-Specific Chunking</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 24%" />
+<col style="width: 26%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr>
+<th>Content Type</th>
+<th>Strategy</th>
+<th>Chunk Size</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF text</td>
+<td>Recursive</td>
+<td>500 chars</td>
+<td>Respects paragraphs</td>
+</tr>
+<tr>
+<td>PPTX slides</td>
+<td>Per-slide</td>
+<td>1 slide</td>
+<td>Each slide = 1 chunk</td>
+</tr>
+<tr>
+<td>Meeting transcript</td>
+<td>Time-based</td>
+<td>2-min segments</td>
+<td>Timestamped chunks</td>
+</tr>
+<tr>
+<td>Web pages</td>
+<td>Section-based</td>
+<td>By <code>&lt;h2&gt;</code> tags</td>
+<td>Respects HTML structure</td>
+</tr>
+<tr>
+<td>Code files</td>
+<td>Function-based</td>
+<td>Per function</td>
+<td>AST-aware splitting</td>
+</tr>
+<tr>
+<td>Notes</td>
+<td>Paragraph-based</td>
+<td>300 chars</td>
+<td>Shorter for precision</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="embedding-model-1">67.5 Embedding Model</h2>
+<h3 id="model-all-mpnet-base-v2-sentence-transformers">Model: <code>all-mpnet-base-v2</code> (sentence-transformers)</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dimensions</td>
+<td>768</td>
+</tr>
+<tr>
+<td>Max Sequence</td>
+<td>384 tokens</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>~50ms per chunk (CPU)</td>
+</tr>
+<tr>
+<td>Quality</td>
+<td>State-of-the-art for its size</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>~420 MB</td>
+</tr>
+<tr>
+<td>Training</td>
+<td>1B+ sentence pairs</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb434"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb434-1"><a href="#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
+<span id="cb434-2"><a href="#cb434-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb434-3"><a href="#cb434-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SentenceTransformer(<span class="st">&#39;all-mpnet-base-v2&#39;</span>)</span>
+<span id="cb434-4"><a href="#cb434-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb434-5"><a href="#cb434-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Single embedding</span></span>
+<span id="cb434-6"><a href="#cb434-6" aria-hidden="true" tabindex="-1"></a>vector <span class="op">=</span> model.encode(<span class="st">&quot;What is photosynthesis?&quot;</span>)</span>
+<span id="cb434-7"><a href="#cb434-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb434-8"><a href="#cb434-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Batch embedding (faster)</span></span>
+<span id="cb434-9"><a href="#cb434-9" aria-hidden="true" tabindex="-1"></a>vectors <span class="op">=</span> model.encode(chunks, batch_size<span class="op">=</span><span class="dv">32</span>, show_progress_bar<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<hr />
+<h2 id="chunk-metadata">67.6 Chunk Metadata</h2>
+<p>Every chunk stored in Qdrant carries metadata:</p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb435-1"><a href="#cb435-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb435-2"><a href="#cb435-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;text&quot;</span>: <span class="st">&quot;Photosynthesis is the process by which...&quot;</span>,</span>
+<span id="cb435-3"><a href="#cb435-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;source&quot;</span>: <span class="st">&quot;biology_chapter5.pdf&quot;</span>,</span>
+<span id="cb435-4"><a href="#cb435-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;page&quot;</span>: <span class="dv">12</span>,</span>
+<span id="cb435-5"><a href="#cb435-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;chunk_index&quot;</span>: <span class="dv">3</span>,</span>
+<span id="cb435-6"><a href="#cb435-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;total_chunks&quot;</span>: <span class="dv">45</span>,</span>
+<span id="cb435-7"><a href="#cb435-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;classroom_id&quot;</span>: <span class="st">&quot;cls_123&quot;</span>,</span>
+<span id="cb435-8"><a href="#cb435-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;subject&quot;</span>: <span class="st">&quot;Biology&quot;</span>,</span>
+<span id="cb435-9"><a href="#cb435-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;created_at&quot;</span>: <span class="st">&quot;2025-02-15T10:30:00Z&quot;</span>,</span>
+<span id="cb435-10"><a href="#cb435-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;word_count&quot;</span>: <span class="dv">87</span>,</span>
+<span id="cb435-11"><a href="#cb435-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;has_formula&quot;</span>: false,</span>
+<span id="cb435-12"><a href="#cb435-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;has_table&quot;</span>: false</span>
+<span id="cb435-13"><a href="#cb435-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="retrieval-quality-metrics">67.7 Retrieval Quality Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Target</th>
+<th>Actual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Top-5 recall</td>
+<td>&gt;80%</td>
+<td>~85%</td>
+</tr>
+<tr>
+<td>MRR (Mean Reciprocal Rank)</td>
+<td>&gt;0.6</td>
+<td>~0.72</td>
+</tr>
+<tr>
+<td>Latency (search)</td>
+<td>&lt;50ms</td>
+<td>~15ms</td>
+</tr>
+<tr>
+<td>Relevance threshold</td>
+<td>&gt;0.5</td>
+<td>Cosine similarity</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="chunking-pipeline">67.8 Chunking Pipeline</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Chunking Pipeline "]
+        direction TB
+        N0["Document Text"]
+        N1["Split into chunks (500 chars, 50 overlap)"]
+        N2["Filter empty/too-small chunks"]
+        N3["Enrich metadata (page, source, subject)"]
+        N4["Batch embed (sentence-transformers)"]
+        N5["Upsert to Qdrant with payload"]
+        N6["Store chunk references in PostgreSQL"]
+    end
+</pre>
+<hr />
+
+</body>
+</html>

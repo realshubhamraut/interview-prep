@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 33: AI Service API — Complete Endpoint Reference</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-32.html">&larr; Previous</a> <a href="page-34.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-33-ai-service-api-complete-endpoint-reference">Page 33: AI Service API — Complete Endpoint Reference</h1>
+<hr />
+<h2 id="overview-24">33.1 Overview</h2>
+<p>The AI Service (FastAPI) exposes <strong>27 router modules</strong> with an estimated <strong>80+ endpoints</strong> covering tutoring, agents, RAG, document processing, speech, proctoring, meetings, and soft skills.</p>
+<h3 id="base-url-httplocalhost8001">Base URL: <code>http://localhost:8001</code></h3>
+<hr />
+<h2 id="endpoint-reference-by-router">33.2 Endpoint Reference by Router</h2>
+<h3 id="tutor-apitutor.py-routestutor.py">Tutor (<code>api/tutor.py</code>, <code>routes/tutor.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/tutor/chat</code></td>
+<td>Send message to AI tutor (SSE streaming)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/tutor/chat/sync</code></td>
+<td>Synchronous tutor chat</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/tutor/sessions/&lt;id&gt;</code></td>
+<td>Get tutor session history</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/tutor/assess-level</code></td>
+<td>Assess student TAL level</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent-orchestrator-apiagents.py-routesagent.py">Agent Orchestrator (<code>api/agents.py</code>, <code>routes/agent.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/agents/invoke</code></td>
+<td>Invoke orchestrator with task</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/agents/research</code></td>
+<td>Trigger research agent</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/agents/curriculum/generate</code></td>
+<td>Generate curriculum</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/agents/learning/trigger</code></td>
+<td>Trigger learning agent cycle</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rag-search-apirag.py-routesweb_resources.py">RAG &amp; Search (<code>api/rag.py</code>, <code>routes/web_resources.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/rag/query</code></td>
+<td>RAG query against indexed materials</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/rag/search</code></td>
+<td>Semantic search</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/web-resources/search</code></td>
+<td>Web search + caching</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/web-resources/ingest</code></td>
+<td>Ingest web URL</td>
+</tr>
+</tbody>
+</table>
+<h3 id="document-processing-routesdocuments.py-routesindexing.py">Document Processing (<code>routes/documents.py</code>, <code>routes/indexing.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/documents/process</code></td>
+<td>Run 7-stage document pipeline</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/documents/ocr</code></td>
+<td>OCR a document/image</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/index/document</code></td>
+<td>Index document into Qdrant</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/index/classroom-material</code></td>
+<td>Index classroom material</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/index/&lt;collection&gt;/&lt;id&gt;</code></td>
+<td>Remove from index</td>
+</tr>
+</tbody>
+</table>
+<h3 id="curriculum-routescurriculum.py-routessyllabus.py">Curriculum (<code>routes/curriculum.py</code>, <code>routes/syllabus.py</code>)</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 37%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/curriculum/extract-topics</code></td>
+<td>Extract topics from syllabus</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/curriculum/generate-dependencies</code></td>
+<td>Generate topic dependencies</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/curriculum/learning-path</code></td>
+<td>Generate learning path</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/syllabus/analyze</code></td>
+<td>Analyze syllabus document</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/syllabus/extract</code></td>
+<td>Extract syllabus structure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assessment-questions-routesquestions.py-routesquestions_scoring.py">Assessment &amp; Questions (<code>routes/questions.py</code>, <code>routes/questions_scoring.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/questions/generate</code></td>
+<td>Generate questions for topic</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/questions/generate-pool</code></td>
+<td>Generate question pool</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/questions/score</code></td>
+<td>Score student answer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/questions/score-descriptive</code></td>
+<td>Score descriptive answer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/questions/batch-score</code></td>
+<td>Batch score multiple answers</td>
+</tr>
+</tbody>
+</table>
+<h3 id="chat-sessions-routeschat.py-routessession.py-routessse.py">Chat &amp; Sessions (<code>routes/chat.py</code>, <code>routes/session.py</code>, <code>routes/sse.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/chat/message</code></td>
+<td>Send chat message</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/chat/stream</code></td>
+<td>SSE event stream</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/sessions/create</code></td>
+<td>Create AI session</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/sse/events</code></td>
+<td>Server-Sent Events stream</td>
+</tr>
+</tbody>
+</table>
+<h3 id="evaluation-grading-routesevaluation.py-routesgrading.py">Evaluation &amp; Grading (<code>routes/evaluation.py</code>, <code>routes/grading.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/evaluation/answer</code></td>
+<td>Evaluate single answer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/evaluation/batch</code></td>
+<td>Batch evaluation</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/grading/submit</code></td>
+<td>Submit for AI grading</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/grading/rubric</code></td>
+<td>Generate grading rubric</td>
+</tr>
+</tbody>
+</table>
+<h3 id="speech-routesstt.py-routestts.py">Speech (<code>routes/stt.py</code>, <code>routes/tts.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/stt/transcribe</code></td>
+<td>Speech-to-text (Whisper)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/tts/synthesize</code></td>
+<td>Text-to-speech (AWS Polly)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/tts/visemes</code></td>
+<td>TTS with viseme data (lip-sync)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="meetings-apimeetings.py-apimeeting_qa.py">Meetings (<code>api/meetings.py</code>, <code>api/meeting_qa.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/meetings/transcribe</code></td>
+<td>Transcribe recording (Whisper)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/meetings/summarize</code></td>
+<td>Summarize transcript (Gemini)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/meetings/query</code></td>
+<td>RAG Q&amp;A about meeting</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/meetings/&lt;id&gt;/transcript</code></td>
+<td>Get stored transcript</td>
+</tr>
+</tbody>
+</table>
+<h3 id="soft-skills-routessoftskills.py">Soft Skills (<code>routes/softskills.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/softskills/analyze-frame</code></td>
+<td>Analyze video frame</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/softskills/session/start</code></td>
+<td>Start evaluation session</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/softskills/session/end</code></td>
+<td>End session + get report</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/softskills/results/&lt;id&gt;</code></td>
+<td>Get session results</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mock-interview-routesmock_interview.py">Mock Interview (<code>routes/mock_interview.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/mock-interview/start</code></td>
+<td>Start mock interview</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/mock-interview/answer</code></td>
+<td>Submit interview answer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/mock-interview/evaluate</code></td>
+<td>Get interview evaluation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notes-apinotes.py">Notes (<code>api/notes.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/notes/embed</code></td>
+<td>Embed notes into Qdrant</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/notes/search</code></td>
+<td>Search notes semantically</td>
+</tr>
+</tbody>
+</table>
+<h3 id="proctoring-proctorapi.py">Proctoring (<code>proctor/api.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/proctoring/session/start</code></td>
+<td>Start proctoring session</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/proctoring/analyze-frame</code></td>
+<td>Analyze webcam frame</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/proctoring/tab-switch</code></td>
+<td>Record tab switch</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/proctoring/session/end</code></td>
+<td>End session + get results</td>
+</tr>
+</tbody>
+</table>
+<h3 id="topic-scores-routestopic_scores.py">Topic Scores (<code>routes/topic_scores.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/topic-scores/&lt;user_id&gt;</code></td>
+<td>Get user topic scores</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/topic-scores/update</code></td>
+<td>Update topic mastery</td>
+</tr>
+</tbody>
+</table>
+<h3 id="web-ingest-routesweb_ingest.py">Web Ingest (<code>routes/web_ingest.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/web-ingest/crawl</code></td>
+<td>Crawl and ingest URL</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/web-ingest/batch</code></td>
+<td>Batch URL ingestion</td>
+</tr>
+</tbody>
+</table>
+<h3 id="classroom-syllabus-routesclassroom_syllabus.py">Classroom Syllabus (<code>routes/classroom_syllabus.py</code>)</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 37%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/classroom-syllabus/analyze</code></td>
+<td>Analyze uploaded syllabus</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/classroom-syllabus/extract</code></td>
+<td>Extract topics from syllabus</td>
+</tr>
+</tbody>
+</table>
+<h3 id="anchor-routes-routesanchor_routes.py">Anchor Routes (<code>routes/anchor_routes.py</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/anchors/generate</code></td>
+<td>Generate anchor points for content</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sse-streaming-pattern">33.3 SSE Streaming Pattern</h2>
+<div class="sourceCode" id="cb218"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb218-1"><a href="#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/chat&quot;</span>)</span>
+<span id="cb218-2"><a href="#cb218-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> tutor_chat(request: ChatRequest):</span>
+<span id="cb218-3"><a href="#cb218-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> event_generator():</span>
+<span id="cb218-4"><a href="#cb218-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">async</span> <span class="cf">for</span> chunk <span class="kw">in</span> llm.astream(messages):</span>
+<span id="cb218-5"><a href="#cb218-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> <span class="ss">f&quot;data: </span><span class="sc">{</span>json<span class="sc">.</span>dumps({<span class="st">&#39;content&#39;</span>: chunk.content})<span class="sc">}</span><span class="ch">\n\n</span><span class="ss">&quot;</span></span>
+<span id="cb218-6"><a href="#cb218-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> <span class="st">&quot;data: [DONE]</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb218-7"><a href="#cb218-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb218-8"><a href="#cb218-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> StreamingResponse(</span>
+<span id="cb218-9"><a href="#cb218-9" aria-hidden="true" tabindex="-1"></a>        event_generator(),</span>
+<span id="cb218-10"><a href="#cb218-10" aria-hidden="true" tabindex="-1"></a>        media_type<span class="op">=</span><span class="st">&quot;text/event-stream&quot;</span></span>
+<span id="cb218-11"><a href="#cb218-11" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<hr />
+<h2 id="health-endpoint-1">33.4 Health Endpoint</h2>
+<div class="sourceCode" id="cb219"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb219-1"><a href="#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.get</span>(<span class="st">&quot;/health&quot;</span>)</span>
+<span id="cb219-2"><a href="#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> health_check():</span>
+<span id="cb219-3"><a href="#cb219-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;status&quot;</span>: <span class="st">&quot;healthy&quot;</span>, <span class="st">&quot;service&quot;</span>: <span class="st">&quot;ai-tutor&quot;</span>, <span class="st">&quot;version&quot;</span>: <span class="st">&quot;2.0.0&quot;</span>}</span></code></pre></div>
+<hr />
+
+</body>
+</html>

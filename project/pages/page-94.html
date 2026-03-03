@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 94: Voice Interface &amp;amp; Real-time Streaming</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-93.html">&larr; Previous</a> <a href="page-95.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-94-voice-interface-real-time-streaming">Page 94: Voice Interface &amp; Real-time Streaming</h1>
+<blockquote>
+<p>Text-to-Speech with AWS Polly (viseme lip sync), Speech-to-Text with local Whisper, and Server-Sent Events for live resource streaming.</p>
+</blockquote>
+<hr />
+<h2 id="text-to-speech-tts">94.1 Text-to-Speech (TTS)</h2>
+<h3 id="source-apiroutestts.py-104-lines-servicespolly_service.py">Source: <code>api/routes/tts.py</code> (104 lines) + <code>services/polly_service.py</code></h3>
+<p>Uses <strong>AWS Polly</strong> neural voices with Oculus-compatible viseme timing for avatar lip synchronization.</p>
+<h3 id="endpoints-2">Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /api/tts/status</code></td>
+<td>GET</td>
+<td>Check TTS availability</td>
+</tr>
+<tr>
+<td><code>POST /api/tts/synthesize</code></td>
+<td>POST</td>
+<td>Synthesize speech</td>
+</tr>
+</tbody>
+</table>
+<h3 id="requestresponse">Request/Response</h3>
+<div class="sourceCode" id="cb602"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb602-1"><a href="#cb602-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TTSSynthesizeRequest(BaseModel):</span>
+<span id="cb602-2"><a href="#cb602-2" aria-hidden="true" tabindex="-1"></a>    text: <span class="bu">str</span>    <span class="co"># Max 3000 chars</span></span>
+<span id="cb602-3"><a href="#cb602-3" aria-hidden="true" tabindex="-1"></a>    voice: <span class="bu">str</span>   <span class="co"># &quot;male&quot; or &quot;female&quot;</span></span>
+<span id="cb602-4"><a href="#cb602-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb602-5"><a href="#cb602-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TTSSynthesizeResponse(BaseModel):</span>
+<span id="cb602-6"><a href="#cb602-6" aria-hidden="true" tabindex="-1"></a>    audio_base64: <span class="bu">str</span>          <span class="co"># Base64 MP3 audio</span></span>
+<span id="cb602-7"><a href="#cb602-7" aria-hidden="true" tabindex="-1"></a>    visemes: List[VisemeData]  <span class="co"># Lip sync timing</span></span>
+<span id="cb602-8"><a href="#cb602-8" aria-hidden="true" tabindex="-1"></a>    voice: <span class="bu">str</span>                 <span class="co"># e.g. &quot;Joanna (Neural)&quot;</span></span>
+<span id="cb602-9"><a href="#cb602-9" aria-hidden="true" tabindex="-1"></a>    duration_ms: <span class="bu">int</span>           <span class="co"># Audio duration</span></span>
+<span id="cb602-10"><a href="#cb602-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb602-11"><a href="#cb602-11" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> VisemeData(BaseModel):</span>
+<span id="cb602-12"><a href="#cb602-12" aria-hidden="true" tabindex="-1"></a>    time: <span class="bu">int</span>     <span class="co"># Milliseconds offset</span></span>
+<span id="cb602-13"><a href="#cb602-13" aria-hidden="true" tabindex="-1"></a>    value: <span class="bu">str</span>    <span class="co"># Oculus viseme ID (e.g. &quot;sil&quot;, &quot;PP&quot;, &quot;FF&quot;, &quot;TH&quot;)</span></span></code></pre></div>
+<h3 id="voice-mapping">Voice Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Polly Voice</th>
+<th>Quality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>female</code></td>
+<td>Joanna</td>
+<td>Neural</td>
+</tr>
+<tr>
+<td><code>male</code></td>
+<td>Matthew</td>
+<td>Neural</td>
+</tr>
+</tbody>
+</table>
+<h3 id="integration-with-avatar">Integration with Avatar</h3>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant LLM as LLM
+    participant TTS as POST /api/tts/synthesize
+    participant FE as Frontend
+
+    S->>LLM: Ask question
+    LLM->>TTS: Answer text
+    TTS->>FE: {audio_base64, visemes[]}
+    FE->>FE: Play audio + animate avatar mouth</pre>
+<hr />
+<h2 id="speech-to-text-stt">94.2 Speech-to-Text (STT)</h2>
+<h3 id="source-apiroutesstt.py-138-lines">Source: <code>api/routes/stt.py</code> (138 lines)</h3>
+<p>Uses <strong>local OpenAI Whisper</strong> model for offline transcription — no API calls, no cost.</p>
+<h3 id="endpoints-3">Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /api/stt/status</code></td>
+<td>GET</td>
+<td>Check Whisper availability</td>
+</tr>
+<tr>
+<td><code>POST /api/stt/transcribe</code></td>
+<td>POST</td>
+<td>Transcribe audio file</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configuration-10">Configuration</h3>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 32%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Options</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WHISPER_STT_MODEL</code></td>
+<td><code>base</code></td>
+<td><code>tiny</code> (39MB), <code>base</code> (74MB), <code>small</code> (244MB), <code>medium</code> (769MB)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="transcription-flow-1">Transcription Flow</h3>
+<div class="sourceCode" id="cb604"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb604-1"><a href="#cb604-1" aria-hidden="true" tabindex="-1"></a><span class="at">@router.post</span>(<span class="st">&quot;/transcribe&quot;</span>)</span>
+<span id="cb604-2"><a href="#cb604-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> transcribe_audio(audio: UploadFile, language: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;en&quot;</span>):</span>
+<span id="cb604-3"><a href="#cb604-3" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> <span class="cf">await</span> get_whisper_model()  <span class="co"># Cached singleton</span></span>
+<span id="cb604-4"><a href="#cb604-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save to temp file → whisper.transcribe() → cleanup</span></span>
+<span id="cb604-5"><a href="#cb604-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> TranscriptionResponse(</span>
+<span id="cb604-6"><a href="#cb604-6" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span><span class="st">&quot;...&quot;</span>,</span>
+<span id="cb604-7"><a href="#cb604-7" aria-hidden="true" tabindex="-1"></a>        language<span class="op">=</span><span class="st">&quot;en&quot;</span>,</span>
+<span id="cb604-8"><a href="#cb604-8" aria-hidden="true" tabindex="-1"></a>        duration_seconds<span class="op">=</span><span class="fl">5.2</span>,</span>
+<span id="cb604-9"><a href="#cb604-9" aria-hidden="true" tabindex="-1"></a>        confidence<span class="op">=</span><span class="fl">1.0</span></span>
+<span id="cb604-10"><a href="#cb604-10" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<h3 id="fallback-strategy">Fallback Strategy</h3>
+<pre class="mermaid">flowchart LR
+    STT1["🌐 Browser Web Speech API<br/>Free, no server"] -->|"fails on some browsers"| STT2["🔧 POST /api/stt/transcribe<br/>Local Whisper"]
+    STT2 -->|"Whisper not installed"| STT3["⌨️ Text input fallback<br/>Type instead of speak"]
+</pre>
+<hr />
+<h2 id="server-sent-events-sse">94.3 Server-Sent Events (SSE)</h2>
+<h3 id="source-apiroutessse.py-169-lines">Source: <code>api/routes/sse.py</code> (169 lines)</h3>
+<p>Streams resource discovery updates to the frontend in real-time. When a student asks a question, PDFs and resources are crawled in the background and appear dynamically.</p>
+<h3 id="endpoints-4">Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /sse/resources/{request_id}</code></td>
+<td>GET</td>
+<td>SSE stream (EventSource)</td>
+</tr>
+<tr>
+<td><code>POST /sse/notify/{request_id}</code></td>
+<td>POST</td>
+<td>Backend → push event</td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-types-1">Event Types</h3>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 27%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Event</th>
+<th>Data</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>connected</code></td>
+<td><code>{request_id, message}</code></td>
+<td>Initial handshake</td>
+</tr>
+<tr>
+<td><code>loading_status</code></td>
+<td><code>{status, progress}</code></td>
+<td>“Searching for PDFs…” (25%)</td>
+</tr>
+<tr>
+<td><code>pdf_added</code></td>
+<td><code>{type:"pdf", pdf:{...}}</code></td>
+<td>New PDF discovered</td>
+</tr>
+<tr>
+<td><code>pptx_added</code></td>
+<td><code>{type:"pptx", pptx:{...}}</code></td>
+<td>New PPTX discovered</td>
+</tr>
+<tr>
+<td><code>complete</code></td>
+<td><code>{total_pdfs}</code></td>
+<td>All done</td>
+</tr>
+<tr>
+<td><code>heartbeat</code></td>
+<td><code>{timestamp}</code></td>
+<td>Keep-alive every 15s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="architecture-6">Architecture</h3>
+<pre class="mermaid">sequenceDiagram
+    participant FE as Frontend
+    participant SSE as SSE Route<br/>stream_resources()
+    participant WC as Web Crawler
+    participant PDF as PDF Processor
+
+    FE->>SSE: EventSource(/sse/resources/abc)
+    SSE-->>FE: "connected" {request_id}
+
+    WC->>SSE: POST push_event("abc", pdf_data)
+    SSE-->>FE: "pdf_added" {type: pdf, ...}
+
+    PDF->>SSE: POST push_pdf_update(...)
+    SSE-->>FE: "loading_status" {progress: 75%}
+
+    SSE-->>FE: "complete" {total_pdfs: 3}
+    Note over FE,SSE: 15s heartbeat keeps connection alive</pre>
+<h3 id="connection-management">Connection Management</h3>
+<ul>
+<li>In-memory <code>Dict[request_id, asyncio.Queue]</code></li>
+<li>Auto-cleanup on client disconnect</li>
+<li>Auto-close on “complete” event</li>
+<li>15-second heartbeat to prevent timeouts</li>
+</ul>
+<hr />
+
+</body>
+</html>

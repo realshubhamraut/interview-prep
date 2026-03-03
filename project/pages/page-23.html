@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 23: LLM Provider Strategy &amp;amp; API Key Management</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-22.html">&larr; Previous</a> <a href="page-24.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-23-llm-provider-strategy-api-key-management">Page 23: LLM Provider Strategy &amp; API Key Management</h1>
+<hr />
+<h2 id="overview-15">23.1 Overview</h2>
+<p>ensureStudy employs a <strong>multi-provider LLM strategy</strong> that supports OpenAI GPT-4, Google Gemini, Groq (Mixtral/LLaMA), and local models (Mistral-7B via Ollama). This enables cost optimization, fallback resilience, and task-specific model selection.</p>
+<hr />
+<h2 id="provider-inventory">23.2 Provider Inventory</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 20%" />
+<col style="width: 25%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Models</th>
+<th>Use Case</th>
+<th>Cost Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td>GPT-4, GPT-3.5-turbo</td>
+<td>Primary tutoring, complex reasoning</td>
+<td><span class="math display">$$$ |
+| **Google Gemini** | Gemini 1.5 Flash, Gemini 1.5 Pro | Meeting summarization, long-context tasks | $$</span></td>
+</tr>
+<tr>
+<td><strong>Groq</strong></td>
+<td>Mixtral-8x7B, LLaMA 3 70B</td>
+<td>Fast classification, topic extraction</td>
+<td>$</td>
+</tr>
+<tr>
+<td><strong>Ollama (local)</strong></td>
+<td>Mistral-7B, LLaMA 3 8B</td>
+<td>Assessment generation, offline fallback</td>
+<td>Free</td>
+</tr>
+<tr>
+<td><strong>OpenAI Whisper</strong></td>
+<td>whisper-1</td>
+<td>Speech-to-text transcription</td>
+<td>$</td>
+</tr>
+<tr>
+<td><strong>AWS Polly</strong></td>
+<td>Various voices</td>
+<td>Text-to-speech with visemes</td>
+<td>$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="llm-service-architecture">23.3 LLM Service Architecture</h2>
+<h3 id="source-backendai-serviceappservicesllm_service.py">Source: <code>backend/ai-service/app/services/llm_service.py</code></h3>
+<div class="sourceCode" id="cb173"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LLMService:</span>
+<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb173-3"><a href="#cb173-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.provider <span class="op">=</span> os.getenv(<span class="st">&quot;LLM_PROVIDER&quot;</span>, <span class="st">&quot;openai&quot;</span>)</span>
+<span id="cb173-4"><a href="#cb173-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> os.getenv(<span class="st">&quot;LLM_MODEL&quot;</span>, <span class="st">&quot;gpt-4&quot;</span>)</span>
+<span id="cb173-5"><a href="#cb173-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb173-6"><a href="#cb173-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> generate(<span class="va">self</span>, prompt, system_prompt<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb173-7"><a href="#cb173-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.provider <span class="op">==</span> <span class="st">&quot;openai&quot;</span>:</span>
+<span id="cb173-8"><a href="#cb173-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cf">await</span> <span class="va">self</span>._openai_generate(prompt, system_prompt, <span class="op">**</span>kwargs)</span>
+<span id="cb173-9"><a href="#cb173-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="va">self</span>.provider <span class="op">==</span> <span class="st">&quot;gemini&quot;</span>:</span>
+<span id="cb173-10"><a href="#cb173-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cf">await</span> <span class="va">self</span>._gemini_generate(prompt, system_prompt, <span class="op">**</span>kwargs)</span>
+<span id="cb173-11"><a href="#cb173-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="va">self</span>.provider <span class="op">==</span> <span class="st">&quot;groq&quot;</span>:</span>
+<span id="cb173-12"><a href="#cb173-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cf">await</span> <span class="va">self</span>._groq_generate(prompt, system_prompt, <span class="op">**</span>kwargs)</span>
+<span id="cb173-13"><a href="#cb173-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="va">self</span>.provider <span class="op">==</span> <span class="st">&quot;ollama&quot;</span>:</span>
+<span id="cb173-14"><a href="#cb173-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cf">await</span> <span class="va">self</span>._ollama_generate(prompt, system_prompt, <span class="op">**</span>kwargs)</span></code></pre></div>
+<h3 id="provider-selection-by-feature">Provider Selection by Feature</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 33%" />
+<col style="width: 19%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Primary Provider</th>
+<th>Fallback</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tutor chat</strong></td>
+<td>OpenAI GPT-4</td>
+<td>Gemini 1.5 Flash</td>
+<td>Best reasoning quality</td>
+</tr>
+<tr>
+<td><strong>Meeting summary</strong></td>
+<td>Gemini 1.5 Flash</td>
+<td>GPT-3.5-turbo</td>
+<td>Long-context (1M tokens)</td>
+</tr>
+<tr>
+<td><strong>Topic extraction</strong></td>
+<td>Groq (Mixtral)</td>
+<td>GPT-3.5-turbo</td>
+<td>Fast, structured output</td>
+</tr>
+<tr>
+<td><strong>Subject classification</strong></td>
+<td>Groq (LLaMA 3)</td>
+<td>Local Mistral</td>
+<td>Speed-critical</td>
+</tr>
+<tr>
+<td><strong>Assessment generation</strong></td>
+<td>Ollama (Mistral-7B)</td>
+<td>GPT-3.5-turbo</td>
+<td>Volume, cost-free</td>
+</tr>
+<tr>
+<td><strong>Question scoring</strong></td>
+<td>GPT-4</td>
+<td>Gemini 1.5 Pro</td>
+<td>Accuracy-critical</td>
+</tr>
+<tr>
+<td><strong>Curriculum generation</strong></td>
+<td>GPT-4</td>
+<td>Gemini 1.5 Pro</td>
+<td>Complex reasoning</td>
+</tr>
+<tr>
+<td><strong>Web search analysis</strong></td>
+<td>Groq (Mixtral)</td>
+<td>GPT-3.5-turbo</td>
+<td>Fast processing</td>
+</tr>
+<tr>
+<td><strong>Speech-to-text</strong></td>
+<td>OpenAI Whisper</td>
+<td>Local Whisper</td>
+<td>Accuracy</td>
+</tr>
+<tr>
+<td><strong>Text-to-speech</strong></td>
+<td>AWS Polly</td>
+<td>Browser TTS</td>
+<td>Viseme support</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="api-key-management">23.4 API Key Management</h2>
+<h3 id="environment-configuration">Environment Configuration</h3>
+<div class="sourceCode" id="cb174"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .env</span></span>
+<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a><span class="co"># === Primary LLM ===</span></span>
+<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>sk-...</span>
+<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a><span class="va">LLM_PROVIDER</span><span class="op">=</span>openai              <span class="co"># openai, gemini, groq, ollama</span></span>
+<span id="cb174-5"><a href="#cb174-5" aria-hidden="true" tabindex="-1"></a><span class="va">LLM_MODEL</span><span class="op">=</span>gpt-4                  <span class="co"># Model name</span></span>
+<span id="cb174-6"><a href="#cb174-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-7"><a href="#cb174-7" aria-hidden="true" tabindex="-1"></a><span class="co"># === Google Gemini ===</span></span>
+<span id="cb174-8"><a href="#cb174-8" aria-hidden="true" tabindex="-1"></a><span class="va">GOOGLE_API_KEY</span><span class="op">=</span>AIza...            <span class="co"># For meeting summaries, long-context</span></span>
+<span id="cb174-9"><a href="#cb174-9" aria-hidden="true" tabindex="-1"></a><span class="va">GEMINI_MODEL</span><span class="op">=</span>gemini-1.5-flash</span>
+<span id="cb174-10"><a href="#cb174-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-11"><a href="#cb174-11" aria-hidden="true" tabindex="-1"></a><span class="co"># === Groq (Fast Inference) ===</span></span>
+<span id="cb174-12"><a href="#cb174-12" aria-hidden="true" tabindex="-1"></a><span class="va">GROQ_API_KEY</span><span class="op">=</span>gsk_...              <span class="co"># For classification, extraction</span></span>
+<span id="cb174-13"><a href="#cb174-13" aria-hidden="true" tabindex="-1"></a><span class="va">GROQ_MODEL</span><span class="op">=</span>mixtral-8x7b-32768</span>
+<span id="cb174-14"><a href="#cb174-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-15"><a href="#cb174-15" aria-hidden="true" tabindex="-1"></a><span class="co"># === Local Models ===</span></span>
+<span id="cb174-16"><a href="#cb174-16" aria-hidden="true" tabindex="-1"></a><span class="va">OLLAMA_HOST</span><span class="op">=</span>http://localhost:11434  <span class="co"># Local Ollama server</span></span>
+<span id="cb174-17"><a href="#cb174-17" aria-hidden="true" tabindex="-1"></a><span class="va">OLLAMA_MODEL</span><span class="op">=</span>mistral:7b</span>
+<span id="cb174-18"><a href="#cb174-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-19"><a href="#cb174-19" aria-hidden="true" tabindex="-1"></a><span class="co"># === Speech/Audio ===</span></span>
+<span id="cb174-20"><a href="#cb174-20" aria-hidden="true" tabindex="-1"></a><span class="co"># OPENAI_API_KEY is reused for Whisper</span></span>
+<span id="cb174-21"><a href="#cb174-21" aria-hidden="true" tabindex="-1"></a><span class="va">AWS_ACCESS_KEY_ID</span><span class="op">=</span>...             <span class="co"># For AWS Polly TTS</span></span>
+<span id="cb174-22"><a href="#cb174-22" aria-hidden="true" tabindex="-1"></a><span class="va">AWS_SECRET_ACCESS_KEY</span><span class="op">=</span>...</span>
+<span id="cb174-23"><a href="#cb174-23" aria-hidden="true" tabindex="-1"></a><span class="va">AWS_REGION</span><span class="op">=</span>ap-south-1</span>
+<span id="cb174-24"><a href="#cb174-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-25"><a href="#cb174-25" aria-hidden="true" tabindex="-1"></a><span class="co"># === Embedding ===</span></span>
+<span id="cb174-26"><a href="#cb174-26" aria-hidden="true" tabindex="-1"></a><span class="va">EMBEDDING_MODEL</span><span class="op">=</span>sentence-transformers/all-mpnet-base-v2  <span class="co"># Local model</span></span></code></pre></div>
+<h3 id="key-rotation-strategy">Key Rotation Strategy</h3>
+<ol type="1">
+<li>All API keys stored exclusively in <code>.env</code> (gitignored)</li>
+<li><code>.env.production.example</code> provides template without real values</li>
+<li>Production keys set via environment variables or secrets manager</li>
+<li>Keys never logged (startup logger masks with <code>***</code>)</li>
+</ol>
+<hr />
+<h2 id="cost-optimization">23.5 Cost Optimization</h2>
+<h3 id="token-usage-patterns">Token Usage Patterns</h3>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 22%" />
+<col style="width: 25%" />
+<col style="width: 13%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Avg Input Tokens</th>
+<th>Avg Output Tokens</th>
+<th>Provider</th>
+<th>Monthly Cost (est.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tutor chat</td>
+<td>2,000</td>
+<td>500</td>
+<td>GPT-4</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>Topic extraction</td>
+<td>500</td>
+<td>200</td>
+<td>Groq</td>
+<td>~Free tier</td>
+</tr>
+<tr>
+<td>Assessment gen</td>
+<td>300</td>
+<td>400</td>
+<td>Ollama</td>
+<td>$0 (local)</td>
+</tr>
+<tr>
+<td>Meeting summary</td>
+<td>5,000</td>
+<td>1,000</td>
+<td>Gemini</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Question scoring</td>
+<td>800</td>
+<td>200</td>
+<td>GPT-4</td>
+<td>Variable</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-reduction-strategies">Cost Reduction Strategies</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Response caching</strong></td>
+<td>Redis cache with query hash keys, 1h TTL</td>
+</tr>
+<tr>
+<td><strong>Embedding caching</strong></td>
+<td>Redis cache with text hash keys, 7d TTL</td>
+</tr>
+<tr>
+<td><strong>Local models first</strong></td>
+<td>Use Ollama for high-volume, low-complexity tasks</td>
+</tr>
+<tr>
+<td><strong>Groq for speed</strong></td>
+<td>Free tier covers most classification needs</td>
+</tr>
+<tr>
+<td><strong>Gemini for length</strong></td>
+<td>1M token context handles long transcripts cheaply</td>
+</tr>
+<tr>
+<td><strong>Streaming</strong></td>
+<td>SSE streaming reduces perceived latency, same cost</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fallback-chain">23.6 Fallback Chain</h2>
+<div class="sourceCode" id="cb175"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> generate_with_fallback(prompt, providers<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a>    providers <span class="op">=</span> providers <span class="kw">or</span> [<span class="st">&quot;openai&quot;</span>, <span class="st">&quot;gemini&quot;</span>, <span class="st">&quot;groq&quot;</span>, <span class="st">&quot;ollama&quot;</span>]</span>
+<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb175-4"><a href="#cb175-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> provider <span class="kw">in</span> providers:</span>
+<span id="cb175-5"><a href="#cb175-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb175-6"><a href="#cb175-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cf">await</span> generate(prompt, provider<span class="op">=</span>provider)</span>
+<span id="cb175-7"><a href="#cb175-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> RateLimitError:</span>
+<span id="cb175-8"><a href="#cb175-8" aria-hidden="true" tabindex="-1"></a>            logger.warning(<span class="ss">f&quot;</span><span class="sc">{</span>provider<span class="sc">}</span><span class="ss"> rate limited, trying next&quot;</span>)</span>
+<span id="cb175-9"><a href="#cb175-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb175-10"><a href="#cb175-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> APIError <span class="im">as</span> e:</span>
+<span id="cb175-11"><a href="#cb175-11" aria-hidden="true" tabindex="-1"></a>            logger.error(<span class="ss">f&quot;</span><span class="sc">{</span>provider<span class="sc">}</span><span class="ss"> failed: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb175-12"><a href="#cb175-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb175-13"><a href="#cb175-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb175-14"><a href="#cb175-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> AllProvidersFailedError(<span class="st">&quot;No LLM provider available&quot;</span>)</span></code></pre></div>
+<hr />
+<h2 id="embedding-strategy-1">23.7 Embedding Strategy</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 26%" />
+<col style="width: 28%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th>Location</th>
+<th>Dimension</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>all-mpnet-base-v2</code></td>
+<td>Local (HuggingFace)</td>
+<td>768</td>
+<td>Document, notes, meeting embeddings</td>
+</tr>
+<tr>
+<td><code>text-embedding-3-small</code></td>
+<td>OpenAI API</td>
+<td>1536</td>
+<td>(Configured but backup)</td>
+</tr>
+</tbody>
+</table>
+<p>The primary embedding model runs <strong>locally</strong> via <code>sentence-transformers</code>, eliminating per-call API costs for the highest-volume operation (every document chunk, query, and meeting segment).</p>
+<hr />
+<h2 id="prompt-engineering-patterns">23.8 Prompt Engineering Patterns</h2>
+<h3 id="system-prompt-structure">System Prompt Structure</h3>
+<div class="sourceCode" id="cb176"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>TUTOR_SYSTEM_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;You are an expert tutor for </span><span class="sc">{subject}</span><span class="st">.</span></span>
+<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a><span class="st">Student Level: </span><span class="sc">{tal_level}</span><span class="st"> (</span><span class="sc">{level_description}</span><span class="st">)</span></span>
+<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a><span class="st">Topic: </span><span class="sc">{topic}</span></span>
+<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a><span class="st">Classroom: </span><span class="sc">{classroom_name}</span></span>
+<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a><span class="st">Context from study materials:</span></span>
+<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a><span class="sc">{rag_context}</span></span>
+<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-9"><a href="#cb176-9" aria-hidden="true" tabindex="-1"></a><span class="st">Instructions:</span></span>
+<span id="cb176-10"><a href="#cb176-10" aria-hidden="true" tabindex="-1"></a><span class="st">- Adapt explanations to the student&#39;s assessed level</span></span>
+<span id="cb176-11"><a href="#cb176-11" aria-hidden="true" tabindex="-1"></a><span class="st">- Use examples relevant to their curriculum</span></span>
+<span id="cb176-12"><a href="#cb176-12" aria-hidden="true" tabindex="-1"></a><span class="st">- Reference the provided context when possible</span></span>
+<span id="cb176-13"><a href="#cb176-13" aria-hidden="true" tabindex="-1"></a><span class="st">- Use LaTeX for mathematical expressions</span></span>
+<span id="cb176-14"><a href="#cb176-14" aria-hidden="true" tabindex="-1"></a><span class="st">- Be encouraging and supportive&quot;&quot;&quot;</span></span></code></pre></div>
+<h3 id="json-structured-output">JSON-Structured Output</h3>
+<div class="sourceCode" id="cb177"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a>TOPIC_EXTRACTION_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;Extract topics from this syllabus text.</span></span>
+<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="st">Return ONLY valid JSON in this format:</span></span>
+<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;topics&quot;: [</span></span>
+<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a><span class="st">        {&quot;name&quot;: &quot;Topic Name&quot;, &quot;subtopics&quot;: [&quot;Sub1&quot;, &quot;Sub2&quot;], &quot;difficulty&quot;: &quot;medium&quot;}</span></span>
+<span id="cb177-6"><a href="#cb177-6" aria-hidden="true" tabindex="-1"></a><span class="st">    ]</span></span>
+<span id="cb177-7"><a href="#cb177-7" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb177-8"><a href="#cb177-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-9"><a href="#cb177-9" aria-hidden="true" tabindex="-1"></a><span class="st">Syllabus text:</span></span>
+<span id="cb177-10"><a href="#cb177-10" aria-hidden="true" tabindex="-1"></a><span class="sc">{text}</span><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+
+</body>
+</html>

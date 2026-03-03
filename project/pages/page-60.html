@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 60: Network Architecture &amp;amp; TLS Configuration</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-59.html">&larr; Previous</a> <a href="page-61.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-60-network-architecture-tls-configuration">Page 60: Network Architecture &amp; TLS Configuration</h1>
+<hr />
+<h2 id="overview-48">60.1 Overview</h2>
+<p>ensureStudy implements <strong>TLS encryption</strong> for both local development (via mkcert) and LAN access, with Nginx reverse proxy in production. The system supports 3 networking modes: localhost, LAN, and production cloud.</p>
+<hr />
+<h2 id="network-modes">60.2 Network Modes</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 25%" />
+<col style="width: 40%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Script</th>
+<th>Frontend URL</th>
+<th>TLS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local</td>
+<td><code>run-local.sh</code></td>
+<td><code>https://localhost:3000</code></td>
+<td>mkcert (self-signed)</td>
+</tr>
+<tr>
+<td>LAN</td>
+<td><code>run-lan.sh</code></td>
+<td><code>https://192.168.4.x:3000</code></td>
+<td>mkcert (LAN cert)</td>
+</tr>
+<tr>
+<td>Production</td>
+<td>Docker Compose</td>
+<td><code>https://domain.com</code></td>
+<td>Let’s Encrypt / AWS ACM</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tls-certificate-files">60.3 TLS Certificate Files</h2>
+<h3 id="mkcert-generated-certificates">mkcert-Generated Certificates</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localhost+2.pem</code></td>
+<td>Localhost TLS certificate</td>
+</tr>
+<tr>
+<td><code>localhost+2-key.pem</code></td>
+<td>Localhost TLS private key</td>
+</tr>
+<tr>
+<td><code>192.168.4.60+2.pem</code></td>
+<td>LAN IP TLS certificate</td>
+</tr>
+<tr>
+<td><code>192.168.4.60+2-key.pem</code></td>
+<td>LAN IP TLS private key</td>
+</tr>
+<tr>
+<td><code>192.168.4.157+2.pem</code></td>
+<td>Second LAN IP certificate</td>
+</tr>
+<tr>
+<td><code>192.168.4.157+2-key.pem</code></td>
+<td>Second LAN IP private key</td>
+</tr>
+<tr>
+<td><code>rootCA.pem</code></td>
+<td>Root CA for mkcert trust</td>
+</tr>
+</tbody>
+</table>
+<h3 id="certificate-generation">Certificate Generation</h3>
+<div class="sourceCode" id="cb390"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb390-1"><a href="#cb390-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install mkcert</span></span>
+<span id="cb390-2"><a href="#cb390-2" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install mkcert</span>
+<span id="cb390-3"><a href="#cb390-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb390-4"><a href="#cb390-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install local CA</span></span>
+<span id="cb390-5"><a href="#cb390-5" aria-hidden="true" tabindex="-1"></a><span class="ex">mkcert</span> <span class="at">-install</span></span>
+<span id="cb390-6"><a href="#cb390-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb390-7"><a href="#cb390-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate certificates</span></span>
+<span id="cb390-8"><a href="#cb390-8" aria-hidden="true" tabindex="-1"></a><span class="ex">mkcert</span> localhost 127.0.0.1 ::1</span>
+<span id="cb390-9"><a href="#cb390-9" aria-hidden="true" tabindex="-1"></a><span class="ex">mkcert</span> 192.168.4.60 192.168.4.60 localhost</span>
+<span id="cb390-10"><a href="#cb390-10" aria-hidden="true" tabindex="-1"></a><span class="ex">mkcert</span> 192.168.4.157 192.168.4.157 localhost</span></code></pre></div>
+<hr />
+<h2 id="local-development-run-local.sh">60.4 Local Development (<code>run-local.sh</code>)</h2>
+<div class="sourceCode" id="cb391"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb391-1"><a href="#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb391-2"><a href="#cb391-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Start all services with HTTPS on localhost</span></span>
+<span id="cb391-3"><a href="#cb391-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb391-4"><a href="#cb391-4" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">NEXT_PUBLIC_API_URL</span><span class="op">=</span>https://localhost:8000</span>
+<span id="cb391-5"><a href="#cb391-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">NEXT_PUBLIC_AI_URL</span><span class="op">=</span>https://localhost:8001</span>
+<span id="cb391-6"><a href="#cb391-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb391-7"><a href="#cb391-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Start infrastructure</span></span>
+<span id="cb391-8"><a href="#cb391-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker-compose</span> up <span class="at">-d</span> postgres redis qdrant kafka zookeeper mongodb minio</span>
+<span id="cb391-9"><a href="#cb391-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb391-10"><a href="#cb391-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Start backend services</span></span>
+<span id="cb391-11"><a href="#cb391-11" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend/core-service <span class="kw">&amp;&amp;</span> <span class="ex">flask</span> run <span class="at">--cert</span><span class="op">=</span>../../localhost+2.pem <span class="dt">\</span></span>
+<span id="cb391-12"><a href="#cb391-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">--key</span><span class="op">=</span>../../localhost+2-key.pem <span class="at">--port</span> 8000 <span class="kw">&amp;</span></span>
+<span id="cb391-13"><a href="#cb391-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb391-14"><a href="#cb391-14" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend/ai-service <span class="kw">&amp;&amp;</span> <span class="ex">uvicorn</span> app.main:app <span class="at">--port</span> 8001 <span class="dt">\</span></span>
+<span id="cb391-15"><a href="#cb391-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ssl-certfile</span> ../../localhost+2.pem <span class="dt">\</span></span>
+<span id="cb391-16"><a href="#cb391-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ssl-keyfile</span> ../../localhost+2-key.pem <span class="kw">&amp;</span></span>
+<span id="cb391-17"><a href="#cb391-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb391-18"><a href="#cb391-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Start frontend with HTTPS</span></span>
+<span id="cb391-19"><a href="#cb391-19" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run dev <span class="at">--</span> <span class="at">--experimental-https</span></span></code></pre></div>
+<hr />
+<h2 id="lan-development-run-lan.sh">60.5 LAN Development (<code>run-lan.sh</code>)</h2>
+<div class="sourceCode" id="cb392"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb392-1"><a href="#cb392-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb392-2"><a href="#cb392-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Start services accessible from any device on the local network</span></span>
+<span id="cb392-3"><a href="#cb392-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb392-4"><a href="#cb392-4" aria-hidden="true" tabindex="-1"></a><span class="va">LAN_IP</span><span class="op">=</span><span class="va">$(</span><span class="ex">ipconfig</span> getifaddr en0<span class="va">)</span></span>
+<span id="cb392-5"><a href="#cb392-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">NEXT_PUBLIC_API_URL</span><span class="op">=</span>https://<span class="va">${LAN_IP}</span>:8000</span>
+<span id="cb392-6"><a href="#cb392-6" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">NEXT_PUBLIC_AI_URL</span><span class="op">=</span>https://<span class="va">${LAN_IP}</span>:8001</span>
+<span id="cb392-7"><a href="#cb392-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb392-8"><a href="#cb392-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Use LAN-specific certificates</span></span>
+<span id="cb392-9"><a href="#cb392-9" aria-hidden="true" tabindex="-1"></a><span class="va">CERT</span><span class="op">=</span><span class="st">&quot;192.168.4.60+2.pem&quot;</span></span>
+<span id="cb392-10"><a href="#cb392-10" aria-hidden="true" tabindex="-1"></a><span class="va">KEY</span><span class="op">=</span><span class="st">&quot;192.168.4.60+2-key.pem&quot;</span></span>
+<span id="cb392-11"><a href="#cb392-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb392-12"><a href="#cb392-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Start backend with LAN binding</span></span>
+<span id="cb392-13"><a href="#cb392-13" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend/core-service <span class="kw">&amp;&amp;</span> <span class="ex">flask</span> run <span class="at">--host</span> 0.0.0.0 <span class="at">--port</span> 8000 <span class="dt">\</span></span>
+<span id="cb392-14"><a href="#cb392-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cert</span><span class="op">=</span>../../<span class="va">${CERT}</span> <span class="at">--key</span><span class="op">=</span>../../<span class="va">${KEY}</span> <span class="kw">&amp;</span></span>
+<span id="cb392-15"><a href="#cb392-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb392-16"><a href="#cb392-16" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend/ai-service <span class="kw">&amp;&amp;</span> <span class="ex">uvicorn</span> app.main:app <span class="at">--host</span> 0.0.0.0 <span class="at">--port</span> 8001 <span class="dt">\</span></span>
+<span id="cb392-17"><a href="#cb392-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ssl-certfile</span> ../../<span class="va">${CERT}</span> <span class="at">--ssl-keyfile</span> ../../<span class="va">${KEY}</span> <span class="kw">&amp;</span></span>
+<span id="cb392-18"><a href="#cb392-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb392-19"><a href="#cb392-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Frontend binds to all interfaces</span></span>
+<span id="cb392-20"><a href="#cb392-20" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> run dev <span class="at">--</span> <span class="at">--hostname</span> 0.0.0.0</span></code></pre></div>
+<p>This allows testing from mobile devices, tablets, and other machines on the same network.</p>
+<hr />
+<h2 id="production-network">60.6 Production Network</h2>
+<h3 id="nginx-reverse-proxy">Nginx Reverse Proxy</h3>
+<pre class="nginx"><code># /etc/nginx/sites-available/ensurestudy
+server {
+    listen 443 ssl http2;
+    server_name ensurestudy.example.com;
+    
+    ssl_certificate /etc/letsencrypt/live/ensurestudy.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ensurestudy.example.com/privkey.pem;
+    
+    # Frontend
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &#39;upgrade&#39;;
+    }
+    
+    # Core API
+    location /api/ {
+        proxy_pass http://localhost:8000;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+    }
+    
+    # AI Service
+    location /ai/ {
+        proxy_pass http://localhost:8001;
+        proxy_read_timeout 300;  # Long timeout for AI
+    }
+    
+    # SSE (no buffering)
+    location /api/tutor/chat {
+        proxy_pass http://localhost:8001;
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_set_header Connection &#39;&#39;;
+        proxy_http_version 1.1;
+        chunked_transfer_encoding off;
+    }
+    
+    # WebSocket
+    location /ws/ {
+        proxy_pass http://localhost:8001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &quot;upgrade&quot;;
+    }
+}</code></pre>
+<hr />
+<h2 id="docker-network-topology">60.7 Docker Network Topology</h2>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Docker Network Topology "]
+        direction TB
+        N0["Docker Bridge: ensurestudy-network"]
+        N1["Frontend      Core         AI        Kafka"]
+        N2[":3000       :8000       :8001       :29092"]
+        N3["Internal DNS Resolution"]
+        N4["core-service:8000  ai-service:8001  kafka:29092"]
+        N5["postgres:5432  redis:6379  qdrant:6333  mongodb:27017"]
+        N6["Postgres     Redis       Qdrant     MongoDB"]
+        N7[":5432       :6379       :6333       :27017"]
+        N8["Port mapping to localhost for development access"]
+    end
+</pre>
+<hr />
+<h2 id="port-map">60.8 Port Map</h2>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Service</th>
+<th>Protocol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3000</td>
+<td>Frontend (Next.js)</td>
+<td>HTTP/HTTPS</td>
+</tr>
+<tr>
+<td>8000</td>
+<td>Core Service (Flask)</td>
+<td>HTTP/HTTPS</td>
+</tr>
+<tr>
+<td>8001</td>
+<td>AI Service (FastAPI)</td>
+<td>HTTP/HTTPS</td>
+</tr>
+<tr>
+<td>5432</td>
+<td>PostgreSQL</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>6333</td>
+<td>Qdrant (HTTP API)</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>6334</td>
+<td>Qdrant (gRPC)</td>
+<td>gRPC</td>
+</tr>
+<tr>
+<td>6379</td>
+<td>Redis</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>9000</td>
+<td>MinIO (S3 API)</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>9092</td>
+<td>Kafka (external)</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>29092</td>
+<td>Kafka (internal)</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>2181</td>
+<td>ZooKeeper</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>27017</td>
+<td>MongoDB</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>9042</td>
+<td>Cassandra</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>8080</td>
+<td>Kafka UI</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>9101</td>
+<td>MinIO Console</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>5000</td>
+<td>MLflow</td>
+<td>HTTP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="gitignore-secrets-protection">60.9 .gitignore — Secrets Protection</h2>
+<pre class="gitignore"><code># Environment secrets
+.env
+.env.local
+.env.production
+
+# TLS certificates
+*.pem
+*.key
+*.crt</code></pre>
+<hr />
+
+</body>
+</html>

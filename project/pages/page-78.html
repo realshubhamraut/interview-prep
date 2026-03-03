@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 78: Agent Roadmap — Planned Capabilities</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-77.html">&larr; Previous</a> <a href="page-79.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-78-agent-roadmap-planned-capabilities">Page 78: Agent Roadmap — Planned Capabilities</h1>
+<blockquote>
+<p>Documents planned/future agent capabilities from <code>agent-possibilities.md</code> that are designed but not yet fully implemented.</p>
+</blockquote>
+<hr />
+<h2 id="overview-64">78.1 Overview</h2>
+<p>This page documents <strong>planned agent extensions</strong> that are architecturally designed and prototyped in the codebase but represent future capabilities. These follow the existing LangGraph StateGraph patterns and agent tool framework.</p>
+<hr />
+<h2 id="computerized-adaptive-testing-cat-agent">78.2 Computerized Adaptive Testing (CAT) Agent</h2>
+<h3 id="status-designed-not-deployed">Status: Designed, Not Deployed</h3>
+<p>Uses <strong>Item Response Theory (IRT)</strong> to dynamically select questions and estimate student ability with fewer questions than traditional tests.</p>
+<h3 id="irt-3-parameter-logistic-model">IRT 3-Parameter Logistic Model</h3>
+<div class="sourceCode" id="cb498"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb498-1"><a href="#cb498-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> probability_correct(theta: <span class="bu">float</span>, question: Dict) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb498-2"><a href="#cb498-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;3-PL IRT model&quot;&quot;&quot;</span></span>
+<span id="cb498-3"><a href="#cb498-3" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> question[<span class="st">&quot;discrimination&quot;</span>]   <span class="co"># How well question differentiates</span></span>
+<span id="cb498-4"><a href="#cb498-4" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> question[<span class="st">&quot;difficulty&quot;</span>]        <span class="co"># Question difficulty (-3 to +3)</span></span>
+<span id="cb498-5"><a href="#cb498-5" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> question.get(<span class="st">&quot;guessing&quot;</span>, <span class="fl">0.0</span>) <span class="co"># Guessing probability for MCQ</span></span>
+<span id="cb498-6"><a href="#cb498-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb498-7"><a href="#cb498-7" aria-hidden="true" tabindex="-1"></a>    exponent <span class="op">=</span> a <span class="op">*</span> (theta <span class="op">-</span> b)</span>
+<span id="cb498-8"><a href="#cb498-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> c <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> c) <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>exponent))</span></code></pre></div>
+<h3 id="adaptive-selection">Adaptive Selection</h3>
+<div class="sourceCode" id="cb499"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb499-1"><a href="#cb499-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> select_next_question(<span class="va">self</span>) <span class="op">-&gt;</span> Dict:</span>
+<span id="cb499-2"><a href="#cb499-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Select question with maximum Fisher information at current theta&quot;&quot;&quot;</span></span>
+<span id="cb499-3"><a href="#cb499-3" aria-hidden="true" tabindex="-1"></a>    remaining <span class="op">=</span> [q <span class="cf">for</span> q <span class="kw">in</span> <span class="va">self</span>.questions <span class="cf">if</span> q[<span class="st">&quot;id&quot;</span>] <span class="kw">not</span> <span class="kw">in</span> <span class="va">self</span>.administered]</span>
+<span id="cb499-4"><a href="#cb499-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb499-5"><a href="#cb499-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> information(question: Dict) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb499-6"><a href="#cb499-6" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> question[<span class="st">&quot;discrimination&quot;</span>]</span>
+<span id="cb499-7"><a href="#cb499-7" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> <span class="va">self</span>.probability_correct(<span class="va">self</span>.theta_estimate, question)</span>
+<span id="cb499-8"><a href="#cb499-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (a <span class="op">**</span> <span class="dv">2</span>) <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)</span>
+<span id="cb499-9"><a href="#cb499-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb499-10"><a href="#cb499-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">max</span>(remaining, key<span class="op">=</span>information)</span></code></pre></div>
+<h3 id="stopping-criteria">Stopping Criteria</h3>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard error</td>
+<td>&lt; 0.3</td>
+</tr>
+<tr>
+<td>Max questions</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Time limit</td>
+<td>Assessment-defined</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output</h3>
+<div class="sourceCode" id="cb500"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb500-1"><a href="#cb500-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb500-2"><a href="#cb500-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ability_estimate&quot;</span><span class="fu">:</span> <span class="fl">1.7</span><span class="fu">,</span></span>
+<span id="cb500-3"><a href="#cb500-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;standard_error&quot;</span><span class="fu">:</span> <span class="fl">0.28</span><span class="fu">,</span></span>
+<span id="cb500-4"><a href="#cb500-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;questions_administered&quot;</span><span class="fu">:</span> <span class="dv">18</span><span class="fu">,</span></span>
+<span id="cb500-5"><a href="#cb500-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;confidence_interval&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fl">1.15</span><span class="ot">,</span> <span class="fl">2.25</span><span class="ot">]</span></span>
+<span id="cb500-6"><a href="#cb500-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+<h2 id="question-quality-agent">78.3 Question Quality Agent</h2>
+<h3 id="status-designed">Status: Designed</h3>
+<p>Evaluates and improves auto-generated questions using 5 quality dimensions:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Weight</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clarity</td>
+<td>25%</td>
+<td>Is question unambiguous?</td>
+</tr>
+<tr>
+<td>Distractors</td>
+<td>25%</td>
+<td>Are wrong options plausible?</td>
+</tr>
+<tr>
+<td>Difficulty</td>
+<td>20%</td>
+<td>Matches target level?</td>
+</tr>
+<tr>
+<td>Bloom’s Level</td>
+<td>15%</td>
+<td>Tests understanding vs recall?</td>
+</tr>
+<tr>
+<td>Bias</td>
+<td>15%</td>
+<td>Free from cultural/gender bias?</td>
+</tr>
+</tbody>
+</table>
+<p>A question passes quality review if overall score ≥ 7.0/10.</p>
+<hr />
+<h2 id="cheat-resistant-question-agent">78.4 Cheat-Resistant Question Agent</h2>
+<h3 id="status-designed-1">Status: Designed</h3>
+<p>Generates questions that resist internet lookup using 4 strategies:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 36%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Technique</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Personalized</td>
+<td>Use student’s name/context</td>
+<td>“Alice has 47 kg of…”</td>
+</tr>
+<tr>
+<td>Novel scenario</td>
+<td>Unusual creative setting</td>
+<td>“On a Mars colony, calculate…”</td>
+</tr>
+<tr>
+<td>Material-specific</td>
+<td>Questions from uploaded PDFs only</td>
+<td>“According to Chapter 5 of your textbook…”</td>
+</tr>
+<tr>
+<td>Randomized values</td>
+<td>Non-round numbers</td>
+<td>“A car with mass 1,347 kg…”</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="real-time-presentation-coach">78.5 Real-Time Presentation Coach</h2>
+<h3 id="status-partially-implemented">Status: Partially Implemented</h3>
+<p>Live feedback during practice presentations with cooldown logic:</p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb501-1"><a href="#cb501-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RealTimeCoachAgent:</span>
+<span id="cb501-2"><a href="#cb501-2" aria-hidden="true" tabindex="-1"></a>    cooldown_seconds <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Don&#39;t repeat same feedback for 10s</span></span>
+<span id="cb501-3"><a href="#cb501-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb501-4"><a href="#cb501-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> process_metrics(<span class="va">self</span>, metrics: Dict) <span class="op">-&gt;</span> Optional[<span class="bu">str</span>]:</span>
+<span id="cb501-5"><a href="#cb501-5" aria-hidden="true" tabindex="-1"></a>        feedbacks <span class="op">=</span> []</span>
+<span id="cb501-6"><a href="#cb501-6" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb501-7"><a href="#cb501-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> metrics.get(<span class="st">&quot;eye_contact_rate&quot;</span>, <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">0.4</span>:</span>
+<span id="cb501-8"><a href="#cb501-8" aria-hidden="true" tabindex="-1"></a>            feedbacks.append(<span class="st">&quot; Look at the camera more&quot;</span>)</span>
+<span id="cb501-9"><a href="#cb501-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb501-10"><a href="#cb501-10" aria-hidden="true" tabindex="-1"></a>        wpm <span class="op">=</span> metrics.get(<span class="st">&quot;words_per_minute&quot;</span>, <span class="dv">130</span>)</span>
+<span id="cb501-11"><a href="#cb501-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> wpm <span class="op">&gt;</span> <span class="dv">170</span>:</span>
+<span id="cb501-12"><a href="#cb501-12" aria-hidden="true" tabindex="-1"></a>            feedbacks.append(<span class="st">&quot; Slow down a bit&quot;</span>)</span>
+<span id="cb501-13"><a href="#cb501-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> wpm <span class="op">&lt;</span> <span class="dv">100</span>:</span>
+<span id="cb501-14"><a href="#cb501-14" aria-hidden="true" tabindex="-1"></a>            feedbacks.append(<span class="st">&quot; Try speaking a bit faster&quot;</span>)</span>
+<span id="cb501-15"><a href="#cb501-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb501-16"><a href="#cb501-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> metrics.get(<span class="st">&quot;filler_detected&quot;</span>):</span>
+<span id="cb501-17"><a href="#cb501-17" aria-hidden="true" tabindex="-1"></a>            feedbacks.append(<span class="ss">f&quot; You said &#39;</span><span class="sc">{</span>metrics[<span class="st">&#39;filler_detected&#39;</span>]<span class="sc">}</span><span class="ss">&#39; — try pausing instead&quot;</span>)</span>
+<span id="cb501-18"><a href="#cb501-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb501-19"><a href="#cb501-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> metrics.get(<span class="st">&quot;posture_score&quot;</span>, <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">0.5</span>:</span>
+<span id="cb501-20"><a href="#cb501-20" aria-hidden="true" tabindex="-1"></a>            feedbacks.append(<span class="st">&quot; Straighten your posture&quot;</span>)</span>
+<span id="cb501-21"><a href="#cb501-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb501-22"><a href="#cb501-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> feedbacks[<span class="dv">0</span>] <span class="cf">if</span> feedbacks <span class="cf">else</span> <span class="va">None</span></span></code></pre></div>
+<h3 id="feedback-timing">Feedback Timing</h3>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Overview"]
+        direction TB
+        N0["WebSocket at 5 FPS (every 200ms)"]
+        N1["Process metrics → check thresholds"]
+        N2["Check cooldown (10s per feedback type)"]
+        N3["Queue feedback → deliver every 3 seconds"]
+    end
+</pre>
+<hr />
+<h2 id="concept-mastery-agent">78.6 Concept Mastery Agent</h2>
+<h3 id="status-designed-2">Status: Designed</h3>
+<p>Ensures true understanding before advancing, using adaptive teaching strategies:</p>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Overview"]
+        direction TB
+        N0["Explain → Quiz → Score ≥ 85%? → Next Concept"]
+        N1["Score < 85%"]
+        N2["Attempts < 3 → Change Strategy → Re-explain"]
+        N3["Attempts ≥ 3 → Break into Sub-concepts"]
+    end
+</pre>
+<h3 id="teaching-strategies">Teaching Strategies</h3>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>When</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Visual</td>
+<td>Abstract concepts</td>
+<td>Mermaid diagrams</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>New concepts</td>
+<td>“RAM is like a desk…”</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>Procedural knowledge</td>
+<td>Step-by-step worked examples</td>
+</tr>
+<tr>
+<td>Formal</td>
+<td>Advanced students</td>
+<td>Precise definitions, proofs</td>
+</tr>
+<tr>
+<td>Socratic</td>
+<td>Struggling students</td>
+<td>Leading questions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="socratic-questioning-agent">78.7 Socratic Questioning Agent</h2>
+<h3 id="status-designed-3">Status: Designed</h3>
+<p>Guides students to discover answers through questions rather than direct answers:</p>
+<div class="sourceCode" id="cb504"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb504-1"><a href="#cb504-1" aria-hidden="true" tabindex="-1"></a>SOCRATIC_SYSTEM_PROMPT <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb504-2"><a href="#cb504-2" aria-hidden="true" tabindex="-1"></a><span class="st">You are a Socratic tutor. You NEVER give direct answers.</span></span>
+<span id="cb504-3"><a href="#cb504-3" aria-hidden="true" tabindex="-1"></a><span class="st">Instead, you guide students through questions.</span></span>
+<span id="cb504-4"><a href="#cb504-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb504-5"><a href="#cb504-5" aria-hidden="true" tabindex="-1"></a><span class="st">Rules:</span></span>
+<span id="cb504-6"><a href="#cb504-6" aria-hidden="true" tabindex="-1"></a><span class="st">1. Respond with 2-3 guiding questions</span></span>
+<span id="cb504-7"><a href="#cb504-7" aria-hidden="true" tabindex="-1"></a><span class="st">2. Build on student&#39;s prior knowledge</span></span>
+<span id="cb504-8"><a href="#cb504-8" aria-hidden="true" tabindex="-1"></a><span class="st">3. If stuck after 3 attempts, give a hint (not answer)</span></span>
+<span id="cb504-9"><a href="#cb504-9" aria-hidden="true" tabindex="-1"></a><span class="st">4. Celebrate discovery moments</span></span>
+<span id="cb504-10"><a href="#cb504-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="behavioral-pattern-proctoring-agent">78.8 Behavioral Pattern Proctoring Agent</h2>
+<h3 id="status-designed-4">Status: Designed</h3>
+<p>Reasons about <strong>behavior patterns</strong> over time rather than single-frame threshold violations:</p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Detection</th>
+<th>Risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phone lookup</td>
+<td>Repeated gaze to same off-screen point</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Note reading</td>
+<td>Brief downward gaze, returns to screen</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Person assistance</td>
+<td>Second face + quick side gaze</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Natural break</td>
+<td>Brief look away, yawning</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="correlation-analysis">Correlation Analysis</h3>
+<p>Detects suspicious timing: if answers change within 3 seconds of looking away, it flags a <code>lookup_then_answer</code> correlation.</p>
+<hr />
+<h2 id="worker-web-ingest-pipeline">78.9 7-Worker Web Ingest Pipeline</h2>
+<h3 id="status-implemented">Status: Implemented</h3>
+<p>The Research Agent’s web content pipeline uses 7 specialized workers:</p>
+<table>
+<thead>
+<tr>
+<th>Worker</th>
+<th>Role</th>
+<th>Input → Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W1</td>
+<td>Topic Extractor</td>
+<td>Query → key topics (LLM)</td>
+</tr>
+<tr>
+<td>W2</td>
+<td>DuckDuckGo Search</td>
+<td>Topics → article URLs</td>
+</tr>
+<tr>
+<td>W3</td>
+<td>Wikipedia Search</td>
+<td>Topics → article titles</td>
+</tr>
+<tr>
+<td>W4</td>
+<td>Wikipedia Content</td>
+<td>Titles → full text</td>
+</tr>
+<tr>
+<td>W5</td>
+<td>Parallel Crawler</td>
+<td>URLs → raw HTML (httpx)</td>
+</tr>
+<tr>
+<td>W6</td>
+<td>Content Cleaner</td>
+<td>HTML → clean text (trafilatura)</td>
+</tr>
+<tr>
+<td>W6B</td>
+<td>PDF Search</td>
+<td>Topics → downloaded PDFs</td>
+</tr>
+<tr>
+<td>W7</td>
+<td>Chunk &amp; Embed</td>
+<td>Text → Qdrant vectors</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="future-enhancements-summary">78.10 Future Enhancements Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAT/IRT adaptive testing</td>
+<td>Designed</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Question quality agent</td>
+<td>Designed</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Cheat-resistant questions</td>
+<td>Designed</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Real-time presentation coach</td>
+<td>Partial</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Concept mastery agent</td>
+<td>Designed</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Socratic questioning</td>
+<td>Designed</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Behavioral pattern proctoring</td>
+<td>Designed</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>A/B testing framework</td>
+<td>Designed</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>RLHF-lite preference learning</td>
+<td>Designed</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Batch learning pipeline (nightly)</td>
+<td>Designed</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>

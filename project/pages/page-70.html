@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 70: Learning Element Framework &amp;amp; Revision System</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-69.html">&larr; Previous</a> <a href="page-71.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-70-learning-element-framework-revision-system">Page 70: Learning Element Framework &amp; Revision System</h1>
+<hr />
+<h2 id="overview-58">70.1 Overview</h2>
+<p>The <strong>Learning Element Framework</strong> is the atomic unit of ensureStudy’s adaptive learning system. Every piece of knowledge is modeled as a Learning Element with properties for difficulty, prerequisites, mastery tracking, and personalized delivery based on the student’s VARK learning style.</p>
+<hr />
+<h2 id="learning-element-model">70.2 Learning Element Model</h2>
+<h3 id="source-ai-serviceapplearninglearning_element.py">Source: <code>ai-service/app/learning/learning_element.py</code></h3>
+<div class="sourceCode" id="cb448"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb448-1"><a href="#cb448-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LearningElement:</span>
+<span id="cb448-2"><a href="#cb448-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Atomic unit of knowledge in the ensureStudy system&quot;&quot;&quot;</span></span>
+<span id="cb448-3"><a href="#cb448-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb448-4"><a href="#cb448-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb448-5"><a href="#cb448-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.<span class="bu">id</span>: <span class="bu">str</span>                        <span class="co"># Unique identifier</span></span>
+<span id="cb448-6"><a href="#cb448-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.topic_id: <span class="bu">str</span>                  <span class="co"># Parent topic</span></span>
+<span id="cb448-7"><a href="#cb448-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.content: <span class="bu">str</span>                   <span class="co"># Core concept text</span></span>
+<span id="cb448-8"><a href="#cb448-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.difficulty: <span class="bu">float</span>              <span class="co"># 0.0-1.0</span></span>
+<span id="cb448-9"><a href="#cb448-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.bloom_level: <span class="bu">str</span>               <span class="co"># Taxonomy level</span></span>
+<span id="cb448-10"><a href="#cb448-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.prerequisites: List[<span class="bu">str</span>]       <span class="co"># Element IDs</span></span>
+<span id="cb448-11"><a href="#cb448-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.learning_styles: Dict[<span class="bu">str</span>, <span class="bu">str</span>] <span class="co"># VARK → content variant</span></span>
+<span id="cb448-12"><a href="#cb448-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assessable: <span class="bu">bool</span>               <span class="co"># Can be tested?</span></span>
+<span id="cb448-13"><a href="#cb448-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.estimated_minutes: <span class="bu">int</span>         <span class="co"># Time to learn</span></span>
+<span id="cb448-14"><a href="#cb448-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.keywords: List[<span class="bu">str</span>]            <span class="co"># Search keywords</span></span></code></pre></div>
+<hr />
+<h2 id="vark-content-variants">70.3 VARK Content Variants</h2>
+<p>Each learning element can have multiple content presentations:</p>
+<div class="sourceCode" id="cb449"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb449-1"><a href="#cb449-1" aria-hidden="true" tabindex="-1"></a>learning_element.learning_styles <span class="op">=</span> {</span>
+<span id="cb449-2"><a href="#cb449-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;visual&quot;</span>: <span class="st">&quot;diagram_url or structured visual explanation&quot;</span>,</span>
+<span id="cb449-3"><a href="#cb449-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;auditory&quot;</span>: <span class="st">&quot;audio_explanation_url or verbal walkthrough&quot;</span>,</span>
+<span id="cb449-4"><a href="#cb449-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;reading&quot;</span>: <span class="st">&quot;detailed text explanation with references&quot;</span>,</span>
+<span id="cb449-5"><a href="#cb449-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;kinesthetic&quot;</span>: <span class="st">&quot;interactive exercise or coding challenge&quot;</span></span>
+<span id="cb449-6"><a href="#cb449-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="delivery-logic">Delivery Logic</h3>
+<div class="sourceCode" id="cb450"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb450-1"><a href="#cb450-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> deliver_content(element: LearningElement, student: LearningProfile):</span>
+<span id="cb450-2"><a href="#cb450-2" aria-hidden="true" tabindex="-1"></a>    primary <span class="op">=</span> student.primary_style.value   <span class="co"># e.g., &quot;visual&quot;</span></span>
+<span id="cb450-3"><a href="#cb450-3" aria-hidden="true" tabindex="-1"></a>    secondary <span class="op">=</span> student.secondary_style.value <span class="cf">if</span> student.secondary_style <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb450-4"><a href="#cb450-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb450-5"><a href="#cb450-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build multi-modal response</span></span>
+<span id="cb450-6"><a href="#cb450-6" aria-hidden="true" tabindex="-1"></a>    content <span class="op">=</span> element.learning_styles.get(primary, element.content)</span>
+<span id="cb450-7"><a href="#cb450-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb450-8"><a href="#cb450-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> secondary:</span>
+<span id="cb450-9"><a href="#cb450-9" aria-hidden="true" tabindex="-1"></a>        supplement <span class="op">=</span> element.learning_styles.get(secondary)</span>
+<span id="cb450-10"><a href="#cb450-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> supplement:</span>
+<span id="cb450-11"><a href="#cb450-11" aria-hidden="true" tabindex="-1"></a>            content <span class="op">+=</span> <span class="ss">f&quot;</span><span class="ch">\n\n</span><span class="ss">**Additional perspective:**</span><span class="ch">\n</span><span class="sc">{</span>supplement<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb450-12"><a href="#cb450-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb450-13"><a href="#cb450-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> content</span></code></pre></div>
+<hr />
+<h2 id="revision-assessment-agent-1">70.4 Revision Assessment Agent</h2>
+<h3 id="source-agentsrevision_assessment_agent.py">Source: <code>agents/revision_assessment_agent.py</code></h3>
+<div class="sourceCode" id="cb451"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb451-1"><a href="#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RevisionAssessmentAgent:</span>
+<span id="cb451-2"><a href="#cb451-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Generates revision assessments based on spaced repetition schedule&quot;&quot;&quot;</span></span>
+<span id="cb451-3"><a href="#cb451-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb451-4"><a href="#cb451-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> create_revision(<span class="va">self</span>, user_id: <span class="bu">str</span>):</span>
+<span id="cb451-5"><a href="#cb451-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Get due review items from spaced repetition</span></span>
+<span id="cb451-6"><a href="#cb451-6" aria-hidden="true" tabindex="-1"></a>        due_items <span class="op">=</span> <span class="va">self</span>.spaced_rep.get_due_reviews(user_id)</span>
+<span id="cb451-7"><a href="#cb451-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb451-8"><a href="#cb451-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. For each due topic, generate review questions</span></span>
+<span id="cb451-9"><a href="#cb451-9" aria-hidden="true" tabindex="-1"></a>        questions <span class="op">=</span> []</span>
+<span id="cb451-10"><a href="#cb451-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> item <span class="kw">in</span> due_items:</span>
+<span id="cb451-11"><a href="#cb451-11" aria-hidden="true" tabindex="-1"></a>            q <span class="op">=</span> <span class="cf">await</span> <span class="va">self</span>.question_agent.generate(</span>
+<span id="cb451-12"><a href="#cb451-12" aria-hidden="true" tabindex="-1"></a>                topic<span class="op">=</span>item.topic_name,</span>
+<span id="cb451-13"><a href="#cb451-13" aria-hidden="true" tabindex="-1"></a>                count<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb451-14"><a href="#cb451-14" aria-hidden="true" tabindex="-1"></a>                difficulty<span class="op">=</span><span class="va">self</span>._difficulty_from_mastery(item.mastery)</span>
+<span id="cb451-15"><a href="#cb451-15" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb451-16"><a href="#cb451-16" aria-hidden="true" tabindex="-1"></a>            questions.extend(q)</span>
+<span id="cb451-17"><a href="#cb451-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb451-18"><a href="#cb451-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Create revision assessment</span></span>
+<span id="cb451-19"><a href="#cb451-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> RevisionAssessment(</span>
+<span id="cb451-20"><a href="#cb451-20" aria-hidden="true" tabindex="-1"></a>            user_id<span class="op">=</span>user_id,</span>
+<span id="cb451-21"><a href="#cb451-21" aria-hidden="true" tabindex="-1"></a>            questions<span class="op">=</span>questions,</span>
+<span id="cb451-22"><a href="#cb451-22" aria-hidden="true" tabindex="-1"></a>            topics<span class="op">=</span>due_items,</span>
+<span id="cb451-23"><a href="#cb451-23" aria-hidden="true" tabindex="-1"></a>            estimated_minutes<span class="op">=</span><span class="bu">len</span>(questions) <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb451-24"><a href="#cb451-24" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb451-25"><a href="#cb451-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb451-26"><a href="#cb451-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _difficulty_from_mastery(<span class="va">self</span>, mastery: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb451-27"><a href="#cb451-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mastery <span class="op">&lt;</span> <span class="dv">40</span>: <span class="cf">return</span> <span class="st">&quot;easy&quot;</span>      <span class="co"># Rebuild foundations</span></span>
+<span id="cb451-28"><a href="#cb451-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mastery <span class="op">&lt;</span> <span class="dv">70</span>: <span class="cf">return</span> <span class="st">&quot;medium&quot;</span>    <span class="co"># Reinforce</span></span>
+<span id="cb451-29"><a href="#cb451-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;hard&quot;</span>                         <span class="co"># Challenge</span></span></code></pre></div>
+<hr />
+<h2 id="mastery-calculation">70.5 Mastery Calculation</h2>
+<div class="sourceCode" id="cb452"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb452-1"><a href="#cb452-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_topic_mastery(user_id: <span class="bu">str</span>, topic_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb452-2"><a href="#cb452-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb452-3"><a href="#cb452-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Mastery is a weighted combination of:</span></span>
+<span id="cb452-4"><a href="#cb452-4" aria-hidden="true" tabindex="-1"></a><span class="co">    - Assessment scores (40%)</span></span>
+<span id="cb452-5"><a href="#cb452-5" aria-hidden="true" tabindex="-1"></a><span class="co">    - Review quality in spaced repetition (30%)</span></span>
+<span id="cb452-6"><a href="#cb452-6" aria-hidden="true" tabindex="-1"></a><span class="co">    - Study frequency and recency (20%)</span></span>
+<span id="cb452-7"><a href="#cb452-7" aria-hidden="true" tabindex="-1"></a><span class="co">    - Tutor interaction quality (10%)</span></span>
+<span id="cb452-8"><a href="#cb452-8" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb452-9"><a href="#cb452-9" aria-hidden="true" tabindex="-1"></a>    assessment_score <span class="op">=</span> get_avg_assessment_score(user_id, topic_id)</span>
+<span id="cb452-10"><a href="#cb452-10" aria-hidden="true" tabindex="-1"></a>    review_quality <span class="op">=</span> get_avg_review_quality(user_id, topic_id)</span>
+<span id="cb452-11"><a href="#cb452-11" aria-hidden="true" tabindex="-1"></a>    study_recency <span class="op">=</span> get_study_recency_score(user_id, topic_id)</span>
+<span id="cb452-12"><a href="#cb452-12" aria-hidden="true" tabindex="-1"></a>    tutor_quality <span class="op">=</span> get_tutor_interaction_score(user_id, topic_id)</span>
+<span id="cb452-13"><a href="#cb452-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb452-14"><a href="#cb452-14" aria-hidden="true" tabindex="-1"></a>    mastery <span class="op">=</span> (</span>
+<span id="cb452-15"><a href="#cb452-15" aria-hidden="true" tabindex="-1"></a>        assessment_score <span class="op">*</span> <span class="fl">0.4</span> <span class="op">+</span></span>
+<span id="cb452-16"><a href="#cb452-16" aria-hidden="true" tabindex="-1"></a>        review_quality <span class="op">*</span> <span class="fl">0.3</span> <span class="op">+</span></span>
+<span id="cb452-17"><a href="#cb452-17" aria-hidden="true" tabindex="-1"></a>        study_recency <span class="op">*</span> <span class="fl">0.2</span> <span class="op">+</span></span>
+<span id="cb452-18"><a href="#cb452-18" aria-hidden="true" tabindex="-1"></a>        tutor_quality <span class="op">*</span> <span class="fl">0.1</span></span>
+<span id="cb452-19"><a href="#cb452-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb452-20"><a href="#cb452-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb452-21"><a href="#cb452-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">min</span>(<span class="fl">100.0</span>, <span class="bu">max</span>(<span class="fl">0.0</span>, mastery))</span></code></pre></div>
+<hr />
+<h2 id="tal-teaching-adaptation-level">70.6 TAL (Teaching Adaptation Level)</h2>
+<p>TAL adjusts the tutor’s teaching complexity based on demonstrated mastery:</p>
+<table>
+<thead>
+<tr>
+<th>TAL</th>
+<th>Mastery Range</th>
+<th>Teaching Style</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0-20%</td>
+<td>Simple definitions, lots of examples</td>
+</tr>
+<tr>
+<td>2</td>
+<td>20-40%</td>
+<td>Explanations with analogies</td>
+</tr>
+<tr>
+<td>3</td>
+<td>40-60%</td>
+<td>Standard academic level</td>
+</tr>
+<tr>
+<td>4</td>
+<td>60-80%</td>
+<td>Advanced concepts, connections</td>
+</tr>
+<tr>
+<td>5</td>
+<td>80-100%</td>
+<td>Expert-level, edge cases, criticism</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb453"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb453-1"><a href="#cb453-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_tal_level(mastery: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb453-2"><a href="#cb453-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mastery <span class="op">&lt;</span> <span class="dv">20</span>: <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb453-3"><a href="#cb453-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mastery <span class="op">&lt;</span> <span class="dv">40</span>: <span class="cf">return</span> <span class="dv">2</span></span>
+<span id="cb453-4"><a href="#cb453-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mastery <span class="op">&lt;</span> <span class="dv">60</span>: <span class="cf">return</span> <span class="dv">3</span></span>
+<span id="cb453-5"><a href="#cb453-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mastery <span class="op">&lt;</span> <span class="dv">80</span>: <span class="cf">return</span> <span class="dv">4</span></span>
+<span id="cb453-6"><a href="#cb453-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">5</span></span></code></pre></div>
+<hr />
+<h2 id="weak-topic-detection-recovery">70.7 Weak Topic Detection &amp; Recovery</h2>
+<div class="sourceCode" id="cb454"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb454-1"><a href="#cb454-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_weak_topics(user_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb454-2"><a href="#cb454-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb454-3"><a href="#cb454-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A topic is weak when:</span></span>
+<span id="cb454-4"><a href="#cb454-4" aria-hidden="true" tabindex="-1"></a><span class="co">    1. confidence_score &lt; 50%, OR</span></span>
+<span id="cb454-5"><a href="#cb454-5" aria-hidden="true" tabindex="-1"></a><span class="co">    2. times_studied &gt; 3 AND confidence_score &lt; 70%, OR</span></span>
+<span id="cb454-6"><a href="#cb454-6" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Spaced repetition easiness_factor &lt; 1.5</span></span>
+<span id="cb454-7"><a href="#cb454-7" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb454-8"><a href="#cb454-8" aria-hidden="true" tabindex="-1"></a>    progress <span class="op">=</span> Progress.query.filter_by(user_id<span class="op">=</span>user_id).<span class="bu">all</span>()</span>
+<span id="cb454-9"><a href="#cb454-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb454-10"><a href="#cb454-10" aria-hidden="true" tabindex="-1"></a>    weak <span class="op">=</span> []</span>
+<span id="cb454-11"><a href="#cb454-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> progress:</span>
+<span id="cb454-12"><a href="#cb454-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> p.confidence_score <span class="op">&lt;</span> <span class="dv">50</span>:</span>
+<span id="cb454-13"><a href="#cb454-13" aria-hidden="true" tabindex="-1"></a>            weak.append(p)</span>
+<span id="cb454-14"><a href="#cb454-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> p.times_studied <span class="op">&gt;</span> <span class="dv">3</span> <span class="kw">and</span> p.confidence_score <span class="op">&lt;</span> <span class="dv">70</span>:</span>
+<span id="cb454-15"><a href="#cb454-15" aria-hidden="true" tabindex="-1"></a>            weak.append(p)</span>
+<span id="cb454-16"><a href="#cb454-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb454-17"><a href="#cb454-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> weak</span></code></pre></div>
+<h3 id="recovery-strategy">Recovery Strategy</h3>
+<pre class="mermaid">flowchart TB
+    subgraph MAIN["Overview"]
+        direction TB
+        N0["Weak topic detected"]
+        N1["1. Mark topic as 'weak' in Progress"]
+        N2["2. Schedule immediate spaced repetition review"]
+        N3["3. Generate targeted practice questions (easy difficulty)"]
+        N4["4. Lower TAL level for this topic"]
+        N5["5. Notify parent (if linked)"]
+        N6["6. Suggest supplementary resources (web enrichment)"]
+    end
+</pre>
+<hr />
+<h2 id="final-documentation-summary-70-pages">70.8 Final Documentation Summary (70 Pages)</h2>
+<table>
+<thead>
+<tr>
+<th>Batch</th>
+<th>Pages</th>
+<th>Focus Area</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1-5</td>
+<td>Architecture &amp; Core Agents</td>
+</tr>
+<tr>
+<td>2</td>
+<td>6-10</td>
+<td>Specialized Agents</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11-15</td>
+<td>Backend &amp; Frontend Services</td>
+</tr>
+<tr>
+<td>4</td>
+<td>16-20</td>
+<td>ML, Streaming &amp; Proctoring</td>
+</tr>
+<tr>
+<td>5</td>
+<td>21-25</td>
+<td>Operations &amp; Production</td>
+</tr>
+<tr>
+<td>6</td>
+<td>26-30</td>
+<td>ETL, CI/CD &amp; Configuration</td>
+</tr>
+<tr>
+<td>7</td>
+<td>31-35</td>
+<td>API &amp; Sequence Reference</td>
+</tr>
+<tr>
+<td>8</td>
+<td>36-40</td>
+<td>Patterns, Components &amp; Glossary</td>
+</tr>
+<tr>
+<td>9</td>
+<td>41-45</td>
+<td>Models, Docker &amp; Quick-Start</td>
+</tr>
+<tr>
+<td>10</td>
+<td>46-50</td>
+<td>LangGraph, Moderation &amp; Stats</td>
+</tr>
+<tr>
+<td>11</td>
+<td>51-55</td>
+<td>Prompts, Qdrant, Kafka &amp; Auth</td>
+</tr>
+<tr>
+<td>12</td>
+<td>56-60</td>
+<td>Migrations, OCR &amp; Networking</td>
+</tr>
+<tr>
+<td>13</td>
+<td>61-65</td>
+<td>Classrooms, Assessments &amp; Roles</td>
+</tr>
+<tr>
+<td>14</td>
+<td>66-70</td>
+<td>State Mgmt, Chunking &amp; Learning</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>ensureStudy — 70 pages of production-grade technical documentation.</em></p>
+<hr />
+
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 2: System Architecture &amp;amp; Design Decisions</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme:"default", maxTextSize:5000000, securityLevel:"loose", flowchart:{useMaxWidth:true, htmlLabels:true, curve:"basis"}, sequence:{useMaxWidth:true}});</script>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line); position: relative; left: -1em;
+      text-align: right; vertical-align: baseline; border: none;
+      display: inline-block; -webkit-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+    table { width: calc(100% + 4em); margin-left: -2em; margin-right: -2em; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; border: 1px solid #ccc; border-radius: 4px; }
+    th, td { padding: 8px 14px; text-align: left; border: 1px solid #ddd; }
+    th { font-weight: 600; background: #e8e8e0; border-bottom: 2px solid #aaa; }
+    tbody tr:nth-child(even) { background: #f0efe8; }
+    tbody tr:hover { background: #e8e7df; }
+    pre.mermaid { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; overflow-x: auto; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; }
+    pre { overflow-x: auto; }
+    code:not(.sourceCode) { background: #e8e8e0; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    body { font-family: Georgia, 'Times New Roman', Times, serif; max-width: 64em; margin: 0 auto; padding: 20px 30px; line-height: 1.6; color: #1a1a1a; background: #f5f5f0; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .nav-bar a { text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.9em; }
+    .nav-bar a:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="../index.html" target="_top">&larr; Back to Index</a>
+    <a href="page-01.html">&larr; Previous</a> <a href="page-03.html">Next &rarr;</a>
+  </div>
+  <h1 id="page-2-system-architecture-design-decisions">Page 2: System Architecture &amp; Design Decisions</h1>
+<hr />
+<h2 id="high-level-architecture">2.1 High-Level Architecture</h2>
+<p>ensureStudy employs a <strong>service-oriented architecture</strong> with three application services, five specialized databases, an event streaming layer, and supporting infrastructure — all orchestrated through Docker Compose.</p>
+<pre class="mermaid">flowchart TB
+    subgraph CLIENT["🖥️ CLIENT LAYER"]
+        FE["Next.js 14 Frontend<br/>TypeScript + TailwindCSS<br/>Port 3000<br/>Roles: Student, Teacher, Parent, Admin"]
+    end
+
+    FE -->|"HTTP/REST"| CS
+    FE -->|"HTTP/REST + WS + SSE"| AI
+
+    subgraph SERVICES["⚙️ SERVICE LAYER"]
+        CS["Core Service<br/>Flask + SQLAlchemy<br/>Port 8000<br/>Auth, Users, Classrooms,<br/>Assessments, Curriculum,<br/>Progress, Meetings, Notes"]
+        AI["AI Service<br/>FastAPI + LangGraph<br/>Port 8001<br/>17 AI Agents, RAG Pipeline,<br/>Proctoring (8 detectors),<br/>Doc Processing, TTS/STT,<br/>Web Enrichment, LLM"]
+    end
+
+    CS & AI --> PG & QD & RD
+
+    subgraph DATA["🗄️ DATA LAYER"]
+        PG["PostgreSQL<br/>15 tables<br/>Users, Classes,<br/>Progress, Curriculum"]
+        QD["Qdrant Vector DB<br/>Embeddings, RAG Docs,<br/>Notes, Meetings"]
+        RD["Redis<br/>Cache, Sessions,<br/>Rate Limiting"]
+        MDB["MongoDB<br/>Transcripts, Logs,<br/>Reports"]
+        CAS["Cassandra<br/>Analytics, Events,<br/>Time-series"]
+        MINIO["MinIO (S3)<br/>Files, Uploads,<br/>Models"]
+    end
+
+    CS & AI --> MDB & CAS & MINIO
+
+    subgraph STREAMING["📨 EVENT STREAMING LAYER"]
+        ZK["Zookeeper<br/>CP 7.5.0"] --> KFK["Apache Kafka<br/>CP 7.5.0<br/>Topics: student-events,<br/>chat-messages, assessment-sub,<br/>moderation, leaderboard"]
+        KFK --> SPARK["PySpark<br/>Streaming / Batch"]
+        KFK --- KUI["Kafka UI<br/>Provectus<br/>Port 8080"]
+    end
+
+    AI --> KFK
+    CS --> KFK
+
+    subgraph MONITORING["📊 MONITORING & TOOLS"]
+        MLF["MLflow v2.9.0<br/>Port 5000<br/>Experiment tracking"]
+        STR["Streamlit Dashboard<br/>Port 8501<br/>Live analytics"]
+    end
+
+    subgraph EXTERNAL["🌐 EXTERNAL SERVICES"]
+        HF["HuggingFace<br/>LLM API"]
+        LK["LiveKit<br/>Cloud"]
+        SER["Serper API<br/>Web Search"]
+        YT["YouTube<br/>Data API"]
+        POLLY["AWS Polly<br/>TTS"]
+    end
+
+    AI --> HF & SER & YT & POLLY
+    FE --> LK
+</pre>
+<hr />
+<h2 id="service-decomposition-rationale">2.2 Service Decomposition Rationale</h2>
+<h3 id="why-two-backend-services">Why Two Backend Services?</h3>
+<p>The system separates concerns between <strong>core-service</strong> (Flask) and <strong>ai-service</strong> (FastAPI) for several reasons:</p>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework choice</strong></td>
+<td>Flask is mature for CRUD/auth; FastAPI provides async support essential for LLM inference and streaming responses</td>
+</tr>
+<tr>
+<td><strong>Deployment independence</strong></td>
+<td>AI service can be scaled independently (GPU instances) while core service runs on standard compute</td>
+</tr>
+<tr>
+<td><strong>Resource isolation</strong></td>
+<td>ML model loading (embeddings, classifiers, YOLO) consumes significant memory and shouldn’t impact auth/CRUD latency</td>
+</tr>
+<tr>
+<td><strong>Team separation</strong></td>
+<td>AI/ML engineers work on ai-service; backend engineers work on core-service</td>
+</tr>
+<tr>
+<td><strong>Different lifecycle</strong></td>
+<td>AI models and agents evolve faster than the core data model</td>
+</tr>
+</tbody>
+</table>
+<h3 id="trade-off-analysis">Trade-off Analysis</h3>
+<table>
+<colgroup>
+<col style="width: 60%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Benefit</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Independent scaling of AI compute</td>
+<td>Inter-service HTTP latency (~2-10ms per call)</td>
+</tr>
+<tr>
+<td>Resource isolation for ML models</td>
+<td>Increased operational complexity (2 services to deploy)</td>
+</tr>
+<tr>
+<td>Framework-appropriate tooling</td>
+<td>Data consistency challenges (no shared DB transactions)</td>
+</tr>
+<tr>
+<td>Parallel development</td>
+<td>Need for API contracts between services</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Alternative considered</strong>: Monolithic Flask app with AI modules loaded in-process. Rejected because Mistral-7B model loading requirements and async LLM calls are poorly suited to Flask’s synchronous WSGI model.</p>
+<hr />
+<h2 id="communication-patterns">2.3 Communication Patterns</h2>
+<h3 id="frontend-backend">Frontend ↔︎ Backend</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 28%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Use Case</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REST API</td>
+<td>CRUD operations, agent queries</td>
+<td>Axios HTTP client → Flask/FastAPI</td>
+</tr>
+<tr>
+<td>Server-Sent Events (SSE)</td>
+<td>Real-time resource updates</td>
+<td><code>/sse</code> endpoint in ai-service</td>
+</tr>
+<tr>
+<td>WebSocket</td>
+<td>Proctoring frame streaming</td>
+<td>FastAPI WebSocket endpoints</td>
+</tr>
+<tr>
+<td>WebRTC</td>
+<td>Video conferencing</td>
+<td>LiveKit SDK (cloud-hosted SFU)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="backend-backend">Backend ↔︎ Backend</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 36%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Direction</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP REST</td>
+<td>Core → AI Service</td>
+<td>Grading callbacks, assessment triggers</td>
+</tr>
+<tr>
+<td>Kafka events</td>
+<td>Core → AI Service (async)</td>
+<td>Assessment submissions trigger Learning Agent</td>
+</tr>
+<tr>
+<td>Shared database</td>
+<td>Both → PostgreSQL</td>
+<td>User data, classroom context</td>
+</tr>
+</tbody>
+</table>
+<h3 id="backend-databases">Backend ↔︎ Databases</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 32%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Database</th>
+<th>Access Pattern</th>
+<th>Connection Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td>SQLAlchemy ORM</td>
+<td>Connection pool with pre-ping and 300s recycle</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>HTTP/gRPC client</td>
+<td>Direct connection via <code>qdrant-client</code></td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>Redis client</td>
+<td>Single connection via <code>redis-py</code></td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>PyMongo</td>
+<td>Direct connection with auth</td>
+</tr>
+<tr>
+<td>Cassandra</td>
+<td>CQL driver</td>
+<td>Session-based connection</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="docker-compose-topology">2.4 Docker Compose Topology</h2>
+<h3 id="development-environment-13-services">Development Environment (13 services)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-compose.yml service graph</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">postgres         → Port 5432 (health</span><span class="kw">:</span><span class="at"> pg_isready)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">redis            → Port 6379 (health</span><span class="kw">:</span><span class="at"> redis-cli ping)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">qdrant           → Port 6333/6334 (health</span><span class="kw">:</span><span class="at"> curl /health)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">zookeeper        → Port 2181 (health</span><span class="kw">:</span><span class="at"> nc -z)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">kafka            → Port 9092/29092 (depends</span><span class="kw">:</span><span class="at"> zookeeper)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">kafka-ui         → Port 8080 (depends</span><span class="kw">:</span><span class="at"> kafka)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">core-api         → Port 8000 (depends</span><span class="kw">:</span><span class="at"> postgres, redis)</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ai-service       → Port 8001 (depends</span><span class="kw">:</span><span class="at"> postgres, redis, qdrant, kafka)</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">frontend         → Port 3000 (depends</span><span class="kw">:</span><span class="at"> core-api, ai-service)</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">dashboards       → Port 8501 (depends</span><span class="kw">:</span><span class="at"> postgres, qdrant)</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mlflow           → Port 5000 (depends</span><span class="kw">:</span><span class="at"> postgres)</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mongodb          → Port 27017 (health</span><span class="kw">:</span><span class="at"> mongosh)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">cassandra        → Port 9042 (health</span><span class="kw">:</span><span class="at"> cqlsh)</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">minio            → Port 9100/9101 (health</span><span class="kw">:</span><span class="at"> curl /minio/health/live)</span></span></code></pre></div>
+<h3 id="service-dependency-chain">Service Dependency Chain</h3>
+<pre class="mermaid">flowchart LR
+    ZK["zookeeper"] --> KFK["kafka"]
+    KFK --> AI["ai-service<br/>:8001"]
+    KFK --> FE["frontend<br/>:3000"]
+    KFK --> CORE["core-api<br/>:8000"]
+    AI --> QD["qdrant"]
+    AI --> PG1["postgres"]
+    AI --> RD1["redis"]
+    AI --> KFK
+    CORE --> PG2["postgres"]
+    CORE --> RD2["redis"]
+</pre>
+<h3 id="volume-management">Volume Management</h3>
+<table>
+<thead>
+<tr>
+<th>Volume</th>
+<th>Purpose</th>
+<th>Persistence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgres_data</code></td>
+<td>User data, curriculum, assessments</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td><code>qdrant_storage</code></td>
+<td>Document embeddings, RAG index</td>
+<td>Rebuild-able</td>
+</tr>
+<tr>
+<td><code>redis_data</code></td>
+<td>Session cache</td>
+<td>Ephemeral</td>
+</tr>
+<tr>
+<td><code>kafka_data</code></td>
+<td>Event log</td>
+<td>Important for replay</td>
+</tr>
+<tr>
+<td><code>mongo_data</code></td>
+<td>Meeting transcripts</td>
+<td>Important</td>
+</tr>
+<tr>
+<td><code>cassandra_data</code></td>
+<td>Analytics time-series</td>
+<td>Important</td>
+</tr>
+<tr>
+<td><code>minio_data</code></td>
+<td>File uploads</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td><code>mlflow_artifacts</code></td>
+<td>Model artifacts</td>
+<td>Important</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="network-architecture">2.5 Network Architecture</h2>
+<p>All services communicate on a shared Docker bridge network (<code>ensure-study</code>). In development:</p>
+<ul>
+<li><strong>Internal DNS</strong>: Services reference each other by container name (e.g., <code>kafka:29092</code>, <code>postgres:5432</code>)</li>
+<li><strong>External access</strong>: Ports are mapped to localhost for development<br />
+</li>
+<li><strong>LAN mode</strong>: <code>run-lan.sh</code> script configures services to bind to the machine’s LAN IP using mkcert TLS certificates</li>
+</ul>
+<h3 id="tls-certificate-strategy">TLS Certificate Strategy</h3>
+<p>The repository includes pre-generated mkcert certificates for local HTTPS:</p>
+<table>
+<thead>
+<tr>
+<th>Certificate</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localhost+2.pem</code> / <code>localhost+2-key.pem</code></td>
+<td>Local development HTTPS</td>
+</tr>
+<tr>
+<td><code>192.168.4.60+2.pem</code></td>
+<td>LAN access (specific IP)</td>
+</tr>
+<tr>
+<td><code>192.168.4.157+2.pem</code></td>
+<td>LAN access (alternate IP)</td>
+</tr>
+<tr>
+<td><code>rootCA.pem</code></td>
+<td>Root CA for mkcert trust chain</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="api-gateway-pattern">2.6 API Gateway Pattern</h2>
+<p>The system does <strong>not</strong> use a dedicated API gateway. Instead:</p>
+<ul>
+<li>The <strong>Next.js frontend</strong> acts as a BFF (Backend-for-Frontend), determining which backend service to call based on the request type</li>
+<li><strong>NextAuth.js</strong> handles OAuth/session management on the frontend</li>
+<li><strong>JWT tokens</strong> from the core-service are passed as Bearer tokens to both services</li>
+<li><strong>CORS</strong> is configured with wildcard origins (<code>*</code>) on both services for LAN/dev flexibility</li>
+</ul>
+<h3 id="design-trade-off">Design Trade-off</h3>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Current Approach</th>
+<th>Production Consideration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct client-to-service routing</td>
+<td>Add nginx/Traefik as reverse proxy for TLS termination</td>
+</tr>
+<tr>
+<td>Wildcard CORS</td>
+<td>Restrict to specific origins in production</td>
+</tr>
+<tr>
+<td>No rate limiting at gateway level</td>
+<td>Add API gateway with rate limiting</td>
+</tr>
+<tr>
+<td>No request routing logic</td>
+<td>Consolidate under single domain with path-based routing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-flow-patterns">2.7 Data Flow Patterns</h2>
+<h3 id="synchronous-request-path-tutor-agent-query">Synchronous Request Path (Tutor Agent Query)</h3>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant FE as Frontend
+    participant AI as AI Service
+    participant OA as Orchestrator Agent
+
+    S->>FE: Ask question
+    FE->>AI: POST /query
+    AI->>OA: Route to orchestrator
+    OA->>OA: Intent Classification
+    OA->>OA: Tutor Agent (ABCR→TAL→MCP→Qdrant→LLM)
+    OA->>OA: Response Synthesis
+    OA->>FE: Return answer
+    Note over S,OA: Latency: ~2-8s (LLM dominated)</pre>
+<p><strong>Latency budget</strong>: ~2-8 seconds (dominated by LLM inference via HuggingFace API)</p>
+<h3 id="asynchronous-event-path-assessment-submission">Asynchronous Event Path (Assessment Submission)</h3>
+<pre class="mermaid">sequenceDiagram
+    participant S as Student
+    participant CS as Core Service
+    participant PG as PostgreSQL
+    participant K as Kafka
+    participant LA as Learning Agent
+
+    S->>CS: Submit assessment
+    CS->>PG: Save results
+    CS->>K: Publish to student-events
+    K->>LA: Consume event
+    LA->>LA: Learning cycle
+    LA->>PG: Save new questions (if threshold met)
+    Note over S,LA: Async — processed within seconds to minutes</pre>
+<p><strong>Processing time</strong>: Decoupled from request — processed within seconds to minutes.</p>
+<h3 id="document-ingestion-path">Document Ingestion Path</h3>
+<pre class="mermaid">sequenceDiagram
+    participant T as Teacher
+    participant CS as Core Service
+    participant FS as File Storage
+    participant AI as AI Service
+    participant QD as Qdrant
+    participant FE as Frontend
+
+    T->>CS: Upload document
+    CS->>FS: Store file
+    CS->>AI: Trigger processing
+    AI->>AI: 7-stage pipeline (OCR→Chunk→Embed)
+    AI->>QD: Index embeddings
+    AI-->>FE: SSE notification</pre>
+<hr />
+<h2 id="error-handling-strategy">2.8 Error Handling Strategy</h2>
+<h3 id="service-level-resilience">Service-Level Resilience</h3>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Health checks</td>
+<td><code>/health</code> endpoint on both services with Docker healthchecks</td>
+</tr>
+<tr>
+<td>Database connection pooling</td>
+<td>SQLAlchemy pool with pre-ping and 300s recycle</td>
+</tr>
+<tr>
+<td>Graceful degradation</td>
+<td>Moderation can be skipped (<code>SKIP_MODERATION=true</code>)</td>
+</tr>
+<tr>
+<td>Model preloading</td>
+<td>Optional at startup (<code>PRELOAD_MODELS=true</code>)</td>
+</tr>
+<tr>
+<td>Request logging middleware</td>
+<td>All requests logged with timing in ai-service</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent-level-error-handling">Agent-Level Error Handling</h3>
+<p>Each LangGraph agent includes error state in its <code>TypedDict</code>: - <code>error: Optional[str]</code> field in every agent state - Try-catch blocks around LLM calls with fallback responses - Timeout handling for external API calls (HuggingFace, Serper, YouTube)</p>
+<hr />
+<h2 id="configuration-management">2.9 Configuration Management</h2>
+<p>Configuration flows through three layers:</p>
+<ol type="1">
+<li><strong>Root <code>.env</code> file</strong> — Loaded by both services via <code>python-dotenv</code></li>
+<li><strong>Pydantic Settings</strong> — <code>config.py</code> in ai-service with typed validation</li>
+<li><strong>Docker Compose environment</strong> — Environment variables in <code>docker-compose.yml</code> (can override <code>.env</code>)</li>
+</ol>
+<h3 id="configuration-hierarchy-ai-service">Configuration Hierarchy (ai-service)</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Priority: Environment variable &gt; .env file &gt; Pydantic defaults</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Settings(BaseSettings):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    EMBEDDING_MODEL: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    LLM_MODEL: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;mistralai/Mistral-7B-Instruct-v0.2&quot;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    QDRANT_HOST: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;localhost&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    TOP_K_RESULTS: <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    MAX_CONTEXT_TOKENS: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2000</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
+<h3 id="notable-configuration-decisions">Notable Configuration Decisions</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 25%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EMBEDDING_DIMENSION</code></td>
+<td>768</td>
+<td>all-mpnet-base-v2 output dimension</td>
+</tr>
+<tr>
+<td><code>LLM_MAX_NEW_TOKENS</code></td>
+<td>1024</td>
+<td>Balance between detail and latency</td>
+</tr>
+<tr>
+<td><code>LLM_TEMPERATURE</code></td>
+<td>0.3</td>
+<td>Low for factual educational content</td>
+</tr>
+<tr>
+<td><code>TOP_K_RESULTS</code></td>
+<td>8</td>
+<td>Sufficient context without overwhelming the LLM</td>
+</tr>
+<tr>
+<td><code>SIMILARITY_THRESHOLD</code></td>
+<td>0.5</td>
+<td>Permissive to avoid missing relevant chunks</td>
+</tr>
+<tr>
+<td><code>MAX_CONTENT_LENGTH</code></td>
+<td>500 MB</td>
+<td>Supports large document uploads (textbooks, slides)</td>
+</tr>
+<tr>
+<td><code>WHISPER_MODEL</code></td>
+<td>medium</td>
+<td>Balance accuracy vs. speed (769M params)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</body>
+</html>
