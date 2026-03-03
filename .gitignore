@@ -1,0 +1,16 @@
+# ML experiment tracking
+**/wandb/
+**/catboost_info/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.venv/
